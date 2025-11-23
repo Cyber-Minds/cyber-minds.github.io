@@ -112,7 +112,7 @@ section {
   margin-bottom: 3%;
   font-weight: 700px;
   color: white;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "True Sans" !important;
 }
 
 .leftRectangle-section1 {
@@ -172,7 +172,7 @@ section {
   margin-bottom: 3%;
   font-weight: 700px;
   color: white;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "True Sans" !important;
 }
 
 .leftRectangle-section2 a {
@@ -239,7 +239,7 @@ section {
   margin-bottom: 3%;
   font-weight: 700px;
   color: white;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "True Sans" !important;
 }
 
 .Empty-section3 {
@@ -318,10 +318,22 @@ a {
   font-family: "Space Grotesk", sans-serif;
 }
 
+
 .blue-word{
   color: rgb(63, 225, 217);
 }
 
+.green-word {
+  color: rgb(117, 255, 78);
+}
+
 .act-img {
   rotate: -1deg;
+}
+
+.networkingimage{
+  width: 60%;
+  height: auto;
+  align-self: center;
+  margin-top: 2em;
 }

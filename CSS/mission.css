@@ -7,13 +7,12 @@ body {
   display: flex;
   position: relative;
   flex-direction: column;
-  min-height: 100vh;
   width: auto;
   padding-bottom: 2em;
 }
 
 body {
-  min-height: 100vh;
+
   font-family: "Georgia", sans-serif;
   margin: 0;
   padding: 0;

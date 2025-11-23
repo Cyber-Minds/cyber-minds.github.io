@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="../../../CSS/Courses and Activities/Course 11/Introductioncourse11.css"
+      href="../../../CSS/Courses and Activities/Course 11/SharedResponsibilityModel11.css"
     />
     <script
       src="https://kit.fontawesome.com/5964d931e5.js"
@@ -19,7 +19,7 @@
       rel="stylesheet"
     />
 
-    <title>Course 11 - Introduction</title>
+    <title>Course 11 - Shared Responsibility Model</title>
   </head>
   <body class="body">
     <header>
@@ -36,19 +36,19 @@
       </div>
     </header>
 
-    <div><p class="page-title">Course 11 - Cybersecurity in the Cloud</p></div>
+    <div><p class="page-title">Course 11 - Shared Responsibility Model</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
         <p>
-          Cloud computing allows organizations to host applications, store data,
-          and run services without maintaining physical hardware. This flexibility
-          comes with new security challenges because cloud resources are reachable
-          from the internet and can be created or changed very quickly.
+          The shared responsibility model describes how cloud security duties are
+          divided between the cloud provider and the customer. It prevents confusion 
+          about who protects what. Cloud providers manage the physical and core 
+          infrastructure while customers secure the resources they create inside the cloud.
         </p>
 
         <img 
-          src="../../../Images/Course11Intro.jpg"
+          src="../../../Images/SharedResponsibilityModel.png"
           alt="Cloud Computing Concept Img"
           style="
             width: 62em;
@@ -59,23 +59,37 @@
           "
         />
 
-        <p>
-          Attackers often target cloud systems because a single weak setting or
-          exposed credential can compromise an entire environment.
-          <br>
-          <br>
-          <span class="blue-word">Cybersecurity in the cloud</span> requires
-          understanding how cloud providers operate and how responsibilities are
-          shared. It also requires strong identity controls, careful configuration
-          management, and continuous monitoring. When these elements work
-          together, organizations can run secure and resilient cloud systems.
-        </p>
+        <h3><span class="blue-word">Key Concepts:</span></h3>
+
+        <ul>
+          <li>
+            <span class="green-word">Cloud Provider Responsibilities:</span> Cloud providers operate and secure the physical data 
+            centers where servers and storage devices are located. They maintain networking hardware virtualization layers and global 
+            connectivity. They ensure physical protection uptime and foundational security controls. This allows customers to focus on 
+            the systems they build on top of the platform.
+
+          </li>
+          <li>
+            <span class="green-word">Customer Responsibilities:</span> Customers must secure their applications data access policies and 
+            cloud configurations. They control user accounts storage settings network rules and workload behavior. If a customer leaves 
+            a storage bucket open or assigns overly broad permissions the cloud provider cannot fix that mistake. Customers must actively 
+            manage their layer of responsibility.
+
+          </li>
+          <li>
+            <span class="green-word">Understanding Service Types:</span> Different cloud service models change the boundaries of responsibility. 
+            In Infrastructure as a Service customers manage virtual machines operating systems applications and data. In Platform as a Service 
+            customers secure their application and data while the provider handles the runtime. In Software as a Service customers mainly manage 
+            user settings and data policies. Understanding these differences helps prevent security gaps.
+        </li>
+        </ul>
+        <br>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz2.html"
+          <a href="../../../HTML/Courses and Activities/Course 11/Introductioncourse11.html"
             >&lt; Previous</a
           >
-          <a href="../../../HTML/Courses and Activities/Course 11/SharedResponsibilityModel11.html">Next ></a>
+          <a href="../../../HTML/Courses and Activities/Course 11/CloudIdentityandAccessManagement11.html">Next ></a>
           <a class="next_course">Skip to Next Course</a>
         </div>
         <div class="pop-up">
