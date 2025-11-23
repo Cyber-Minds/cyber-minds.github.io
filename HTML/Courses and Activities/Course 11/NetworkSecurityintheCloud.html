@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="../../../CSS/Courses and Activities/Course 11/Introductioncourse11.css"
+      href="../../../CSS/Courses and Activities/Course 11/NetworkSecurityintheCloud.css"
     />
     <script
       src="https://kit.fontawesome.com/5964d931e5.js"
@@ -19,7 +19,7 @@
       rel="stylesheet"
     />
 
-    <title>Course 11 - Introduction</title>
+    <title>Course 11 - Network Security in the Cloud</title>
   </head>
   <body class="body">
     <header>
@@ -36,19 +36,18 @@
       </div>
     </header>
 
-    <div><p class="page-title">Course 11 - Cybersecurity in the Cloud</p></div>
+    <div><p class="page-title">Course 11 - Network Security in the Cloud</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
         <p>
-          Cloud computing allows organizations to host applications, store data,
-          and run services without maintaining physical hardware. This flexibility
-          comes with new security challenges because cloud resources are reachable
-          from the internet and can be created or changed very quickly.
+         Cloud networks are virtual but follow the same security principles 
+         as traditional on premise networks. Good network design reduces 
+         exposure and prevents attackers from reaching important resources.
         </p>
 
         <img 
-          src="../../../Images/Course11Intro.jpg"
+          src="../../../Images/NetworkSecurityintheCloud.png"
           alt="Cloud Computing Concept Img"
           style="
             width: 62em;
@@ -59,23 +58,36 @@
           "
         />
 
-        <p>
-          Attackers often target cloud systems because a single weak setting or
-          exposed credential can compromise an entire environment.
-          <br>
-          <br>
-          <span class="blue-word">Cybersecurity in the cloud</span> requires
-          understanding how cloud providers operate and how responsibilities are
-          shared. It also requires strong identity controls, careful configuration
-          management, and continuous monitoring. When these elements work
-          together, organizations can run secure and resilient cloud systems.
-        </p>
+        <h3><span class="blue-word">Key Concepts:</span></h3>
+
+        <ul>
+          <li>
+            <span class="green-word">Virtual Private Clouds:</span> A virtual private cloud is an isolated segment of the provider network. 
+            Organizations place sensitive resources inside this private area to limit external access. This separation helps protect critical 
+            systems.
+          </li>
+          <li>
+            <span class="green-word">Security Groups and Firewall Rules:</span> Security groups act as virtual firewalls. They decide which traffic is 
+            allowed to reach servers or containers. Strong inbound and outbound rules block unauthorized traffic and reduce attack opportunities.
+          </li>
+          <li>
+            <span class="green-word">Network Segmentation:</span> Segmentation divides networks into smaller zones. If an attacker enters one zone they 
+            cannot automatically enter others. This limits the impact of a compromise and slows lateral movement.
+
+        </li>
+        <li>
+            <span class="green-word">Encrypted Traffic:</span> Encryption protects data moving between cloud resources and users. Even if traffic is intercepted
+            the data cannot be read. Encrypted communication is essential for preventing data theft.
+
+        </li>
+        </ul>
+        <br>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz2.html"
+          <a href="../../../HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz1Course11.html"
             >&lt; Previous</a
           >
-          <a href="../../../HTML/Courses and Activities/Course 11/SharedResponsibilityModel11.html">Next ></a>
+          <a href="../../../HTML/Courses and Activities/Course 11/CloudEncryptionandDataProtection11.html">Next ></a>
           <a class="next_course">Skip to Next Course</a>
         </div>
         <div class="pop-up">

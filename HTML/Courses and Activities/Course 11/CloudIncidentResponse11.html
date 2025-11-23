@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="../../../CSS/Courses and Activities/Course 11/Introductioncourse11.css"
+      href="../../../CSS/Courses and Activities/Course 11/CloudIncidentResponse11.css"
     />
     <script
       src="https://kit.fontawesome.com/5964d931e5.js"
@@ -19,7 +19,7 @@
       rel="stylesheet"
     />
 
-    <title>Course 11 - Introduction</title>
+    <title>Course 11 - Cloud Incident Response</title>
   </head>
   <body class="body">
     <header>
@@ -36,19 +36,17 @@
       </div>
     </header>
 
-    <div><p class="page-title">Course 11 - Cybersecurity in the Cloud</p></div>
+    <div><p class="page-title">Course 11 - Cloud Incident Response</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
         <p>
-          Cloud computing allows organizations to host applications, store data,
-          and run services without maintaining physical hardware. This flexibility
-          comes with new security challenges because cloud resources are reachable
-          from the internet and can be created or changed very quickly.
+        Incident response in the cloud requires fast action because attackers can modify cloud resources
+        quickly. Cloud providers offer tools that help teams detect respond to and recover from attacks.
         </p>
 
         <img 
-          src="../../../Images/Course11Intro.jpg"
+          src="../../../Images/CloudIncidentResponse.png"
           alt="Cloud Computing Concept Img"
           style="
             width: 62em;
@@ -59,23 +57,34 @@
           "
         />
 
-        <p>
-          Attackers often target cloud systems because a single weak setting or
-          exposed credential can compromise an entire environment.
-          <br>
-          <br>
-          <span class="blue-word">Cybersecurity in the cloud</span> requires
-          understanding how cloud providers operate and how responsibilities are
-          shared. It also requires strong identity controls, careful configuration
-          management, and continuous monitoring. When these elements work
-          together, organizations can run secure and resilient cloud systems.
-        </p>
+        <h3><span class="blue-word">Key Concepts:</span></h3>
+
+        <ul>
+          <li>
+            <span class="green-word">Detection:</span> Detection uses cloud monitoring tools to identify suspicious activity such as unusual
+            login attempts or unexpected network traffic. These tools review logs and alert security teams when something appears abnormal.
+          </li>
+          <li>
+            <span class="green-word">Containment:</span> Containment stops the threat from spreading. This can involve disabling a compromised 
+            account isolating a virtual machine or tightening security group rules. Quick containment prevents further damage.
+          </li>
+          <li>
+            <span class="green-word">Investigation:</span> Investigation uses logs snapshots and historical data to understand how the incident 
+            happened. Cloud platforms record most user and system actions which helps analysts reconstruct the attacker’s steps.
+
+        </li>
+        <li>
+            <span class="green-word">Recovery:</span> Recovery restores systems and strengthens them to prevent the same type of attack in the 
+            future. This may include rotating keys rebuilding systems or updating security settings.
+        </li>
+        </ul>
+        <br>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz2.html"
+          <a href="../../../HTML/Courses and Activities/Course 11/CloudEncryptionandDataProtection11.html"
             >&lt; Previous</a
           >
-          <a href="../../../HTML/Courses and Activities/Course 11/SharedResponsibilityModel11.html">Next ></a>
+          <a href="../../../HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html">Next ></a>
           <a class="next_course">Skip to Next Course</a>
         </div>
         <div class="pop-up">
