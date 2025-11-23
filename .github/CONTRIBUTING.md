@@ -24,8 +24,14 @@ Thank you for your interest in contributing to CyberMinds! We welcome contributi
 
 ## Development Guidelines
 
+- Follow existing code style and naming conventions
+- Keep HTML, CSS, and JavaScript files organized by course
+- Use consistent file naming: `[ContentName]course[N].[ext]`
+- Test changes across different browsers before submitting
+
 ## Pull Request Process
 
+1. Fork the repository and create a new branch for your feature
 2. Update documentation if needed
 3. Test your changes thoroughly
 4. Request review from maintainers
