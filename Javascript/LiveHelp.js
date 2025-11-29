@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
       randomDuration = randomDuration + 4;
     }
     circle.style.animationDuration = `${randomDuration}s`;
-    console.log(randomDuration);
     circlesContainer.appendChild(circle);
   }
 });
