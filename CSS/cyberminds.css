@@ -179,7 +179,7 @@ header {
   border-radius: 1em 1em 1em 1em;
   position: relative;
   display: flex;
-  padding-bottom: 1.5em;
+  padding: 4em 2em;
   width: 100%;
   height: fit-content;
   align-items: center;
@@ -244,7 +244,7 @@ header {
   align-items: center;
   flex-wrap: nowrap;
   align-self: flex-end;
-  margin-top: 25vh;
+  margin-top: 8em;
 }
 
 .flex_empty {
@@ -259,8 +259,7 @@ header {
   flex-direction: column;
   text-align: center;
   flex: 9;
-  padding-right: 1.5em;
-  padding-left: 1.5em;
+  padding: 3em 2em;
   border-radius: 1em;
   background-color: rgb(17, 25, 35);
   position: relative; /* Add this line */
@@ -659,12 +658,14 @@ a {
   margin-top: 4%;
   margin-bottom: 2%;
   width: 100%;
-  height: calc(90vh);
+  min-height: 90vh;
+  padding: 4em 0;
   align-items: center;
   justify-content: space-between;
   display: inline-block;
   text-align: center;
   animation: rotateBoxShadow 4s infinite linear;
+  position: relative;
 }
 
 @keyframes rotateBoxShadow {
@@ -704,8 +705,13 @@ a {
 }
 
 .animatedbackgroundwithCircles {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: calc(90vh);
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .animatedbackgroundwithCircles::before {
@@ -752,10 +758,8 @@ a {
 /* THE FEEDBACK BOXES */
 .contentforverticalboxFeedback {
   border-radius: 0.5em 0.5em 0.5em 0.5em;
-  margin-top: 2%;
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-bottom: 2%;
+  margin: 2em auto;
+  width: 90%;
   position: relative;
   overflow-y: auto; /* Enable vertical scrollbar */
   display: flex;
@@ -862,7 +866,7 @@ a {
   font-size: 1.1em;
   font-family: "Space Grotesk", sans-serif;
   align-self: left;
-  padding-right: 40%;
+  padding: 1em 1em 0.5em 1em;
   font-weight: 600;
 }
 
