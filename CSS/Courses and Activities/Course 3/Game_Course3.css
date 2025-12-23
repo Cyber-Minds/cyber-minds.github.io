@@ -66,16 +66,18 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent;
   /* Set initial text color to transparent */
   font-size: 2.5em;
-  background: linear-gradient(to left,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0),
-      rgba(255, 255, 255, 0.8));
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  );
   /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
@@ -197,7 +199,6 @@ section {
   white-space: nowrap;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -205,7 +206,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -288,13 +288,11 @@ section {
   /* Adjust the margin between "Previous" and "Next" buttons */
   text-decoration: none;
   white-space: nowrap;
-
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto;/
+  margin-left: auto;
 }
-
 
 .right-side_rectangle-buttons a:hover,
 .leftRectangle-section1 a:hover,
@@ -313,30 +311,32 @@ section {
 
 .yellow-word {
   color: rgb(255, 255, 100);
-
 }
-
-
 
 .green-word {
   color: rgb(117, 255, 78);
 }
-h3{
-  font-family: "Space Grotesk", sans-serif;
+h3 {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
 }
 
-.blue-word{
+.blue-word {
   color: rgb(63, 225, 217);
 }
 
 .congratulations {
   font-size: medium;
-  background: -webkit-linear-gradient(right, rgb(49, 165, 161), rgb(92, 171, 255), rgb(63, 225, 217), rgb(104, 148, 250));
+  background: -webkit-linear-gradient(
+    right,
+    rgb(49, 165, 161),
+    rgb(92, 171, 255),
+    rgb(63, 225, 217),
+    rgb(104, 148, 250)
+  );
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
 
 .AvsAimage {
   margin-left: auto;
@@ -345,26 +345,23 @@ h3{
   width: 70%;
   margin: 3em;
   align-self: center;
-
 }
 
 h2 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.8em;
 }
-
-
 
 p {
   font-weight: 400;
   font-size: 1em;
   line-height: 1.7em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-style: normal;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 #act-img {
