@@ -6,7 +6,7 @@ body {
 .Parent-container {
   display: flex;
   flex-direction: column;
-  height: calc(140vh);
+  min-height: 100vh;
   width: auto;
   background-color: black;
   animation: rotateBoxShadow 4s infinite linear;
@@ -35,6 +35,14 @@ body {
   color: #ffffff;
   text-align: center;
 }
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
 .chat {
   margin: 50;
   opacity: 100%;
@@ -43,9 +51,17 @@ body {
   background-color: #ffffff;
   margin: 0 auto;
   width: 50%;
-  height: 100%;
-  background-size: 50%, auto;
+  height: 2px;
+  margin-bottom: 20px;
 }
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
 header {
   background-color: #000000;
   color: #ffffff;
@@ -109,12 +125,7 @@ header {
   top: 8.5%;
   left: 49%;
   color: transparent; /* Set initial text color to transparent */
-  background: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0),
-    rgba(255, 255, 255, 0.8)
-  ); /* Adjust the colors and stops as needed */
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.8)); /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
   animation: fadeIn 3s forwards; /* Set the duration of the animation */
@@ -140,25 +151,9 @@ p {
 }
 
 footer {
-  background-color: #0a0a0a;
   color: #fff;
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-}
-
-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-}
-
-.page-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
+  margin-top: auto;
 }
