@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -6,15 +6,12 @@
     <title>CyberMinds</title>
     <link rel="icon" type="image/jpeg" href="./Images/circle.jpg" />
     <link rel="stylesheet" href="./CSS/cyberminds.css" />
-    <link rel="stylesheet" href="./CSS/SignIn&LogIn.css" />
-    <link rel="stylesheet" href="./CSS/modal.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Alice&family=Anta&family=Cookie&family=Dancing+Script&family=Domine:wght@500;600&family=IM+Fell+French+Canon+SC&family=Inter:wght@100..900&family=Lora:ital@0;1&family=Maven+Pro:wght@400..900&family=Merriweather:wght@300&family=Noto+Sans+JP:wght@100&family=Noto+Sans+Khojki&family=Nova+Square&family=Parisienne&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tangerine:wght@700&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <script
       src="https://kit.fontawesome.com/511e914ee1.js"
       crossorigin="anonymous"
@@ -22,9 +19,8 @@
   </head>
 
   <body>
-
     <div class="Parent-container">
-      <header id="navbar">
+      <header>
         <div class="header-content">
           <img src="./Images/circle.jpg" alt="CyberMinds Logo" />
           <nav class="header-buttons">
@@ -35,7 +31,7 @@
             <a href="./HTML/course_Contents.html">Courses</a>
             <a href="./HTML/ourTeam.html">Our Team</a>
             <a href="./HTML/CTF.html">CTF</a>
-            <a href="#" id="openSignInModal">Sign In</a>
+            <a href="./HTML/SignIn&LogIn.html">Sign In</a>
           </nav>
         </div>
       </header>
@@ -51,20 +47,21 @@
           src="./Images/Cybermindsloop.mp4"
         ></video>
         <div class="section-wording">
-          <h2 class="section-wording">Cyber<span class= "MindsforCYBERMINDS">Minds</span></h2>
+          <h2 class="section-wording">
+            Cyber<span class="MindsforCYBERMINDS">Minds</span>
+          </h2>
         </div>
         <div class="section-slogan">
-          <p class = "slogan-wording">Protecting the digital future.</p>
+          <p class="slogan-wording">Protecting the digital future.</p>
         </div>
         <nav class="section-buttons">
           <a href="#" onclick="scrollDown()">How it Works</a>
-          <a href="#" id="getStartedBtn">Get Started</a>
+          <a href="./HTML/course_Contents.html">Get Started</a>
         </nav>
       </div>
       <div class="section2-container">
-
         <div class="section2 reveal">
-          <div class = "cursor"></div>
+          <div class="cursor"></div>
           <div>
             <p class="section2-title">How It Works...</p>
           </div>
@@ -117,12 +114,11 @@
               </p>
             </div>
             <div class="flex_empty"></div>
-
           </div>
         </div>
       </div>
       <div class="section5 reveal">
-        <div class = "cursor"></div>
+        <div class="cursor"></div>
         <div class="titleforsection5">
           <h1 class="section5-title">Feedback from Users</h1>
         </div>
@@ -130,7 +126,8 @@
         <div class="contentforverticalboxFeedback">
           <div class="FeedbackColumn1">
             <div class="Feedback1">
-              <div class="FeedbackTitle">Mihika K. <span class="stars">☆ ☆ ☆ ☆</span></div>
+              <p class="FeedbackTitle">Mihika K.</p>
+              <p class="stars">☆ ☆ ☆ ☆</p>
               <p class="theFeedback">
                 Neat! What I loved the most about this website is everything was
                 quick and easy to find. The course content and table of content
@@ -140,7 +137,8 @@
               </p>
             </div>
             <div class="Feedback2">
-              <div class="FeedbackTitle">Eternal Knight <span class="stars">☆ ☆ ☆ ☆ ☆</span></div>
+              <p class="FeedbackTitle">Eternal Knight</p>
+              <p class="stars">☆ ☆ ☆ ☆ ☆</p>
               <p class="theFeedback">
                 <b>Cool Website.</b> Really loved how everything was explained.
                 Lots of added animations, and extra features. Would definitely
@@ -150,7 +148,8 @@
           </div>
           <div class="FeedbackColumn2">
             <div class="Feedback3">
-              <div class="FeedbackTitle">Purva G. <span class="stars">☆ ☆ ☆ ☆ ☆</span></div>
+              <p class="FeedbackTitle">Purva G.</p>
+              <p class="stars">☆ ☆ ☆ ☆ ☆</p>
               <p class="theFeedback">
                 I've been using CyberMinds for over a <b>month</b> now and I am
                 very happy with it! I've watched it progress throughout - and
@@ -163,7 +162,8 @@
               </p>
             </div>
             <div class="Feedback4">
-              <div class="FeedbackTitle">Ishan S. <span class="stars">☆ ☆ ☆  ☆</span></div>
+              <p class="FeedbackTitle">Ishan S.</p>
+              <p class="stars">☆ ☆ ☆ ☆</p>
               <p class="theFeedback">
                 <b>100%</b> glad to have came across this...
               </p>
@@ -171,7 +171,9 @@
           </div>
           <div class="FeedbackColumn3">
             <div class="Feedback5">
-              <div class="FeedbackTitle">Green Kangaroo 247 <span class="stars">☆ ☆ ☆ ☆ ☆</span></div>
+              <p class="FeedbackTitle">Green Kangaroo 247</p>
+              <p class="stars">☆ ☆ ☆ ☆ ☆</p>
+
               <p class="theFeedback">
                 This is a truly <b>incredible</b> Website. I learned far more
                 than I ever knew about Cybersecurity. The courses are easy to
@@ -180,7 +182,8 @@
               </p>
             </div>
             <div class="Feedback6">
-              <div class="FeedbackTitle">Boston M. <span class="stars">☆ ☆ ☆ ☆ ☆</span></div>
+              <p class="FeedbackTitle">Boston M.</p>
+              <p class="stars">☆ ☆ ☆ ☆ ☆</p>
               <p class="theFeedback">
                 My friend recommended this site quite recently. It's definitely
                 worth checking out if you are looking for something new or just
@@ -196,12 +199,11 @@
       </div>
 
       <div class="section4 reveal">
-
         <span
           class="verticalbox1"
           onclick="redirectToLink('HTML/LiveHelp.html')"
         >
-        <div class = "cursor"></div>
+          <div class="cursor"></div>
           <div class="imageforverticalbox">
             <img class="imggreen" src="Images/greenimageforchatbox.jpg" />
           </div>
@@ -226,10 +228,16 @@
             </a>
           </div>
         </span>
-        <span class="verticalbox2" onclick="redirectToLink('HTML/AdvancedCourses.html')">
-          <div class = "cursor"></div>
+        <span
+          class="verticalbox2"
+          onclick="redirectToLink('HTML/AdvancedCourses.html')"
+        >
+          <div class="cursor"></div>
           <div class="imageforverticalbox">
-            <img class="imgpurple" src="Images/purpleimageforAdvancedCourses.jpg" />
+            <img
+              class="imgpurple"
+              src="Images/purpleimageforAdvancedCourses.jpg"
+            />
           </div>
           <div class="contentforverticalbox">
             <div class="titleforverticalbox">
@@ -255,227 +263,209 @@
         </span>
       </div>
 
-
       <div class="section3 reveal">
+        <div class="section3 reveal">
+          <div class="cursor1"></div>
+          <h2 class="section3-title">Cybersecurity Opportunities</h2>
 
+          <div class="board-quote">
+            <blockquote>
+              "Cybersecurity is not just about protecting data, but about
+              protecting the <span class="blue-word">trust</span>
+              in our digital world."
+            </blockquote>
 
-      <div class="section3 reveal">
-
-        <div class = "cursor1"></div>
-        <h2 class="section3-title">Cybersecurity Opportunities</h2>
-
-
-        <div class="board-quote">
-          <blockquote>
-            "Cybersecurity is not just about protecting data, but about
-            protecting the <span class="blue-word">trust</span>
-            in our digital world."
-          </blockquote>
-
-          <p class="board-quote-author">- The CyberMinds Board</p>
-        </div>
-
-        <div class="opportunities-container">
-          <div class="opportunity-card">
-            <i class="fa-solid fa-shield-halved fa-2xl"></i>
-            <h3>Information Security Analyst</h3>
-            <h5>Average Salary: $99,274</h5>
-            <p>Protect an organization's computer networks and systems by:</p>
-            <ul>
-              <li>Monitoring networks for data security vulnerabilities</li>
-              <li>Investigating, documenting, and reporting security breaches</li>
-              <li>Researching IT security trends</li>
-              <li>Helping computer users with security products and procedures</li>
-              <li>Developing strategies to help their organization remain secure</li>
-            </ul>
+            <p class="board-quote-author">- The CyberMinds Board</p>
           </div>
 
+          <div class="opportunities-container">
+            <div class="opportunity-card">
+              <i class="fa-solid fa-shield-halved fa-2xl"></i>
+              <h3>Information Security Analyst</h3>
+              <h5>Average Salary: $99,274</h5>
+              <p>Protect an organization's computer networks and systems by:</p>
+              <ul>
+                <li>Monitoring networks for data security vulnerabilities</li>
+                <li>
+                  Investigating, documenting, and reporting security breaches
+                </li>
+                <li>Researching IT security trends</li>
+                <li>
+                  Helping computer users with security products and procedures
+                </li>
+                <li>
+                  Developing strategies to help their organization remain secure
+                </li>
+              </ul>
+            </div>
 
-          <div class="opportunity-card">
-            <i class="fa-solid fa-user-secret fa-2xl"></i>
-            <h3>Digital Forensic Examiner</h3>
-            <h5>Average Salary: $96,157</h5>
-            <p>Digital forensic investigators retrieve information from computers and other digital devices to discover how an unauthorized person accessed a system or to gather evidence for legal purposes. Day-to-day tasks might include:</p>
-            <ul>
-              <li>Collecting, preserving, and analyzing digital evidence</li>
-              <li>Recovering data from erased or damaged hard drives</li>
-              <li>Documenting the data retrieval process and maintaining chain of custody</li>
-              <li>Assisting law enforcement in criminal investigations</li>
-              <li>Providing expert testimony in court proceedings</li>
-            </ul>
+            <div class="opportunity-card">
+              <i class="fa-solid fa-user-secret fa-2xl"></i>
+              <h3>Digital Forensic Examiner</h3>
+              <h5>Average Salary: $96,157</h5>
+              <p>
+                Digital forensic investigators retrieve information from
+                computers and other digital devices to discover how an
+                unauthorized person accessed a system or to gather evidence for
+                legal purposes. Day-to-day tasks might include:
+              </p>
+              <ul>
+                <li>Collecting, preserving, and analyzing digital evidence</li>
+                <li>Recovering data from erased or damaged hard drives</li>
+                <li>
+                  Documenting the data retrieval process and maintaining chain
+                  of custody
+                </li>
+                <li>Assisting law enforcement in criminal investigations</li>
+                <li>Providing expert testimony in court proceedings</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-server fa-2xl"></i>
+              <h3>Security Systems Administrator</h3>
+              <h5>Average Salary: $114,967</h5>
+              <p>
+                Manages the day-to-day operations of an organization's
+                cybersecurity systems, ensuring smooth and secure performance.
+              </p>
+              <ul>
+                <li>Monitoring systems and running regular backups</li>
+                <li>Managing individual user accounts</li>
+                <li>Developing and documenting security procedures</li>
+                <li>
+                  Collaborating with security teams to respond to intrusions
+                </li>
+                <li>Participating in company-wide security audits</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-hat-wizard fa-2xl"></i>
+              <h3>Penetration Tester</h3>
+              <h5>Average Salary: $124,127</h5>
+              <p>
+                Helps businesses identify security weaknesses by simulating
+                attacks on their computer networks.
+              </p>
+              <ul>
+                <li>Planning, designing, and carrying out penetration tests</li>
+                <li>Creating reports and offering recommendations</li>
+                <li>Developing scripts to automate testing</li>
+                <li>Conducting social engineering exercises</li>
+                <li>Providing technical support during incident handling</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-shield fa-2xl"></i>
+              <h3>Security Engineer</h3>
+              <h5>Average Salary: $137,879</h5>
+              <p>
+                Designs systems to protect a company’s computers, networks, and
+                data from cyberattacks and disasters.
+              </p>
+              <ul>
+                <li>Developing security standards and best practices</li>
+                <li>Recommending security enhancements to management</li>
+                <li>Ensuring new security systems are installed correctly</li>
+                <li>Testing security solutions</li>
+                <li>Leading incident response teams</li>
+                <li>Developing programs to automate vulnerability detection</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-network-wired fa-2xl"></i>
+              <h3>Security Architect</h3>
+              <h5>Average Salary: $164,433</h5>
+              <p>
+                Sets the vision for a company’s security systems, identifying
+                vulnerabilities and building strategies to strengthen security
+                across networks and systems.
+              </p>
+              <ul>
+                <li>Building and maintaining security networks and systems</li>
+                <li>Preparing budgets and overseeing security expenses</li>
+                <li>
+                  Coordinating security operations across IT and engineering
+                  departments
+                </li>
+                <li>
+                  Improving systems in response to security incidents or
+                  vulnerabilities
+                </li>
+                <li>Conducting breach of security drills</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-lock fa-2xl"></i>
+              <h3>Cryptography Engineer</h3>
+              <h5>Average Salary: $137,802</h5>
+              <p>
+                Secures data for communication and information exchange by
+                creating encryption algorithms, ciphers, and security protocols,
+                and analyzing coded information.
+              </p>
+              <ul>
+                <li>Developing new cryptographic algorithms</li>
+                <li>Analyzing existing algorithms for vulnerabilities</li>
+                <li>Implementing encryption solutions</li>
+                <li>Testing new encryption techniques and tools</li>
+              </ul>
+            </div>
+
+            <div class="opportunity-card">
+              <i class="fa-solid fa-user-shield fa-2xl"></i>
+              <h3>Cybersecurity Manager</h3>
+              <h5>Average Salary: $153,084</h5>
+              <p>
+                Oversees the security infrastructure of an organization,
+                managing resources, policies, and risk mitigation efforts to
+                ensure compliance and protection.
+              </p>
+              <ul>
+                <li>Managing human and technological resources</li>
+                <li>
+                  Tracking changes to internal and external security policy
+                </li>
+                <li>Ensuring compliance with security rules and regulations</li>
+                <li>Sourcing cybersecurity tools for the organization</li>
+                <li>Leading risk mitigation efforts</li>
+              </ul>
+            </div>
           </div>
 
-          <div class="opportunity-card">
-            <i class="fa-solid fa-server fa-2xl"></i>
-            <h3>Security Systems Administrator</h3>
-            <h5>Average Salary: $114,967</h5>
-            <p>Manages the day-to-day operations of an organization's cybersecurity systems, ensuring smooth and secure performance.</p>
-            <ul>
-              <li>Monitoring systems and running regular backups</li>
-              <li>Managing individual user accounts</li>
-              <li>Developing and documenting security procedures</li>
-              <li>Collaborating with security teams to respond to intrusions</li>
-              <li>Participating in company-wide security audits</li>
-            </ul>
+          <div class="board-quote">
+            <p
+              class="disclaimer"
+              style="
+                font-size: 0.8em;
+                color: rgba(255, 255, 255, 0.6);
+                text-align: center;
+              "
+            >
+              Information cited from Coursera
+            </p>
           </div>
 
-          <div class="opportunity-card">
-            <i class="fa-solid fa-hat-wizard fa-2xl"></i>
-            <h3>Penetration Tester</h3>
-            <h5>Average Salary: $124,127</h5>
-            <p>Helps businesses identify security weaknesses by simulating attacks on their computer networks.</p>
-            <ul>
-              <li>Planning, designing, and carrying out penetration tests</li>
-              <li>Creating reports and offering recommendations</li>
-              <li>Developing scripts to automate testing</li>
-              <li>Conducting social engineering exercises</li>
-              <li>Providing technical support during incident handling</li>
-            </ul>
+          <div class="board-quote">
+            <blockquote>
+              "Cybersecurity is not just about protecting data, but about
+              protecting the <span class="blue-word">trust</span>
+              in our digital world."
+            </blockquote>
+
+            <p class="board-quote-author">- The CyberMinds Board</p>
           </div>
-
-          <div class="opportunity-card">
-            <i class="fa-solid fa-shield fa-2xl"></i>
-            <h3>Security Engineer</h3>
-            <h5>Average Salary: $137,879</h5>
-            <p>Designs systems to protect a company’s computers, networks, and data from cyberattacks and disasters.</p>
-            <ul>
-              <li>Developing security standards and best practices</li>
-              <li>Recommending security enhancements to management</li>
-              <li>Ensuring new security systems are installed correctly</li>
-              <li>Testing security solutions</li>
-              <li>Leading incident response teams</li>
-              <li>Developing programs to automate vulnerability detection</li>
-            </ul>
-          </div>
-
-          <div class="opportunity-card">
-            <i class="fa-solid fa-network-wired fa-2xl"></i>
-            <h3>Security Architect</h3>
-            <h5>Average Salary: $164,433</h5>
-            <p>Sets the vision for a company’s security systems, identifying vulnerabilities and building strategies to strengthen security across networks and systems.</p>
-            <ul>
-              <li>Building and maintaining security networks and systems</li>
-              <li>Preparing budgets and overseeing security expenses</li>
-              <li>Coordinating security operations across IT and engineering departments</li>
-              <li>Improving systems in response to security incidents or vulnerabilities</li>
-              <li>Conducting breach of security drills</li>
-            </ul>
-          </div>
-
-          <div class="opportunity-card">
-            <i class="fa-solid fa-lock fa-2xl"></i>
-            <h3>Cryptography Engineer</h3>
-            <h5>Average Salary: $137,802</h5>
-            <p>Secures data for communication and information exchange by creating encryption algorithms, ciphers, and security protocols, and analyzing coded information.</p>
-            <ul>
-              <li>Developing new cryptographic algorithms</li>
-              <li>Analyzing existing algorithms for vulnerabilities</li>
-              <li>Implementing encryption solutions</li>
-              <li>Testing new encryption techniques and tools</li>
-            </ul>
-          </div>
-
-          <div class="opportunity-card">
-            <i class="fa-solid fa-user-shield fa-2xl"></i>
-            <h3>Cybersecurity Manager</h3>
-            <h5>Average Salary: $153,084</h5>
-            <p>Oversees the security infrastructure of an organization, managing resources, policies, and risk mitigation efforts to ensure compliance and protection.</p>
-            <ul>
-              <li>Managing human and technological resources</li>
-              <li>Tracking changes to internal and external security policy</li>
-              <li>Ensuring compliance with security rules and regulations</li>
-              <li>Sourcing cybersecurity tools for the organization</li>
-              <li>Leading risk mitigation efforts</li>
-            </ul>
-          </div>
-
-        </div>
-
-        <div class="board-quote">
-            <p class="disclaimer" style="font-size:0.8em; color:rgba(255,255,255,0.6); text-align:center;">Information cited from Coursera</p>
-        </div>
-
-
-        <div class="board-quote">
-          <blockquote>
-            "Cybersecurity is not just about protecting data, but about
-            protecting the <span class="blue-word">trust</span>
-            in our digital world."
-          </blockquote>
-
-          <p class="board-quote-author">- The CyberMinds Board</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sign In Modal -->
-    <div id="signInModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div class="wrapper">
-          <form action="">
-            <h1>Sign In</h1>
-            <div class="input-box">
-              <input type="text" placeholder="Username" required>
-              <i class="bx bxs-user"></i>
-            </div>
-            <div class="input-box">
-              <input type="password" placeholder="Password" required>
-              <i class="bx bxs-lock-alt"></i>
-            </div>
-            <div class="remember-forgot">
-              <label><input type="checkbox">Remember Me</label>
-              <a href="#">Forgot Password?</a>
-            </div>
-            <button type="submit" class="btn">Sign In</button>
-            <div class="register-link">
-              <p>Don't have an account? <a href="#" id="switchToRegister">Sign Up</a></p>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal close-register">&times;</span>
-        <div class="wrapper">
-          <form action="">
-            <h1>Sign Up</h1>
-            <div class="input-box">
-              <input type="text" placeholder="Username" required>
-              <i class="bx bxs-user"></i>
-            </div>
-            <div class="input-box">
-              <input type="email" placeholder="Email" required>
-              <i class="bx bxs-envelope"></i>
-            </div>
-            <div class="input-box">
-              <input type="password" placeholder="Password" required>
-              <i class="bx bxs-lock-alt"></i>
-            </div>
-            <div class="input-box">
-              <input type="password" placeholder="Confirm Password" required>
-              <i class="bx bxs-lock-alt"></i>
-            </div>
-            <div class="remember-forgot">
-              <label><input type="checkbox" required>I agree to the terms & conditions</label>
-            </div>
-            <button type="submit" class="btn">Sign Up</button>
-            <div class="register-link">
-              <p>Already have an account? <a href="#" id="switchToLogin">Sign In</a></p>
-            </div>
-          </form>
         </div>
       </div>
+      <footer id="footer">
+        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
+      </footer>
+      <script src="./Javascript/cyberminds.js"></script>
+      <script src="./Javascript/footer.js"></script>
     </div>
-
-    <footer id="footer">
-      <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
-    </footer>
-    <script src="./Javascript/cyberminds.js"></script>
-    <script src="./Javascript/footer.js"></script>
-    <script src="./Javascript/modal.js"></script>
   </body>
 </html>

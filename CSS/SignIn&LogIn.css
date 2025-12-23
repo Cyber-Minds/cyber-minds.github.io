@@ -2,7 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 body {
@@ -87,14 +87,19 @@ header {
 }
 
 .page-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 3em;
   font-weight: 700;
   word-spacing: 0.2em;
   letter-spacing: 0.1em;
   margin-bottom: 0.3em;
   color: transparent;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.8));
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  );
   background-clip: text;
   -webkit-background-clip: text;
   animation: fadeIn 2s forwards;
@@ -236,7 +241,7 @@ header {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 @media (max-width: 500px) {
