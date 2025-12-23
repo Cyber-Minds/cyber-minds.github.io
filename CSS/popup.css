@@ -3,19 +3,23 @@
   height: 15em;
   padding: auto;
   padding-top: 3em;
-  border-radius: 0.8em;
-  align-self: center;
+  border-radius: 0.8em;  
   text-align: center;
   position: fixed;
   top: 100vh;
+  left: 50%; 
+  transform: translateX(-50%);
   opacity: 0;
   background-color: rgb(17, 25, 39);
-  box-shadow: 0 0em 2em rgb(17, 25, 40); /* Adjust the values for a softer shadow */
+  box-shadow: 0 0em 2em rgb(17, 25, 40);
+  transition: opacity 0.4s ease-in-out, top 0.4s ease-in-out, transform 0.4s ease-in-out; 
 }
 
 .pop-up.active {
   opacity: 100;
-  top: 30vh;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
 }
 
 .exit-button {
