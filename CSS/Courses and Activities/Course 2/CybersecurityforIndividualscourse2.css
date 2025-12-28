@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent; /* Set initial text color to transparent */
@@ -288,7 +288,7 @@ section {
 }
 
 h2 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.8em;
 }
 
@@ -296,17 +296,17 @@ p {
   font-weight: 400;
   font-size: 1em;
   line-height: 1.7em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-style: normal;
 }
 
 li {
   font-size: medium;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
 }
 
@@ -314,7 +314,7 @@ h3 {
   color: rgb(63, 225, 217);
 }
 h2 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.8em;
 }
 
@@ -322,17 +322,17 @@ p {
   font-weight: 400;
   font-size: 1em;
   line-height: 1.7em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-style: normal;
 }
 
 li {
   font-size: medium;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
   line-height: 1.7em;
 }
@@ -342,7 +342,7 @@ h3 {
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .green-word {

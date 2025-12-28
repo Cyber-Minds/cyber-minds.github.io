@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -316,7 +316,7 @@
       </div>
 
       <!-- <footer class="page-footer">
-        <p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
+        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
       </footer> -->
     </section>
     <script>
@@ -325,85 +325,114 @@
 
         // Check answer for question 1
         var q1Answer = document.querySelector('input[name="q1"]:checked');
-        if (q1Answer && q1Answer.value === "SW") {
+        if (q1Answer && q1Answer.value === 'SW') {
           score++;
         }
-        showAnswerDetail("q1-SW-detail");
-        showAnswerDetail("q1-ES-detail");
-        showAnswerDetail("q1-VW-detail");
-        showAnswerDetail("q1-VS-detail");
+        showAnswerDetail('q1-SW-detail');
+        showAnswerDetail('q1-ES-detail');
+        showAnswerDetail('q1-VW-detail');
+        showAnswerDetail('q1-VS-detail');
 
         // Check answer for question 2
         var q2Answer = document.querySelector('input[name="q2"]:checked');
         if (
-          (q2Answer && q2Answer.value === "verify") ||
-          (q2Answer && q2Answer.value === "ignore")
+          (q2Answer && q2Answer.value === 'verify') ||
+          (q2Answer && q2Answer.value === 'ignore')
         ) {
           score++;
         }
-        showAnswerDetail("q2-open-detail");
-        showAnswerDetail("q2-grammar-detail");
-        showAnswerDetail("q2-verify-detail");
-        showAnswerDetail("q2-ignore-detail");
+        showAnswerDetail('q2-open-detail');
+        showAnswerDetail('q2-grammar-detail');
+        showAnswerDetail('q2-verify-detail');
+        showAnswerDetail('q2-ignore-detail');
 
         var q3Answer = document.querySelector('input[name="q3"]:checked');
-        if (q3Answer && q3Answer.value === "false") {
+        if (q3Answer && q3Answer.value === 'false') {
           score++;
         }
-        showAnswerDetail("q3-true-detail");
-        showAnswerDetail("q3-false-detail");
+        showAnswerDetail('q3-true-detail');
+        showAnswerDetail('q3-false-detail');
 
         var q4Answer = document.querySelector('input[name="q4"]:checked');
-        if (q4Answer && q4Answer.value === "none") {
+        if (q4Answer && q4Answer.value === 'none') {
           score++;
         }
-        showAnswerDetail("q4-tail-detail");
-        showAnswerDetail("q4-dive-detail");
-        showAnswerDetail("q4-phishing-detail");
-        showAnswerDetail("q4-none-detail");
+        showAnswerDetail('q4-tail-detail');
+        showAnswerDetail('q4-dive-detail');
+        showAnswerDetail('q4-phishing-detail');
+        showAnswerDetail('q4-none-detail');
 
         // Display the result
-        var resultElement = document.getElementById("result");
-        resultElement.innerHTML = "Your score is: " + score + "/4";
+        var resultElement = document.getElementById('result');
+        resultElement.innerHTML = 'Your score is: ' + score + '/4';
       }
 
       function showAnswerDetail(detailId) {
-        var labels = document.querySelectorAll("label");
+        var labels = document.querySelectorAll('label');
         var detailElement = document.getElementById(detailId);
         if (detailElement) {
-          detailElement.style.display = "block";
+          detailElement.style.display = 'block';
         }
         labels.forEach(function (label) {
-          label.style.width = "80%";
+          label.style.width = '80%';
         });
       }
 
-      var labels = document.querySelectorAll("label");
+      var labels = document.querySelectorAll('label');
       labels.forEach(function (label) {
-        label.addEventListener("click", function () {
+        label.addEventListener('click', function () {
           // Remove 'selected' class from all labels
           labels.forEach(function (otherLabel) {
-            var radioLabel = label.closest("li.option"); // Assuming the radio is wrapped in an <li> with class "option"
+            var radioLabel = label.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
             var radioName = radioLabel
               .querySelector('input[type="radio"]')
-              .getAttribute("name");
-            var otherRadioLabel = otherLabel.closest("li.option"); // Assuming the radio is wrapped in an <li> with class "option"
+              .getAttribute('name');
+            var otherRadioLabel = otherLabel.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
             var otherRadioName = otherRadioLabel
               .querySelector('input[type="radio"]')
-              .getAttribute("name");
+              .getAttribute('name');
             if (otherRadioName === radioName) {
-              otherLabel.classList.remove("selected");
+              otherLabel.classList.remove('selected');
             }
           });
 
           // Add 'selected' class to the clicked label
-          label.classList.add("selected");
+          label.classList.add('selected');
         });
       });
     </script>
-      <script src="../../../Javascript/footer.js"></script>
-      <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="5zyd1xHaZEua96z-hkI37";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-      </script>
+    <script src="../../../Javascript/footer.js"></script>
+    <script>
+      (function () {
+        if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
+          window.chatbase = (...arguments) => {
+            if (!window.chatbase.q) {
+              window.chatbase.q = [];
+            }
+            window.chatbase.q.push(arguments);
+          };
+          window.chatbase = new Proxy(window.chatbase, {
+            get(target, prop) {
+              if (prop === 'q') {
+                return target.q;
+              }
+              return (...args) => target(prop, ...args);
+            },
+          });
+        }
+        const onLoad = function () {
+          const script = document.createElement('script');
+          script.src = 'https://www.chatbase.co/embed.min.js';
+          script.id = '5zyd1xHaZEua96z-hkI37';
+          script.domain = 'www.chatbase.co';
+          document.body.appendChild(script);
+        };
+        if (document.readyState === 'complete') {
+          onLoad();
+        } else {
+          window.addEventListener('load', onLoad);
+        }
+      })();
+    </script>
   </body>
 </html>

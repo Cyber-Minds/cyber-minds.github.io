@@ -66,16 +66,18 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400;
   color: transparent;
   /* Set initial text color to transparent */
   font-size: 2.5em;
-  background: linear-gradient(to left,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0),
-      rgba(255, 255, 255, 0.8));
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  );
   /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
@@ -197,7 +199,6 @@ section {
   white-space: nowrap;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -205,7 +206,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -290,7 +290,7 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto;/
+  margin-left: auto;
 }
 
 .right-side_rectangle-buttons a:hover,
@@ -300,42 +300,40 @@ section {
   background-color: #1e6bb2;
 }
 
-
-
 .right-side_rectangle h2,
 .right-side_rectangle p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 2.3em;
 }
 
 .right-side_rectangle p {
   font-size: medium;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
 }
 
 h2 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.5em;
   font-weight: 500;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.5em;
 }
 
 li {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .blue-word {
