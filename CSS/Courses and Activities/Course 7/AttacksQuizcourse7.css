@@ -76,7 +76,7 @@ iframe {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent; /* Set initial text color to transparent */
@@ -212,7 +212,6 @@ section {
   flex: 1;
 }
 
-
 .leftRectangle-section3 {
   flex: 0.2;
   background-color: #111927;
@@ -293,7 +292,7 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .right-side_rectangle-buttons a:hover,
@@ -303,136 +302,143 @@ section {
   background-color: #1e6bb2;
 }
 
-h3{
-  font-family: "Space Grotesk", sans-serif;
+h3 {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
 }
 
-h2{
-  font-family: "Space Grotesk", sans-serif;
-  font-size:1.8em; 
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8em;
 }
 
-p{
+p {
   font-weight: 400;
   font-size: 1em;
   line-height: 1.7em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-style: normal;
 }
 
-li{
+li {
   font-size: medium;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-h3{
-  font-family: "Space Grotesk", sans-serif;
+h3 {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
 }
 
-.blue-word{
+.blue-word {
   color: rgb(63, 225, 217);
 }
 
+.green-word {
+  color: rgb(117, 255, 78);
+}
 
-  .green-word {
-    color: rgb(117, 255, 78);
-  }
+.list-without-bullet-points {
+  list-style: None;
+}
 
-  .list-without-bullet-points{
-    list-style: None;
-  }
+.quiz-container {
+  max-width: 600px;
+  margin: auto;
+}
 
-  .quiz-container {
-    max-width: 600px;
-    margin: auto;
-  }
-  
-  .question {
-    margin-bottom: 2em;
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: none;
-    font-size: 1.1em;
-  }
-  
-  .options {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: -0px;
-  }
-  
-  .option {
-    margin-bottom: 0.5em;
-  }
-  
-  input[type="radio"] {
-    display: none; /* Hide the radio buttons */
-  }
-  label {
-    display: block;
-    padding: 0.3em;
-    background-color: #16305a; /* Light gray background */
-    cursor: pointer;
-    border-radius: 0.4em; /* Add border-radius for a bevel effect */
-    font-family: "Space Grotesk", sans-serif;
-    font-size: medium;
-    width: 50%; /* Set the maximum width for the label */
-    text-align: center; /* Center the text */
-    margin-top:  0.6em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    margin: 0 auto; /* Center horizontally using margin */
-  }
-  
-  
-  label.selected {
-    background-color:  rgb(61, 78, 163); /* Change the background color for the selected label */
-  }
-  
-  .wrong {
-    background-color:  rgb(255, 0, 0); /* Change the background color for the selected label */
-  }
-  
-  .right {
-    background-color:  rgb(21, 255, 0); /* Change the background color for the selected label */
-  }
-  
-  .answer-detail {
-    display: none;
-    margin-top: 0.6px;
-  }
-  
-  #result {
-    font-weight: bold;
-    margin-top: 20px;
-    margin: 0 auto;
-    font-family: "Space Grotesk", sans-serif;
-    margin-bottom: 2em;
-  }
-  
-  .submit {
-    display: block;
-    padding: 0.5em;
-    margin-bottom: 0.6em;
-    background-color: rgb(83, 168, 19); /* Light gray background */
-    border: 0.1em solid rgb(72, 151, 12);
-    cursor: pointer;
-    border-radius: 0.6em; /* Add border-radius for a bevel effect */
-    font-family: "Space Grotesk", sans-serif;
-    font-size: medium;
-    max-width: 20%; /* Set the maximum width for the label */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    color:#ffffff;
-    align-self: center;
-  }
-  
-  
-  
+.question {
+  margin-bottom: 2em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: none;
+  font-size: 1.1em;
+}
+
+.options {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: -0px;
+}
+
+.option {
+  margin-bottom: 0.5em;
+}
+
+input[type='radio'] {
+  display: none; /* Hide the radio buttons */
+}
+label {
+  display: block;
+  padding: 0.3em;
+  background-color: #16305a; /* Light gray background */
+  cursor: pointer;
+  border-radius: 0.4em; /* Add border-radius for a bevel effect */
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: medium;
+  width: 50%; /* Set the maximum width for the label */
+  text-align: center; /* Center the text */
+  margin-top: 0.6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  margin: 0 auto; /* Center horizontally using margin */
+}
+
+label.selected {
+  background-color: rgb(
+    61,
+    78,
+    163
+  ); /* Change the background color for the selected label */
+}
+
+.wrong {
+  background-color: rgb(
+    255,
+    0,
+    0
+  ); /* Change the background color for the selected label */
+}
+
+.right {
+  background-color: rgb(
+    21,
+    255,
+    0
+  ); /* Change the background color for the selected label */
+}
+
+.answer-detail {
+  display: none;
+  margin-top: 0.6px;
+}
+
+#result {
+  font-weight: bold;
+  margin-top: 20px;
+  margin: 0 auto;
+  font-family: 'Space Grotesk', sans-serif;
+  margin-bottom: 2em;
+}
+
+.submit {
+  display: block;
+  padding: 0.5em;
+  margin-bottom: 0.6em;
+  background-color: rgb(83, 168, 19); /* Light gray background */
+  border: 0.1em solid rgb(72, 151, 12);
+  cursor: pointer;
+  border-radius: 0.6em; /* Add border-radius for a bevel effect */
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: medium;
+  max-width: 20%; /* Set the maximum width for the label */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  color: #ffffff;
+  align-self: center;
+}

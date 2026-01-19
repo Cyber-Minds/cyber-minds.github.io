@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400;
   color: transparent; /* Set initial text color to transparent */
@@ -189,7 +189,6 @@ section {
   white-space: nowrap;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -197,7 +196,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -279,10 +277,10 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto; /
+  margin-left: auto;
 }
 
-.right-side_rectangle-buttons a:hover ,
+.right-side_rectangle-buttons a:hover,
 .leftRectangle-section1 a:hover,
 .leftRectangle-section2 a:hover,
 .leftRectangle-section3 a:hover {
@@ -290,26 +288,26 @@ section {
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h2 {
   margin-bottom: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: none;
   font-size: 1.1em;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 li {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .box {
@@ -343,14 +341,14 @@ a {
 .box-front {
   background-color: #9db9f5;
   color: #111111;
-  font-family: "MuseoModerno", sans-serif;
+  font-family: 'MuseoModerno', sans-serif;
 }
 .box-back {
   background-color: rgb(173, 255, 141);
   color: #0e1636;
   transform: rotateY(180deg);
   font-size: 0.8em;
-  font-family: "MuseoModerno", sans-serif;
+  font-family: 'MuseoModerno', sans-serif;
 }
 
 .act-img {
@@ -369,7 +367,7 @@ a {
 
 .question {
   margin-bottom: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: none;
   font-size: 1.1em;
 }

@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent; /* Set initial text color to transparent */
@@ -296,7 +296,7 @@ section {
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
   margin-bottom: 0.8em;
 }
@@ -322,7 +322,7 @@ li {
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .blue-word{

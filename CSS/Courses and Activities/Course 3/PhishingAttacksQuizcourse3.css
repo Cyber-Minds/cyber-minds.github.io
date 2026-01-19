@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent; /* Set initial text color to transparent */
@@ -195,7 +195,6 @@ section {
   text-align: left;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -203,7 +202,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -285,7 +283,7 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto; /
+  margin-left: auto;
 }
 
 .right-side_rectangle-buttons a:hover ,
@@ -322,7 +320,7 @@ li {
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .blue-word{
@@ -342,7 +340,7 @@ a {
 
 .question {
   margin-bottom: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: none;
   font-size: 1.1em;
 }
@@ -357,7 +355,7 @@ a {
   margin-bottom: 0.5em;
 }
 
-input[type="radio"] {
+input[type='radio'] {
   display: none; /* Hide the radio buttons */
 }
 label {
@@ -366,20 +364,23 @@ label {
   background-color: #16305a; /* Light gray background */
   cursor: pointer;
   border-radius: 0.4em; /* Add border-radius for a bevel effect */
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: medium;
   width: 50%; /* Set the maximum width for the label */
   text-align: center; /* Center the text */
-  margin-top:  0.6em;
+  margin-top: 0.6em;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
   margin: 0 auto; /* Center horizontally using margin */
 }
 
-
 label.selected {
-  background-color:  rgb(61, 78, 163); /* Change the background color for the selected label */
+  background-color: rgb(
+    61,
+    78,
+    163
+  ); /* Change the background color for the selected label */
 }
 
 .answer-detail {
@@ -413,5 +414,3 @@ font-weight: bold;
   color:#ffffff;
   margin: 0.6em auto 0.6em auto; 
 }
-
-

@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent; /* Set initial text color to transparent */
@@ -195,7 +195,6 @@ section {
   text-align: left;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -203,7 +202,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -285,7 +283,7 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto; /
+  margin-left: auto;
 }
 
 .right-side_rectangle-buttons a:hover ,
@@ -296,7 +294,7 @@ section {
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
   margin-bottom: 0.8em;
 }
@@ -310,19 +308,19 @@ h2 {
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
   margin-bottom: 1.5em;
 } 
 
 li {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
   margin-bottom: 0.5em;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .blue-word{

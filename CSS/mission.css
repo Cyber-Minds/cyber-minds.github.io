@@ -12,8 +12,7 @@ body {
 }
 
 body {
-
-  font-family: "Georgia", sans-serif;
+  font-family: 'Georgia', sans-serif;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -94,14 +93,19 @@ main {
 
 .page-title {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 4em;
   font-weight: 700;
   font-style: normal;
   word-spacing: 0.2em;
   letter-spacing: 0.1em;
   color: transparent; /* Set initial text color to transparent */
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.8)); /* Adjust the colors and stops as needed */
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  ); /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
   animation: fadeIn 3s forwards; /* Set the duration of the animation */
@@ -118,7 +122,7 @@ p {
   color: white;
   padding-left: 2em;
   padding-right: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
 }
 
@@ -127,21 +131,21 @@ ul {
   color: white;
   text-align: center;
   list-style: none;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 li {
   margin-bottom: 0.3em;
   color: white;
   scale: 100%;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.5em;
 }
 
 a {
   color: #ffffff;
   text-decoration: none;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h2 {
@@ -152,7 +156,7 @@ h2 {
   /*border-bottom: 2px solid #333;*/
   padding-bottom: 5px;
   text-align: center;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h3 {
@@ -161,7 +165,7 @@ h3 {
   /*border-bottom: 2px solid #333;*/
   padding-bottom: 0.25em;
   text-align: center;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 footer {
@@ -178,7 +182,7 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .flex1 {
