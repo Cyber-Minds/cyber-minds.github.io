@@ -8,10 +8,10 @@
       href="../../../CSS/Courses and Activities/Course 2/CybersecurityforCompanycourse2.css"
     />
     <script
-      src="https://kit.fontawesome.com/3051dbead5.js"
+      src="https://kit.fontawesome.com/5964d931e5.js"
       crossorigin="anonymous"
     ></script>
-
+    <link rel="stylesheet" href="../../../CSS/popup.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +21,7 @@
 
     <title>Course 2 - Cybersecurity for Companies</title>
   </head>
-  <body>
+  <body class="body">
     <header>
       <div class="header-content">
         <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
@@ -39,7 +39,7 @@
 
     <div><p class="page-title">Course 2 - Cybersecurity for Companies</p></div>
 
-    <section>
+    <section class="section">
       <div class="right-side_rectangle">
         <h2>The Importance of Cybersecurity for Companies</h2>
         <p>
@@ -98,7 +98,16 @@
           one of the most popular frameworks used by organizations. This is the
           NIST CSF:
         </p>
-        <img class="nist-csf" src="../../../Images/nist-csf.png" />
+        <img
+          src="../../../Images/nist-csf.png"
+          style="
+            width: 22em;
+            height: auto;
+            margin-left: 10em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+          "
+        />
 
         <h3><span class="blue-word"> Stages of the NIST CSF</span></h3>
         <ol>
@@ -128,22 +137,22 @@
         </ol>
 
         <div class="right-side_rectangle-buttons">
-          <a
-            href="../../Courses and Activities/Course 2/CybersecurityforIndividualscourse2.html"
+          <a href="../../Courses and Activities/Course 2/CybersecurityforIndividualscourse2.html"
             >&lt; Previous</a
           >
-          <a
-            href="../../Courses and Activities/Course 3/Introductioncourse3.html"
-            >Next ></a
-          >
+          <a href="../../Courses and Activities/Course 2/MandatoryPolicies.html">Next ></a>
           <a
             href="../../Courses and Activities/Course 3/Introductioncourse3.html"
             class="next_course"
             >Skip to Next Course</a
           >
         </div>
+        <div class="pop-up">
+          <div class="exit-button">
+            <i class="fa-solid fa-x"></i>
+          </div>
+        </div>
       </div>
-
       <div class="left-side_rectangle">
         <div class="leftRectangle-section1">
           <p class="leftRectangle-section1-button-title">Go back?</p>
@@ -155,17 +164,14 @@
 
         <div class="leftRectangle-section2">
           <p class="leftRectangle-section2-button-title">Table of Contents</p>
-          <a href="../Course 2/Introductioncourse2.html">
+          <a href="Introductioncourse2.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
-            Course 2 - Introduction
+            />Course 2 - Introduction
           </a>
-          <a
-            href="../../Courses and Activities/Course 2/CybersecurityforIndividualscourse2.html"
-          >
+          <a href="../../Courses and Activities/Course 2/CybersecurityforIndividualscourse2.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -173,9 +179,7 @@
             />
             Cybersecurity: Individuals
           </a>
-          <a
-            href="../../../HTML/Courses and Activities/Course 2/CybersecurityforCompanycourse2.html"
-          >
+          <a href="../../../HTML/Courses and Activities/Course 2/CybersecurityforCompanycourse2.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -183,9 +187,7 @@
             />
             Cybersecurity: Companies
           </a>
-          <a
-            href="../../../HTML/Courses and Activities/Course 2/MandatoryPolicies.html"
-          >
+          <a href="../../../HTML/Courses and Activities/Course 2/MandatoryPolicies.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -193,11 +195,15 @@
             />
             Mandatory Policies
           </a>
+
+        
+          
+
           <!-- <a href="add here">  >add more here </a>
           <a href="add here"> >add more here </a>
           <a href="add activity here"> >add more here </a>
           <a href="add game here">  >add more here </a> -->
-        </div>
+          </div>
         <div class="Empty-section2">
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
         </div>
@@ -215,10 +221,9 @@
       <!-- <footer class="page-footer">
         <p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
       </footer> -->
-    </section>
-      <script src="../../../Javascript/footer.js"></script>
-      <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="5zyd1xHaZEua96z-hkI37";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-      </script>
+      </section>
+
+    <script src="../../../Javascript/popUp_Pages.js"></script>
+    <script src="../../../Javascript/footer.js"></script>
   </body>
 </html>

@@ -7,21 +7,11 @@
       rel="stylesheet"
       href="../../../CSS/Courses and Activities/Course 1/Introductioncourse1.css"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
-
+    <script
+      src="https://kit.fontawesome.com/5964d931e5.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="../../../CSS/popup.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,7 +21,7 @@
 
     <title>Course 1 - Introduction</title>
   </head>
-  <body>
+  <body class="body">
     <header>
       <div class="header-content">
         <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
@@ -49,18 +39,9 @@
 
     <div><p class="page-title">Course 1 - Introduction</p></div>
 
-    <section>
+    <section class="section">
       <div class="right-side_rectangle">
         <h2>What is Cybersecurity?</h2>
-        <p>
-          Many people think about
-          <span class="blue-word">Cybersecurity</span> from a very straight
-          forward point of view, and in rare cases it is… BUT …In many cases, it
-          is far from straightforward. It represents
-          <span class="blue-word">different things</span> to
-          <span class="blue-word">various people</span> in
-          <span class="blue-word">various situations</span>…
-        </p>
         <ul>
           <li>
             For <span class="green-word">individuals</span>, Cybersecurity means
@@ -80,7 +61,6 @@
             national security threats.
           </li>
         </ul>
-
         <p>
           Cybersecurity is the way to protect servers, devices, electronic
           systems, and networks from
@@ -100,6 +80,7 @@
             margin-bottom: 1em;
           "
         />
+
         <p>
           Cybersecurity is a
           <span class="blue-word">fast-growing</span> and
@@ -118,19 +99,22 @@
         </p>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../course_Contents.html">&lt; Previous</a>
-          <a
-            href="../../Courses and Activities/Course 1/StatisticsofCybersecurityreadingcourse1.html"
-            >Next ></a
+          <a href="../../course_Contents.html"
+            >&lt; Previous</a
           >
+          <a href="../../../HTML/Courses and Activities/Course 1/StatisticsofCybersecurityreadingcourse1.html">Next ></a>
           <a
             href="../../Courses and Activities/Course 2/Introductioncourse2.html"
             class="next_course"
             >Skip to Next Course</a
           >
         </div>
+        <div class="pop-up">
+          <div class="exit-button">
+            <i class="fa-solid fa-x"></i>
+          </div>
+        </div>
       </div>
-
       <div class="left-side_rectangle">
         <div class="leftRectangle-section1">
           <p class="leftRectangle-section1-button-title">Go back?</p>
@@ -149,9 +133,7 @@
               height="40"
             />Course 1 - Introduction
           </a>
-          <a
-            href="../../Courses and Activities/Course 1/StatisticsofCybersecurityreadingcourse1.html"
-          >
+          <a href="StatisticsofCybersecurityreadingcourse1.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -159,16 +141,15 @@
             />
             Cybersecurity Statistics
           </a>
-          <a
-            href="../../../HTML/Courses and Activities/Course 1/CybersecurityJobscourse1.html"
-          >
+          <a href="CybersecurityJobscourse1.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Cybersecurity Jobs
+            />
+            Cybersecurity Jobs
           </a>
-          <a href="../../Courses and Activities/Course 1/CIAtriadcourse1.html">
+          <a href="CIAtriadcourse1.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -176,11 +157,15 @@
             />
             Reading - CIA Triad
           </a>
+
+        
+          
+
           <!-- <a href="add here">  >add more here </a>
           <a href="add here"> >add more here </a>
           <a href="add activity here"> >add more here </a>
           <a href="add game here">  >add more here </a> -->
-        </div>
+          </div>
         <div class="Empty-section2">
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
         </div>
@@ -198,10 +183,9 @@
       <!-- <footer class="page-footer">
         <p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
       </footer> -->
-    </section>
-      <script src="../../../Javascript/footer.js"></script>
-      <script>
-      (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="5zyd1xHaZEua96z-hkI37";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-      </script>
+      </section>
+
+    <script src="../../../Javascript/popUp_Pages.js"></script>
+    <script src="../../../Javascript/footer.js"></script>
   </body>
 </html>
