@@ -66,16 +66,18 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400 !important;
   color: transparent;
   /* Set initial text color to transparent */
   font-size: 2.5em;
-  background: linear-gradient(to left,
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0),
-      rgba(255, 255, 255, 0.8));
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  );
   /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
@@ -197,7 +199,6 @@ section {
   white-space: nowrap;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -205,7 +206,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -290,9 +290,8 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto;/
+  margin-left: auto;
 }
-
 
 .right-side_rectangle-buttons a:hover,
 .leftRectangle-section1 a:hover,
@@ -302,21 +301,20 @@ section {
 }
 
 h2 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 li {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
-
 
 .quiz-container {
   max-width: 600px;
@@ -325,7 +323,7 @@ a {
 
 .question {
   margin-bottom: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: none;
   font-size: 1.1em;
 }
@@ -340,7 +338,7 @@ a {
   margin-bottom: 0.5em;
 }
 
-input[type="radio"] {
+input[type='radio'] {
   display: none;
   /* Hide the radio buttons */
 }
@@ -353,7 +351,7 @@ label {
   cursor: pointer;
   border-radius: 0.4em;
   /* Add border-radius for a bevel effect */
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: medium;
   width: 50%;
   /* Set the maximum width for the label */
@@ -366,7 +364,6 @@ label {
   margin: 0 auto;
   /* Center horizontally using margin */
 }
-
 
 label.selected {
   background-color: rgb(61, 78, 163);
@@ -382,7 +379,7 @@ label.selected {
   font-weight: bold;
   margin-top: 20px;
   margin: 0 auto;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   margin-bottom: 2em;
 }
 
@@ -391,7 +388,6 @@ label.selected {
 }
 
 .submit {
-
   display: block;
   padding: 0.5em;
   margin-bottom: 0.6em;
@@ -401,7 +397,7 @@ label.selected {
   cursor: pointer;
   border-radius: 0.6em;
   /* Add border-radius for a bevel effect */
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: medium;
   max-width: 20%;
   /* Set the maximum width for the label */

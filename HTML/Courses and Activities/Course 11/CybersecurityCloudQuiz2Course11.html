@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -32,22 +32,28 @@
           <a href="../../LiveHelp.html">Live Help</a>
           <a href="../../ourTeam.html">Our Team</a>
           <a href="../../CTF.html">CTF</a>
+          <a href="../../SignIn&LogIn.html">Sign In</a>
         </nav>
       </div>
     </header>
 
-    <div><p class="page-title">Course 11 - Cybersecurity in the Cloud Quiz 2</p></div>
+    <div>
+      <p class="page-title">Course 11 - Cybersecurity in the Cloud Quiz 2</p>
+    </div>
 
     <section class="section">
       <div class="right-side_rectangle">
-        <div class="question">1. What is the main purpose of a security group?</div>
+        <div class="question">
+          1. What is the main purpose of a security group?
+        </div>
         <ul class="options">
           <li class="option">
             <input type="radio" name="q1" value="SW" id="q1-SW" />
             <label for="q1-SW" id="q1-a1">
               To store passwords
               <div id="q1-SW-detail" class="answer-detail">
-                Passwords are stored and protected using Key Management and IAM technologies, not security groups.
+                Passwords are stored and protected using Key Management and IAM
+                technologies, not security groups.
               </div>
             </label>
           </li>
@@ -55,16 +61,17 @@
             <input type="radio" name="q1" value="ES" id="q1-ES" />
             <label for="q1-ES" id="q1-a2">
               To filter network traffic
-              <div id="q1-ES-detail" class="answer-detail">
-                Correct!
-              </div>
+              <div id="q1-ES-detail" class="answer-detail">Correct!</div>
             </label>
           </li>
           <li class="option">
             <input type="radio" name="q1" value="VW" id="q1-VW" />
             <label for="q1-VW" id="q1-a3">
               To host API keys
-              <div id="q1-VW-detail" class="answer-detail">API keys are a type of credential protected by Key Management and IAM systems, not a function of security groups.</div>
+              <div id="q1-VW-detail" class="answer-detail">
+                API keys are a type of credential protected by Key Management
+                and IAM systems, not a function of security groups.
+              </div>
             </label>
           </li>
           <li class="option">
@@ -72,7 +79,8 @@
             <label for="q1-VS" id="q1-a4">
               To deploy applications
               <div id="q1-VS-detail" class="answer-detail">
-                Applications are deployed onto servers or containers within a Virtual Private Cloud (VPC), not by a security group.
+                Applications are deployed onto servers or containers within a
+                Virtual Private Cloud (VPC), not by a security group.
               </div>
             </label>
           </li>
@@ -86,7 +94,10 @@
             <input type="radio" name="q2" value="open" id="q2-open" />
             <label for="q2-open" name="q2" id="q2-a1">
               Managing physical servers
-              <div id="q2-open-detail" class="answer-detail">Managing physical servers and data centers is the responsibility of the cloud provider.</div>
+              <div id="q2-open-detail" class="answer-detail">
+                Managing physical servers and data centers is the responsibility
+                of the cloud provider.
+              </div>
             </label>
           </li>
           <li class="option">
@@ -94,7 +105,8 @@
             <label for="q2-grammar" name="q2" id="q2-a2">
               Protecting the cloud provider network
               <div id="q2-grammar-detail" class="answer-detail">
-                Protecting the core global network infrastructure is a responsibility of the cloud provider.
+                Protecting the core global network infrastructure is a
+                responsibility of the cloud provider.
               </div>
             </label>
           </li>
@@ -102,9 +114,7 @@
             <input type="radio" name="q2" value="verify" id="q2-verify" />
             <label for="q2-verify" name="q2" id="q2-a3">
               Configuring access controls and securing workloads
-              <div id="q2-verify-detail" class="answer-detail">
-                Correct!
-              </div>
+              <div id="q2-verify-detail" class="answer-detail">Correct!</div>
             </label>
           </li>
           <li class="option">
@@ -112,20 +122,24 @@
             <label for="q2-ignore" name="q2" id="q2-a4">
               Controlling the hypervisor
               <div id="q2-ignore-detail" class="answer-detail">
-                Maintaining the virtualization layers and networking hardware is the responsibility of the cloud provider.
+                Maintaining the virtualization layers and networking hardware is
+                the responsibility of the cloud provider.
               </div>
             </label>
           </li>
         </ul>
 
-        <div class="question">3. What happens during cloud incident containment?</div>
+        <div class="question">
+          3. What happens during cloud incident containment?
+        </div>
         <ul class="options">
           <li class="option">
             <input type="radio" name="q3" value="tail" id="q3-tail" />
             <label for="q3-tail" name="q3" id="q3-a1">
               Incident data is deleted
               <div id="q3-tail-detail" class="answer-detail">
-                Data is not simply deleted during containment, which instead focuses on isolating the compromised element.
+                Data is not simply deleted during containment, which instead
+                focuses on isolating the compromised element.
               </div>
             </label>
           </li>
@@ -134,7 +148,8 @@
             <label for="q3-dive" name="q3" id="q3-a2">
               Attackers are given temporary access
               <div id="q3-dive-detail" class="answer-detail">
-                Giving temporary access is the opposite of containment, which involves disabling accounts or isolating systems.
+                Giving temporary access is the opposite of containment, which
+                involves disabling accounts or isolating systems.
               </div>
             </label>
           </li>
@@ -142,9 +157,7 @@
             <input type="radio" name="q3" value="phishing" id="q3-phishing" />
             <label for="q3-phishing" name="q3" id="q3-a3">
               The threat is stopped from spreading
-              <div id="q3-phishing-detail" class="answer-detail">
-                Correct!
-              </div>
+              <div id="q3-phishing-detail" class="answer-detail">Correct!</div>
             </label>
           </li>
           <li class="option">
@@ -152,20 +165,25 @@
             <label for="q3-none" name="q3" id="q3-a4">
               All cloud services shut down
               <div id="q3-none-detail" class="answer-detail">
-                Shutting down all cloud services is an overly extreme measure; containment focuses on isolating only the compromised account or resource.
+                Shutting down all cloud services is an overly extreme measure;
+                containment focuses on isolating only the compromised account or
+                resource.
               </div>
             </label>
           </li>
         </ul>
 
-        <div class="question">4. Which of the following is a common cloud threat?</div>
+        <div class="question">
+          4. Which of the following is a common cloud threat?
+        </div>
         <ul class="options">
           <li class="option">
             <input type="radio" name="q4" value="tail" id="q4-tail" />
             <label for="q4-tail" name="q4" id="q4-a1">
               Rapid elasticity
               <div id="q4-tail-detail" class="answer-detail">
-                Rapid elasticity is a feature of cloud computing, not a security threat.
+                Rapid elasticity is a feature of cloud computing, not a security
+                threat.
               </div>
             </label>
           </li>
@@ -174,7 +192,8 @@
             <label for="q4-dive" name="q4" id="q4-a2">
               Global availability
               <div id="q4-dive-detail" class="answer-detail">
-                Global availability is a benefit of cloud computing, not a security threat.
+                Global availability is a benefit of cloud computing, not a
+                security threat.
               </div>
             </label>
           </li>
@@ -182,9 +201,7 @@
             <input type="radio" name="q4" value="phishing" id="q4-phishing" />
             <label for="q4-phishing" name="q4" id="q4-a3">
               Credential compromise
-              <div id="q4-phishing-detail" class="answer-detail">
-                Correct!
-              </div>
+              <div id="q4-phishing-detail" class="answer-detail">Correct!</div>
             </label>
           </li>
           <li class="option">
@@ -192,7 +209,8 @@
             <label for="q4-none" name="q4" id="q4-a4">
               Automatic scaling
               <div id="q4-none-detail" class="answer-detail">
-                Automatic scaling is a feature of cloud computing, not a security threat.
+                Automatic scaling is a feature of cloud computing, not a
+                security threat.
               </div>
             </label>
           </li>
@@ -200,15 +218,13 @@
 
         <button onclick="submitQuiz()" class="submit">Submit Quiz</button>
 
-                <p id="result"></p>
+        <p id="result"></p>
         <div class="right-side_rectangle-buttons">
           <a
             href="../../Courses and Activities/Course 11/CloudIncidentResponse11.html"
             >&lt; Previous</a
           >
-          <a href="#" 
-            >Next ></a
-          >
+          <a href="#">Next ></a>
           <a class="next_course">Skip to Next Course</a>
         </div>
         <div class="pop-up">
@@ -267,11 +283,7 @@
             Common Cloud Threats
           </a>
           <a href="CybersecurityCloudQuiz1Course11.html">
-            <img
-              src="../../../Images/ICON_QUIZ.png"
-              width="40"
-              height="40"
-            />
+            <img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
             Networking Quiz 1
           </a>
           <a href="NetworkSecurityintheCloud.html">
@@ -299,20 +311,15 @@
             Cloud Incident Response
           </a>
           <a href="CybersecurityCloudQuiz2Course11.html">
-            <img
-              src="../../../Images/ICON_QUIZ.png"
-              width="40"
-              height="40"
-            />
+            <img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
             Networking Quiz 2
           </a>
-          
 
           <!-- <a href="add here">  >add more here </a>
           <a href="add here"> >add more here </a>
           <a href="add activity here"> >add more here </a>
           <a href="add game here">  >add more here </a> -->
-          </div>
+        </div>
         <div class="Empty-section2">
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
         </div>
@@ -328,7 +335,7 @@
       </div>
 
       <!-- <footer class="page-footer">
-        <p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
+        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
       </footer> -->
     </section>
     <script>
@@ -337,109 +344,110 @@
 
         // Check answer for question 1
         var q1Answer = document.querySelector('input[name="q1"]:checked');
-        if (q1Answer && q1Answer.value === "ES") {
+        if (q1Answer && q1Answer.value === 'ES') {
           score++;
         }
-        var lab = document.getElementById("q1-a1");
-        showAnswerDetail("q1-SW-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q1-a2");
-        showAnswerDetail("q1-ES-detail");
-        lab.style.color = "lightgreen";
-        lab = document.getElementById("q1-a3");
-        showAnswerDetail("q1-VW-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q1-a4");
-        showAnswerDetail("q1-VS-detail");
-        lab.style.color = "red";
+        var lab = document.getElementById('q1-a1');
+        showAnswerDetail('q1-SW-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q1-a2');
+        showAnswerDetail('q1-ES-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q1-a3');
+        showAnswerDetail('q1-VW-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q1-a4');
+        showAnswerDetail('q1-VS-detail');
+        lab.style.color = 'red';
 
         // Check answer for question 2
         var q2Answer = document.querySelector('input[name="q2"]:checked');
-        if (q2Answer && q2Answer.value === "verify") {
+        if (q2Answer && q2Answer.value === 'verify') {
           score++;
         }
-        lab = document.getElementById("q2-a1");
-        showAnswerDetail("q2-open-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q2-a2");
-        showAnswerDetail("q2-grammar-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q2-a3");
-        showAnswerDetail("q2-verify-detail");
-        lab.style.color = "lightgreen";
-        lab = document.getElementById("q2-a4");
-        showAnswerDetail("q2-ignore-detail");
-        lab.style.color = "red";
+        lab = document.getElementById('q2-a1');
+        showAnswerDetail('q2-open-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q2-a2');
+        showAnswerDetail('q2-grammar-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q2-a3');
+        showAnswerDetail('q2-verify-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q2-a4');
+        showAnswerDetail('q2-ignore-detail');
+        lab.style.color = 'red';
 
         var q3Answer = document.querySelector('input[name="q3"]:checked');
-        if (q3Answer && q3Answer.value === "phishing") {
+        if (q3Answer && q3Answer.value === 'phishing') {
           score++;
         }
-        lab = document.getElementById("q3-a1");
-        showAnswerDetail("q3-tail-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q3-a2");
-        showAnswerDetail("q3-dive-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q3-a3");
-        showAnswerDetail("q3-phishing-detail");
-        lab.style.color = "lightgreen";
-        lab = document.getElementById("q3-a4");
-        showAnswerDetail("q3-none-detail");
-        lab.style.color = "red";
+        lab = document.getElementById('q3-a1');
+        showAnswerDetail('q3-tail-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q3-a2');
+        showAnswerDetail('q3-dive-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q3-a3');
+        showAnswerDetail('q3-phishing-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q3-a4');
+        showAnswerDetail('q3-none-detail');
+        lab.style.color = 'red';
 
         var q4Answer = document.querySelector('input[name="q4"]:checked');
-        if (q4Answer && q4Answer.value === "phishing") {
+        if (q4Answer && q4Answer.value === 'phishing') {
           score++;
         }
-        lab = document.getElementById("q4-a1");
-        showAnswerDetail("q4-tail-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q4-a2");
-        showAnswerDetail("q4-dive-detail");
-        lab.style.color = "red";
-        lab = document.getElementById("q4-a3");
-        showAnswerDetail("q4-phishing-detail");
-        lab.style.color = "lightgreen";
-        lab = document.getElementById("q4-a4");
-        showAnswerDetail("q4-none-detail");
-        lab.style.color = "red";
+        lab = document.getElementById('q4-a1');
+        showAnswerDetail('q4-tail-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q4-a2');
+        showAnswerDetail('q4-dive-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q4-a3');
+        showAnswerDetail('q4-phishing-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q4-a4');
+        showAnswerDetail('q4-none-detail');
+        lab.style.color = 'red';
 
         // Display the result
-        var resultElement = document.getElementById("result");
-        resultElement.innerHTML = "Your score is: " + score + "/4";
+        var resultElement = document.getElementById('result');
+        resultElement.innerHTML = 'Your score is: ' + score + '/4';
       }
 
       function showAnswerDetail(detailId) {
         var detailElement = document.getElementById(detailId);
         if (detailElement) {
-          detailElement.style.display = "block";
+          detailElement.style.display = 'block';
         }
       }
 
-      var labels = document.querySelectorAll("label");
+      var labels = document.querySelectorAll('label');
       labels.forEach(function (label) {
-        label.addEventListener("click", function () {
+        label.addEventListener('click', function () {
           // Remove 'selected' class from all labels
           labels.forEach(function (otherLabel) {
-            var radioLabel = label.closest("li.option"); // Assuming the radio is wrapped in an <li> with class "option"
+            var radioLabel = label.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
             var radioName = radioLabel
               .querySelector('input[type="radio"]')
-              .getAttribute("name");
-            var otherRadioLabel = otherLabel.closest("li.option"); // Assuming the radio is wrapped in an <li> with class "option"
+              .getAttribute('name');
+            var otherRadioLabel = otherLabel.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
             var otherRadioName = otherRadioLabel
               .querySelector('input[type="radio"]')
-              .getAttribute("name");
+              .getAttribute('name');
             if (otherRadioName === radioName) {
-              otherLabel.classList.remove("selected");
+              otherLabel.classList.remove('selected');
             }
           });
 
           // Add 'selected' class to the clicked label
-          label.classList.add("selected");
+          label.classList.add('selected');
         });
       });
     </script>
     <script src="../../../Javascript/popUp_Pages.js"></script>
+    <script src="../../../Javascript/footer.js"></script>
   </body>
 </html>

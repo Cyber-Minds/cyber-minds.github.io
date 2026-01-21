@@ -28,7 +28,7 @@ body {
 }
 
 body {
-  font-family: "Georgia", sans-serif;
+  font-family: 'Georgia', sans-serif;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -93,7 +93,7 @@ header {
   transform: translateX(-50%);
   top: 8.5%;
   left: 49%;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 4em;
   font-weight: 700;
   font-style: normal;
@@ -199,15 +199,15 @@ footer {
 }
 
 h2 {
-  font-family: "MuseoModerno", sans-serif;
+  font-family: 'MuseoModerno', sans-serif;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 footer {
@@ -224,7 +224,7 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .emailForCyberminds {
