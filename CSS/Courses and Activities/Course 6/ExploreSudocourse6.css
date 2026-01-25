@@ -61,7 +61,7 @@ header {
   margin-bottom: 1%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
+  font-family: 'MuseoModerno', sans-serif !important;
   letter-spacing: 0.05em;
   font-weight: 400;
   color: transparent; /* Set initial text color to transparent */
@@ -189,7 +189,6 @@ section {
   white-space: nowrap;
 }
 
-
 .leftRectangle-section2 a:last-child {
   margin-bottom: 9%;
 }
@@ -197,7 +196,6 @@ section {
 .Empty-section2 {
   flex: 1;
 }
-
 
 .leftRectangle-section3 {
   flex: 0.2;
@@ -279,22 +277,20 @@ section {
 }
 
 .right-side_rectangle-buttons .next_course {
-  margin-left: auto; /
+  margin-left: auto;
 }
 
-.right-side_rectangle-buttons a:hover ,
+.right-side_rectangle-buttons a:hover,
 .leftRectangle-section1 a:hover,
 .leftRectangle-section2 a:hover,
 .leftRectangle-section3 a:hover {
   background-color: #1e6bb2;
 }
 
-
-
 .right-side_rectangle h2,
 .right-side_rectangle p {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size:2.3em;
+  font-size: 2.3em;
 }
 
 .right-side_rectangle p {
@@ -303,27 +299,27 @@ section {
 }
 
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h2 {
-  font-family: "MuseoModerno", sans-serif;
+  font-family: 'MuseoModerno', sans-serif;
   font-weight: 400;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
   font-size: 1.2em;
 }
 
 li {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .green-word {
