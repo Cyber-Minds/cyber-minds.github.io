@@ -1,14 +1,21 @@
 {
-	# This Caddy instance is intended to run behind an edge proxy.
-	# TLS should terminate at the edge, not here.
-	auto_https off
+	# Used only when APP_DOMAIN is a real public domain.
+	# Ignored for internal listeners like :80.
+	email {$ACME_EMAIL}
 }
 
-# Internal listener. Keep this as :80 when running behind edge proxy.
-# If you run this stack directly on the internet, set APP_DOMAIN to a real
-# domain and use a TLS-enabled config at the edge.
+# APP_DOMAIN can be:
+# - terminal.example.com (Caddy serves HTTPS directly)
+# - :80 (Caddy serves HTTP only, for use behind another reverse proxy)
 {$APP_DOMAIN::80} {
-	reverse_proxy backend:3000
+	@api path /api* /health
+	handle @api {
+		reverse_proxy backend:3000
+	}
+
+	handle {
+		reverse_proxy backend:3000
+	}
 
 	encode zstd gzip
 
