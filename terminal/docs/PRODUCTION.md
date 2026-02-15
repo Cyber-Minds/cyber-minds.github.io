@@ -27,6 +27,8 @@ ENVIRONMENT=production
 
 APP_DOMAIN=terminal.example.com
 ACME_EMAIL=ops@example.com
+CADDY_HTTP_PORT=80
+CADDY_HTTPS_PORT=443
 
 ALLOWED_ORIGINS=https://terminal.example.com
 ```
@@ -36,6 +38,9 @@ Notes:
 - `ALLOWED_ORIGINS` is checked by backend CORS and WS origin validation.
 - For multiple origins, use comma-separated values:
   `ALLOWED_ORIGINS=https://terminal.example.com,https://www.example.com`
+- If `443` is occupied, set `CADDY_HTTPS_PORT` (for example `8443`) and include
+  that port in `ALLOWED_ORIGINS`:
+  `ALLOWED_ORIGINS=https://terminal.example.com:8443`
 
 ## 3. Deploy
 

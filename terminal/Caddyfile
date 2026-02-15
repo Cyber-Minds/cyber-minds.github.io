@@ -1,14 +1,18 @@
 {
-	# Optional: set ACME_EMAIL in env for Let's Encrypt account notifications.
-	email {$ACME_EMAIL}
+	# This Caddy instance is intended to run behind an edge proxy.
+	# TLS should terminate at the edge, not here.
+	auto_https off
 }
 
-{$APP_DOMAIN:localhost} {
+# Internal listener. Keep this as :80 when running behind edge proxy.
+# If you run this stack directly on the internet, set APP_DOMAIN to a real
+# domain and use a TLS-enabled config at the edge.
+{$APP_DOMAIN::80} {
 	reverse_proxy backend:3000
 
 	encode zstd gzip
 
-	# Proxy defaults include WS upgrade handling.
+	# Caddy handles WebSocket upgrades automatically.
 	header {
 		X-Content-Type-Options "nosniff"
 		X-Frame-Options "DENY"

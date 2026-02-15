@@ -37,6 +37,8 @@ ENVIRONMENT=production
 
 APP_DOMAIN=terminal.yourdomain.com
 ACME_EMAIL=you@yourdomain.com
+CADDY_HTTP_PORT=80
+CADDY_HTTPS_PORT=443
 
 ALLOWED_ORIGINS=https://terminal.yourdomain.com
 ```
@@ -45,6 +47,13 @@ If you need multiple allowed origins:
 
 ```env
 ALLOWED_ORIGINS=https://terminal.yourdomain.com,https://www.yourdomain.com
+```
+
+If `443` is already in use on the server, map Caddy to another host port:
+
+```env
+CADDY_HTTPS_PORT=8443
+ALLOWED_ORIGINS=https://terminal.yourdomain.com:8443
 ```
 
 ## 5) Start production stack
