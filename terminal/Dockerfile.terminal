@@ -5,13 +5,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Enable Ubuntu repositories and install base packages.
 # Keep apt lists available so users can install extra packages in live sessions.
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
     ca-certificates \
     gnupg \
     lsb-release \
     && add-apt-repository -y universe \
-    && apt-get update && apt-get install -y \
+    && apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
     git \
@@ -25,24 +25,31 @@ RUN apt-get update && apt-get install -y \
     golang-go \
     sudo \
     zsh \
-    nginx
+    nginx \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Install Python 3.11
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.11 \
     python3-pip \
     python3.11-venv \
     && ln -sf /usr/bin/python3.11 /usr/bin/python \
-    && ln -sf /usr/bin/python3.11 /usr/bin/python3
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Install Java (OpenJDK 17)
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    openjdk-17-jre
+# Install Java (OpenJDK 17 headless to reduce image size + build disk usage)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-17-jdk-headless \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Configure nginx to run safely as non-root by default.
 # This keeps terminal-user in least-privilege mode while allowing `nginx` to start.
@@ -78,7 +85,7 @@ RUN printf '%s\n' \
     && sed -i 's/listen \\[::\\]:80 default_server;/listen [::]:8080 default_server;/' /etc/nginx/sites-available/default
 
 # Set Java environment variables
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/default-java
 ENV PATH=$PATH:$JAVA_HOME/bin
 
 # Create a non-root user with sudo access
