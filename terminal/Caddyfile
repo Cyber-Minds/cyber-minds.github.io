@@ -1,0 +1,13 @@
+:80 {
+	# Internal Caddy behind edge reverse proxy. TLS terminates at edge.
+	reverse_proxy backend:3000
+
+	encode zstd gzip
+
+	# Caddy handles WebSocket upgrades automatically.
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}
