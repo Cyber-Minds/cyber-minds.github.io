@@ -596,9 +596,12 @@
       };
 
       const query = new URLSearchParams(window.location.search);
-      // Use same-origin by default so deployed frontend works without query params.
-      // In dev, live-server proxy keeps /api on same origin as well.
-      const defaultApiOrigin = window.location.origin;
+      // Two-deployment setup:
+      // - Main site can host this UI on github.io.
+      // - Terminal backend runs on a dedicated host/domain.
+      const defaultApiOrigin = window.location.hostname.endsWith('github.io')
+        ? 'https://terminal.egeuysal.com'
+        : window.location.origin;
       const configuredApiOrigin = query.get('apiOrigin') || defaultApiOrigin;
       const apiOrigin = (() => {
         try {
