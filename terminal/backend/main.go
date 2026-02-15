@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/url"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -215,6 +216,19 @@ func getAllowedOrigins() []string {
 func normalizeOrigin(origin string) string {
 	origin = strings.TrimSpace(origin)
 	origin = strings.TrimSuffix(origin, "/")
+	if origin == "" {
+		return ""
+	}
+
+	// Accept full URLs in ALLOWED_ORIGINS (including accidental path/query),
+	// but normalize them down to strict origin format: scheme://host[:port].
+	if strings.Contains(origin, "://") {
+		parsed, err := url.Parse(origin)
+		if err == nil && parsed.Scheme != "" && parsed.Host != "" {
+			return parsed.Scheme + "://" + parsed.Host
+		}
+	}
+
 	return origin
 }
 
