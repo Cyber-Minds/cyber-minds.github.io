@@ -1,0 +1,17 @@
+{
+	# Optional: set ACME_EMAIL in env for Let's Encrypt account notifications.
+	email {$ACME_EMAIL}
+}
+
+{$APP_DOMAIN:localhost} {
+	reverse_proxy backend:3000
+
+	encode zstd gzip
+
+	# Proxy defaults include WS upgrade handling.
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}

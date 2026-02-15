@@ -1,0 +1,105 @@
+FROM ubuntu:22.04
+
+# Prevent interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Enable Ubuntu repositories and install base packages.
+# Keep apt lists available so users can install extra packages in live sessions.
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    && add-apt-repository -y universe \
+    && apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    vim \
+    nano \
+    htop \
+    net-tools \
+    iputils-ping \
+    nmap \
+    build-essential \
+    golang-go \
+    sudo \
+    zsh \
+    nginx
+
+# Install Python 3.11
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3-pip \
+    python3.11-venv \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3
+
+# Install Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Install Java (OpenJDK 17)
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jdk \
+    openjdk-17-jre
+
+# Configure nginx to run safely as non-root by default.
+# This keeps terminal-user in least-privilege mode while allowing `nginx` to start.
+RUN printf '%s\n' \
+    'worker_processes auto;' \
+    'pid /tmp/nginx.pid;' \
+    'error_log /tmp/nginx-main-error.log warn;' \
+    'include /etc/nginx/modules-enabled/*.conf;' \
+    '' \
+    'events {' \
+    '    worker_connections 768;' \
+    '}' \
+    '' \
+    'http {' \
+    '    sendfile on;' \
+    '    tcp_nopush on;' \
+    '    types_hash_max_size 2048;' \
+    '    include /etc/nginx/mime.types;' \
+    '    default_type application/octet-stream;' \
+    '    ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;' \
+    '    ssl_prefer_server_ciphers on;' \
+    '    access_log /tmp/nginx-access.log;' \
+    '    client_body_temp_path /tmp/nginx-client-body;' \
+    '    proxy_temp_path /tmp/nginx-proxy;' \
+    '    fastcgi_temp_path /tmp/nginx-fastcgi;' \
+    '    uwsgi_temp_path /tmp/nginx-uwsgi;' \
+    '    scgi_temp_path /tmp/nginx-scgi;' \
+    '    gzip on;' \
+    '    include /etc/nginx/conf.d/*.conf;' \
+    '    include /etc/nginx/sites-enabled/*;' \
+    '}' > /etc/nginx/nginx.conf \
+    && sed -i 's/listen 80 default_server;/listen 8080 default_server;/' /etc/nginx/sites-available/default \
+    && sed -i 's/listen \\[::\\]:80 default_server;/listen [::]:8080 default_server;/' /etc/nginx/sites-available/default
+
+# Set Java environment variables
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH=$PATH:$JAVA_HOME/bin
+
+# Create a non-root user with sudo access
+RUN useradd -m -s /bin/bash terminal-user && \
+    echo "terminal-user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Create workspace directory and set ownership
+RUN mkdir -p /workspace && \
+    chown -R terminal-user:terminal-user /workspace
+
+# Give terminal-user write access to nginx runtime/log dirs to avoid startup alerts.
+RUN mkdir -p /var/log/nginx /var/lib/nginx && \
+    chown -R terminal-user:terminal-user /var/log/nginx /var/lib/nginx
+
+WORKDIR /workspace
+
+# Set default user
+USER terminal-user
+
+# Set up shell prompt
+RUN echo 'export PS1="\[\033[01;36m\]cyberminds\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \$ "' >> /home/terminal-user/.bashrc
+
+# Default command
+CMD ["/bin/bash"]
