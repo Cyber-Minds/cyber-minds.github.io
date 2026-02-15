@@ -588,10 +588,9 @@
       };
 
       const query = new URLSearchParams(window.location.search);
-      const defaultApiOrigin =
-        window.location.port === '3000'
-          ? window.location.origin
-          : `${window.location.protocol}//${window.location.hostname}:3000`;
+      // Use same-origin by default so deployed frontend works without query params.
+      // In dev, live-server proxy keeps /api on same origin as well.
+      const defaultApiOrigin = window.location.origin;
       const configuredApiOrigin = query.get('apiOrigin') || defaultApiOrigin;
       const apiOrigin = (() => {
         try {
