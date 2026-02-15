@@ -1,21 +1,6 @@
-{
-	# Used only when APP_DOMAIN is a real public domain.
-	# Ignored for internal listeners like :80.
-	email {$ACME_EMAIL}
-}
-
-# APP_DOMAIN can be:
-# - terminal.example.com (Caddy serves HTTPS directly)
-# - :80 (Caddy serves HTTP only, for use behind another reverse proxy)
-{$APP_DOMAIN::80} {
-	@api path /api* /health
-	handle @api {
-		reverse_proxy backend:3000
-	}
-
-	handle {
-		reverse_proxy backend:3000
-	}
+:80 {
+	# Internal Caddy behind edge reverse proxy. TLS terminates at edge.
+	reverse_proxy backend:3000
 
 	encode zstd gzip
 
