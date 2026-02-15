@@ -109,7 +109,6 @@ section {
 }
 
 
-
 @keyframes rotateBoxShadow1 {
   0% {
     box-shadow: 0.1em 0.1em 1em rgba(24, 55, 68, 0.2); /* Adjust the opacity */
@@ -126,14 +125,6 @@ section {
 }
 
 
-
-@media only screen and (max-width: 600px) {
-  header {
-    position: static;
-  }
-}
-
-
 play-button {
   width: 10%;
   object-fit: cover;
@@ -143,6 +134,16 @@ h2 {
   font-family: 'MuseoModerno', sans-serif;
   font-weight: 500;
   color: white;
+}
+
+
+p {
+  font-family: 'Space Grotesk', sans-serif;
+  color: rgba(255, 255, 255, 0.91);
+}
+
+a {
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 footer {
