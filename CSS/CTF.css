@@ -1,14 +1,7 @@
-/* this page links to index */
 body {
-  overflow-x: hidden;
-}
-
-.Parent-container {
-  display: flex;
-  flex-direction: column;
-  height: 80em;
-  width: auto;
-  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  background-color: black;
   animation: rotateBoxShadow 4s infinite linear;
 }
 
@@ -17,23 +10,14 @@ body {
     box-shadow: inset 0px 0em 15em #102d42;
   }
   33% {
-    box-shadow: inset 0px 1em 17em #1a2738;
+    box-shadow: inset 0px 1em 20em #213f67;
   }
   66% {
-    box-shadow: inset 0px 0.5em 17em #1a2738;
+    box-shadow: inset 0px 0.5em 20em #132b49;
   }
   100% {
     box-shadow: inset 0em 0em 15em #143852;
   }
-}
-
-body {
-  font-family: 'Georgia', sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  color: #ffffff;
-  text-align: center;
 }
 
 header {
@@ -74,7 +58,7 @@ header {
   color: #ffffff;
   padding: 0.5em 1em;
   transition: background-color 0.3s;
-  background-color: #16425d;
+  background-color: #174867;
   text-decoration: none;
   margin-right: 0.9em;
   padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
@@ -87,12 +71,11 @@ header {
 }
 
 .page-title {
-  display: inline-block;
-  font-stretch: expanded;
-  position: absolute;
-  transform: translateX(-50%);
-  top: 8.5%;
-  left: 49%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  padding: 0%;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 4em;
   font-weight: 700;
@@ -104,12 +87,11 @@ header {
     to left,
     rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0),
-    rgba(255, 255, 255, 0.8)
+    rgb(255, 255, 255)
   ); /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
   animation: fadeIn 3s forwards; /* Set the duration of the animation */
-  margin-bottom: 30;
 }
 
 @keyframes fadeIn {
@@ -119,95 +101,48 @@ header {
   }
 }
 
-.title-image {
-  width: 100%;
-  height: calc(75vh);
-  margin: 0.2em;
-  padding: 0em;
-  opacity: 25%;
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+
+
+@keyframes rotateBoxShadow1 {
+  0% {
+    box-shadow: 0.1em 0.1em 1em rgba(24, 55, 68, 0.2); /* Adjust the opacity */
+  }
+  33% {
+    box-shadow: 0.1em 0.2em 0.5em #305982; /* Adjust the spread and color */
+  }
+  66% {
+    box-shadow: 0.1em 0.2em 0.4em #38557d; /* Adjust the spread and color */
+  }
+  100% {
+    box-shadow: 0.1em 0.2em 0.5em rgba(36, 84, 117, 0.5); /* Adjust the spread and opacity */
+  }
+}
+
+
+
+@media only screen and (max-width: 600px) {
+  header {
+    position: static;
+  }
+}
+
+
+play-button {
+  width: 10%;
   object-fit: cover;
-  display: inline-block;
-}
-
-.content {
-  margin-top: 15%;
-  font-size: 1.5em;
-}
-
-.question {
-  background-color: #174167;
-  margin-right: 30%;
-  margin-left: 30%;
-  border-radius: 1em;
-}
-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-}
-
-.page-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-}
-
-.question-title {
-  border-bottom: 2px solid #f9f9f970;
-  border-width: 0.009em;
-  border-radius: 1em;
-}
-
-.question-text {
-  display: none;
-}
-
-.show-text .question-text {
-  display: block;
-}
-
-.minus-icon {
-  display: none;
-}
-
-.show-text .minus-icon {
-  display: inline;
-}
-
-.show-text .plus-icon {
-  display: none;
-}
-
-.question-btn {
-  margin-left: 90%;
-  transform: translateY(-70%);
-  background-color: transparent;
-  border-color: transparent;
-  border-radius: 0.2em;
-}
-
-.far.fa-plus-square {
-  font-size: 1.5em;
-}
-
-.far.fa-minus-square {
-  font-size: 1.5em;
 }
 
 h2 {
   font-family: 'MuseoModerno', sans-serif;
-}
-
-a {
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-p {
-  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  color: white;
 }
 
 footer {
@@ -216,31 +151,10 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-}
-
-.page-footer {
   background-color: #0a0a0a;
   color: #fff;
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
   font-family: 'Space Grotesk', sans-serif;
-}
-
-.emailForCyberminds {
-  color: #ffffff; /* Light blue color */
-  text-decoration: none; /* No underline */
-  font-size: 0.8em; /* Smaller font size */
-}
-
-/* Hover effect for the email link */
-.emailForCyberminds:hover {
-  color: #ffffff; /* Dark blue color on hover */
-  text-decoration: underline; /* Underline on hover */
-  font-weight: bold; /* Bold on hover */
-}
-
-.header-image {
-  opacity: 30%;
-  border-radius: 2em;
 }
