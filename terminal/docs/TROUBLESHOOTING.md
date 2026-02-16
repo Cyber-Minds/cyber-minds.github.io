@@ -5,6 +5,7 @@ Use this when something breaks.
 ## 1. `go: command not found`
 
 Cause:
+
 - Old terminal image still running.
 
 Fix:
@@ -39,9 +40,11 @@ make terminal-logs
 ## 3. Editor tabs not showing created files
 
 Expected behavior:
+
 - Files under `/workspace` appear in tabs within ~2 seconds.
 
 If not:
+
 - Confirm terminal session is connected
 - Create file again:
 
@@ -55,9 +58,11 @@ echo "hello" > try.md
 ## 4. `POST /api/session` returns 404
 
 Cause:
+
 - Wrong frontend/backend routing or proxy.
 
 Fix:
+
 - Run `make terminal-up`
 - If using live-server, ensure `/api` traffic reaches backend at `:3000`
 - Test directly:
@@ -69,6 +74,7 @@ curl -X POST http://127.0.0.1:3000/api/session
 ## 5. Nginx in container permission errors
 
 If `nginx` fails with permission denied:
+
 - Rebuild image; non-root nginx config is already in Dockerfile.
 
 ```bash
@@ -94,9 +100,11 @@ make terminal-up
 ## 7. Browser UI stale after changes
 
 Cause:
+
 - Cached frontend JS/CSS.
 
 Fix:
+
 - Hard refresh (`Cmd+Shift+R`)
 - If needed, open in private window.
 
@@ -120,7 +128,7 @@ docker compose -f terminal/docker-compose.yml logs --tail=200 backend
 ```
 
 And include:
+
 - exact URL used
 - exact terminal command used
 - screenshot or copied browser console error
-

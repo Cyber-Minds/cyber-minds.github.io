@@ -4,7 +4,8 @@
 
 **URL**: http://localhost:8080
 
-**Status**: 
+**Status**:
+
 - ✅ Backend running (Go server)
 - ✅ Terminal base image ready
 - ✅ Health check passing
@@ -16,15 +17,18 @@
 ## 🎨 What's New
 
 ### Beautiful Replit-Style Interface
+
 You now have a split-screen coding environment:
 
 **Left Panel**: Monaco Code Editor
+
 - Syntax highlighting
 - Auto-completion
 - Multi-language tabs (Python, JavaScript, Java)
 - Gruvbox dark theme
 
 **Right Panel**: Full Linux Terminal
+
 - Real-time command execution
 - Matching Gruvbox colors
 - One-click Run button
@@ -44,7 +48,7 @@ You now have a split-screen coding environment:
    - Python tab is selected by default
    - Edit the sample code or write your own
 
-4. **Click Run**: 
+4. **Click Run**:
    - The ▶ Run button will create the file and execute it
    - Output appears in the terminal instantly
 
@@ -76,24 +80,28 @@ $ curl http://localhost:8080/health
 ## 🎯 Features Working
 
 ✅ **Code Editor**
+
 - Monaco editor loaded
 - Gruvbox theme active
 - Tab switching works
 - IntelliSense enabled
 
 ✅ **Terminal**
+
 - WebSocket connection
 - Full Linux shell
 - Command execution
 - Real-time output
 
 ✅ **Run System**
+
 - One-click execution
 - Automatic file creation
 - Language detection
 - Output capture
 
 ✅ **UI/UX**
+
 - Responsive design
 - Resizable panels
 - Status indicators
@@ -104,18 +112,21 @@ $ curl http://localhost:8080/health
 ## 🔧 Technical Details
 
 ### Containers Running
+
 ```
 try-backend-1 (Go server on port 8080)
 try-terminal-base-1 (Base image for sessions)
 ```
 
 ### Images Built
+
 ```
 terminal-backend:latest (11MB Alpine + Go binary)
 terminal-base:latest (Ubuntu 22.04 + Python/Node/Java)
 ```
 
 ### Network
+
 ```
 Port 8080 → Backend → Docker API
 WebSocket → Terminal sessions
@@ -126,23 +137,27 @@ WebSocket → Terminal sessions
 ## 🎨 UI Elements
 
 ### Header
+
 - ⚡ CodeTerminal logo
 - ● Connection status (green = connected)
 - Language info
 
 ### Editor Panel
+
 - 🐍 Python tab (hello.py)
 - ⚡ JavaScript tab (hello.js)
 - ☕ Java tab (Hello.java)
 - Monaco editor with syntax highlighting
 
 ### Terminal Panel
+
 - 📟 Terminal label
 - [Clear] button
 - [▶ Run] button
 - xterm.js terminal
 
 ### Color Scheme (Gruvbox)
+
 - Warm dark backgrounds (#282828)
 - High contrast text (#ebdbb2)
 - Green accents (#b8bb26)
@@ -153,24 +168,32 @@ WebSocket → Terminal sessions
 ## 📝 Example Usage
 
 ### Python
+
 ```python
 # hello.py (default tab)
 print("Hello from Python!")
 result = sum(range(1, 11))
 print(f"Sum of 1-10: {result}")
 ```
+
 **Click Run** → See output in terminal
 
 ### JavaScript
+
 ```javascript
 // hello.js
-console.log("Hello from Node.js!");
+console.log('Hello from Node.js!');
 const numbers = [1, 2, 3, 4, 5];
-console.log("Doubled:", numbers.map(n => n * 2));
+console.log(
+  'Doubled:',
+  numbers.map((n) => n * 2)
+);
 ```
+
 **Click Run** → See output in terminal
 
 ### Java
+
 ```java
 // Hello.java
 public class Hello {
@@ -179,6 +202,7 @@ public class Hello {
     }
 }
 ```
+
 **Click Run** → Compiles and executes
 
 ---
@@ -186,6 +210,7 @@ public class Hello {
 ## 🐛 Troubleshooting
 
 ### If Terminal Won't Connect
+
 ```bash
 # Check backend logs
 docker-compose logs -f backend
@@ -195,11 +220,13 @@ docker-compose restart backend
 ```
 
 ### If Editor Won't Load
+
 - Hard refresh (Cmd/Ctrl + Shift + R)
 - Check browser console (F12)
 - Verify internet connection (Monaco loads from CDN)
 
 ### View Logs
+
 ```bash
 # All logs
 docker-compose logs -f
@@ -282,7 +309,7 @@ See `DEPLOY_CHECKLIST.md` for complete guide.
 ✅ Health checks passing  
 ✅ Logs clean and informative  
 ✅ Production-ready backend  
-✅ Full documentation created  
+✅ Full documentation created
 
 ---
 

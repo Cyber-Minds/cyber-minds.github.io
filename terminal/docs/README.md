@@ -3,6 +3,7 @@
 Web-based coding + Linux terminal environment used by the CyberMinds CTF page.
 
 This folder contains everything for `/terminal`:
+
 - Docker image for isolated user shells
 - Go backend API + WebSocket bridge
 - Compose files for local and production usage
@@ -16,6 +17,7 @@ Start here, then follow the docs in order:
 3. `terminal/docs/TROUBLESHOOTING.md`
 
 Useful references:
+
 - `terminal/docker-compose.yml` (local compose)
 - `terminal/docker-compose.prod.yml` (production compose)
 - `terminal/backend/main.go` (API + WebSocket + session management)
@@ -52,6 +54,7 @@ Browser UI (`HTML/terminal.html`) -> Caddy (`terminal/Caddyfile`) -> Go backend 
 Current mode is learning-focused, not hardened multi-tenant SaaS.
 
 Important behavior:
+
 - Each user gets a separate container
 - Container has `sudo` enabled for `terminal-user` (intentional for CTF)
 - Outbound networking is allowed in current setup

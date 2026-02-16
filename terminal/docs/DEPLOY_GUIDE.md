@@ -16,6 +16,7 @@ docker compose version
 ## 2) Point DNS
 
 Create an `A` record:
+
 - `terminal.yourdomain.com` -> your server public IP
 
 Wait until DNS resolves.
@@ -66,6 +67,7 @@ docker compose -f terminal/docker-compose.prod.yml ps
 ```
 
 You should see:
+
 - `caddy` up
 - `backend` up
 - `terminal-base` helper container
@@ -93,6 +95,7 @@ Should return `200` (or successful HTTP response headers).
 ## 9) Open in browser
 
 Visit:
+
 - your main site terminal UI page (for this repo: `https://yourdomain.com/HTML/terminal.html`)
 
 ---

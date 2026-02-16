@@ -5,6 +5,7 @@ This is the recommended production setup for `/terminal`.
 ## Goal
 
 Expose terminal backend safely at your domain with:
+
 - Caddy as reverse proxy (internal HTTP listener)
 - Backend only on internal Docker network
 - Explicit CORS / WebSocket origin allowlist
@@ -12,6 +13,7 @@ Expose terminal backend safely at your domain with:
 ## 1. Prerequisites
 
 On your server:
+
 - Docker and `docker compose`
 - DNS A/AAAA record for your terminal domain
 
@@ -32,6 +34,7 @@ ALLOWED_ORIGINS=https://cyber-minds.github.io
 ```
 
 Notes:
+
 - `APP_DOMAIN` is the host Caddy accepts (via `Host` header).
 - `ALLOWED_ORIGINS` is checked by backend CORS and WS origin validation.
 - It must match where `HTML/terminal.html` is served (main site origin), not
@@ -60,6 +63,7 @@ docker compose -f terminal/docker-compose.prod.yml ps
 ```
 
 Expected:
+
 - `caddy` listening on `${CADDY_HTTP_PORT}` (default `18080`)
 - `backend` running with no public host port
 - `terminal-base` helper image container
@@ -103,12 +107,14 @@ docker compose -f terminal/docker-compose.prod.yml --env-file terminal/.env up -
 ```
 
 Rollback:
+
 - checkout previous commit/tag
 - re-run same compose command
 
 ## 9. Troubleshooting
 
 If browser sees CORS or WS errors:
+
 1. Verify `Origin` exactly matches `ALLOWED_ORIGINS`.
 2. Confirm edge proxy is forwarding the correct `Host` and websocket upgrade headers.
 3. Confirm backend is reachable from caddy container:

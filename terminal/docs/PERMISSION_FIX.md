@@ -1,16 +1,21 @@
 # ✅ File Permission Issue Fixed
 
 ## Problem
+
 When trying to create files in the terminal, users got:
+
 ```bash
 bash: hello.py: Permission denied
 ```
 
 ## Root Cause
+
 The `/workspace` directory was created as root before switching to `terminal-user`, causing permission issues.
 
 ## Solution
+
 Updated `Dockerfile.terminal` to:
+
 1. Create the `terminal-user` first
 2. Then create `/workspace` directory
 3. Set proper ownership: `chown -R terminal-user:terminal-user /workspace`
@@ -19,6 +24,7 @@ Updated `Dockerfile.terminal` to:
 ## Changes Made
 
 ### Before
+
 ```dockerfile
 # Create workspace directory
 RUN mkdir -p /workspace
@@ -33,6 +39,7 @@ USER terminal-user
 ```
 
 ### After
+
 ```dockerfile
 # Create a non-root user with sudo access
 RUN useradd -m -s /bin/bash terminal-user && \
@@ -69,18 +76,23 @@ Now you can:
 5. **See output** in the terminal
 
 ### Example - Python
+
 ```python
 print("Hello from Python!")
 ```
+
 Click **▶ Run** → Works! ✅
 
 ### Example - JavaScript
+
 ```javascript
-console.log("Hello from Node.js!");
+console.log('Hello from Node.js!');
 ```
+
 Click **▶ Run** → Works! ✅
 
 ### Example - Java
+
 ```java
 public class Hello {
     public static void main(String[] args) {
@@ -88,6 +100,7 @@ public class Hello {
     }
 }
 ```
+
 Click **▶ Run** → Compiles and runs! ✅
 
 ## Status
@@ -96,7 +109,7 @@ Click **▶ Run** → Compiles and runs! ✅
 ✅ Permissions fixed  
 ✅ Application restarted  
 ✅ File creation working  
-✅ Code execution working  
+✅ Code execution working
 
 ---
 
