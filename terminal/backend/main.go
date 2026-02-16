@@ -84,8 +84,8 @@ func main() {
 	router.HandleFunc("/api/session/{sessionId}/file", readSessionFile).Methods("GET", "OPTIONS")
 	router.HandleFunc("/health", healthCheck).Methods("GET")
 
-	// Serve frontend static files
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./frontend")))
+	// No static frontend in this deployment. UI is deployed separately.
+	router.PathPrefix("/").Handler(http.NotFoundHandler())
 
 	port := os.Getenv("PORT")
 	if port == "" {

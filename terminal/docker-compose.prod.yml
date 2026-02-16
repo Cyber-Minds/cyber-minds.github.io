@@ -1,10 +1,29 @@
 services:
+  caddy:
+    image: caddy:2.10-alpine
+    depends_on:
+      - backend
+    ports:
+      - "${CADDY_HTTP_PORT:-18080}:80"
+    environment:
+      - APP_DOMAIN=${APP_DOMAIN:-terminal.egeuysal.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "${TERMINAL_PUBLIC_PORT:-18080}:3000"
+    expose:
+      - "3000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -34,3 +53,7 @@ services:
       dockerfile: Dockerfile.terminal
     image: terminal-base:latest
     command: "true"
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -36,24 +36,21 @@ PORT=3000
 ENVIRONMENT=production
 
 APP_DOMAIN=terminal.yourdomain.com
-ACME_EMAIL=you@yourdomain.com
-CADDY_HTTP_PORT=80
-CADDY_HTTPS_PORT=443
+CADDY_HTTP_PORT=18080
 
-ALLOWED_ORIGINS=https://terminal.yourdomain.com
+ALLOWED_ORIGINS=https://yourdomain.com
 ```
 
 If you need multiple allowed origins:
 
 ```env
-ALLOWED_ORIGINS=https://terminal.yourdomain.com,https://www.yourdomain.com
+ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 ```
 
-If `443` is already in use on the server, map Caddy to another host port:
+If `80/443` are already in use on the server, keep Caddy on an internal host port:
 
 ```env
-CADDY_HTTPS_PORT=8443
-ALLOWED_ORIGINS=https://terminal.yourdomain.com:8443
+CADDY_HTTP_PORT=18080
 ```
 
 ## 5) Start production stack
@@ -88,7 +85,7 @@ docker compose -f terminal/docker-compose.prod.yml logs -f backend
 ## 8) Verify health
 
 ```bash
-curl -I https://terminal.yourdomain.com/health
+curl -H "Host: terminal.yourdomain.com" http://127.0.0.1:18080/health
 ```
 
 Should return `200` (or successful HTTP response headers).
@@ -96,8 +93,7 @@ Should return `200` (or successful HTTP response headers).
 ## 9) Open in browser
 
 Visit:
-- `https://terminal.yourdomain.com/`
-- or your main site path that links to `/terminal/`
+- your main site terminal UI page (for this repo: `https://yourdomain.com/HTML/terminal.html`)
 
 ---
 
@@ -118,8 +114,8 @@ docker compose -f terminal/docker-compose.prod.yml --env-file terminal/.env up -
 
 ## If it fails
 
-1. DNS wrong -> cert won’t issue.
-2. Ports `80/443` blocked -> open firewall.
+1. DNS or edge routing wrong -> requests never reach `terminal.yourdomain.com`.
+2. Internal port (`CADDY_HTTP_PORT`) blocked between edge and app host.
 3. Wrong `ALLOWED_ORIGINS` -> browser CORS/WS errors.
 4. Inspect logs:
 

@@ -25,9 +25,6 @@ WORKDIR /app
 # Copy binary
 COPY --from=builder /app/server .
 
-# Copy frontend
-COPY frontend/ ./frontend/
-
 EXPOSE 8080
 
 CMD ["./server"]

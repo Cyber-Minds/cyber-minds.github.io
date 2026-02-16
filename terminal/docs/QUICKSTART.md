@@ -33,8 +33,12 @@ What this does:
 ## 3. Open Terminal UI
 
 Use either:
-- `http://localhost:3000` (backend serves terminal frontend)
-- `http://localhost:8080/terminal/` if running site with live-server
+- `http://localhost:8080/HTML/terminal.html` (recommended, from main site)
+- `http://localhost:8080/HTML/terminal.html?apiOrigin=http://localhost:3000` (explicit backend override)
+
+Notes:
+- Terminal UI is now part of the main site (`HTML/terminal.html`).
+- Terminal backend is API-only and runs separately on `http://localhost:3000`.
 
 ## 4. Verify It Works
 

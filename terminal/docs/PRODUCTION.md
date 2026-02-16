@@ -4,8 +4,8 @@ This is the recommended production setup for `/terminal`.
 
 ## Goal
 
-Expose terminal safely at your domain with:
-- Caddy as reverse proxy + TLS
+Expose terminal backend safely at your domain with:
+- Caddy as reverse proxy (internal HTTP listener)
 - Backend only on internal Docker network
 - Explicit CORS / WebSocket origin allowlist
 
@@ -26,21 +26,20 @@ PORT=3000
 ENVIRONMENT=production
 
 APP_DOMAIN=terminal.example.com
-ACME_EMAIL=ops@example.com
-CADDY_HTTP_PORT=80
-CADDY_HTTPS_PORT=443
+CADDY_HTTP_PORT=18080
 
-ALLOWED_ORIGINS=https://terminal.example.com
+ALLOWED_ORIGINS=https://www.example.com
 ```
 
 Notes:
-- `APP_DOMAIN` is used by Caddy to serve your site and obtain certs.
+- `APP_DOMAIN` is the host Caddy accepts (via `Host` header).
 - `ALLOWED_ORIGINS` is checked by backend CORS and WS origin validation.
+- It must match where `HTML/terminal.html` is served (main site origin), not
+  necessarily the API domain.
 - For multiple origins, use comma-separated values:
-  `ALLOWED_ORIGINS=https://terminal.example.com,https://www.example.com`
-- If `443` is occupied, set `CADDY_HTTPS_PORT` (for example `8443`) and include
-  that port in `ALLOWED_ORIGINS`:
-  `ALLOWED_ORIGINS=https://terminal.example.com:8443`
+  `ALLOWED_ORIGINS=https://example.com,https://www.example.com`
+- `CADDY_HTTP_PORT` is the host port to publish Caddy on. Keep it off `80/443`
+  when those are already in use.
 
 ## 3. Deploy
 
@@ -59,20 +58,22 @@ docker compose -f terminal/docker-compose.prod.yml ps
 ```
 
 Expected:
-- `caddy` listening on `80/443`
+- `caddy` listening on `${CADDY_HTTP_PORT}` (default `18080`)
 - `backend` running with no public host port
 - `terminal-base` helper image container
 
 Health check from server:
 
 ```bash
-curl -I https://terminal.example.com/health
+curl -H "Host: terminal.example.com" http://127.0.0.1:18080/health
 ```
 
 ## 5. How Routing Works
 
-- Browser requests `https://terminal.example.com/...`
-- Caddy terminates TLS and proxies to `backend:3000`
+- Browser loads terminal UI from main website (`HTML/terminal.html`)
+- UI sends API + WS requests to `https://terminal.example.com/...`
+- Edge forwards to this stack on `http://<host>:${CADDY_HTTP_PORT}`
+- Caddy proxies to `backend:3000`
 - WebSocket upgrades for terminal are forwarded automatically by Caddy
 
 ## 6. Security Checklist
@@ -107,7 +108,7 @@ Rollback:
 
 If browser sees CORS or WS errors:
 1. Verify `Origin` exactly matches `ALLOWED_ORIGINS`.
-2. Confirm domain and TLS cert are active in Caddy logs.
+2. Confirm edge proxy is forwarding the correct `Host` and websocket upgrade headers.
 3. Confirm backend is reachable from caddy container:
 
 ```bash
