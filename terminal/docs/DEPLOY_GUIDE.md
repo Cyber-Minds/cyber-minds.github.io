@@ -38,13 +38,13 @@ ENVIRONMENT=production
 APP_DOMAIN=terminal.yourdomain.com
 CADDY_HTTP_PORT=18080
 
-ALLOWED_ORIGINS=https://yourdomain.com
+ALLOWED_ORIGINS=https://cyber-minds.github.io
 ```
 
 If you need multiple allowed origins:
 
 ```env
-ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+ALLOWED_ORIGINS=https://cyber-minds.github.io,https://yourdomain.com
 ```
 
 If `80/443` are already in use on the server, keep Caddy on an internal host port:

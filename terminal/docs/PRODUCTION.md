@@ -28,7 +28,7 @@ ENVIRONMENT=production
 APP_DOMAIN=terminal.example.com
 CADDY_HTTP_PORT=18080
 
-ALLOWED_ORIGINS=https://www.example.com
+ALLOWED_ORIGINS=https://cyber-minds.github.io
 ```
 
 Notes:
@@ -37,7 +37,9 @@ Notes:
 - It must match where `HTML/terminal.html` is served (main site origin), not
   necessarily the API domain.
 - For multiple origins, use comma-separated values:
-  `ALLOWED_ORIGINS=https://example.com,https://www.example.com`
+  `ALLOWED_ORIGINS=https://cyber-minds.github.io,https://yourdomain.com`
+- For GitHub Pages `https://cyber-minds.github.io/CyberMinds/HTML/CTF.html`,
+  the browser `Origin` is `https://cyber-minds.github.io` (path is not included).
 - `CADDY_HTTP_PORT` is the host port to publish Caddy on. Keep it off `80/443`
   when those are already in use.
 
