@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const terminal = document.querySelector('.terminal-section');
+        let commandHistory = [];
+        let historyIndex = -1;
+        
+        terminal.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.style.cssText = 'background: #1e1e1e; color: #00ff00; border: none; font-family: Courier New; outline: none; width: 100%;';
+            
+            const promptDiv = document.createElement('div');
+            promptDiv.style.display = 'flex';
+            promptDiv.style.marginBottom = '10px';
+            
+            const promptText = document.createElement('span');
+            promptText.textContent = '$ ';
+            promptText.style.marginRight = '5px';
+            
+            promptDiv.appendChild(promptText);
+            promptDiv.appendChild(input);
+            terminal.appendChild(promptDiv);
+            input.focus();
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const command = input.value.trim();
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    
+                    const output = document.createElement('div');
+                    output.style.marginBottom = '10px';
+                    output.textContent = executeCommand(command);
+                    terminal.appendChild(output);
+                    
+                    input.remove();
+                    terminal.scrollTop = terminal.scrollHeight;
+                    terminal.click();
+                } else if (e.key === 'ArrowUp') {
+                    if (historyIndex > 0) historyIndex--;
+                    input.value = commandHistory[historyIndex] || '';
+                } else if (e.key === 'ArrowDown') {
+                    if (historyIndex < commandHistory.length) historyIndex++;
+                    input.value = commandHistory[historyIndex] || '';
+                }
+            });
+        });
+        
+        function executeCommand(command) {
+            const commands = {
+                'help': 'Available commands: help, clear, echo, date, pwd',
+                'clear': '',
+                'date': new Date().toString(),
+                'pwd': '/Users/ashwin/Documents/GitHub/CyberMinds/HTML/CTF',
+                'echo': 'echo: provide text after command'
+            };
+            
+            if (command.startsWith('echo ')) return command.substring(5);
+            return commands[command] || `Command not found: ${command}`;
+        }
+    });
+</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragraph and Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+        }
+        
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .paragraph-section {
+            flex: 1;
+            padding: 40px;
+            background-color: #f5f5f5;
+            overflow-y: auto;
+        }
+        
+        .paragraph-section h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .paragraph-section p {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        .terminal-section {
+            flex: 1;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow-y: auto;
+            border-left: 2px solid #333;
+        }
+        
+        .terminal-section .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="paragraph-section">
+            <h1>Welcome</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consectetur vel nunc quis ultricies. Vestibulum aliquam mauris massa, sed ullamcorper ante porttitor pulvinar. Etiam rhoncus dignissim maximus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Morbi tincidunt ipsum velit, quis laoreet lorem dapibus nec. Donec feugiat turpis ut libero varius aliquet. Vestibulum tincidunt et velit at iaculis. Maecenas ornare, justo at luctus ullamcorper, enim risus rhoncus justo, vitae feugiat lorem tortor id lorem. Nullam diam erat, volutpat vitae sodales tempor, vulputate in lorem. Fusce bibendum sollicitudin dolor. Ut convallis, arcu sed bibendum mollis, magna turpis vehicula augue, et commodo mi tellus a risus. Sed a justo sit amet eros blandit condimentum vitae a tortor. Nam mollis venenatis nisi. Donec lobortis justo magna, a pretium quam pharetra quis. Nam pretium imperdiet nisi, quis tempus est fermentum semper. Donec id egestas ipsum, sed luctus neque.
+
+Nunc non pretium turpis, sit amet efficitur nunc. Vestibulum dictum odio eu arcu imperdiet, eget laoreet magna pulvinar. Curabitur erat erat, maximus ac justo in, pharetra laoreet elit. Nulla facilisi. Nunc convallis pellentesque lorem a pretium. Nunc facilisis vel arcu sed ornare. Curabitur ut mi faucibus, sagittis dolor sit amet, tristique sem. Ut fermentum a lacus et semper. Mauris eleifend interdum hendrerit. Integer convallis turpis scelerisque aliquam lobortis. Vestibulum massa urna, blandit non commodo in, semper nec arcu. Duis ac sollicitudin dolor. Praesent eu odio et metus interdum sodales sit amet ut tortor. Phasellus ultrices magna in erat porta placerat. Nullam dapibus odio purus, quis finibus lacus tempus eu. Nulla gravida scelerisque mattis.
+
+Pellentesque enim lorem, consequat et quam eu, scelerisque feugiat turpis. Donec iaculis ante ac scelerisque pretium. Curabitur sodales ut dolor ut consequat. In fermentum odio quis est consectetur semper. Nam ipsum lectus, mattis nec egestas mollis, pulvinar in nulla. Duis at nunc id ante egestas elementum sit amet ac sapien. Praesent aliquet velit efficitur felis eleifend, et maximus ipsum efficitur. Suspendisse ut tortor sed nulla luctus tempus. Phasellus porta nisl malesuada neque pharetra vehicula.
+
+Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed rhoncus ex. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam sit amet venenatis leo. Cras vitae sapien in dui pharetra placerat nec a nunc. Aliquam ornare enim eget nunc tincidunt, non accumsan mauris elementum. Nullam imperdiet tortor velit, a pellentesque arcu eleifend in.
+
+In vestibulum purus ut molestie condimentum. Nullam sed lectus et orci pharetra semper et sit amet purus. Vivamus ornare cursus eleifend. Nunc ipsum libero, porttitor non arcu id, ornare ornare massa. Maecenas a lorem mauris. Etiam et urna et tellus consequat pretium in vitae leo. Vestibulum semper rutrum mi, nec consequat lacus blandit et. Duis porttitor efficitur tortor in sagittis. Fusce at ullamcorper erat. Morbi ac dignissim lorem, et sodales justo.
+            </p>
+        </div>
+        
+        <div class="terminal-section">
+            <div class="prompt">$ Welcome to Terminal</div>
+            <div class="prompt">$ ls -la</div>
+            <div>total 48</div>
+            <div>drwxr-xr-x  5 user  staff   160 Jan 1 10:00 .</div>
+            <div>drwxr-xr-x  3 user  staff    96 Jan 1 09:00 ..</div>
+            <div>-rw-r--r--  1 user  staff  1234 Jan 1 10:00 file.txt</div>
+            <div class="prompt">$ cat file.txt</div>
+            <div>Hello from the terminal!</div>
+        </div>
+    </div>
+</body>
+</html>
