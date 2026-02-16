@@ -1181,7 +1181,7 @@
             label: 'Run Code',
             hint: 'Ctrl/Cmd + Enter',
             keywords: 'run execute terminal',
-            disabled: !isTerminalConnected(),
+            disabled: false,
             run: () => document.getElementById('runBtn').click(),
           },
           {
@@ -1189,7 +1189,7 @@
             label: 'Check Solution',
             hint: 'Ctrl/Cmd + Shift + C',
             keywords: 'check validate challenge',
-            disabled: !isTerminalConnected(),
+            disabled: false,
             run: () => document.getElementById('checkSolutionBtn').click(),
           },
           {
@@ -2117,6 +2117,10 @@
        * Attach all UI event handlers (tabs, run/clear/check buttons).
        */
       function handleGlobalShortcuts(event) {
+        const isCmd = event.metaKey || event.ctrlKey;
+        const code = event.code || '';
+        const key = (event.key || '').toLowerCase();
+
         if (isCommandPaletteOpen) {
           if (event.key === 'Escape') {
             event.preventDefault();
@@ -2140,12 +2144,11 @@
           }
         }
 
-        const isCmd = event.metaKey || event.ctrlKey;
         if (!isCmd) {
           return;
         }
 
-        if (event.key.toLowerCase() === 'k') {
+        if (code === 'KeyK' || key === 'k') {
           event.preventDefault();
           if (isCommandPaletteOpen) {
             closeCommandPalette();
@@ -2162,19 +2165,19 @@
           return;
         }
 
-        if (event.shiftKey && event.key.toLowerCase() === 'c') {
+        if (event.shiftKey && (code === 'KeyC' || key === 'c')) {
           event.preventDefault();
           document.getElementById('checkSolutionBtn').click();
           return;
         }
 
-        if (event.shiftKey && event.key.toLowerCase() === 'l') {
+        if (event.shiftKey && (code === 'KeyL' || key === 'l')) {
           event.preventDefault();
           document.getElementById('clearBtn').click();
           return;
         }
 
-        if (event.shiftKey && event.key.toLowerCase() === 's') {
+        if (event.shiftKey && (code === 'KeyS' || key === 's')) {
           event.preventDefault();
           document.getElementById('loadStarterBtn').click();
         }
@@ -2294,7 +2297,8 @@
           }
         });
 
-        window.addEventListener('keydown', handleGlobalShortcuts);
+        // Capture phase avoids Monaco/xterm consuming shortcuts first.
+        window.addEventListener('keydown', handleGlobalShortcuts, true);
       }
 
       /**
