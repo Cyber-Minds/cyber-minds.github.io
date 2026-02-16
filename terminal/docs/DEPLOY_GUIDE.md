@@ -51,6 +51,7 @@ ALLOWED_ORIGINS=https://cyber-minds.github.io,https://yourdomain.com
 ```
 
 Protection knobs:
+
 - `MAX_ACTIVE_SESSIONS` returns `503` when the cap is reached.
 - `SESSION_CREATE_RATE_LIMIT_PER_MINUTE` returns `429` for bursty session creation from one IP.
 
