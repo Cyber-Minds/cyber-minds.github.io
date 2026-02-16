@@ -7,10 +7,13 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/url"
+	"net"
 	"net/http"
+	"net/netip"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -31,6 +34,9 @@ const (
 	containerCPULimit    = 1000000000        // 1 CPU
 	terminalImageName    = "terminal-base:latest"
 	readBufferSize       = 8192
+	rateLimitWindow      = time.Minute
+	defaultMaxSessions   = 30
+	defaultCreateRate    = 12 // requests per minute per client IP
 )
 
 // Session represents a terminal session
@@ -53,9 +59,13 @@ type fileEntry struct {
 }
 
 var (
-	sessions = make(map[string]*Session)
-	mu       sync.RWMutex
-	upgrader = websocket.Upgrader{
+	sessions               = make(map[string]*Session)
+	mu                     sync.RWMutex
+	createSessionAttempts  = make(map[string][]time.Time)
+	createSessionAttemptsM sync.Mutex
+	maxActiveSessions      = getEnvInt("MAX_ACTIVE_SESSIONS", defaultMaxSessions)
+	createRatePerMinute    = getEnvInt("SESSION_CREATE_RATE_LIMIT_PER_MINUTE", defaultCreateRate)
+	upgrader               = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			origin := r.Header.Get("Origin")
 			return isOriginAllowed(origin)
@@ -94,6 +104,7 @@ func main() {
 
 	log.Printf("Server starting on port %s", port)
 	log.Printf("Environment: %s", getEnvironment())
+	log.Printf("Session limits: max_active=%d create_per_minute=%d", maxActiveSessions, createRatePerMinute)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
@@ -129,6 +140,19 @@ func getEnvironment() string {
 		return "development"
 	}
 	return env
+}
+
+func getEnvInt(key string, defaultValue int) int {
+	raw := strings.TrimSpace(os.Getenv(key))
+	if raw == "" {
+		return defaultValue
+	}
+	value, err := strconv.Atoi(raw)
+	if err != nil || value <= 0 {
+		log.Printf("Invalid %s=%q; using default %d", key, raw, defaultValue)
+		return defaultValue
+	}
+	return value
 }
 
 func securityHeadersMiddleware(next http.Handler) http.Handler {
@@ -292,6 +316,18 @@ func healthCheck(w http.ResponseWriter, r *http.Request) {
 
 // createSession creates a new Docker container and returns session ID
 func createSession(w http.ResponseWriter, r *http.Request) {
+	if isSessionCapacityReached() {
+		http.Error(w, "Session capacity reached. Try again later.", http.StatusServiceUnavailable)
+		return
+	}
+
+	clientIP := getClientIP(r)
+	if !allowCreateSession(clientIP) {
+		w.Header().Set("Retry-After", "60")
+		http.Error(w, "Too many session requests. Please wait and retry.", http.StatusTooManyRequests)
+		return
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -350,6 +386,12 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mu.Lock()
+	if len(sessions) >= maxActiveSessions {
+		mu.Unlock()
+		cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{Force: true, RemoveVolumes: true})
+		http.Error(w, "Session capacity reached. Try again later.", http.StatusServiceUnavailable)
+		return
+	}
 	sessions[sessionID] = session
 	mu.Unlock()
 
@@ -366,6 +408,72 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 		"sessionId":   sessionID,
 		"containerId": resp.ID,
 	})
+}
+
+func isSessionCapacityReached() bool {
+	mu.RLock()
+	defer mu.RUnlock()
+	return len(sessions) >= maxActiveSessions
+}
+
+func allowCreateSession(clientIP string) bool {
+	now := time.Now()
+	cutoff := now.Add(-rateLimitWindow)
+
+	createSessionAttemptsM.Lock()
+	defer createSessionAttemptsM.Unlock()
+
+	attempts := createSessionAttempts[clientIP]
+	trimmed := attempts[:0]
+	for _, t := range attempts {
+		if t.After(cutoff) {
+			trimmed = append(trimmed, t)
+		}
+	}
+
+	if len(trimmed) >= createRatePerMinute {
+		createSessionAttempts[clientIP] = trimmed
+		return false
+	}
+
+	trimmed = append(trimmed, now)
+	createSessionAttempts[clientIP] = trimmed
+	return true
+}
+
+func getClientIP(r *http.Request) string {
+	// Prefer the last client hop before our direct reverse proxy.
+	if xff := strings.TrimSpace(r.Header.Get("X-Forwarded-For")); xff != "" {
+		parts := strings.Split(xff, ",")
+		ips := make([]string, 0, len(parts))
+		for _, p := range parts {
+			ip := strings.TrimSpace(p)
+			if ip == "" {
+				continue
+			}
+			if _, err := netip.ParseAddr(ip); err == nil {
+				ips = append(ips, ip)
+			}
+		}
+		if n := len(ips); n >= 2 {
+			return ips[n-2]
+		}
+		if len(ips) == 1 {
+			return ips[0]
+		}
+	}
+
+	if xrip := strings.TrimSpace(r.Header.Get("X-Real-IP")); xrip != "" {
+		if _, err := netip.ParseAddr(xrip); err == nil {
+			return xrip
+		}
+	}
+
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
+	return host
 }
 
 // handleTerminal handles WebSocket connection for terminal I/O

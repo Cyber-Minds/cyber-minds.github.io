@@ -31,6 +31,8 @@ APP_DOMAIN=terminal.example.com
 CADDY_HTTP_PORT=18080
 
 ALLOWED_ORIGINS=https://cyber-minds.github.io
+MAX_ACTIVE_SESSIONS=30
+SESSION_CREATE_RATE_LIMIT_PER_MINUTE=12
 ```
 
 Notes:
@@ -45,6 +47,9 @@ Notes:
   the browser `Origin` is `https://cyber-minds.github.io` (path is not included).
 - `CADDY_HTTP_PORT` is the host port to publish Caddy on. Keep it off `80/443`
   when those are already in use.
+- `MAX_ACTIVE_SESSIONS` returns `503` when concurrent sessions hit the cap.
+- `SESSION_CREATE_RATE_LIMIT_PER_MINUTE` returns `429` when a client IP creates
+  sessions too frequently.
 
 ## 3. Deploy
 
@@ -87,7 +92,8 @@ curl -H "Host: terminal.example.com" http://127.0.0.1:18080/health
 - Do not use wildcard CORS in production.
 - Keep `ALLOWED_ORIGINS` explicit.
 - Keep backend internal (no `ports` published in prod compose).
-- Add auth in front of `/terminal` if this is public-facing.
+- Set a sane `MAX_ACTIVE_SESSIONS` for your VPS capacity.
+- Keep `SESSION_CREATE_RATE_LIMIT_PER_MINUTE` low enough to prevent abuse.
 - Monitor backend logs and session volume.
 
 ## 7. Logs
