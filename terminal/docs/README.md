@@ -3,9 +3,9 @@
 Web-based coding + Linux terminal environment used by the CyberMinds CTF page.
 
 This folder contains everything for `/terminal`:
+
 - Docker image for isolated user shells
 - Go backend API + WebSocket bridge
-- Browser UI (challenge panel, editor, terminal)
 - Compose files for local and production usage
 
 ## Documentation Map
@@ -17,15 +17,16 @@ Start here, then follow the docs in order:
 3. `terminal/docs/TROUBLESHOOTING.md`
 
 Useful references:
+
 - `terminal/docker-compose.yml` (local compose)
 - `terminal/docker-compose.prod.yml` (production compose)
 - `terminal/backend/main.go` (API + WebSocket + session management)
-- `terminal/frontend/index.html` (full UI)
+- `HTML/terminal.html` (full UI, deployed with main site)
 - `terminal/Dockerfile.terminal` (actual terminal environment)
 
 ## What This Service Does
 
-When a user opens `/terminal`:
+When a user opens `HTML/terminal.html` on the main website:
 
 1. Frontend calls `POST /api/session`
 2. Backend starts an isolated container from `terminal-base:latest`
@@ -37,7 +38,7 @@ Each session has cleanup logic and resource limits.
 
 ## Architecture (Simple)
 
-Browser UI (`frontend/index.html`) -> Go backend (`backend/main.go`) -> Docker daemon -> Per-user container
+Browser UI (`HTML/terminal.html`) -> Caddy (`terminal/Caddyfile`) -> Go backend (`backend/main.go`) -> Docker daemon -> Per-user container
 
 ### Key API Endpoints
 
@@ -53,6 +54,7 @@ Browser UI (`frontend/index.html`) -> Go backend (`backend/main.go`) -> Docker d
 Current mode is learning-focused, not hardened multi-tenant SaaS.
 
 Important behavior:
+
 - Each user gets a separate container
 - Container has `sudo` enabled for `terminal-user` (intentional for CTF)
 - Outbound networking is allowed in current setup

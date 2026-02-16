@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   backend:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -20,4 +18,4 @@ services:
       context: .
       dockerfile: Dockerfile.terminal
     image: terminal-base:latest
-    command: "true"
+    command: 'true'

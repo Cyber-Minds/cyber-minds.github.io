@@ -5,6 +5,7 @@ This is the fastest way to run CyberMinds terminal locally.
 ## 1. Prerequisites
 
 You need:
+
 - Docker Desktop / OrbStack running
 - `docker compose` available
 - Port `3000` free (terminal backend)
@@ -26,6 +27,7 @@ make terminal-up
 ```
 
 What this does:
+
 - builds terminal base image (`terminal/Dockerfile.terminal`)
 - builds backend image (`terminal/Dockerfile`)
 - starts compose stack from `terminal/docker-compose.yml`
@@ -33,8 +35,14 @@ What this does:
 ## 3. Open Terminal UI
 
 Use either:
-- `http://localhost:3000` (backend serves terminal frontend)
-- `http://localhost:8080/terminal/` if running site with live-server
+
+- `http://localhost:8080/HTML/terminal.html` (recommended, from main site)
+- `http://localhost:8080/HTML/terminal.html?apiOrigin=http://localhost:3000` (explicit backend override)
+
+Notes:
+
+- Terminal UI is now part of the main site (`HTML/terminal.html`).
+- Terminal backend is API-only and runs separately on `http://localhost:3000`.
 
 ## 4. Verify It Works
 

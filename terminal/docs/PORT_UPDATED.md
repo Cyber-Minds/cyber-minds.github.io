@@ -5,6 +5,7 @@
 The application is now running on **PORT 3000** instead of 8080.
 
 ### Access URL
+
 **http://localhost:3000**
 
 ### What Was Updated
@@ -13,7 +14,7 @@ The application is now running on **PORT 3000** instead of 8080.
 ✅ `.env.example` - PORT=3000  
 ✅ `docker-compose.yml` - Port mapping 3000:3000  
 ✅ `docker-compose.prod.yml` - Port mapping 3000:3000  
-✅ Application restarted successfully  
+✅ Application restarted successfully
 
 ### Current Status
 

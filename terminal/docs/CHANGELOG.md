@@ -3,6 +3,7 @@
 ## Version 2.0.0 - Replit-Style Interface
 
 ### 🎨 Major UI Overhaul
+
 - **Replit-inspired split-pane layout**
   - Monaco code editor on the left
   - Terminal on the right
@@ -20,6 +21,7 @@
   - Java (Hello.java)
 
 ### ✨ New Features
+
 - **One-Click Code Execution**
   - Automatic file creation from editor
   - Language-specific run commands
@@ -43,6 +45,7 @@
   - Adaptive resizing
 
 ### 🔧 Backend Improvements
+
 - **Fixed Docker SDK Errors**
   - Updated to docker/docker v25.0.0+incompatible
   - Resolved ContainerStartOptions compatibility
@@ -63,6 +66,7 @@
   - Resource limits
 
 ### 📁 New Files
+
 - `.env` - Development environment config
 - `.env.example` - Environment template
 - `docker-compose.prod.yml` - Production configuration
@@ -71,18 +75,21 @@
 - `CHANGELOG.md` - This file
 
 ### 🐛 Bug Fixes
+
 - Fixed Docker SDK compatibility issues
 - Resolved undefined types errors
 - Improved WebSocket connection handling
 - Better container cleanup
 
 ### 🚀 Performance
+
 - Optimized editor loading
 - Efficient terminal rendering
 - Smart panel resizing
 - Reduced initial bundle size
 
 ## Version 1.0.0 - Initial Release
+
 - Basic terminal functionality
 - Docker container isolation
 - WebSocket communication
@@ -95,6 +102,7 @@
 ### From v1.0.0 to v2.0.0
 
 1. **Update Dependencies**
+
    ```bash
    cd backend
    go get github.com/docker/docker@v25.0.0+incompatible
@@ -102,12 +110,14 @@
    ```
 
 2. **Set Environment Variables**
+
    ```bash
    cp .env.example .env
    # Edit .env as needed
    ```
 
 3. **Rebuild**
+
    ```bash
    make build
    docker-compose -f docker-compose.prod.yml up -d
@@ -124,6 +134,7 @@
 ## What's Next?
 
 ### Planned Features
+
 - [ ] More language support (Go, Rust, C++)
 - [ ] File system explorer
 - [ ] Multiple file editing
@@ -136,6 +147,7 @@
 - [ ] Export code as gist
 
 ### Improvements
+
 - [ ] Authentication system
 - [ ] Rate limiting
 - [ ] Session persistence

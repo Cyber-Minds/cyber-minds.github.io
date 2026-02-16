@@ -469,16 +469,8 @@
           </div>
         </div>
         <div class="header-right">
-          <a
-            class="header-link"
-            href="https://cyber-minds.github.io/CyberMinds/index.html"
-            >Home</a
-          >
-          <a
-            class="header-link"
-            href="https://cyber-minds.github.io/CyberMinds/HTML/CTF.html"
-            >CTF</a
-          >
+          <a class="header-link" href="../index.html">Home</a>
+          <a class="header-link" href="./CTF.html">CTF</a>
         </div>
       </header>
 
@@ -597,11 +589,15 @@
 
       const query = new URLSearchParams(window.location.search);
       // Two-deployment setup:
-      // - Main site can host this UI on github.io.
-      // - Terminal backend runs on a dedicated host/domain.
-      const defaultApiOrigin = window.location.hostname.endsWith('github.io')
-        ? 'https://terminal.egeuysal.com'
-        : window.location.origin;
+      // - Terminal UI is served by main website deployment.
+      // - Terminal backend is served by dedicated API domain.
+      // Localhost is kept for local development convenience.
+      const isLocalHost = ['localhost', '127.0.0.1'].includes(
+        window.location.hostname
+      );
+      const defaultApiOrigin = isLocalHost
+        ? window.location.origin
+        : 'https://terminal.egeuysal.com';
       const configuredApiOrigin = query.get('apiOrigin') || defaultApiOrigin;
       const apiOrigin = (() => {
         try {

@@ -4,14 +4,16 @@ This is the recommended production setup for `/terminal`.
 
 ## Goal
 
-Expose terminal safely at your domain with:
-- Caddy as reverse proxy + TLS
+Expose terminal backend safely at your domain with:
+
+- Caddy as reverse proxy (internal HTTP listener)
 - Backend only on internal Docker network
 - Explicit CORS / WebSocket origin allowlist
 
 ## 1. Prerequisites
 
 On your server:
+
 - Docker and `docker compose`
 - DNS A/AAAA record for your terminal domain
 
@@ -26,21 +28,28 @@ PORT=3000
 ENVIRONMENT=production
 
 APP_DOMAIN=terminal.example.com
-ACME_EMAIL=ops@example.com
-CADDY_HTTP_PORT=80
-CADDY_HTTPS_PORT=443
+CADDY_HTTP_PORT=18080
 
-ALLOWED_ORIGINS=https://terminal.example.com
+ALLOWED_ORIGINS=https://cyber-minds.github.io
+MAX_ACTIVE_SESSIONS=30
+SESSION_CREATE_RATE_LIMIT_PER_MINUTE=12
 ```
 
 Notes:
-- `APP_DOMAIN` is used by Caddy to serve your site and obtain certs.
+
+- `APP_DOMAIN` is the host Caddy accepts (via `Host` header).
 - `ALLOWED_ORIGINS` is checked by backend CORS and WS origin validation.
+- It must match where `HTML/terminal.html` is served (main site origin), not
+  necessarily the API domain.
 - For multiple origins, use comma-separated values:
-  `ALLOWED_ORIGINS=https://terminal.example.com,https://www.example.com`
-- If `443` is occupied, set `CADDY_HTTPS_PORT` (for example `8443`) and include
-  that port in `ALLOWED_ORIGINS`:
-  `ALLOWED_ORIGINS=https://terminal.example.com:8443`
+  `ALLOWED_ORIGINS=https://cyber-minds.github.io,https://yourdomain.com`
+- For GitHub Pages `https://cyber-minds.github.io/CyberMinds/HTML/CTF.html`,
+  the browser `Origin` is `https://cyber-minds.github.io` (path is not included).
+- `CADDY_HTTP_PORT` is the host port to publish Caddy on. Keep it off `80/443`
+  when those are already in use.
+- `MAX_ACTIVE_SESSIONS` returns `503` when concurrent sessions hit the cap.
+- `SESSION_CREATE_RATE_LIMIT_PER_MINUTE` returns `429` when a client IP creates
+  sessions too frequently.
 
 ## 3. Deploy
 
@@ -59,20 +68,23 @@ docker compose -f terminal/docker-compose.prod.yml ps
 ```
 
 Expected:
-- `caddy` listening on `80/443`
+
+- `caddy` listening on `${CADDY_HTTP_PORT}` (default `18080`)
 - `backend` running with no public host port
 - `terminal-base` helper image container
 
 Health check from server:
 
 ```bash
-curl -I https://terminal.example.com/health
+curl -H "Host: terminal.example.com" http://127.0.0.1:18080/health
 ```
 
 ## 5. How Routing Works
 
-- Browser requests `https://terminal.example.com/...`
-- Caddy terminates TLS and proxies to `backend:3000`
+- Browser loads terminal UI from main website (`HTML/terminal.html`)
+- UI sends API + WS requests to `https://terminal.example.com/...`
+- Edge forwards to this stack on `http://<host>:${CADDY_HTTP_PORT}`
+- Caddy proxies to `backend:3000`
 - WebSocket upgrades for terminal are forwarded automatically by Caddy
 
 ## 6. Security Checklist
@@ -80,7 +92,8 @@ curl -I https://terminal.example.com/health
 - Do not use wildcard CORS in production.
 - Keep `ALLOWED_ORIGINS` explicit.
 - Keep backend internal (no `ports` published in prod compose).
-- Add auth in front of `/terminal` if this is public-facing.
+- Set a sane `MAX_ACTIVE_SESSIONS` for your VPS capacity.
+- Keep `SESSION_CREATE_RATE_LIMIT_PER_MINUTE` low enough to prevent abuse.
 - Monitor backend logs and session volume.
 
 ## 7. Logs
@@ -100,14 +113,16 @@ docker compose -f terminal/docker-compose.prod.yml --env-file terminal/.env up -
 ```
 
 Rollback:
+
 - checkout previous commit/tag
 - re-run same compose command
 
 ## 9. Troubleshooting
 
 If browser sees CORS or WS errors:
+
 1. Verify `Origin` exactly matches `ALLOWED_ORIGINS`.
-2. Confirm domain and TLS cert are active in Caddy logs.
+2. Confirm edge proxy is forwarding the correct `Host` and websocket upgrade headers.
 3. Confirm backend is reachable from caddy container:
 
 ```bash
