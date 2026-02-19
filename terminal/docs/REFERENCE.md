@@ -34,7 +34,7 @@ HTML:
 ## Backend Go Package Layout
 
 - `terminal/backend/doc.go`: package-level GoDoc.
-- `terminal/backend/main.go`: server bootstrap and route registration.
+- `terminal/backend/hello.go`: server bootstrap and route registration.
 - `terminal/backend/constants.go`: constants/types/shared runtime maps.
 - `terminal/backend/environment.go`: environment parsing and Docker validation.
 - `terminal/backend/middleware.go`: security headers, CORS, logging, health.

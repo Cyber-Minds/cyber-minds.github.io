@@ -68,14 +68,14 @@ const runCommands = {
   python: 'python3 hello.py',
   javascript: 'node hello.js',
   java: 'javac Hello.java && java Hello',
-  go: 'go run main.go',
+  go: 'go run hello.go',
 };
 
 const templateFilenames = {
   python: 'hello.py',
   javascript: 'hello.js',
   java: 'Hello.java',
-  go: 'main.go',
+  go: 'hello.go',
 };
 
 const challengeCatalog = {
