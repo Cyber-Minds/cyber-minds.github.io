@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg0-hard: #0a1320;
+  --bg0: #111a25;
+  --bg1: #182535;
+  --bg2: #213448;
+  --bg3: #2f4a67;
+  --bg4: #3d5f83;
+  --fg0: #ffffff;
+  --fg1: #e6effa;
+  --fg2: #c8dbf3;
+  --fg3: #9db8d9;
+  --fg4: #7e9ac0;
+  --red: #fb4934;
+  --green: #6fdbf0;
+  --yellow: #fabd2f;
+}
+
+[data-theme='light'] {
+  --bg0-hard: #e8f0fa;
+  --bg0: #f6f9ff;
+  --bg1: #eef3fb;
+  --bg2: #d5e2f2;
+  --bg3: #b6c9df;
+  --bg4: #8da9ca;
+  --fg0: #102033;
+  --fg1: #15263a;
+  --fg2: #29415e;
+  --fg3: #4b6788;
+  --fg4: #6d87a6;
+  --green: #2397b2;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: radial-gradient(circle at top right, #16263a, var(--bg0-hard));
+  color: var(--fg1);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
