@@ -1,61 +1,57 @@
-# Run this:
+# Deploy `/terminal` (Production)
 
-set -e
+This runbook deploys the terminal backend stack and exposes it behind Caddy.
 
-cd ~/CyberMinds
-git checkout egeuysall
-git pull
+## 1. Prepare Environment
 
-## 1) Make sure terminal stack is up with correct origin
+Create `terminal/.env`:
 
-cat > terminal/.env << 'EOF'
+```env
 PORT=3000
 ENVIRONMENT=production
-APP_DOMAIN=terminal.egeuysal.com
+APP_DOMAIN=terminal.example.com
 CADDY_HTTP_PORT=18080
-ALLOWED_ORIGINS=https://cyber-minds.github.io
-EOF
+ALLOWED_ORIGINS=https://your-main-site.example.com
+```
 
+Notes:
+
+- `ALLOWED_ORIGINS` must be the exact origin serving the terminal UI page.
+- Canonical UI page is `HTML/terminal/index.html` on the main site deployment.
+
+## 2. Build and Start Stack
+
+```bash
 docker compose -f terminal/docker-compose.prod.yml --env-file terminal/.env up -d --build
+```
 
-## 2) Find the PUBLIC caddy container (the one bound to :443)
+## 3. Wire Public Caddy to Terminal Stack
 
-PUB_CADDY=$(docker ps --format '{{.Names}} {{.Image}} {{.Ports}}' | awk '$0 ~ /0\.0\.0\.0:443->/ && tolower($0) ~ /caddy/ {print $1; exit}')
-if [ -z "$PUB_CADDY" ]; then
-echo "No public caddy container found on :443. Run: docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}'"
-exit 1
-fi
-echo "Public Caddy: $PUB_CADDY"
+Find your public Caddy container (bound to `:443`), ensure it shares network `terminal_default`, and add a route:
 
-## 3) Put public caddy and terminal stack on same Docker network
-
-docker network connect terminal_default "$PUB_CADDY" 2>/dev/null || true
-
-## 4) Locate mounted Caddyfile used by public caddy
-
-CF=$(docker inspect "$PUB_CADDY" --format '{{range .Mounts}}{{if eq .Destination "/etc/caddy/Caddyfile"}}{{.Source}}{{end}}{{end}}')
-if [ -z "$CF" ]; then
-echo "Could not find /etc/caddy/Caddyfile mount for $PUB_CADDY"
-exit 1
-fi
-echo "Public Caddyfile: $CF"
-
-## 5) Add terminal route if missing
-
-if ! grep -q "terminal.egeuysal.com" "$CF"; then
-  cp "$CF" "${CF}.bak.$(date +%s)"
-cat >> "$CF" << 'EOF'
-
-terminal.egeuysal.com {
-reverse_proxy terminal-caddy-1:80
+```caddy
+terminal.example.com {
+  reverse_proxy terminal-caddy-1:80
 }
-EOF
-fi
+```
 
-## 6) Reload public caddy config
+Reload Caddy after updating config.
 
-docker exec "$PUB_CADDY" caddy reload --config /etc/caddy/Caddyfile
+## 4. Verify
 
-## 7) Verify
+```bash
+curl -I https://terminal.example.com/health
+```
 
-curl -I https://terminal.egeuysal.com/health
+Expected:
+
+- `200 OK` from `/health`
+- Browser terminal page can create session and connect WebSocket
+
+## 5. Post-Deploy Checks
+
+- Session create works: `POST /api/session`
+- WebSocket works: `WS /api/terminal/{sessionId}`
+- File sync works: `GET /api/session/{sessionId}/files`
+
+If session creation fails, check Docker daemon access and image `terminal-base:latest`.
