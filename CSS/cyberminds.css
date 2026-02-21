@@ -36,6 +36,44 @@ header {
   margin-right: 3em;
 }
 
+/* make header/inner container a positioning context so the absolute nav
+   is placed just below the header instead of at the bottom of the page */
+header,
+.header-content {
+  position: relative;
+  z-index: 1002; /* ensure logo sits above the sliding sidebar */
+}
+
+/* logo acts as menu toggle; keep it above everything */
+#menuToggle {
+  cursor: pointer;
+  position: fixed;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 1003; /* above header and sidebar */
+}
+
+/* ensure header content (other links) doesn't sit beneath fixed logo */
+.header-content {
+  padding-left: 4em;
+}
+
+/* when the nav has `.open` we become a fixed left hamburger sidebar */
+.header-buttons.open {
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 220px;              /* sidebar width */
+  padding-top: 3em;          /* avoid overlapping the logo */
+  background-color: #000000;
+  z-index: 1001;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+/* navigation buttons are normally visible; toggling only applies at narrow widths */
 .header-buttons {
   display: flex;
   justify-content: space-between;
@@ -45,6 +83,27 @@ header {
   padding-right: 6em;
   align-items: center;
   flex-grow: 1;
+  position: relative; /* flow in document when visible */
+  width: auto;
+  flex-direction: row;
+}
+
+
+/* at small viewport sizes we collapse the nav and enable toggle */
+@media (max-width: 768px) {
+  .header-buttons {
+    display: none !important; /* hide until user taps logo */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;           /* span full header width */
+    z-index: 1001;         /* float above other page content */
+    flex-direction: column; /* stack links when open */
+  }
+  .header-buttons.open {
+    display: flex !important;
+    z-index: 1001;
+  }
 }
 
 .header-buttons a {

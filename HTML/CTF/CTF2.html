@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CTF Page 2 | CyberMinds</title>
+
+  <link rel="stylesheet" href="../../CSS/CTF.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
+    <link rel="stylesheet" href="/CSS/cyberminds.css" />
+</head>
+<body>
+  <header>
+      <div class="header-content">
+        <div id="menuToggle"><div class="glass"><img src="/Images/circle.jpg" alt="CyberMinds Logo" /></div></div>
+        <nav class="header-buttons">
+          <a href="../../index.html">Back to Home Screen</a>
+          <a href="../moreinfo.html">More Info</a>
+          <a href="../mission.html">Mission</a>
+          <a href="../LiveHelp.html">Live Help</a>
+          <a href="../course_Contents.html">Courses</a>
+          <a href="../ourTeam.html">Our Team</a>
+          <a href="../CTF.html">CTF</a>
+          <a href="../SignIn&LogIn.html">Sign In</a>
+        </nav>
+      </div>
+    </header>
+
+    <div><p class="page-title">CTF Page 2</p></div>
+    <section>
+      <div class="right-side_rectangle">
+        <div class="container">
+          <div class="paragraph-section">
+              <h1>CTF Page 2</h1>
+              <p>Content for CTF Page 2 goes here.</p>
+          </div>
+          <div class="terminal-section">
+              <div class="prompt">$ Welcome to Terminal</div>
+          </div>
+      </div>
+      </div>
+      <div class="left-side_rectangle">
+         <div class="leftRectangle-section1">
+           <p class="leftRectangle-section1-button-title">Go back?</p>
+           <a href="../../index.html">Back to Home Screen</a>
+         </div>
+         <div class="Empty-section1"></div>
+
+         <div class="leftRectangle-section2">
+           <p class="leftRectangle-section2-button-title">Table of Contents</p>
+           <a href="../course_Contents.html">Courses</a>
+           <a href="../CTF.html">CTF</a>
+           <a href="CTF1.html">CTF Page 1</a>
+           <a href="CTF2.html">CTF Page 2</a>
+           <a href="CTF3.html">CTF Page 3</a>
+           <a href="CTF4.html">CTF Page 4</a>
+         </div>
+         <div class="Empty-section2"></div>
+
+         <div class="leftRectangle-section3">
+           <p class="leftRectangle-section3-button-title">Need Help?</p>
+           <a href="../LiveHelp.html">Chat Box</a>
+         </div>
+         <div class="Empty-section3"></div>
+       </div>
+    </section>
+
+  <footer id="footer">
+    <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
+  </footer>
+  <script src="/Javascript/cyberminds.js"></script>
+<script src="../Javascript/footer.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const terminal = document.querySelector('.terminal-section');
+        let commandHistory = [];
+        let historyIndex = -1;
+        terminal.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.style.cssText = 'background: #1e1e1e; color: #00ff00; border: none; font-family: Courier New; outline: none; width: 100%;';
+            const promptDiv = document.createElement('div');
+            promptDiv.style.display = 'flex';
+            promptDiv.style.marginBottom = '10px';
+            const promptText = document.createElement('span');
+            promptText.textContent = '$ ';
+            promptText.style.marginRight = '5px';
+            promptDiv.appendChild(promptText);
+            promptDiv.appendChild(input);
+            terminal.appendChild(promptDiv);
+            input.focus();
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const command = input.value.trim();
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    const output = document.createElement('div');
+                    output.style.marginBottom = '10px';
+                    output.textContent = executeCommand(command);
+                    terminal.appendChild(output);
+                    input.remove();
+                    terminal.scrollTop = terminal.scrollHeight;
+                    terminal.click();
+                } else if (e.key === 'ArrowUp') {
+                    if (historyIndex > 0) historyIndex--;
+                    input.value = commandHistory[historyIndex] || '';
+                } else if (e.key === 'ArrowDown') {
+                    if (historyIndex < commandHistory.length) historyIndex++;
+                    input.value = commandHistory[historyIndex] || '';
+                }
+            });
+        });
+        function executeCommand(command) {
+            const commands = {
+                'help': 'Available commands: help, clear, echo, date, pwd',
+                'clear': '',
+                'date': new Date().toString(),
+                'pwd': '/Users/ashwin/Documents/GitHub/CyberMinds/HTML/CTF',
+                'echo': 'echo: provide text after command'
+            };
+            if (command.startsWith('echo ')) return command.substring(5);
+            return commands[command] || `Command not found: ${command}`;
+        }
+    });
+</script>
+</body>
+</html>

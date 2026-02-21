@@ -1,39 +1,8 @@
-/* this page links to index */
+/* Course-style layout for CTF page */
 body {
-  overflow-x: hidden;
-}
-
-.Parent-container {
-  display: flex;
-  flex-direction: column;
-  height: 80em;
-  width: auto;
-  background-color: #000000;
-  animation: rotateBoxShadow 4s infinite linear;
-}
-
-@keyframes rotateBoxShadow {
-  0% {
-    box-shadow: inset 0px 0em 15em #102d42;
-  }
-  33% {
-    box-shadow: inset 0px 1em 17em #1a2738;
-  }
-  66% {
-    box-shadow: inset 0px 0.5em 17em #1a2738;
-  }
-  100% {
-    box-shadow: inset 0em 0em 15em #143852;
-  }
-}
-
-body {
-  font-family: "Georgia", sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  color: #ffffff;
-  text-align: center;
+  background-color: #1a2738;
 }
 
 header {
@@ -48,8 +17,8 @@ header {
 
 .header-content {
   display: flex;
-  align-items: center; /* Center the items vertically */
-  justify-content: space-between; /* Space between the logo and nav */
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header-content img {
@@ -74,12 +43,12 @@ header {
   color: #ffffff;
   padding: 0.5em 1em;
   transition: background-color 0.3s;
-  background-color: #16425d;
-  text-decoration: none;
+  background-color: #174167;
   margin-right: 0.9em;
-  padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
-  border-radius: 0.8em; /* Make the buttons more rounded */
-  white-space: nowrap; /* Prevent text from wrapping */
+  padding: 0.4em 0.8em;
+  border-radius: 0.8em;
+  white-space: nowrap;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .header-buttons a:hover {
@@ -87,115 +56,162 @@ header {
 }
 
 .page-title {
-  display: inline-block;
-  font-stretch: expanded;
-  position: absolute;
-  transform: translateX(-50%);
-  top: 8.5%;
-  left: 49%;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 4em;
-  font-weight: 700;
-  font-style: normal;
-  word-spacing: 0.2em;
-  letter-spacing: 0.1em;
-  color: transparent; /* Set initial text color to transparent */
+  display: flex;
+  justify-content: left;
+  margin-left: 8.75%;
+  margin-bottom: 1%;
+  margin-top: 2%;
+  padding: 0%;
+  font-family: "MuseoModerno", sans-serif !important;
+  letter-spacing: 0.05em;
+  font-weight: 400 !important;
+  color: transparent;
+  font-size: 2.5em;
   background: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0),
     rgba(255, 255, 255, 0.8)
-  ); /* Adjust the colors and stops as needed */
+  );
   background-clip: text;
   -webkit-background-clip: text;
-  animation: fadeIn 3s forwards; /* Set the duration of the animation */
-  margin-bottom: 30;
+  animation: fadeIn 6s forwards;
 }
 
 @keyframes fadeIn {
   to {
     color: rgb(255, 255, 255);
-    background-size: 200% 100%; /* Adjust the size of the gradient */
+    background-size: 200% 100%;
   }
 }
 
-.title-image {
+section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-left: 8%;
+  margin-right: 8%;
+  background-color: #1a2738;
+  width: 84%;
+  justify-self: center;
+  height: auto;
+}
+
+.left-side_rectangle {
+  flex: 3;
+  margin: 2%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 1%;
+  gap: 2%;
+  align-items: center;
+  background-color: #1a2738;
+}
+
+.leftRectangle-section1-button-title,
+.leftRectangle-section2-button-title,
+.leftRectangle-section3-button-title {
+  margin-top: 5%;
+  margin-bottom: 3%;
+  font-weight: 700px;
+  color: white;
+}
+
+.leftRectangle-section1,
+.leftRectangle-section2,
+.leftRectangle-section3 {
+  flex: 0.2;
+  background-color: #111927;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
-  height: calc(75vh);
-  margin: 0.2em;
-  padding: 0em;
-  opacity: 25%;
-  object-fit: cover;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.content {
-  margin-top: 15%;
-  font-size: 1.5em;
+.leftRectangle-section1 a,
+.leftRectangle-section2 a,
+.leftRectangle-section3 a {
+  margin-bottom: 6%;
+  margin-top: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 2.5em;
+  border-radius: 0.5em;
+  background-color: #182a47;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  margin: 3%;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.question {
-  background-color: #174167;
-  margin-right: 30%;
-  margin-left: 30%;
-  border-radius: 1em;
-}
-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
+.Empty-section1,
+.Empty-section2,
+.Empty-section3 {
+  flex: 1;
 }
 
-.page-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
+.right-side_rectangle {
+  flex: 8;
+  margin: 2%;
+  margin-right: 0%;
+  margin-left: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  flex-direction: column;
+  background-color: #1a2738;
+  color: rgb(212, 212, 212);
+  overflow-wrap: break-word;
 }
 
-.question-title {
-  border-bottom: 2px solid #f9f9f970;
-  border-width: 0.009em;
-  border-radius: 1em;
+.right-side_rectangle-buttons {
+  display: flex;
+  flex-direction: row;
+  background-color: #111927;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.2em;
 }
 
-.question-text {
-  display: none;
+.right-side_rectangle-buttons a {
+  border-radius: 0.5em;
+  background-color: #182a47;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 1%;
+  margin: 0 2%;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
-.show-text .question-text {
-  display: block;
+.right-side_rectangle-buttons .next_course {
+  margin-left: auto;
 }
 
-.minus-icon {
-  display: none;
+.right-side_rectangle-buttons a:hover,
+.leftRectangle-section1 a:hover,
+.leftRectangle-section2 a:hover,
+.leftRectangle-section3 a:hover {
+  background-color: #1e6bb2;
 }
 
-.show-text .minus-icon {
-  display: inline;
+h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1em;
 }
 
-.show-text .plus-icon {
-  display: none;
-}
-
-.question-btn {
-  margin-left: 90%;
-  transform: translateY(-70%);
-  background-color: transparent;
-  border-color: transparent;
-  border-radius: 0.2em;
-}
-
-.far.fa-plus-square {
-  font-size: 1.5em;
-}
-
-.far.fa-minus-square {
-  font-size: 1.5em;
+h2 {
+  font-family: "Space Grotesk", sans-serif;
 }
 
 h2 {
@@ -231,6 +247,23 @@ footer {
   color: #ffffff; /* Light blue color */
   text-decoration: none; /* No underline */
   font-size: 0.8em; /* Smaller font size */
+}
+
+/* ensure container flexes normally */
+.container {
+  display: flex;
+  flex-direction: column; /* stack paragraph and terminal */
+}
+
+/* fixed-size terminal with its own scroll */
+.terminal-section {
+  height: 400px;
+  overflow-y: auto;
+  background-color: #1e1e1e;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  padding: 20px;
+  border-left: 2px solid #333;
 }
 
 /* Hover effect for the email link */

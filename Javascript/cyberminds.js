@@ -118,6 +118,42 @@ function changePageCustomize() {
   window.location.href = "./HTML/customize.html";
 }
 
+// toggle navigation when logo or header image (or container) is clicked
+// we prefer using #menuToggle if it exists, otherwise fall back to any image
+function setupHeaderToggle() {
+  const nav = document.querySelector('nav.header-buttons');
+  if (!nav) return;
+  // prefer the wrapper div if present
+  let toggle = document.getElementById('menuToggle');
+  if (!toggle) {
+    toggle = document.querySelector('.header-content img');
+  }
+  if (!toggle) return;
+  toggle.style.cursor = 'pointer';
+  toggle.addEventListener('click', function (e) {
+    e.stopPropagation();
+    // toggle the open state regardless of width; CSS handles orientation
+    nav.classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+
+  // clear open state when resizing, to revert orientation
+  window.addEventListener('resize', function () {
+    nav.classList.remove('open');
+  });
+}
+
+// call on DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupHeaderToggle);
+} else {
+  setupHeaderToggle();
+}
+
 function changePageourTeam() {
   window.location.href = "./HTML/ourTeam.html";
 }
