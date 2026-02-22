@@ -50,3 +50,97 @@ body {
   height: 100vh;
   width: 100vw;
 }
+
+.challenge-nav-group-header {
+  list-style: none;
+  cursor: pointer;
+  padding: 10px 15px;
+  background: var(--bg1); 
+  border: 1px solid var(--bg3);
+  border-radius: 4px;
+  color: var(--fg1);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.challenge-nav-group-header:hover {
+  background: var(--bg2);
+}
+
+.challenge-nav-group-header::-webkit-details-marker {
+  display: none;
+}
+
+/* Add a subtle custom arrow */
+.challenge-nav-group-header::after {
+  content: '▾';
+  opacity: 0.5;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.challenge-group-wrapper[open] .challenge-nav-group-header::after {
+  transform: rotate(180deg);
+  color: var(--yellow);
+}
+
+.sub-task {
+  margin: 2px 0 2px 12px !important; /* Slight indent from the left */
+  padding: 8px 12px !important;
+  width: calc(100% - 12px) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--bg2) !important;
+  border-left: 3px solid var(--bg3) !important; 
+  border-radius: 0 4px 4px 0 !important;
+  font-size: 0.85rem !important;
+  text-align: left;
+}
+
+.sub-task:hover {
+  background: var(--bg2) !important;
+  border-left-color: var(--fg4) !important;
+}
+
+.sub-task.active {
+  background: var(--bg3) !important;
+  border-left-color: var(--yellow) !important;
+  color: var(--fg0) !important;
+}
+
+.challenge-nav-item {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px 15px;
+  background: var(--bg1); /* Fixes the white background issue */
+  border: 1px solid var(--bg3);
+  border-radius: 4px;
+  color: var(--fg1);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.challenge-nav-item:hover {
+  background: var(--bg2);
+}
+
+.challenge-nav-item.active {
+  background: var(--bg3);
+  border-color: var(--yellow);
+  color: var(--fg0);
+}
+
+.challenge-nav-item .status-dot {
+  display: none;
+}

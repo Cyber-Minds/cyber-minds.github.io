@@ -63,40 +63,61 @@ function loadChallenge(challengeId, updateUrl = true) {
 }
 
 function renderChallengeNav() {
-  const nav = document.getElementById('challengeNav');
-  nav.innerHTML = '';
+  const container = document.querySelector('.challenge-nav-list') || document.getElementById('challengeNav');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  const renderedGroups = new Set();
 
-  Object.entries(challengeCatalog).forEach(([id, challenge]) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'challenge-link';
-    button.dataset.challenge = id;
-    const passed = !!completedChallenges[id];
+  challengeOrder.forEach((id) => {
+    const challenge = challengeCatalog[id];
+    const isCompleted = !!completedChallenges[id];
+    const isActive = activeChallengeId === id;
 
-    if (passed) {
-      const icon = document.createElement('span');
-      icon.className = 'challenge-check-icon';
-      icon.innerHTML =
-        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>';
-      button.appendChild(icon);
-    }
+    // Check if this challenge belongs to a group (e.g., Log Hunt)
+    if (challenge.groupId) {
+      if (!renderedGroups.has(challenge.groupId)) {
+        renderedGroups.add(challenge.groupId);
 
-    const title = document.createElement('span');
-    title.className = 'challenge-title';
-    title.textContent = `${challenge.title} (${challenge.difficulty})`;
-    button.appendChild(title);
+        // Create the Dropdown (details/summary)
+        const details = document.createElement('details');
+        details.className = 'challenge-group-wrapper';
+        // Auto-open the dropdown if the active challenge is inside it
+        if (activeChallengeId.startsWith(id.split('-')[0])) {
+          details.open = true;
+        }
 
-    if (passed) {
-      button.disabled = true;
-      button.title = 'Completed';
+        const summary = document.createElement('summary');
+        summary.className = 'challenge-nav-group-header';
+        summary.textContent = challenge.groupTitle || 'Group';
+
+        details.appendChild(summary);
+        container.appendChild(details);
+      }
+
+      // Add the task button inside the existing details element
+      const parentDetails = container.lastChild;
+      const btn = document.createElement('button');
+      btn.className = `challenge-nav-item sub-task ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+      btn.innerHTML = `
+        <span class="status-dot"></span>
+        <span class="title">${challenge.title}</span>
+      `;
+      btn.onclick = () => loadChallenge(id);
+      parentDetails.appendChild(btn);
+
     } else {
-      button.addEventListener('click', () => loadChallenge(id));
+      // Standard rendering for standalone challenges
+      const btn = document.createElement('button');
+      btn.className = `challenge-nav-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+      btn.innerHTML = `
+        <span class="status-dot"></span>
+        <span class="title">${challenge.title}</span>
+      `;
+      btn.onclick = () => loadChallenge(id);
+      container.appendChild(btn);
     }
-
-    nav.appendChild(button);
   });
-
-  renderProgressTimeline();
 }
 
 function applyChallengeStarter() {
