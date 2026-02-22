@@ -156,3 +156,27 @@ footer {
   font-size: 0.9em;
   font-family: 'Space Grotesk', sans-serif;
 }
+
+.course-card {
+  display: block;
+  width: 22rem;
+  background-color: #0d0d0d;
+  border-radius: 1rem;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: 0 0 1rem rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer; /* makes the CARD clickable */
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 1.5rem rgba(0,0,0,0.6);
+}
+
+.course-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: default; /* prevents image from looking like the link */
+}
