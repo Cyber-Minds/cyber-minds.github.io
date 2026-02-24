@@ -103,8 +103,16 @@ function renderChallengeNav() {
         <span class="status-dot"></span>
         <span class="title">${challenge.title}</span>
       `;
-      btn.onclick = () => loadChallenge(id);
-      parentDetails.appendChild(btn);
+      btn.onclick = () => {
+  const currentIndex = getChallengeIndex(activeChallengeId);
+  const targetIndex = getChallengeIndex(id);
+  if (targetIndex > currentIndex && !completedChallenges[activeChallengeId]) {
+    showToast('Finish the current challenge first!');
+    return;
+  }
+  loadChallenge(id);
+};
+parentDetails.appendChild(btn);
 
     } else {
       // Standard rendering for standalone challenges
@@ -114,8 +122,16 @@ function renderChallengeNav() {
         <span class="status-dot"></span>
         <span class="title">${challenge.title}</span>
       `;
-      btn.onclick = () => loadChallenge(id);
-      container.appendChild(btn);
+      btn.onclick = () => {
+      const currentIndex = getChallengeIndex(activeChallengeId);
+      const targetIndex = getChallengeIndex(id);
+        if (targetIndex > currentIndex && !completedChallenges[activeChallengeId]) {
+          showToast('Finish the current challenge first!');
+        return;
+  }
+  loadChallenge(id);
+};
+container.appendChild(btn);
     }
   });
 }
