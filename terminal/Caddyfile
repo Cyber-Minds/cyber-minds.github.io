@@ -1,5 +1,4 @@
-{$APP_DOMAIN:terminal.egeuysal.com}:80 {
-	# Internal Caddy behind edge reverse proxy. TLS terminates at edge.
+{$APP_DOMAIN:terminal.egeuysal.com} {
 	reverse_proxy backend:3000
 
 	encode zstd gzip
