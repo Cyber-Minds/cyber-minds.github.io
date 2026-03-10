@@ -66,7 +66,7 @@ async function syncWorkspaceFiles() {
       .filter(
         (entry) => !Object.values(templateFilenames).includes(entry.path)
       )
-      .slice(0, 50);
+      .slice(0, MAX_WORKSPACE_FILE_TABS);
 
     const previous = workspaceFiles.map((entry) => entry.path).join('|');
     const next = files.map((entry) => entry.path).join('|');
@@ -90,7 +90,7 @@ async function syncWorkspaceFiles() {
       .filter(
         (entry) => !Object.values(templateFilenames).includes(entry.path)
       )
-      .slice(0, 50);
+      .slice(0, MAX_WORKSPACE_FILE_TABS);
 
     const previous = workspaceFiles.map((entry) => entry.path).join('|');
     const next = files.map((entry) => entry.path).join('|');

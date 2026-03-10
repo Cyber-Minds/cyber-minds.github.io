@@ -29,6 +29,7 @@ let activeEditorFile = {
 const PROGRESS_STORAGE_KEY = 'cm_ctf_progress_v1';
 const THEME_STORAGE_KEY = 'cm_terminal_theme_v1';
 const DRAFT_STORAGE_PREFIX = 'cm_terminal_draft_v1';
+const MAX_WORKSPACE_FILE_TABS = 200;
 
 const query = new URLSearchParams(window.location.search);
 // Two-deployment setup:
