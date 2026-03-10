@@ -1,13 +1,22 @@
 .file-tabs {
   display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
   gap: 4px;
   background: var(--bg0);
-  padding: 6px 8px 0;
+  padding: 6px 8px 4px;
   border-bottom: 1px solid var(--bg2);
   flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
 }
 
 .file-tab {
+  flex: 0 0 auto;
+  max-width: 220px;
+  height: 30px;
   padding: 6px 10px;
   border: 1px solid var(--bg2);
   border-bottom: none;
@@ -15,6 +24,10 @@
   background: var(--bg1);
   color: var(--fg3);
   font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 }
 

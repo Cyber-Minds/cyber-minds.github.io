@@ -416,6 +416,7 @@ function renderFileTabs() {
     tab.dataset.kind = 'template';
     tab.dataset.lang = lang;
     tab.textContent = templateFilenames[lang];
+    tab.title = templateFilenames[lang];
     const isActive =
       activeEditorFile.kind === 'template' &&
       activeEditorFile.lang === lang;
@@ -429,6 +430,7 @@ function renderFileTabs() {
     tab.dataset.kind = 'workspace';
     tab.dataset.path = entry.path;
     tab.textContent = getFilename(entry.path);
+    tab.title = entry.path;
     const isActive =
       activeEditorFile.kind === 'workspace' &&
       activeEditorFile.path === entry.path;
