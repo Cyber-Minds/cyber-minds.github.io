@@ -1,0 +1,174 @@
+header {
+  background: var(--bg0);
+  border-bottom: 1px solid var(--bg2);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+}
+
+.logo-text {
+  font-family: 'MuseoModerno', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--green);
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: var(--bg1);
+  border: 1px solid var(--bg2);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--fg2);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg4);
+}
+
+.status-dot.connecting {
+  background: var(--yellow);
+}
+
+.status-dot.connected {
+  background: var(--green);
+}
+
+.status-dot.error {
+  background: var(--red);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--fg3);
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-tool-btn {
+  color: var(--fg1);
+  text-decoration: none;
+  border: 1px solid var(--bg3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.header-tool-btn:hover {
+  background: var(--bg2);
+}
+
+.header-link {
+  color: var(--fg1);
+  text-decoration: none;
+  border: 1px solid var(--bg3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.header-link:hover {
+  background: var(--bg2);
+}
+
+.main-content {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  padding: 8px;
+  min-height: 0;
+}
+
+.panel {
+  min-height: 0;
+  border: 1px solid var(--bg2);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.challenge-panel {
+  flex: 0 0 24%;
+}
+
+.editor-panel {
+  flex: 0 0 34%;
+}
+
+.terminal-panel {
+  flex: 1;
+}
+
+.panel-resizer {
+  width: 6px;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, var(--bg3), var(--bg2));
+  cursor: col-resize;
+  flex-shrink: 0;
+}
+
+.panel-resizer:hover {
+  background: linear-gradient(to bottom, var(--green), var(--bg3));
+}
+
+.panel-header {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: var(--bg1);
+  border-bottom: 1px solid var(--bg2);
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg1);
+  letter-spacing: 0.03em;
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  color: var(--fg3);
+}

@@ -1,0 +1,12 @@
+{$APP_DOMAIN:terminal.egeuysal.com} {
+	reverse_proxy backend:3000
+
+	encode zstd gzip
+
+	# Caddy handles WebSocket upgrades automatically.
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}

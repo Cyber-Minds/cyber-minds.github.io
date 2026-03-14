@@ -1,0 +1,15 @@
+/*
+ * CyberMinds Terminal stylesheet entrypoint.
+ *
+ * Keep this file as the stable include target for existing pages,
+ * while actual styles live in focused modules under CSS/terminal/.
+ */
+
+@import url('./terminal/base.css');
+@import url('./terminal/shell.css');
+@import url('./terminal/challenge.css');
+@import url('./terminal/editor.css');
+@import url('./terminal/terminal-panel.css');
+@import url('./terminal/overlay.css');
+@import url('./terminal/responsive.css');
+@import url('./terminal/scrollbar.css');

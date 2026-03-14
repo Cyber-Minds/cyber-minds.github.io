@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberMinds Terminal</title>
+    <link rel="icon" type="image/jpeg" href="../../Images/circle.jpg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css"
+    />
+    <link rel="stylesheet" href="../../CSS/terminal.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <div class="header-left">
+          <div class="logo">
+            <img
+              class="logo-mark"
+              src="../../Images/circle.jpg"
+              alt="CyberMinds"
+            />
+            <span class="logo-text">CyberMinds Terminal</span>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Initializing...</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-tools">
+            <button class="header-tool-btn" id="themeToggleBtn" type="button">
+              Theme
+            </button>
+          </div>
+          <a class="header-link" href="../../index.html">Home</a>
+          <a class="header-link" href="../CTF.html">CTF</a>
+        </div>
+      </header>
+      <div class="mobile-view-switcher" id="mobileViewSwitcher">
+        <button class="mobile-switch-btn" id="mobileChallengeBtn" type="button">
+          Challenge
+        </button>
+        <button class="mobile-switch-btn" id="mobileEditorBtn" type="button">
+          Editor
+        </button>
+        <button class="mobile-switch-btn" id="mobileTerminalBtn" type="button">
+          Terminal
+        </button>
+      </div>
+
+      <div class="main-content">
+        <aside class="panel challenge-panel">
+          <div class="panel-header">
+            <div class="panel-title">Challenge</div>
+            <div class="panel-subtitle" id="challengeDifficulty"></div>
+          </div>
+          <div class="challenge-content">
+            <div class="challenge-progress" id="challengeProgress">
+              <div class="progress-chip" id="progressChip">0/0 complete</div>
+              <div class="progress-timeline" id="progressTimeline"></div>
+            </div>
+            <div class="challenge-nav" id="challengeNav"></div>
+            <div>
+              <h2
+                id="challengeTitle"
+                style="font-size: 18px; margin-bottom: 6px"
+              ></h2>
+              <p id="challengeDescription" class="challenge-description"></p>
+            </div>
+            <div class="challenge-objective">
+              <h3>Objective</h3>
+              <p id="challengeObjective"></p>
+            </div>
+            <div class="challenge-steps">
+              <h3>Checklist</h3>
+              <ol id="challengeSteps"></ol>
+            </div>
+            <div class="challenge-actions">
+              <button class="btn primary" id="loadStarterBtn">
+                Load Starter
+              </button>
+              <button class="btn" id="copyCommandBtn">
+                Copy First Command
+              </button>
+              <button class="btn" id="checkSolutionBtn">Check Solution</button>
+            </div>
+          </div>
+        </aside>
+        <div
+          class="panel-resizer"
+          id="resizerInstructionsEditor"
+          aria-hidden="true"
+        ></div>
+
+        <section class="panel editor-panel" id="editorPanel">
+          <div class="panel-header">
+            <div class="panel-title">Editor</div>
+            <div class="panel-subtitle" id="selectedLanguage">python</div>
+          </div>
+          <div class="file-tabs" id="fileTabs">
+            <div
+              class="file-tab active"
+              data-kind="template"
+              data-lang="python"
+            >
+              hello.py
+            </div>
+            <div class="file-tab" data-kind="template" data-lang="javascript">
+              hello.js
+            </div>
+            <div class="file-tab" data-kind="template" data-lang="java">
+              Hello.java
+            </div>
+            <div class="file-tab" data-kind="template" data-lang="go">
+              hello.go
+            </div>
+          </div>
+          <div class="editor-container">
+            <div id="editor"></div>
+          </div>
+        </section>
+        <div
+          class="panel-resizer"
+          id="resizerEditorTerminal"
+          aria-hidden="true"
+        ></div>
+
+        <section class="panel terminal-panel" id="terminalPanel">
+          <div class="panel-header">
+            <div class="panel-title">Terminal</div>
+            <div class="terminal-actions">
+              <button class="btn" id="clearBtn">Clear</button>
+              <button class="btn primary" id="runBtn">Run</button>
+            </div>
+          </div>
+          <div class="terminal-wrapper">
+            <div class="loading" id="loading">
+              <div class="loading-card">
+                <div class="skeleton-row short"></div>
+                <div class="skeleton-row"></div>
+                <div class="skeleton-row mid"></div>
+              </div>
+              <div class="loading-caption" id="loadingCaption">
+                Preparing terminal workspace...
+              </div>
+            </div>
+            <div id="terminal" style="display: none"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <div class="command-palette-overlay" id="commandPaletteOverlay" hidden>
+      <div class="command-palette" role="dialog" aria-modal="true">
+        <div class="command-palette-head">
+          <span>Command Palette</span>
+          <span class="command-palette-hint">Esc to close</span>
+        </div>
+        <input
+          class="command-palette-input"
+          id="commandPaletteInput"
+          type="text"
+          placeholder="Search actions (run, check, clear, theme...)"
+        />
+        <div class="command-palette-list" id="commandPaletteList"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script src="../../Javascript/terminal.js"></script>
+  </body>
+</html>
