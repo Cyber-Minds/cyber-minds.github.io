@@ -478,6 +478,41 @@ a {
     transform 0.3s ease,
     box-shadow 0.3s ease;
   z-index: 10001;
+  color: #ffffff
+}
+
+.opportunity-card h3 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 15px;
+}
+
+.opportunity-card h5 {
+  color: rgb(111, 219, 240); 
+  font-weight: 600;
+}
+
+.opportunity-card p, 
+.opportunity-card li {
+  color: rgba(255, 255, 255, 0.85); 
+}
+
+.opportunity-card ul {
+  text-align: left;
+  display: inline-block; 
+  padding-left: 1.2em;
+  margin-top: 1em;
+}
+
+.opportunity-card li {
+  margin-bottom: 0.5em;
+}
+
+.opportunity-card i {
+  color: #fb582a; 
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  display: block;
 }
 
 .opportunity-card:hover {
