@@ -1,0 +1,44 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend Build and Smoke Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terminal/backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache: true
+      - name: Install dependencies
+        run: go mod download
+      - name: Verify build compiles
+        run: go build ./...
+      - name: Run go vet
+        run: go vet ./...
+
+  frontend:
+    name: Frontend Lint Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JS syntax
+        run: find Javascript -name "*.js" -exec node --check {} \;
+      - name: Check HTML files are non-empty
+        run: if find HTML -name "*.html" -empty | grep -q .; then echo "Empty HTML files found"; exit 1; fi
