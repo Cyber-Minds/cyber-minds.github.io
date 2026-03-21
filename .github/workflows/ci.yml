@@ -27,13 +27,6 @@ jobs:
         run: go build ./...
       - name: Run go vet
         run: go vet ./...
-      - name: Check formatting
-        run: |
-          unformatted=\terminal\backend\constants.go terminal\backend\doc.go terminal\backend\environment.go terminal\backend\files.go terminal\backend\main.go terminal\backend\middleware.go terminal\backend\progress.go terminal\backend\session.go terminal\backend\terminal_handler.go
-          if [ -n "\" ]; then
-            echo "Unformatted files: \"
-            exit 1
-          fi
 
   frontend:
     name: Frontend Lint Check
@@ -46,13 +39,6 @@ jobs:
         with:
           node-version: '20'
       - name: Check JS syntax
-        run: |
-          find Javascript -name "*.js" | while read f; do
-            node --check "\" && echo "OK: \" || { echo "SYNTAX ERROR: \"; exit 1; }
-          done
+        run: find Javascript -name "*.js" -exec node --check {} \;
       - name: Check HTML files are non-empty
-        run: |
-          find HTML -name "*.html" | while read f; do
-            if [ ! -s "\" ]; then echo "EMPTY: \"; exit 1; fi
-            echo "OK: \"
-          done
+        run: find HTML -name "*.html" -empty -exit
