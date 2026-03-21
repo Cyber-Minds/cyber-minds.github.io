@@ -164,14 +164,16 @@ footer {
   border-radius: 1rem;
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 0 1rem rgba(0,0,0,0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   cursor: pointer; /* makes the CARD clickable */
 }
 
 .course-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 0 1.5rem rgba(0,0,0,0.6);
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.6);
 }
 
 .course-image {
@@ -179,4 +181,33 @@ footer {
   height: auto;
   display: block;
   cursor: default; /* prevents image from looking like the link */
+}
+
+.course-info {
+  padding: 1.2rem 1.35rem 1.35rem;
+}
+
+.course-number {
+  margin-bottom: 0.45rem;
+}
+
+.courseclass {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #6fdbf0;
+}
+
+.course-title {
+  margin: 0 0 0.6rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.course-description {
+  margin: 0;
+  text-align: left;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.86);
 }
