@@ -41,4 +41,4 @@ jobs:
       - name: Check JS syntax
         run: find Javascript -name "*.js" -exec node --check {} \;
       - name: Check HTML files are non-empty
-        run: find HTML -name "*.html" -empty -exit
+        run: if find HTML -name "*.html" -empty | grep -q .; then echo "Empty HTML files found"; exit 1; fi
