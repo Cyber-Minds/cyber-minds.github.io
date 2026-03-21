@@ -25,6 +25,9 @@ func main() {
 	router.HandleFunc("/api/session/{sessionId}/files", listSessionFiles).Methods("GET", "OPTIONS")
 	router.HandleFunc("/api/session/{sessionId}/file", readSessionFile).Methods("GET", "OPTIONS")
 	router.HandleFunc("/health", healthCheck).Methods("GET")
+	router.HandleFunc("/api/session/{sessionId}/progress", handleGetProgress).Methods("GET", "OPTIONS")
+	router.HandleFunc("/api/session/{sessionId}/progress/{challengeId}", handleCompleteChallenge).Methods("POST", "OPTIONS")
+	router.HandleFunc("/api/session/{sessionId}/progress/{challengeId}/access", handleValidateAccess).Methods("GET", "OPTIONS")
 
 	// UI is served by the main website deployment, not this API process.
 	router.PathPrefix("/").Handler(http.NotFoundHandler())

@@ -104,15 +104,15 @@ function renderChallengeNav() {
         <span class="title">${challenge.title}</span>
       `;
       btn.onclick = () => {
-  const currentIndex = getChallengeIndex(activeChallengeId);
-  const targetIndex = getChallengeIndex(id);
-  if (targetIndex > currentIndex && !completedChallenges[activeChallengeId]) {
-    showToast('Finish the current challenge first!');
-    return;
-  }
-  loadChallenge(id);
-};
-parentDetails.appendChild(btn);
+        const currentIndex = getChallengeIndex(activeChallengeId);
+        const targetIndex = getChallengeIndex(id);
+        if (targetIndex > currentIndex && !completedChallenges[activeChallengeId]) {
+          showToast('Finish the current challenge first!');
+          return;
+        }
+        loadChallenge(id);
+      };
+      parentDetails.appendChild(btn);
 
     } else {
       // Standard rendering for standalone challenges
@@ -123,15 +123,15 @@ parentDetails.appendChild(btn);
         <span class="title">${challenge.title}</span>
       `;
       btn.onclick = () => {
-      const currentIndex = getChallengeIndex(activeChallengeId);
-      const targetIndex = getChallengeIndex(id);
+        const currentIndex = getChallengeIndex(activeChallengeId);
+        const targetIndex = getChallengeIndex(id);
         if (targetIndex > currentIndex && !completedChallenges[activeChallengeId]) {
           showToast('Finish the current challenge first!');
-        return;
-  }
-  loadChallenge(id);
-};
-container.appendChild(btn);
+          return;
+        }
+        loadChallenge(id);
+      };
+      container.appendChild(btn);
     }
   });
 }
@@ -253,6 +253,7 @@ function checkChallengeSolution() {
 /**
  * Parse checker output markers from terminal stream.
  * Marks challenge passed and updates local progress.
+ * Also syncs completion to the server for server-side enforcement.
  * @param {string} chunk
  */
 function handleCheckOutput(chunk) {
@@ -292,6 +293,17 @@ function handleCheckOutput(chunk) {
     };
     saveProgress();
     renderChallengeNav();
+
+    // Sync completion to server-side progression enforcement.
+    // This prevents localStorage bypass — the backend is the source of truth.
+    if (sessionId) {
+      fetch(`/api/session/${sessionId}/progress/${challengeId}`, {
+        method: 'POST',
+      }).catch((err) =>
+        console.warn('Failed to sync progress to server:', err)
+      );
+    }
+
     ws.send(`echo "PASS: challenge checks passed."\n`);
     const nextChallengeId = getNextChallengeId(challengeId);
     if (nextChallengeId) {
