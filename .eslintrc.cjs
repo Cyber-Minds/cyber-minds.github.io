@@ -12,6 +12,14 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['Javascript/*.js', 'Javascript/terminal/**/*.js'],
+      rules: {
+        'no-undef': 'off',
+        'no-unused-vars': 'off',
+        'no-use-before-define': 'off',
+      },
+    },
+    {
       files: ['Javascript/**/*.mjs'],
       parserOptions: {
         sourceType: 'module',
@@ -45,10 +53,16 @@ module.exports = {
     'no-return-assign': 'off',
     'no-shadow': 'off',
     'no-trailing-spaces': 'off',
-    'no-undef': 'off',
+    'no-undef': 'error',
     'no-underscore-dangle': 'off',
-    'no-unused-vars': 'off',
-    'no-use-before-define': 'off',
+    'no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
+    'no-use-before-define': [
+      'error',
+      { functions: false, classes: true, variables: true },
+    ],
     'no-useless-escape': 'off',
     'no-var': 'off',
     'operator-assignment': 'off',

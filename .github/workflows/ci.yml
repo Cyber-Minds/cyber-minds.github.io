@@ -30,13 +30,7 @@ jobs:
       - name: Run backend unit tests
         run: go test ./... -coverprofile=coverage.out
       - name: Enforce backend coverage gate (>=60%)
-        run: |
-          total="$(go tool cover -func=coverage.out | awk '/^total:/ {gsub("%","",$3); print $3}')"
-          echo "Backend total coverage: ${total}%"
-          awk -v c="$total" 'BEGIN { exit (c + 0 >= 60 ? 0 : 1) }' || {
-            echo "Coverage gate failed: expected at least 60%, got ${total}%"
-            exit 1
-          }
+        run: ./scripts/check-coverage.sh 60 coverage.out
 
   frontend:
     name: Frontend ESLint Gate
