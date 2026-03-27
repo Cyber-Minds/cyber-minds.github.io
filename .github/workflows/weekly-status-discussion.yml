@@ -1,0 +1,110 @@
+name: Weekly Async Status Discussion
+
+on:
+  schedule:
+    - cron: '0 17 * * 5'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  post-weekly-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create weekly status discussion
+        uses: actions/github-script@v7
+        env:
+          OWNER_LOGIN: egeuysall
+          BACKUP_OWNER_LOGIN: ADGEEJU
+          STATUS_CATEGORY_SLUG: general
+          STATUS_TEMPLATE_PATH: .github/templates/weekly-status-update.md
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require("fs")
+            const core = require("@actions/core")
+
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+            const now = new Date()
+            const dateUtc = now.toISOString().slice(0, 10)
+            const title = `Weekly Async Status Update - ${dateUtc}`
+
+            const templatePath = process.env.STATUS_TEMPLATE_PATH
+            const template = fs.readFileSync(templatePath, "utf8")
+            const body = template
+              .replaceAll("{{DATE_UTC}}", dateUtc)
+              .replaceAll("{{OWNER_LOGIN}}", process.env.OWNER_LOGIN || "egeuysall")
+              .replaceAll("{{BACKUP_OWNER_LOGIN}}", process.env.BACKUP_OWNER_LOGIN || "ADGEEJU")
+
+            const query = `
+              query($owner: String!, $repo: String!) {
+                repository(owner: $owner, name: $repo) {
+                  id
+                  discussionCategories(first: 25) {
+                    nodes {
+                      id
+                      slug
+                      name
+                    }
+                  }
+                  discussions(first: 25, orderBy: {field: CREATED_AT, direction: DESC}) {
+                    nodes {
+                      title
+                      url
+                    }
+                  }
+                }
+              }
+            `
+
+            const result = await github.graphql(query, { owner, repo })
+            const repository = result.repository
+            if (!repository) {
+              core.setFailed(`Repository ${owner}/${repo} not found`)
+              return
+            }
+
+            const existing = repository.discussions.nodes.find((d) => d.title === title)
+            if (existing) {
+              core.notice(`Weekly status discussion already exists: ${existing.url}`)
+              return
+            }
+
+            const categories = repository.discussionCategories.nodes
+            if (!categories || categories.length === 0) {
+              core.setFailed("No discussion categories configured in repository")
+              return
+            }
+
+            const preferredSlug = (process.env.STATUS_CATEGORY_SLUG || "general").toLowerCase()
+            const category = categories.find((c) => c.slug.toLowerCase() === preferredSlug) || categories[0]
+
+            const mutation = `
+              mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+                createDiscussion(input: {
+                  repositoryId: $repositoryId,
+                  categoryId: $categoryId,
+                  title: $title,
+                  body: $body
+                }) {
+                  discussion {
+                    url
+                  }
+                }
+              }
+            `
+
+            const created = await github.graphql(mutation, {
+              repositoryId: repository.id,
+              categoryId: category.id,
+              title,
+              body,
+            })
+
+            core.notice(`Created weekly status discussion: ${created.createDiscussion.discussion.url}`)
