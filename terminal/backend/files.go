@@ -18,6 +18,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var execInContainerFn = execInContainer
+
 func listSessionFiles(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	sessionID := vars["sessionId"]
@@ -38,7 +40,7 @@ func listSessionFiles(w http.ResponseWriter, r *http.Request) {
 	}
 	defer cli.Close()
 
-	out, _, err := execInContainer(ctx, cli, session.ContainerID, []string{
+	out, _, err := execInContainerFn(ctx, cli, session.ContainerID, []string{
 		"bash", "-lc", "cd /workspace && find . -maxdepth 5 -type f -printf '%P\t%s\n' | head -n 300",
 	})
 	if err != nil {
@@ -99,7 +101,7 @@ func readSessionFile(w http.ResponseWriter, r *http.Request) {
 
 	pathArg := shellQuote(relPath)
 	cmd := fmt.Sprintf("cd /workspace && if [ -f %s ]; then sed -n '1,2000p' %s; else exit 2; fi", pathArg, pathArg)
-	content, stderr, err := execInContainer(ctx, cli, session.ContainerID, []string{"bash", "-lc", cmd})
+	content, stderr, err := execInContainerFn(ctx, cli, session.ContainerID, []string{"bash", "-lc", cmd})
 	if err != nil {
 		log.Printf("Failed reading file %s in session %s: %v %s", relPath, sessionID, err, stderr)
 		http.Error(w, "Failed to read file", http.StatusNotFound)

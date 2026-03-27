@@ -18,6 +18,44 @@ import (
 	"github.com/gorilla/mux"
 )
 
+var (
+	createContainerFn = func(ctx context.Context, cli *client.Client) (container.CreateResponse, error) {
+		return cli.ContainerCreate(ctx, &container.Config{
+			Image:        terminalImageName,
+			Cmd:          []string{"/bin/bash"},
+			Tty:          true,
+			OpenStdin:    true,
+			AttachStdin:  true,
+			AttachStdout: true,
+			AttachStderr: true,
+			WorkingDir:   "/workspace",
+			Env: []string{
+				"TERM=xterm-256color",
+			},
+		}, &container.HostConfig{
+			Resources: container.Resources{
+				Memory:   containerMemoryLimit,
+				NanoCPUs: containerCPULimit,
+			},
+			AutoRemove:  false,
+			NetworkMode: "bridge",
+		}, nil, nil, "")
+	}
+	startContainerFn = func(ctx context.Context, cli *client.Client, containerID string) error {
+		return cli.ContainerStart(ctx, containerID, types.ContainerStartOptions{})
+	}
+	removeContainerFn = func(ctx context.Context, cli *client.Client, containerID string, removeVolumes bool) error {
+		return cli.ContainerRemove(ctx, containerID, types.ContainerRemoveOptions{
+			Force:         true,
+			RemoveVolumes: removeVolumes,
+		})
+	}
+	stopContainerFn = func(ctx context.Context, cli *client.Client, containerID string, timeout int) error {
+		stopOptions := container.StopOptions{Timeout: &timeout}
+		return cli.ContainerStop(ctx, containerID, stopOptions)
+	}
+)
+
 // createSession starts an isolated container and returns a session ID.
 func createSession(w http.ResponseWriter, r *http.Request) {
 	if isSessionCapacityReached() {
@@ -43,36 +81,16 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 	}
 	defer cli.Close()
 
-	resp, err := cli.ContainerCreate(ctx, &container.Config{
-		Image:        terminalImageName,
-		Cmd:          []string{"/bin/bash"},
-		Tty:          true,
-		OpenStdin:    true,
-		AttachStdin:  true,
-		AttachStdout: true,
-		AttachStderr: true,
-		WorkingDir:   "/workspace",
-		Env: []string{
-			"TERM=xterm-256color",
-		},
-	}, &container.HostConfig{
-		Resources: container.Resources{
-			Memory:   containerMemoryLimit,
-			NanoCPUs: containerCPULimit,
-		},
-		AutoRemove:  false,
-		NetworkMode: "bridge",
-	}, nil, nil, "")
-
+	resp, err := createContainerFn(ctx, cli)
 	if err != nil {
 		log.Printf("Error creating container: %v", err)
 		http.Error(w, fmt.Sprintf("Failed to create container: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	if err := cli.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
+	if err := startContainerFn(ctx, cli, resp.ID); err != nil {
 		log.Printf("Error starting container %s: %v", resp.ID, err)
-		cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{Force: true})
+		_ = removeContainerFn(ctx, cli, resp.ID, false)
 		http.Error(w, "Failed to start container", http.StatusInternalServerError)
 		return
 	}
@@ -87,7 +105,7 @@ func createSession(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	if len(sessions) >= maxActiveSessions {
 		mu.Unlock()
-		cli.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{Force: true, RemoveVolumes: true})
+		_ = removeContainerFn(ctx, cli, resp.ID, true)
 		http.Error(w, "Session capacity reached. Try again later.", http.StatusServiceUnavailable)
 		return
 	}
@@ -222,17 +240,11 @@ func cleanupSession(sessionID string) {
 	}
 	defer cli.Close()
 
-	timeout := 10
-	stopOptions := container.StopOptions{Timeout: &timeout}
-	if err := cli.ContainerStop(ctx, session.ContainerID, stopOptions); err != nil {
+	if err := stopContainerFn(ctx, cli, session.ContainerID, 10); err != nil {
 		log.Printf("Failed to stop container %s: %v", session.ContainerID[:12], err)
 	}
 
-	removeOptions := types.ContainerRemoveOptions{
-		Force:         true,
-		RemoveVolumes: true,
-	}
-	if err := cli.ContainerRemove(ctx, session.ContainerID, removeOptions); err != nil {
+	if err := removeContainerFn(ctx, cli, session.ContainerID, true); err != nil {
 		log.Printf("Failed to remove container %s: %v", session.ContainerID[:12], err)
 		return
 	}
