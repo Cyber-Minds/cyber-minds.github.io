@@ -1,0 +1,80 @@
+name: Weekly Async Status Bot
+
+on:
+  schedule:
+    - cron: '0 17 * * 5'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  post-weekly-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create weekly status issue
+        uses: actions/github-script@v7
+        env:
+          STATUS_LABEL: weekly-status
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const core = require("@actions/core")
+
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+            const dateUtc = new Date().toISOString().slice(0, 10)
+            const title = `Weekly Async Status Update - ${dateUtc}`
+            const body = [
+              `## Weekly Async Status Update (${dateUtc})`,
+              "",
+              "Posted by: `github-actions[bot]`",
+              "Bot email: `41898282+github-actions[bot]@users.noreply.github.com`",
+              "",
+              "This issue is the weekly source of truth for project status.",
+              "Ad hoc Slack status requests should be replaced by updates in this issue unless there is an incident.",
+              "",
+              "### Blockers",
+              "- ",
+              "",
+              "### Completed Work",
+              "- ",
+              "",
+              "### Next-Week Priorities",
+              "- ",
+            ].join("\\n")
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: "open",
+              per_page: 100,
+            })
+
+            const existing = issues.find((i) => i.title === title)
+            if (existing) {
+              core.notice(`Weekly status issue already exists: ${existing.html_url}`)
+              return
+            }
+
+            let labels = []
+            const labelName = (process.env.STATUS_LABEL || "").trim()
+            if (labelName) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name: labelName })
+                labels = [labelName]
+              } catch (error) {
+                core.notice(`Label '${labelName}' not found, creating issue without label`)
+              }
+            }
+
+            const { data: created } = await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels,
+            })
+
+            core.notice(`Created weekly status issue: ${created.html_url}`)

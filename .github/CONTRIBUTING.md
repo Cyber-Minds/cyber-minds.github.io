@@ -64,7 +64,7 @@ Quarterly review checklist:
 
 Decision log expectations:
 
-- Record each quarterly review result in the related GitHub issue/discussion with:
+- Record each quarterly review result in the related GitHub issue with:
   - Date of review
   - Current runtime versions and proposed target versions
   - Decision (`upgrade now`, `defer`, or `patch only`)
@@ -80,14 +80,13 @@ Security update handling and exception path:
 
 ## Weekly Async Status Cadence
 
-- Source of truth: recurring GitHub Discussion posted every Friday at `17:00 UTC`.
+- Source of truth: recurring GitHub issue posted every Friday at `17:00 UTC` by `github-actions[bot]`.
 - Required sections in every update:
   - `Blockers`
   - `Completed Work`
   - `Next-Week Priorities`
-- Team norm: ad hoc Slack status pings should be replaced by the weekly discussion thread unless there is an incident.
-- Owner: Product lead (@egeuysall)
-- Backup owner: Frontend lead (@ADGEEJU)
+- Team norm: ad hoc Slack status pings should be replaced by the weekly status issue unless there is an incident.
+- Ownership: Maintainers are responsible for ensuring the weekly status issue is posted and updated.
 
 ## Pull Request Process
 
