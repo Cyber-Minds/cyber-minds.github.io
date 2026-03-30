@@ -2,6 +2,7 @@
  * @file Challenge navigation and validation flow.
  */
 function loadChallenge(challengeId, updateUrl = true) {
+
   let resolvedChallengeId = challengeId;
 
   if (
@@ -60,6 +61,9 @@ function loadChallenge(challengeId, updateUrl = true) {
   if (window.innerWidth <= 980) {
     setMobileView('editor');
   }
+
+  // Track challenge start in analytics
+  if (typeof trackChallengeStart === 'function') trackChallengeStart(resolvedChallengeId);
 }
 
 function renderChallengeNav() {
@@ -303,6 +307,9 @@ function handleCheckOutput(chunk) {
         console.warn('Failed to sync progress to server:', err)
       );
     }
+
+    // Track challenge completion in analytics
+    if (typeof trackChallengeComplete === 'function') trackChallengeComplete(challengeId);
 
     ws.send(`echo "PASS: challenge checks passed."\n`);
     const nextChallengeId = getNextChallengeId(challengeId);
