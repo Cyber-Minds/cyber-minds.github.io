@@ -39,7 +39,7 @@ function trackEvent(eventName, payload = {}) {
       }
     }
 
-    // Send only if Umami is loaded
+    // send only when Umami is loaded
     if (typeof window.umami !== 'undefined' && typeof window.umami.track === 'function') {
       window.umami.track(eventName, safePayload);
     }
