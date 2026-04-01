@@ -1,55 +1,52 @@
-# Analytics - CyberMinds
+# Analytics Decision Record
 
-## Tool
-**Umami** (cloud.umami.is) — open source, cookieless, GDPR compliant by default.
+## What we picked and why
 
-## Why Umami
-- No cookies — no consent banner required
-- No PII collection by default
-- Privacy-respecting analytics for a cybersecurity education platform
-- Free tier available on Umami Cloud
+We went with **Umami** (cloud.umami.is) for analytics. It's open source, cookieless, and GDPR compliant out of the box. For a cybersecurity education platform, using something like Google Analytics that harvests user data would be contradictory to what CyberMinds teaches. Umami collects only what we explicitly tell it to and nothing else. It's also free on the cloud tier which fits our budget.
 
-## Dashboard
-Umami Cloud dashboard: https://cloud.umami.is
-Owner: assign to team lead (Ege) after account creation.
+Dashboard lives at: https://cloud.umami.is
+Dashboard owner: project lead (Ege)
 
-## Setup
-1. Create account at cloud.umami.is
-2. Add website → copy the Website ID
+## Setup steps
+
+1. Create an account at cloud.umami.is
+2. Add CyberMinds as a website and copy the Website ID
 3. Replace `UMAMI_WEBSITE_ID_PLACEHOLDER` in all HTML files with the real Website ID
-4. Deploy and verify events appear in dashboard
+4. Deploy and confirm events are showing up in the dashboard
 
-## Event Schema
+## Events we track
 
-| Event Name | Trigger | Payload Fields |
+| Event | When it fires | Data sent |
 |---|---|---|
 | `page_view` | Every page load | `category` (home/ctf/course/chatbox/mission/general) |
-| `ctf_entry_click` | Click on any CTF link | `source` (current page path) |
-| `course_entry_click` | Click on any course link | `source` (current page path) |
-| `get_started_click` | Click Get Started button | `source` (current page path) |
-| `challenge_start` | Challenge loads in terminal | `challenge` (challenge ID) |
-| `challenge_complete` | Challenge passes checker | `challenge` (challenge ID) |
+| `ctf_entry_click` | User clicks any CTF link | `source` (current page path) |
+| `course_entry_click` | User clicks any course link | `source` (current page path) |
+| `get_started_click` | User clicks Get Started | `source` (current page path) |
+| `challenge_start` | A challenge loads in the terminal | `challenge` (challenge ID only) |
+| `challenge_complete` | A challenge passes the checker | `challenge` (challenge ID only) |
 
-## Privacy & Security
+Challenge answers, terminal input, and session credentials are never sent to analytics under any circumstances.
 
-**No PII sent:** All custom event payloads are validated through `trackEvent()` which strips any fields containing: token, session_id, user_id, email, password, key, secret, auth.
+## Privacy guardrails
 
-**Query parameters:** The Umami script tag uses `data-exclude-search="true"` — URL query params (including session tokens) are never sent to analytics.
+**No PII.** Every custom event goes through `trackEvent()` in `analytics.js` before being sent. That function strips any field whose key contains: token, session_id, user_id, email, password, key, secret, or auth. If someone accidentally passes a sensitive field it gets silently dropped.
 
-**DNT (Do Not Track):** Umami honors the browser DNT header by default. No additional configuration needed.
+**No query strings.** The Umami script tag includes `data-exclude-search="true"` which means URL parameters like session tokens or challenge IDs in the address bar are never forwarded to Umami.
 
-**Script failure:** The Umami script tag uses `onerror` handler — if the script fails to load for any reason, page rendering is completely unaffected.
+**DNT respected.** Umami honors the browser Do Not Track header by default. No extra configuration needed on our end.
 
-**No secret keys in client code:** Only the public Website ID is in client-side code. No API keys or secrets are exposed.
+**Script failures are safe.** The script tag has an `onerror` handler so if Umami fails to load for any reason, the rest of the page is completely unaffected.
 
-## Dashboard Queries
+**No secrets in client code.** The only thing exposed in the frontend is the public Website ID. No API keys or private credentials are used on the client side.
 
-**Top entry sources:**
-- Filter by `ctf_entry_click` → group by `source` → shows which pages drive CTF traffic
+**Data retention.** Umami Cloud keeps data for 24 months by default. We only store aggregated event counts, not raw logs or individual user sessions.
 
-**Challenge funnel performance:**
-- Compare `challenge_start` vs `challenge_complete` counts per `challenge` ID
-- Identifies highest and lowest converting challenge steps
+## What the dashboard can answer
 
-## Weekly Reporting
-Assign dashboard ownership and weekly reporting cadence to team lead.
+To find top entry sources: filter by `ctf_entry_click`, group by `source`. That shows which pages are actually driving people into the CTF section.
+
+To find the challenge funnel: compare `challenge_start` vs `challenge_complete` counts for each challenge ID. The ones with the biggest drop-off between start and complete are where users are getting stuck.
+
+## Reporting
+
+Dashboard ownership sits with the project lead. Worth checking weekly during team meetings to track whether new CTF challenges are being attempted and completed.
