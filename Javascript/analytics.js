@@ -39,9 +39,9 @@ function trackEvent(eventName, payload) {
     for (var k in payload) {
       if (!Object.prototype.hasOwnProperty.call(payload, k)) continue;
       var v = payload[k];
-      if (BLOCKED_KEYS.some(function (blocked) { return k.toLowerCase().indexOf(blocked) !== -1; })) {
-        continue;
-      }
+      var key = k.toLowerCase();
+      var blocked = BLOCKED_KEYS.some(function (b) { return key.indexOf(b) !== -1; });
+      if (blocked) continue;
       // Only allow string, number, boolean values — no objects or arrays
       if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
         safePayload[k] = v;
@@ -79,7 +79,7 @@ function trackPageView() {
       category = 'home';
     }
 
-    trackEvent('page_view', { category: category });
+    trackEvent('page_view', { category });
   } catch (e) {
     // silent fail
   }
