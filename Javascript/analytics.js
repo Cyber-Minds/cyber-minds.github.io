@@ -2,6 +2,9 @@
  * @file analytics.js
  * CyberMinds custom event tracking via Umami.
  *
+ * The Umami script is loaded dynamically from here — the website ID lives
+ * in one place rather than being stamped into every HTML file.
+ *
  * Privacy guarantees:
  * - No PII fields are sent in any event payload
  * - Query parameters are stripped (data-exclude-search on script tag)
@@ -9,6 +12,10 @@
  * - Script load failures do not affect page rendering (onerror on script tag)
  * - All payloads are validated before sending
  */
+
+// Umami config — single source of truth; update here to change all pages
+var UMAMI_WEBSITE_ID = '4f3f4eed-fd85-4f62-9469-d5440c9bf000';
+var UMAMI_DOMAINS = 'cyber-minds.github.io';
 
 /**
  * Safe wrapper around umami.track().
@@ -18,18 +25,21 @@
  * @param {string} eventName
  * @param {Object} payload
  */
-function trackEvent(eventName, payload = {}) {
+function trackEvent(eventName, payload) {
+  payload = payload || {};
   try {
     if (typeof eventName !== 'string' || eventName.trim() === '') {
       return;
     }
 
     // Strip any fields that could contain PII or tokens
-    const BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id',
-                          'email', 'password', 'key', 'secret', 'auth'];
-    const safePayload = {};
-    for (const [k, v] of Object.entries(payload)) {
-      if (BLOCKED_KEYS.some(blocked => k.toLowerCase().includes(blocked))) {
+    var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id',
+                        'email', 'password', 'key', 'secret', 'auth'];
+    var safePayload = {};
+    for (var k in payload) {
+      if (!Object.prototype.hasOwnProperty.call(payload, k)) continue;
+      var v = payload[k];
+      if (BLOCKED_KEYS.some(function (blocked) { return k.toLowerCase().indexOf(blocked) !== -1; })) {
         continue;
       }
       // Only allow string, number, boolean values — no objects or arrays
@@ -47,31 +57,54 @@ function trackEvent(eventName, payload = {}) {
   }
 }
 
-// Page view + click tracking — runs after DOMContentLoaded so deferred Umami script is ready
-document.addEventListener('DOMContentLoaded', function () {
-  // Page view enrichment — category derived from path
+/**
+ * Fire page_view with a category derived from the current path.
+ * Called from the Umami script's onload so window.umami is guaranteed ready.
+ */
+function trackPageView() {
   try {
-    const path = window.location.pathname.toLowerCase();
-    let category = 'general';
+    var path = window.location.pathname.toLowerCase();
+    var category = 'general';
 
     // terminal paths classified as ctf to match event schema
-    if (path.includes('ctf') || path.includes('challenge') || path.includes('terminal')) {
+    if (path.indexOf('ctf') !== -1 || path.indexOf('challenge') !== -1 || path.indexOf('terminal') !== -1) {
       category = 'ctf';
-    } else if (path.includes('livehelp')) {
+    } else if (path.indexOf('livehelp') !== -1) {
       category = 'chatbox';
-    } else if (path.includes('mission')) {
+    } else if (path.indexOf('mission') !== -1) {
       category = 'mission';
-    } else if (path.includes('course')) {
+    } else if (path.indexOf('course') !== -1) {
       category = 'course';
-    } else if (path === '/' || path.includes('index')) {
+    } else if (path === '/' || path.indexOf('index') !== -1) {
       category = 'home';
     }
 
-    trackEvent('page_view', { category });
+    trackEvent('page_view', { category: category });
   } catch (e) {
     // silent fail
   }
+}
 
+// Load Umami dynamically — fires trackPageView once the script is ready
+(function loadUmami() {
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://cloud.umami.is/script.js';
+  s.setAttribute('data-website-id', UMAMI_WEBSITE_ID);
+  s.setAttribute('data-exclude-search', 'true');
+  s.setAttribute('data-domains', UMAMI_DOMAINS);
+  s.onerror = function () {
+    console.warn('Analytics failed to load - page rendering unaffected');
+  };
+  s.onload = function () {
+    trackPageView();
+  };
+  document.head.appendChild(s);
+})();
+
+// Click tracking — DOMContentLoaded is fine here (just registering listeners,
+// no umami call happens until the user actually clicks by which point it's loaded)
+document.addEventListener('DOMContentLoaded', function () {
   // Track CTF nav link clicks
   document.querySelectorAll('a[href*="CTF"], a[href*="ctf"]').forEach(function (link) {
     link.addEventListener('click', function () {
