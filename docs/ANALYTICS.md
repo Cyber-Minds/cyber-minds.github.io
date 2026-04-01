@@ -11,8 +11,15 @@ Dashboard owner: project lead (Ege)
 
 1. Create an account at cloud.umami.is
 2. Add CyberMinds as a website and copy the Website ID
-3. Replace `UMAMI_WEBSITE_ID_PLACEHOLDER` in all HTML files with the real Website ID
-4. Deploy and confirm events are showing up in the dashboard
+3. Create a `.env` file in the repo root (copy from `.env.example`) and set:
+```
+   UMAMI_WEBSITE_ID=your-id-here
+   UMAMI_DOMAINS=cyber-minds.github.io
+```
+4. Run `python inject_analytics.py` from the repo root — this automatically injects
+   the Umami script tag and analytics.js reference into all HTML files
+5. Commit the updated HTML files and deploy
+6. Confirm events are appearing in the dashboard at cloud.umami.is
 
 ## Events we track
 
