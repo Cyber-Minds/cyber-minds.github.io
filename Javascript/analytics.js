@@ -20,7 +20,6 @@
  */
 function trackEvent(eventName, payload = {}) {
   try {
-    // Validate event name
     if (typeof eventName !== 'string' || eventName.trim() === '') {
       return;
     }
@@ -39,7 +38,6 @@ function trackEvent(eventName, payload = {}) {
       }
     }
 
-    // send only when Umami is loaded
     if (typeof window.umami !== 'undefined' && typeof window.umami.track === 'function') {
       window.umami.track(eventName, safePayload);
     }
@@ -49,19 +47,24 @@ function trackEvent(eventName, payload = {}) {
   }
 }
 
-// ─────────────────────────────────────────────
-// Page view enrichment
-// Fires on every page load with page category
-// ─────────────────────────────────────────────
+// Page view enrichment — fires on every page load with page category
 (function trackPageCategory() {
   try {
     const path = window.location.pathname.toLowerCase();
     let category = 'general';
-    if (path.includes('ctf') || path.includes('challenge')) category = 'ctf';
-    else if (path.includes('course')) category = 'course';
-    else if (path.includes('livehelp')) category = 'chatbox';
-    else if (path.includes('mission')) category = 'mission';
-    else if (path === '/' || path.includes('index')) category = 'home';
+
+    // terminal paths classified as ctf to match event schema
+    if (path.includes('ctf') || path.includes('challenge') || path.includes('terminal')) {
+      category = 'ctf';
+    } else if (path.includes('livehelp')) {
+      category = 'chatbox';
+    } else if (path.includes('mission')) {
+      category = 'mission';
+    } else if (path.includes('course')) {
+      category = 'course';
+    } else if (path === '/' || path.includes('index')) {
+      category = 'home';
+    }
 
     trackEvent('page_view', { category });
   } catch (e) {
@@ -69,10 +72,7 @@ function trackEvent(eventName, payload = {}) {
   }
 })();
 
-// ─────────────────────────────────────────────
-// CTF entry click tracking
-// Tracks when users click into the CTF section
-// ─────────────────────────────────────────────
+// CTF and course click tracking
 document.addEventListener('DOMContentLoaded', function () {
   // Track CTF nav link clicks
   document.querySelectorAll('a[href*="CTF"], a[href*="ctf"]').forEach(function (link) {
@@ -83,16 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Track course entry clicks
-  document.querySelectorAll('a[href*="course"], a[href*="Course"]').forEach(function (link) {
-    link.addEventListener('click', function () {
-      trackEvent('course_entry_click', {
-        source: window.location.pathname,
-      });
-    });
-  });
-
-  // Track Get Started button clicks
+  // Track Get Started clicks — must be registered before the course selector
+  // so course_Contents links are not double-counted as course_entry_click
   document.querySelectorAll('a[href*="course_Contents"]').forEach(function (link) {
     link.addEventListener('click', function () {
       trackEvent('get_started_click', {
@@ -100,12 +92,18 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
-});
 
-// ─────────────────────────────────────────────
-// Challenge progression milestone tracking
-// Called by challenges.js when a challenge is completed
-// ─────────────────────────────────────────────
+  // Track course entry clicks — exclude course_Contents to avoid double firing
+  document.querySelectorAll(
+    'a[href*="course"]:not([href*="course_Contents"]), a[href*="Course"]:not([href*="course_Contents"])'
+  ).forEach(function (link) {
+    link.addEventListener('click', function () {
+      trackEvent('course_entry_click', {
+        source: window.location.pathname,
+      });
+    });
+  });
+});
 
 /**
  * Track challenge completion milestone.
