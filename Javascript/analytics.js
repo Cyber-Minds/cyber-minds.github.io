@@ -17,6 +17,17 @@
 var UMAMI_WEBSITE_ID = '4f3f4eed-fd85-4f62-9469-d5440c9bf000';
 var UMAMI_DOMAINS = 'cyber-minds.github.io';
 
+var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id',
+                    'email', 'password', 'key', 'secret', 'auth'];
+
+function isBlockedKey(k) {
+  var lower = k.toLowerCase();
+  for (var i = 0; i < BLOCKED_KEYS.length; i++) {
+    if (lower.indexOf(BLOCKED_KEYS[i]) !== -1) return true;
+  }
+  return false;
+}
+
 /**
  * Safe wrapper around umami.track().
  * Validates payload and silently fails if Umami is unavailable.
@@ -33,15 +44,11 @@ function trackEvent(eventName, payload) {
     }
 
     // Strip any fields that could contain PII or tokens
-    var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id',
-                        'email', 'password', 'key', 'secret', 'auth'];
     var safePayload = {};
     for (var k in payload) {
       if (!Object.prototype.hasOwnProperty.call(payload, k)) continue;
       var v = payload[k];
-      var key = k.toLowerCase();
-      var blocked = BLOCKED_KEYS.some(function (b) { return key.indexOf(b) !== -1; });
-      if (blocked) continue;
+      if (isBlockedKey(k)) continue;
       // Only allow string, number, boolean values — no objects or arrays
       if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
         safePayload[k] = v;
