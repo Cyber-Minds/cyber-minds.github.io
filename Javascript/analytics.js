@@ -47,8 +47,9 @@ function trackEvent(eventName, payload = {}) {
   }
 }
 
-// Page view enrichment — fires on every page load with page category
-(function trackPageCategory() {
+// Page view + click tracking — runs after DOMContentLoaded so deferred Umami script is ready
+document.addEventListener('DOMContentLoaded', function () {
+  // Page view enrichment — category derived from path
   try {
     const path = window.location.pathname.toLowerCase();
     let category = 'general';
@@ -70,10 +71,7 @@ function trackEvent(eventName, payload = {}) {
   } catch (e) {
     // silent fail
   }
-})();
 
-// CTF and course click tracking
-document.addEventListener('DOMContentLoaded', function () {
   // Track CTF nav link clicks
   document.querySelectorAll('a[href*="CTF"], a[href*="ctf"]').forEach(function (link) {
     link.addEventListener('click', function () {

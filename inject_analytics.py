@@ -36,11 +36,8 @@ if not WEBSITE_ID:
 print(f'Using Umami Website ID: {WEBSITE_ID}')
 print(f'Using domains: {UMAMI_DOMAINS}')
 
-# Analytics event tracking script — path computed relative to each HTML file
-ANALYTICS_JS_FILENAME = 'analytics.js'
-
-# Folders to scan
-HTML_DIRS = ['HTML', '.']
+# Folders to scan — walking '.' covers the full repo tree including HTML/
+HTML_DIRS = ['.']
 HTML_EXTENSIONS = ['.html']
 
 # Pages to skip
@@ -94,9 +91,10 @@ def inject_file(filepath):
         # Update existing injection with correct values
         content = re.sub(r'data-website-id="[^"]*"', f'data-website-id="{WEBSITE_ID}"', content)
         content = re.sub(r'data-domains="[^"]*"', f'data-domains="{UMAMI_DOMAINS}"', content)
-        # Update analytics.js path to be relative
+        # Update analytics.js path to be relative; consume existing leading
+        # whitespace so indentation doesn't drift on repeated runs
         content = re.sub(
-            r'<script src="[^"]*analytics\.js"></script>',
+            r'[ \t]*<script src="[^"]*analytics\.js"></script>',
             analytics_js_tag,
             content
         )
