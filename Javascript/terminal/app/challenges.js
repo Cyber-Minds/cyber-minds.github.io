@@ -1,6 +1,16 @@
 /**
  * @file Challenge navigation and validation flow.
  */
+function queueAnalyticsEvent(eventName, payload) {
+  var queueKey = '__cybermindsAnalyticsQueue';
+  var queue = window[queueKey];
+  if (!Array.isArray(queue)) {
+    queue = [];
+    window[queueKey] = queue;
+  }
+  queue.push({ eventName, payload: payload || {} });
+}
+
 function loadChallenge(challengeId, updateUrl = true) {
 
   let resolvedChallengeId = challengeId;
@@ -62,14 +72,18 @@ function loadChallenge(challengeId, updateUrl = true) {
     setMobileView('editor');
   }
 
-  // Track challenge start in analytics
-  if (typeof trackChallengeStart === 'function') trackChallengeStart(resolvedChallengeId);
+  // Track challenge start in analytics (queue if analytics loads later)
+  if (typeof trackChallengeStart === 'function') {
+    trackChallengeStart(resolvedChallengeId);
+  } else {
+    queueAnalyticsEvent('challenge_start', { challenge: resolvedChallengeId });
+  }
 }
 
 function renderChallengeNav() {
   const container = document.querySelector('.challenge-nav-list') || document.getElementById('challengeNav');
   if (!container) return;
-  
+
   container.innerHTML = '';
   const renderedGroups = new Set();
 
@@ -308,8 +322,12 @@ function handleCheckOutput(chunk) {
       );
     }
 
-    // Track challenge completion in analytics
-    if (typeof trackChallengeComplete === 'function') trackChallengeComplete(challengeId);
+    // Track challenge completion in analytics (queue if analytics loads later)
+    if (typeof trackChallengeComplete === 'function') {
+      trackChallengeComplete(challengeId);
+    } else {
+      queueAnalyticsEvent('challenge_complete', { challenge: challengeId });
+    }
 
     ws.send(`echo "PASS: challenge checks passed."\n`);
     const nextChallengeId = getNextChallengeId(challengeId);
