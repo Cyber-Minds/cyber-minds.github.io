@@ -51,6 +51,41 @@ header,
   top: 0.5em;
   left: 0.5em;
   z-index: 1003; /* above header and sidebar */
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger icon */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.hamburger span {
+  width: 30px;
+  height: 3px;
+  background: #fff;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.hamburger.open span:first-child {
+  transform: rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg);
 }
 
 /* ensure header content (other links) doesn't sit beneath fixed logo */
@@ -90,7 +125,10 @@ header,
 
 
 /* at small viewport sizes we collapse the nav and enable toggle */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
+  .hamburger {
+    display: flex;
+  }
   .header-buttons {
     display: none !important; /* hide until user taps logo */
     position: absolute;
