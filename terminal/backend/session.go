@@ -22,7 +22,7 @@ var (
 	createContainerFn = func(ctx context.Context, cli *client.Client) (container.CreateResponse, error) {
 		return cli.ContainerCreate(ctx, &container.Config{
 			Image:        terminalImageName,
-			Cmd:          []string{"/bin/bash"},
+			Cmd:          []string{"/bin/bash", "-lc", "nginx && exec /bin/bash"},
 			Tty:          true,
 			OpenStdin:    true,
 			AttachStdin:  true,

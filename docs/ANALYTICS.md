@@ -12,27 +12,25 @@ Dashboard owner: project lead (Ege)
 1. Create an account at cloud.umami.is
 2. Add CyberMinds as a website and copy the Website ID
 3. Create a `.env` file in the repo root (copy from `.env.example`) and set:
-
 ```
-   UMAMI_WEBSITE_ID=3f04dc87-0260-43af-9d3b-089caab98156
+   UMAMI_WEBSITE_ID=your-id-here
    UMAMI_DOMAINS=cyber-minds.github.io
 ```
-
-4. Run `python3 inject_analytics.py` from the repo root — this automatically injects
+4. Run `python inject_analytics.py` from the repo root — this automatically injects
    the Umami script tag and analytics.js reference into all HTML files
 5. Commit the updated HTML files and deploy
 6. Confirm events are appearing in the dashboard at cloud.umami.is
 
 ## Events we track
 
-| Event                | When it fires                     | Data sent                                            |
-| -------------------- | --------------------------------- | ---------------------------------------------------- |
-| `page_view`          | Every page load                   | `category` (home/ctf/course/chatbox/mission/general) |
-| `ctf_entry_click`    | User clicks any CTF link          | `source` (current page path)                         |
-| `course_entry_click` | User clicks any course link       | `source` (current page path)                         |
-| `get_started_click`  | User clicks Get Started           | `source` (current page path)                         |
-| `challenge_start`    | A challenge loads in the terminal | `challenge` (challenge ID only)                      |
-| `challenge_complete` | A challenge passes the checker    | `challenge` (challenge ID only)                      |
+| Event | When it fires | Data sent |
+|---|---|---|
+| `page_view` | Every page load | `category` (home/ctf/course/chatbox/mission/general) |
+| `ctf_entry_click` | User clicks any CTF link | `source` (current page path) |
+| `course_entry_click` | User clicks any course link | `source` (current page path) |
+| `get_started_click` | User clicks Get Started | `source` (current page path) |
+| `challenge_start` | A challenge loads in the terminal | `challenge` (challenge ID only) |
+| `challenge_complete` | A challenge passes the checker | `challenge` (challenge ID only) |
 
 Challenge answers, terminal input, and session credentials are never sent to analytics under any circumstances.
 

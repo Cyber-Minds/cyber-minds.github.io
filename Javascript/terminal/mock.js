@@ -211,12 +211,13 @@ function runMockCommand(command) {
     mockWriteLine('Netid State  Recv-Q Send-Q Local Address:Port');
     mockWriteLine('tcp   LISTEN 0      128    0.0.0.0:22');
     mockWriteLine('tcp   LISTEN 0      4096   0.0.0.0:443');
+    mockWriteLine('tcp   LISTEN 0      511    0.0.0.0:9090');
     return;
   }
 
   if (trimmed.startsWith('curl -I ')) {
     mockWriteLine('HTTP/1.1 200 OK');
-    mockWriteLine('server: Caddy');
+    mockWriteLine('server: nginx/1.24.0');
     mockWriteLine('content-type: text/html; charset=utf-8');
     return;
   }

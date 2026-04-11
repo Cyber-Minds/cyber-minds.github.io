@@ -99,16 +99,16 @@ const challengeCatalog = {
     title: 'Web Recon Starter',
     difficulty: 'Beginner',
     description: 'Practice recon workflows: check open ports and inspect HTTP response headers safely.',
-    objective: 'Identify exposed services and capture response headers into notes.',
+    objective: 'Identify the local nginx service on port 9090 and capture header + port evidence in notes.',
     steps: [
       'Run ss -tulpen to inspect listening services.',
-      'Use curl -I against a target URL.',
-      'Record key headers and suspected tech stack.',
+      'Run curl -I http://localhost:9090.',
+      'Record at least one response header value and port 9090 in recon-notes.txt.',
     ],
     firstCommand: 'ss -tulpen',
-    checkScript: 'set -e; test -f recon-notes.txt; test -s recon-notes.txt; grep -Eqi "(server|content-type|status|header|port)" recon-notes.txt',
+    checkScript: 'set -e; test -f recon-notes.txt; test -s recon-notes.txt; grep -Eqi "(server|content-type|status|header)" recon-notes.txt; grep -Eq "(^|[^0-9])9090([^0-9]|$)" recon-notes.txt',
     starterLang: 'javascript',
-    starterCode: `const http = require('http');\n\nhttp.get('http://example.com', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
+    starterCode: `const http = require('http');\n\nhttp.get('http://localhost:9090', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
   }
 };
 

@@ -215,7 +215,8 @@ function checkChallengeSolution() {
         /(owner|permission|user|group)/i.test(report),
       'web-recon':
         recon.trim().length > 0 &&
-        /(server|content-type|status|header|port)/i.test(recon),
+        /(server|content-type|status|header)/i.test(recon) &&
+        /\b9090\b/.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
     };
     const passed = !!checksByChallenge[activeChallengeId];
