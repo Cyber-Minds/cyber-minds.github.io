@@ -1,8 +1,23 @@
-/* Course-style layout for CTF page */
 body {
   margin: 0;
   padding: 0;
-  background-color: #1a2738;
+  background-color: black;
+  animation: rotateBoxShadow 4s infinite linear;
+}
+
+@keyframes rotateBoxShadow {
+  0% {
+    box-shadow: inset 0px 0em 15em #102d42;
+  }
+  33% {
+    box-shadow: inset 0px 1em 20em #213f67;
+  }
+  66% {
+    box-shadow: inset 0px 0.5em 20em #132b49;
+  }
+  100% {
+    box-shadow: inset 0em 0em 15em #143852;
+  }
 }
 
 header {
@@ -17,8 +32,8 @@ header {
 
 .header-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: center; /* Center the items vertically */
+  justify-content: space-between; /* Space between the logo and nav */
 }
 
 .header-content img {
@@ -43,12 +58,12 @@ header {
   color: #ffffff;
   padding: 0.5em 1em;
   transition: background-color 0.3s;
-  background-color: #174167;
+  background-color: #174867;
+  text-decoration: none;
   margin-right: 0.9em;
-  padding: 0.4em 0.8em;
-  border-radius: 0.8em;
-  white-space: nowrap;
-  font-family: "Space Grotesk", sans-serif;
+  padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
+  border-radius: 0.8em; /* Make the buttons more rounded */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 
 .header-buttons a:hover {
@@ -57,31 +72,32 @@ header {
 
 .page-title {
   display: flex;
-  justify-content: left;
-  margin-left: 8.75%;
-  margin-bottom: 1%;
+  justify-content: center;
+  margin-bottom: 2%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "MuseoModerno", sans-serif !important;
-  letter-spacing: 0.05em;
-  font-weight: 400 !important;
-  color: transparent;
-  font-size: 2.5em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 4em;
+  font-weight: 700;
+  font-style: normal;
+  word-spacing: 0.2em;
+  letter-spacing: 0.1em;
+  color: transparent; /* Set initial text color to transparent */
   background: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0),
-    rgba(255, 255, 255, 0.8)
-  );
+    rgb(255, 255, 255)
+  ); /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
-  animation: fadeIn 6s forwards;
+  animation: fadeIn 3s forwards; /* Set the duration of the animation */
 }
 
 @keyframes fadeIn {
   to {
     color: rgb(255, 255, 255);
-    background-size: 200% 100%;
+    background-size: 200% 100%; /* Adjust the size of the gradient */
   }
 }
 
@@ -89,129 +105,27 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-left: 8%;
-  margin-right: 8%;
-  background-color: #1a2738;
-  width: 84%;
-  justify-self: center;
-  height: auto;
+  padding: 20px;
 }
 
-.left-side_rectangle {
-  flex: 3;
-  margin: 2%;
-  display: flex;
-  flex-direction: column;
-  margin-left: 1%;
-  gap: 2%;
-  align-items: center;
-  background-color: #1a2738;
+@keyframes rotateBoxShadow1 {
+  0% {
+    box-shadow: 0.1em 0.1em 1em rgba(24, 55, 68, 0.2); /* Adjust the opacity */
+  }
+  33% {
+    box-shadow: 0.1em 0.2em 0.5em #305982; /* Adjust the spread and color */
+  }
+  66% {
+    box-shadow: 0.1em 0.2em 0.4em #38557d; /* Adjust the spread and color */
+  }
+  100% {
+    box-shadow: 0.1em 0.2em 0.5em rgba(36, 84, 117, 0.5); /* Adjust the spread and opacity */
+  }
 }
 
-.leftRectangle-section1-button-title,
-.leftRectangle-section2-button-title,
-.leftRectangle-section3-button-title {
-  margin-top: 5%;
-  margin-bottom: 3%;
-  font-weight: 700px;
-  color: white;
-}
-
-.leftRectangle-section1,
-.leftRectangle-section2,
-.leftRectangle-section3 {
-  flex: 0.2;
-  background-color: #111927;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.leftRectangle-section1 a,
-.leftRectangle-section2 a,
-.leftRectangle-section3 a {
-  margin-bottom: 6%;
-  margin-top: 5%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 90%;
-  height: 2.5em;
-  border-radius: 0.5em;
-  background-color: #182a47;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  margin: 3%;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.Empty-section1,
-.Empty-section2,
-.Empty-section3 {
-  flex: 1;
-}
-
-.right-side_rectangle {
-  flex: 8;
-  margin: 2%;
-  margin-right: 0%;
-  margin-left: 1%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  flex-direction: column;
-  background-color: #1a2738;
-  color: rgb(212, 212, 212);
-  overflow-wrap: break-word;
-}
-
-.right-side_rectangle-buttons {
-  display: flex;
-  flex-direction: row;
-  background-color: #111927;
-  justify-content: space-between;
-  align-items: center;
-  height: 3.2em;
-}
-
-.right-side_rectangle-buttons a {
-  border-radius: 0.5em;
-  background-color: #182a47;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  padding: 1%;
-  margin: 0 2%;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.right-side_rectangle-buttons .next_course {
-  margin-left: auto;
-}
-
-.right-side_rectangle-buttons a:hover,
-.leftRectangle-section1 a:hover,
-.leftRectangle-section2 a:hover,
-.leftRectangle-section3 a:hover {
-  background-color: #1e6bb2;
-}
-
-h3 {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1em;
-}
-
-h2 {
-  font-family: "Space Grotesk", sans-serif;
+play-button {
+  width: 10%;
+  object-fit: cover;
 }
 
 h2 {
@@ -250,35 +164,14 @@ footer {
   border-radius: 1rem;
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.4);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow: 0 0 1rem rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer; /* makes the CARD clickable */
 }
 
-/* ensure container flexes normally */
-.container {
-  display: flex;
-  flex-direction: column; /* stack paragraph and terminal */
-}
-
-/* fixed-size terminal with its own scroll */
-.terminal-section {
-  height: 400px;
-  overflow-y: auto;
-  background-color: #1e1e1e;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  padding: 20px;
-  border-left: 2px solid #333;
-}
-
-/* Hover effect for the email link */
-.emailForCyberminds:hover {
-  color: #ffffff; /* Dark blue color on hover */
-  text-decoration: underline; /* Underline on hover */
-  font-weight: bold; /* Bold on hover */
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 1.5rem rgba(0,0,0,0.6);
 }
 
 .course-image {
@@ -286,33 +179,4 @@ footer {
   height: auto;
   display: block;
   cursor: default; /* prevents image from looking like the link */
-}
-
-.course-info {
-  padding: 1.2rem 1.35rem 1.35rem;
-}
-
-.course-number {
-  margin-bottom: 0.45rem;
-}
-
-.courseclass {
-  margin: 0;
-  font-size: 0.95rem;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: #6fdbf0;
-}
-
-.course-title {
-  margin: 0 0 0.6rem;
-  line-height: 1.2;
-  text-align: left;
-}
-
-.course-description {
-  margin: 0;
-  text-align: left;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.86);
 }

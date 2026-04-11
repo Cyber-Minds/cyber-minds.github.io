@@ -47,25 +47,27 @@ function revealmagically() {
 const verticalBox1 = document.querySelector(".verticalbox1");
 const verticalBox2 = document.querySelector(".verticalbox2");
 
-verticalBox1.addEventListener("mouseover", () => {
-  const imgGreen = document.querySelector(".imggreen");
-  imgGreen.style.transform = "scale(1.03)";
-});
+if (verticalBox1 && verticalBox2) {
+  verticalBox1.addEventListener("mouseover", () => {
+    const imgGreen = document.querySelector(".imggreen");
+    if (imgGreen) imgGreen.style.transform = "scale(1.03)";
+  });
 
-verticalBox2.addEventListener("mouseover", () => {
-  const imgPurple = document.querySelector(".imgpurple");
-  imgPurple.style.transform = "scale(1.03)";
-});
+  verticalBox2.addEventListener("mouseover", () => {
+    const imgPurple = document.querySelector(".imgpurple");
+    if (imgPurple) imgPurple.style.transform = "scale(1.03)";
+  });
 
-verticalBox1.addEventListener("mouseout", () => {
-  const imgGreen = document.querySelector(".imggreen");
-  imgGreen.style.transform = "scale(1)";
-});
+  verticalBox1.addEventListener("mouseout", () => {
+    const imgGreen = document.querySelector(".imggreen");
+    if (imgGreen) imgGreen.style.transform = "scale(1)";
+  });
 
-verticalBox2.addEventListener("mouseout", () => {
-  const imgPurple = document.querySelector(".imgpurple");
-  imgPurple.style.transform = "scale(1)";
-});
+  verticalBox2.addEventListener("mouseout", () => {
+    const imgPurple = document.querySelector(".imgpurple");
+    if (imgPurple) imgPurple.style.transform = "scale(1)";
+  });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const numberOfCircles = 300; // You can adjust the number of circles
@@ -94,10 +96,15 @@ document.addEventListener("DOMContentLoaded", function () {
 var prevScrollpos = window.scrollY;
 window.onscroll = function () {
   var currentScrollPos = window.scrollY;
+  const navbar = document.getElementById("navbar");
+  if (!navbar) {
+    prevScrollpos = currentScrollPos;
+    return;
+  }
   if (prevScrollpos > currentScrollPos) {
-    document.getElementById("navbar").style.top = "0";
+    navbar.style.top = "0";
   } else {
-    document.getElementById("navbar").style.top = "-4em";
+    navbar.style.top = "-4em";
   }
   prevScrollpos = currentScrollPos;
 };
@@ -121,6 +128,11 @@ function changePageCustomize() {
 // toggle navigation when logo or header image (or container) is clicked
 // we prefer using #menuToggle if it exists, otherwise fall back to any image
 function setupHeaderToggle() {
+  // header.js owns menu toggling for the shared header.
+  if (document.getElementById('site-header') || document.getElementById('main-nav')) {
+    return;
+  }
+
   const nav = document.querySelector('nav.header-buttons');
   if (!nav) return;
   // prefer the wrapper div if present
@@ -163,23 +175,24 @@ function changePageContent() {
 }
 
 const parentContainer = document.querySelector(".Parent-container");
-const buttonsInWholething = parentContainer.querySelectorAll("button");
-let isClicked23 = false;
-let isHover23 = false;
+if (parentContainer) {
+  const buttonsInWholething = parentContainer.querySelectorAll("button");
+  let isClicked = false;
 
-buttonsInWholething.forEach((button) => {
-  button.addEventListener("click", () => {
-    if (!isClicked) {
-      button.style.opacity = "0.1";
-      isClicked = true;
+  buttonsInWholething.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!isClicked) {
+        button.style.opacity = "0.1";
+        isClicked = true;
 
-      setTimeout(() => {
-        button.style.opacity = "1";
-        isClicked = false;
-      }, 50);
-    }
+        setTimeout(() => {
+          button.style.opacity = "1";
+          isClicked = false;
+        }, 50);
+      }
+    });
   });
-});
+}
 
 const sections = document.querySelectorAll(
   ".section2, .section5, .section4, .section3"
@@ -278,20 +291,24 @@ function updateCursor(offsetY, index) {
 }
 
 const section3 = document.querySelector(".section3");
+if (section3) {
+  section3.addEventListener("mouseleave", () => {
+    const cursor1 = document.querySelector(".cursor1");
+    if (cursor1) {
+      cursor1.style.opacity = "0";
+    }
+  });
 
-section3.addEventListener("mouseleave", () => {
-  const cursor1 = document.querySelector(".cursor1");
-  if (cursor1) {
-    cursor1.style.opacity = "0";
-  }
-});
-
-section3.addEventListener("mousemove", (e) => {
-  const cursor1 = document.querySelector(".cursor1");
-  cursor1.style.opacity = "1";
-  cursor1.style.left = e.pageX - section3.offsetLeft + "px";
-  cursor1.style.top = e.pageY - section3.offsetTop + "px";
-});
+  section3.addEventListener("mousemove", (e) => {
+    const cursor1 = document.querySelector(".cursor1");
+    if (!cursor1) {
+      return;
+    }
+    cursor1.style.opacity = "1";
+    cursor1.style.left = e.pageX - section3.offsetLeft + "px";
+    cursor1.style.top = e.pageY - section3.offsetTop + "px";
+  });
+}
 
 
 setTimeout(() => {
