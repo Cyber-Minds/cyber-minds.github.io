@@ -14,7 +14,7 @@
  */
 
 // Umami config — single source of truth; update here to change all pages
-var UMAMI_WEBSITE_ID = '4f3f4eed-fd85-4f62-9469-d5440c9bf000';
+var UMAMI_WEBSITE_ID = '3f04dc87-0260-43af-9d3b-089caab98156';
 var UMAMI_DOMAINS = 'cyber-minds.github.io';
 var EVENT_QUEUE_KEY = '__cybermindsAnalyticsQueue';
 var MAX_QUEUED_EVENTS = 200;

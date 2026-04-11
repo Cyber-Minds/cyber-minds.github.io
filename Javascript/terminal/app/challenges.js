@@ -72,8 +72,12 @@ function loadChallenge(challengeId, updateUrl = true) {
     setMobileView('editor');
   }
 
-  // Track challenge start in analytics
-  if (typeof trackChallengeStart === 'function') trackChallengeStart(resolvedChallengeId);
+  // Track challenge start in analytics (queue if analytics loads later)
+  if (typeof trackChallengeStart === 'function') {
+    trackChallengeStart(resolvedChallengeId);
+  } else {
+    queueAnalyticsEvent('challenge_start', { challenge: resolvedChallengeId });
+  }
 }
 
 function renderChallengeNav() {
@@ -211,7 +215,8 @@ function checkChallengeSolution() {
         /(owner|permission|user|group)/i.test(report),
       'web-recon':
         recon.trim().length > 0 &&
-        /(server|content-type|status|header|port)/i.test(recon),
+        /(server|content-type|status|header)/i.test(recon) &&
+        /\b9090\b/.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
     };
     const passed = !!checksByChallenge[activeChallengeId];
@@ -318,8 +323,12 @@ function handleCheckOutput(chunk) {
       );
     }
 
-    // Track challenge completion in analytics
-    if (typeof trackChallengeComplete === 'function') trackChallengeComplete(challengeId);
+    // Track challenge completion in analytics (queue if analytics loads later)
+    if (typeof trackChallengeComplete === 'function') {
+      trackChallengeComplete(challengeId);
+    } else {
+      queueAnalyticsEvent('challenge_complete', { challenge: challengeId });
+    }
 
     ws.send(`echo "PASS: challenge checks passed."\n`);
     const nextChallengeId = getNextChallengeId(challengeId);

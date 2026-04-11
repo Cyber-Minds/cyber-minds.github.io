@@ -81,8 +81,8 @@ RUN printf '%s\n' \
     '    include /etc/nginx/conf.d/*.conf;' \
     '    include /etc/nginx/sites-enabled/*;' \
     '}' > /etc/nginx/nginx.conf \
-    && sed -i 's/listen 80 default_server;/listen 8080 default_server;/' /etc/nginx/sites-available/default \
-    && sed -i 's/listen \\[::\\]:80 default_server;/listen [::]:8080 default_server;/' /etc/nginx/sites-available/default
+    && sed -i 's/listen 80 default_server;/listen 9090 default_server;/' /etc/nginx/sites-available/default \
+    && sed -i 's/listen \\[::\\]:80 default_server;/listen [::]:9090 default_server;/' /etc/nginx/sites-available/default
 
 # Set Java environment variables
 ENV JAVA_HOME=/usr/lib/jvm/default-java
