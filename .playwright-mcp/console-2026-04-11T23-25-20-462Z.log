@@ -1,0 +1,387 @@
+[     246ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[     251ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[     596ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[     605ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[     755ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[     767ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[     910ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[     917ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1065ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1073ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1228ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1232ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1379ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1384ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1537ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1545ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1696ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1706ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    1860ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    1865ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2015ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2025ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2176ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2184ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2331ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2338ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2484ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2496ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2646ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2651ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2794ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2809ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    2963ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    2965ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3118ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3126ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3368ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3376ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3524ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3534ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3679ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3682ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3826ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3833ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    3980ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    3985ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4132ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4133ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4284ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4292ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4444ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4451ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4596ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4602ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4844ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4848ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    4993ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    4999ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5140ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5148ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5344ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5351ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5501ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5510ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5652ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5660ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5810ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5816ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    5960ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    5970ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6115ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6117ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6262ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6266ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6410ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6416ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6565ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6568ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6724ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6732ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    6887ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    6895ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7046ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7050ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7202ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7210ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7362ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7366ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7509ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7515ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7710ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7715ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    7863ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    7868ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8017ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8024ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8178ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8183ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8333ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8338ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8482ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8490ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8645ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8647ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8803ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8810ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    8954ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    8960ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    9207ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    9215ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    9362ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    9366ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    9514ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    9515ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    9662ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    9663ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[    9816ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[    9822ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10063ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10068ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10218ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10224ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10369ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10390ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10532ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10544ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10690ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10699ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10851ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   10857ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   10999ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11003ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11153ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11162ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11315ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11316ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11464ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11465ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11615ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11616ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11757ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11759ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   11901ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   11904ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12051ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12052ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12196ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12197ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12348ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12352ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12501ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12502ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12645ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12648ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12799ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12801ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   12943ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   12950ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13096ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13099ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13245ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13250ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13396ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13398ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13547ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13551ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13702ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13709ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   13853ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   13859ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14009ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14016ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14170ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14172ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14335ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14345ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14586ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14597ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14749ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14754ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   14911ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   14917ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   15165ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   15182ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   15325ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   15335ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   15485ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   15492ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   15635ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   15643ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   15886ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   15899ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16042ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16048ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16192ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16199ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16355ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16359ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16502ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16509ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16656ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16666ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16818ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16826ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   16979ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   16982ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17133ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17136ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17287ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17290ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17440ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17441ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17582ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17585ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17784ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17791ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   17941ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   17947ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18094ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18099ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18342ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18347ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18494ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18501ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18646ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18653ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18798ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18805ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   18950ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   18954ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19194ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19206ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19347ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19354ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19501ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19510ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19658ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19689ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19835ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19840ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   19991ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   19994ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20143ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20146ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20294ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20301ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20444ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20451ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20599ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20605ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20760ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20767ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   20907ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   20912ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   21109ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   21114ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
+[   21258ms] [LOG] Live reload enabled. @ http://127.0.0.1:53804/HTML/ourTeam.html:305
+[   21266ms] TypeError: Cannot read properties of null (reading 'appendChild')
+    at HTMLDocument.<anonymous> (http://127.0.0.1:53804/Javascript/cyberminds.js:92:22)
