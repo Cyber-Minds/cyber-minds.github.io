@@ -22,19 +22,7 @@
     <title>Course 10 - Networking Quiz 1</title>
   </head>
   <body class="body">
-    <header>
-      <div class="header-content">
-        <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
-        <nav class="header-buttons">
-          <a href="../../../index.html">Back to Home Screen</a>
-          <a href="../../moreinfo.html">More Info</a>
-          <a href="../../course_Contents.html">Mission</a>
-          <a href="../../LiveHelp.html">Live Help</a>
-          <a href="../../ourTeam.html">Our Team</a>
-          <a href="../../CTF.html">CTF</a>
-        </nav>
-      </div>
-    </header>
+    <header id="site-header"></header>
 
     <div><p class="page-title">Course 10 - Networking Quiz 1</p></div>
 
@@ -325,7 +313,15 @@
             showAnswerDetail('q1-VS-detail');
             lab.style.color = 'red';
 
-            // Check answer for question 2
+// Add 'selected' class to the clicked label
+          label.classList.add("selected");
+        });
+      });
+    </script>
+    <script src="../../../Javascript/popUp_Pages.js"></script>
+      <script src="../../../Javascript/footer.js"></script>
+<script src="../../../Javascript/header.js"></script>
+// Check answer for question 2
             var q2Answer = document.querySelector('input[name="q2"]:checked');
             if (q2Answer && q2Answer.value === 'open') {
               score++;
@@ -411,5 +407,5 @@
       </div>
     </section>
     <script src="../../../Javascript/analytics.js"></script>
-  </body>
+</body>
 </html>

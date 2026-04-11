@@ -26,18 +26,99 @@
     <title>Course 10 - Networking Quiz 2</title>
   </head>
 
-  <body class="body">
-    <header>
-      <div class="header-content">
-        <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
-        <nav class="header-buttons">
-          <a href="../../../index.html">Back to Home Screen</a>
-          <a href="../../moreinfo.html">More Info</a>
-          <a href="../../course_Contents.html">Mission</a>
-          <a href="../../LiveHelp.html">Live Help</a>
-          <a href="../../ourTeam.html">Our Team</a>
-          <a href="../../CTF.html">CTF</a>
-        </nav>
+  <title>Course 10 - Networking Quiz 2</title>
+</head>
+
+<body class="body">
+  <header id="site-header"></header>
+
+  <div>
+    <p class="page-title">Course 10 - Networking Quiz 2</p>
+  </div>
+
+  <section class="section">
+    <div class="right-side_rectangle">
+      <div class="question">1. What is the main function of the Transport layer in the OSI model?</div>
+      <ul class="options">
+        <li class="option">
+          <input type="radio" name="q1" value="SW" id="q1-SW" />
+          <label for="q1-SW" id="q1-a1">
+            Formatting data into packets
+            <div id="q1-SW-detail" class="answer-detail">
+              Layer 2 formats data into packets.
+            </div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q1" value="ES" id="q1-ES" />
+          <label for="q1-ES" id="q1-a2">
+            Regulating communication with respect to protocols and ports
+            <div id="q1-ES-detail" class="answer-detail">Correct!</div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q1" value="VW" id="q1-VW" />
+          <label for="q1-VW" id="q1-a3">
+            Routing data to different destinations
+            <div id="q1-VW-detail" class="answer-detail">
+              Layer 3 routes data.
+            </div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q1" value="VS" id="q1-VS" />
+          <label for="q1-VS" id="q1-a4">
+            Initiating and terminating active connections between devices (sessions)
+            <div id="q1-VS-detail" class="answer-detail">
+              Layer 5 handles sessions.
+            </div>
+          </label>
+        </li>
+      </ul>
+
+      <div class="question">2. Which layers of the OSI model are equivalent to Layer 1 of the TCP/IP model?</div>
+      <ul class="options">
+        <li class="option">
+          <input type="radio" name="q2" value="open" id="q2-open" />
+          <label for="q2-open" name="q2" id="q2-a1">
+            Physical and Data Link
+            <div id="q2-open-detail" class="answer-detail">Correct!</div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q2" value="grammar" id="q2-grammar" />
+          <label for="q2-grammar" name="q2" id="q2-a2">
+            Network and Transport
+            <div id="q2-grammar-detail" class="answer-detail">
+              Layer 3 is responsible for routing data to different destinations, while Layer 4 regulates communication
+              with respect to protocols and ports.
+            </div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q2" value="verify" id="q2-verify" />
+          <label for="q2-verify" name="q2" id="q2-a3">
+            Presentation and Application
+            <div id="q2-verify-detail" class="answer-detail">
+              Layers 6 and 7 are responsible for data formatting and the final presentation of data in user
+              applications, respectively.
+            </div>
+          </label>
+        </li>
+        <li class="option">
+          <input type="radio" name="q2" value="ignore" id="q2-ignore" />
+          <label for="q2-ignore" name="q2" id="q2-a4">
+            Session and Application
+            <div id="q2-ignore-detail" class="answer-detail">
+              Layer 5 manages sessions and Layer 7 deals with the final presentation of data in user applications.
+            </div>
+          </label>
+        </li>
+      </ul>
+
+      <div class="question">3. A stateful firewall has the capability to make detailed analyses of packets, keeping
+        track
+        of additional information beyond safety, allowing for more advanced filtering compared to a stateless firewall.
       </div>
     </header>
 
@@ -446,7 +527,10 @@
     </script>
     <script src="../../../Javascript/popUp.js"></script>
     <script src="../../../Javascript/footer.js"></script>
-    <script>
+<script src="../../../Javascript/header.js"></script>
+
+</html>
+<script>
       (function () {
         if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
           window.chatbase = (...arguments) => {
@@ -479,5 +563,5 @@
       })();
     </script>
     <script src="../../../Javascript/analytics.js"></script>
-  </body>
 </html>
+</body>
