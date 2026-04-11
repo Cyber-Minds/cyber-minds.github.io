@@ -1,0 +1,94 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "CyberMinds home" [ref=e4] [cursor=pointer]:
+        - /url: /index.html
+        - img "CyberMinds Logo" [ref=e5]
+      - navigation "Toggle navigation menu" [ref=e6]:
+        - link "Home" [ref=e7] [cursor=pointer]:
+          - /url: /index.html
+        - link "More Info" [ref=e8] [cursor=pointer]:
+          - /url: /HTML/moreinfo.html
+        - link "Mission" [ref=e9] [cursor=pointer]:
+          - /url: /HTML/mission.html
+        - link "Live Help" [ref=e10] [cursor=pointer]:
+          - /url: /HTML/LiveHelp.html
+        - link "Courses" [ref=e11] [cursor=pointer]:
+          - /url: /HTML/course_Contents.html
+        - link "Our Team" [ref=e12] [cursor=pointer]:
+          - /url: /HTML/ourTeam.html
+        - link "CTF" [ref=e13] [cursor=pointer]:
+          - /url: /HTML/CTF.html
+  - heading "Meet the Team" [level=1] [ref=e14]
+  - generic [ref=e15]:
+    - heading "Leadership" [level=2] [ref=e16]
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - img "Team Member" [ref=e19]
+        - heading "Aarohi Gandhi" [level=2] [ref=e20]
+        - heading "Founder & Director of CyberMinds" [level=3] [ref=e21]
+        - paragraph [ref=e22]: Aarohi is the founder and director of CyberMinds, passionate about making cybersecurity education accessible to everyone. She leads the team in building free, interactive resources that empower students to stay safe online.
+      - generic [ref=e23]:
+        - img "Team Member" [ref=e24]
+        - heading "Ege Uysal" [level=2] [ref=e25]
+        - heading "Coding Director for CyberMinds" [level=3] [ref=e26]
+        - paragraph [ref=e27]: Hello, I’m Ege, the Coding Director for CyberMinds. I helped build the CyberMinds project and built the web terminal.
+  - generic [ref=e28]:
+    - heading "Development Team" [level=2] [ref=e29]
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - img "Team Member" [ref=e32]
+        - heading "Shaurya Sahdev" [level=2] [ref=e33]
+        - heading "Front End" [level=3] [ref=e34]
+        - paragraph [ref=e35]: Shaurya is a sophomore passionate about web design, software development, and video game development. In his free time, he enjoys hiking, skiing, biking, and playing chess. He has made countless small projects and hopes to improve his coding skills with opportunities such as CyberMinds.
+      - generic [ref=e36]:
+        - img "Team Member" [ref=e37]
+        - heading "Sidhaanth Kapoor" [level=2] [ref=e38]
+        - heading "Front End" [level=3] [ref=e39]
+        - paragraph [ref=e40]: Sidhaanth is a sophomore at Redmond High School, passionate about CS, AI, and ML. He has experience in Python, front-end web development, and a bit of C++ and Java. He's been coding for 5 years.
+      - generic [ref=e41]:
+        - img "Team Member" [ref=e42]
+        - heading "Aditya Mahapatra" [level=2] [ref=e43]
+        - heading "Front End" [level=3] [ref=e44]
+        - paragraph [ref=e45]: Aditya is a junior who's passionate about technology. A few things he enjoys in his free time include traveling, photography, and spending time with his family and friends. Currently, he is part of the front-end team for CyberMinds and hopes to grow his skills and help others learn how to stay safe in this digital world.
+      - generic [ref=e46]:
+        - img "Team Member" [ref=e47]
+        - heading "Ashwin Raj" [level=2] [ref=e48]
+        - heading "Front End" [level=3] [ref=e49]
+        - paragraph [ref=e50]: Ashwin helped with the maintenance of the website's Chatbot. He also tested the website to ensure that everything on it is functional, and reported bugs.
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - img "Team Member" [ref=e53]
+        - heading "Ethan Bar-Niv" [level=2] [ref=e54]
+        - heading "Back End" [level=3] [ref=e55]
+        - paragraph [ref=e56]: Ethan is a junior at Lake Washington High School in Kirkland, WA, and has enjoyed coding since a young age. He's particularly interested in how AI and cybersecurity connect and how they can be used together to solve real-world problems. In his free time, he enjoys watching sports and reading fantasy books.
+      - generic [ref=e57]:
+        - img "Team Member" [ref=e58]
+        - heading "Advay Midha" [level=2] [ref=e59]
+        - heading "Back End" [level=3] [ref=e60]
+        - paragraph [ref=e61]: Advay is currently in 10th grade at Tesla STEM High School. Some of his passions include robotics, rocketry, and engineering. He wants to be an aerospace or mechanical engineer. In his free time, he enjoys drumming, playing chess, and biking.
+      - generic [ref=e62]:
+        - img "Team Member" [ref=e63]
+        - heading "Tavish Khandelwal" [level=2] [ref=e64]
+        - heading "AI Team" [level=3] [ref=e65]
+        - paragraph [ref=e66]: Tavish is a junior at Eastlake High School. His favorite subject is math and he loves playing basketball in his free time. He aspires to work on an artificial intelligence team in the future.
+  - generic [ref=e67]:
+    - heading "Content Team" [level=2] [ref=e68]
+    - generic [ref=e69]:
+      - generic [ref=e70]:
+        - img "Team Member" [ref=e71]
+        - heading "Dhruv Mutatkar" [level=2] [ref=e72]
+        - heading "Cybersecurity" [level=3] [ref=e73]
+        - paragraph [ref=e74]: Dhruv develops cybersecurity content for CyberMinds focusing on important topics everyone should know about in the digital age. He enjoys breaking down complex cybersecurity ideas into simple understandable pieces. His goal is to help others learn how to stay safe and informed online.
+      - generic [ref=e75]:
+        - img "Team Member" [ref=e76]
+        - heading "Arron Randhawa" [level=2] [ref=e77]
+        - heading "Cybersecurity" [level=3] [ref=e78]
+        - paragraph [ref=e79]: Arron is a dedicated learner with a strong interest in technology and digital security. He holds a Google Cybersecurity Certificate and is passionate about applying practical cybersecurity principles to protect systems and users. Arron enjoys exploring how technology, ethics, and real-world applications intersect in the digital landscape.
+      - generic [ref=e80]:
+        - img "Team Member" [ref=e81]
+        - heading "Rohan Rijhwani" [level=2] [ref=e82]
+        - heading "Marketing" [level=3] [ref=e83]
+        - paragraph [ref=e84]: Rohan has shared an immense passion for technology from a young age. Outside of CyberMinds, Rohan enjoys photography, traveling, sports, and of course, watching movies. In fact, Rohan joined his high school's varsity soccer team in his freshman year.
+  - contentinfo [ref=e85]:
+    - paragraph [ref=e86]: © 2026 CyberMinds, Inc. All rights reserved.
