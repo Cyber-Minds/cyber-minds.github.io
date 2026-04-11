@@ -1,0 +1,6 @@
+**/*.js
+node_modules
+dist
+build
+coverage
+course4editor.bundle.js

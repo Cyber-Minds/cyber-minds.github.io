@@ -294,3 +294,16 @@ section3.addEventListener("mousemove", (e) => {
 });
 
 
+setTimeout(() => {
+  const popup = document.getElementById("signin-popup");
+  if (popup) {
+    popup.classList.remove("hidden");
+  }
+}, 10000);
+
+function closePopup() {
+  const popup = document.getElementById("signin-popup");
+  if (popup) {
+    popup.classList.add("hidden");
+  }
+}

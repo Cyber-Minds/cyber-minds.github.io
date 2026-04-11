@@ -17,7 +17,21 @@
     <title>Course 7 - Attacks Quiz</title>
   </head>
   <body>
-    <header id="site-header"></header>
+<header id="site-header"></header>
+<header>
+      <div class="header-content">
+        <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
+        <nav class="header-buttons">
+          <a href="../../../index.html">Back to Home Screen</a>
+          <a href="../../moreinfo.html">More Info</a>
+          <a href="../../course_Contents.html">Mission</a>
+          <a href="../../LiveHelp.html">Live Help</a>
+          <a href="../../ourTeam.html">Our Team</a>
+          <a href="../../CTF.html">CTF</a>
+        </nav>
+      </div>
+    </header>
+</body>
 
     <div><p class="page-title">Course 7 - Attacks Quiz</p></div>
 
@@ -246,7 +260,9 @@
       </div>
 
       <!-- <footer class="page-footer">
-        <p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
+<p>&copy; 2024 CyberMinds, Inc. All rights reserved.</p>
+<p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
+</body>
       </footer> -->
     </section>
     <script>
@@ -255,7 +271,7 @@
 
         // Check answer for question 1
         var q1Answer = document.querySelector('input[name="q1"]:checked');
-        if (q1Answer && q1Answer.value === "VW") {
+if (q1Answer && q1Answer.value === "VW") {
           score++;
         }
         var lab = document.getElementById("q1-a1");
@@ -314,12 +330,72 @@
         // Display the result
         var resultElement = document.getElementById("result");
         resultElement.innerHTML = "Your score is: " + score + "/4";
+if (q1Answer && q1Answer.value === 'VW') {
+          score++;
+        }
+        var lab = document.getElementById('q1-a1');
+        showAnswerDetail('q1-SW-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q1-a2');
+        showAnswerDetail('q1-ES-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q1-a3');
+        showAnswerDetail('q1-VW-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q1-a4');
+        showAnswerDetail('q1-VS-detail');
+        lab.style.color = 'red';
+
+        // Check answer for question 2
+        var q2Answer = document.querySelector('input[name="q2"]:checked');
+        if (q2Answer && q2Answer.value === 'grammar') {
+          score++;
+        }
+        lab = document.getElementById('q2-a1');
+        showAnswerDetail('q2-open-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q2-a2');
+        showAnswerDetail('q2-grammar-detail');
+        lab.style.color = 'lightgreen';
+        lab = document.getElementById('q2-a3');
+        showAnswerDetail('q2-verify-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q2-a4');
+        showAnswerDetail('q2-ignore-detail');
+        lab.style.color = 'red';
+
+        var q3Answer = document.querySelector('input[name="q3"]:checked');
+        if (q3Answer && q3Answer.value === 'false') {
+          score++;
+        }
+        lab = document.getElementById('q3-a1');
+        showAnswerDetail('q3-true-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q3-a2');
+        showAnswerDetail('q3-false-detail');
+        lab.style.color = 'lightgreen';
+
+        var q4Answer = document.querySelector('input[name="q4"]:checked');
+        if (q4Answer && q4Answer.value === 'false') {
+          score++;
+        }
+        lab = document.getElementById('q4-a1');
+        showAnswerDetail('q4-true-detail');
+        lab.style.color = 'red';
+        lab = document.getElementById('q4-a2');
+        showAnswerDetail('q4-false-detail');
+        lab.style.color = 'lightgreen';
+
+        // Display the result
+        var resultElement = document.getElementById('result');
+        resultElement.innerHTML = 'Your score is: ' + score + '/4';
+</body>
       }
 
       function showAnswerDetail(detailId) {
         var detailElement = document.getElementById(detailId);
         if (detailElement) {
-          detailElement.style.display = "block";
+detailElement.style.display = "block";
         }
       }
 
@@ -338,15 +414,73 @@
               .getAttribute("name");
             if (otherRadioName === radioName) {
               otherLabel.classList.remove("selected");
+detailElement.style.display = 'block';
+        }
+      }
+
+      var labels = document.querySelectorAll('label');
+      labels.forEach(function (label) {
+        label.addEventListener('click', function () {
+          // Remove 'selected' class from all labels
+          labels.forEach(function (otherLabel) {
+            var radioLabel = label.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
+            var radioName = radioLabel
+              .querySelector('input[type="radio"]')
+              .getAttribute('name');
+            var otherRadioLabel = otherLabel.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
+            var otherRadioName = otherRadioLabel
+              .querySelector('input[type="radio"]')
+              .getAttribute('name');
+            if (otherRadioName === radioName) {
+              otherLabel.classList.remove('selected');
+</body>
             }
           });
 
           // Add 'selected' class to the clicked label
-          label.classList.add("selected");
+label.classList.add("selected");
         });
       });
     </script>
       <script src="../../../Javascript/footer.js"></script>
 <script src="../../../Javascript/header.js"></script>
+label.classList.add('selected');
+        });
+      });
+    </script>
+    <script src="../../../Javascript/footer.js"></script>
+    <script>
+      (function () {
+        if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
+          window.chatbase = (...arguments) => {
+            if (!window.chatbase.q) {
+              window.chatbase.q = [];
+            }
+            window.chatbase.q.push(arguments);
+          };
+          window.chatbase = new Proxy(window.chatbase, {
+            get(target, prop) {
+              if (prop === 'q') {
+                return target.q;
+              }
+              return (...args) => target(prop, ...args);
+            },
+          });
+        }
+        const onLoad = function () {
+          const script = document.createElement('script');
+          script.src = 'https://www.chatbase.co/embed.min.js';
+          script.id = '5zyd1xHaZEua96z-hkI37';
+          script.domain = 'www.chatbase.co';
+          document.body.appendChild(script);
+        };
+        if (document.readyState === 'complete') {
+          onLoad();
+        } else {
+          window.addEventListener('load', onLoad);
+        }
+      })();
+    </script>
+    <script src="../../../Javascript/analytics.js"></script>
 </body>
 </html>

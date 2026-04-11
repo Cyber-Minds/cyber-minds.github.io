@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend Tests and Coverage Gate
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terminal/backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: terminal/backend/go.mod
+          cache: true
+      - name: Install dependencies
+        run: go mod download
+      - name: Verify build compiles
+        run: go build ./...
+      - name: Run go vet
+        run: go vet ./...
+      - name: Run backend unit tests
+        run: go test ./... -coverprofile=coverage.out
+      - name: Enforce backend coverage gate (>=60%)
+        run: ./scripts/check-coverage.sh 60 coverage.out
+
+  frontend:
+    name: Frontend ESLint Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install frontend dependencies
+        run: npm ci
+      - name: Run ESLint (Airbnb base)
+        run: npm run lint:frontend
+      - name: Check HTML files are non-empty
+        run: if find HTML -name "*.html" -empty | grep -q .; then echo "Empty HTML files found"; exit 1; fi

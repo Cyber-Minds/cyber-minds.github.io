@@ -76,7 +76,7 @@ header {
   margin-bottom: 2%;
   margin-top: 2%;
   padding: 0%;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 4em;
   font-weight: 700;
   font-style: normal;
@@ -187,24 +187,24 @@ play-button {
 }
 
 h2 {
-  font-family: "MuseoModerno", sans-serif;
+  font-family: 'MuseoModerno', sans-serif;
   font-weight: 500;
   color: white;
 }
 
 .courseclass {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   color: #6fdbf0;
   font-weight: 400;
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   color: rgba(255, 255, 255, 0.91);
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 footer {
@@ -218,5 +218,5 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }

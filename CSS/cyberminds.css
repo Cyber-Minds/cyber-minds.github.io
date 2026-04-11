@@ -188,7 +188,7 @@ header,
   top: 6%;
   left: 50%;
   letter-spacing: 0.1em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 100;
@@ -196,7 +196,12 @@ header,
   color: transparent;
   /* Set initial text color to transparent */
   font-size: 2.4em;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgb(255, 255, 255));
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgb(255, 255, 255)
+  );
   /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
@@ -222,13 +227,18 @@ header,
   transform: translateX(-50%);
   top: 40%;
   left: 50%;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   letter-spacing: 0.1em;
   font-weight: 400;
   color: transparent;
   /* Set initial text color to transparent */
   font-size: 0.9em;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0), rgb(255, 255, 255)); /* Adjust the colors and stops as needed */
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgb(255, 255, 255)
+  ); /* Adjust the colors and stops as needed */
   background-clip: text;
   -webkit-background-clip: text;
   animation: fadeIn 3s forwards; /* Set the duration of the animation */
@@ -316,7 +326,7 @@ header,
   position: absolute;
   transform: translateX(-50%);
   left: 50%;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 3em;
   font-weight: 700;
   font-style: normal;
@@ -328,7 +338,7 @@ header,
 
 .description {
   flex: 2;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   color: white;
   letter-spacing: 0.1em;
   font-size: 1em;
@@ -394,7 +404,7 @@ header,
 }
 
 a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .section3 {
@@ -432,7 +442,7 @@ a {
 .section3-title {
   z-index: 999;
   color: #ffffff;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 3em;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -489,7 +499,7 @@ a {
 .board-quote {
   color: #ffffff;
   margin-top: 2em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-style: italic;
   padding: 0 15%;
   word-spacing: 0.09em; /* Adjust the value to increase or decrease word spacing */
@@ -497,7 +507,7 @@ a {
 }
 
 .board-quote blockquote {
-  quotes: "“" "”" "‘" "’";
+  quotes: '“' '”' '‘' '’';
 }
 
 .board-quote-author {
@@ -565,6 +575,41 @@ a {
     transform 0.3s ease,
     box-shadow 0.3s ease;
   z-index: 10001;
+  color: #ffffff;
+}
+
+.opportunity-card h3 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 15px;
+}
+
+.opportunity-card h5 {
+  color: rgb(111, 219, 240);
+  font-weight: 600;
+}
+
+.opportunity-card p,
+.opportunity-card li {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.opportunity-card ul {
+  text-align: left;
+  display: inline-block;
+  padding-left: 1.2em;
+  margin-top: 1em;
+}
+
+.opportunity-card li {
+  margin-bottom: 0.5em;
+}
+
+.opportunity-card i {
+  color: #fb582a;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+  display: block;
 }
 
 .opportunity-card:hover {
@@ -585,7 +630,7 @@ a {
 }
 
 .opportunity-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.3em;
   font-weight: 600;
   color: #ffffff;
@@ -593,7 +638,7 @@ a {
 }
 
 .opportunity-desc {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.95em;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
@@ -715,7 +760,7 @@ a {
   margin-top: 1em;
   margin-bottom: none;
   text-align: left;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-style: normal;
   word-spacing: 0.08em;
@@ -734,7 +779,7 @@ a {
   z-index: 1; /* Set a higher z-index value */
   margin-left: 5%;
   text-decoration: none;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1em;
   font-weight: 700;
   font-style: normal;
@@ -790,7 +835,7 @@ a {
   margin-bottom: 5%;
 }
 .section5-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 3em;
   font-weight: 700;
   font-style: normal;
@@ -806,7 +851,7 @@ a {
 }
 
 .animatedbackgroundwithCircles::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -957,7 +1002,7 @@ a {
 .FeedbackTitle {
   color: white;
   font-size: 1.1em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   align-self: left;
   padding-right: 40%;
   font-weight: 600;
@@ -966,7 +1011,7 @@ a {
 .stars {
   color: white;
   font-size: 1.1em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   align-self: left;
 
   font-weight: 600;
@@ -975,7 +1020,7 @@ a {
 .theFeedback {
   color: rgba(255, 255, 255, 0.832);
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   align-self: center;
   padding-left: 6%;
   padding-right: 6%;
@@ -991,7 +1036,7 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .reveal {
@@ -1019,11 +1064,11 @@ footer {
 }
 
 p {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .slogan-wording {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.5em;
   font-weight: 400;
 }
@@ -1038,7 +1083,7 @@ p {
 }
 a {
   text-decoration: none;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .page-footer {
