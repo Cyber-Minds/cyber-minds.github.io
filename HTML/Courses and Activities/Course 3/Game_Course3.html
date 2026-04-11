@@ -18,18 +18,78 @@
     <title>Course 3 - Game</title>
   </head>
 
-  <body>
-    <header>
-      <div class="header-content">
-        <img src="../../../Images/circle.jpg" alt="CyberMinds Logo" />
-        <nav class="header-buttons">
-          <a href="../../../index.html">Back to Home Screen</a>
-          <a href="../../moreinfo.html">More Info</a>
-          <a href="../../course_Contents.html">Mission</a>
-          <a href="../../LiveHelp.html">Live Help</a>
-          <a href="../../ourTeam.html">Our Team</a>
-          <a href="../../CTF.html">CTF</a>
-        </nav>
+  <title>Course 3 - Game</title>
+</head>
+
+<body>
+  <header id="site-header"></header>
+
+  <div>
+    <p class="page-title">Course 3 - Game</p>
+  </div>
+
+  <section>
+    <div class="right-side_rectangle">
+      <!-- INSTRUCTIONS -->
+      <h2>Instructions</h2>
+      <p>
+        You have been tasked as the
+        <span class="blue-word">defender</span>
+        of your company against malicious emails. You work in a very well
+        known and loved company, so you begin with maximum
+        <span class="blue-word">company reputation</span>
+        (can be seen in the top left). Due to the popularity of your company,
+        both sponsors and
+        <span class="blue-word">malicious organizations</span>
+        will send you emails. The malicious emails have a slight
+        red
+        tint to them.<br /><br />
+
+        Your job is to block the
+        <span class="blue-word">malicious emails</span>
+        from reaching your company (bottom of the screen) while also letting
+        <span class="blue-word">sponsor emails</span>
+        through. The company pays you a specific amount of passive income for
+        each sponsor email they receive. This money can be used to purchase
+        <span class="blue-word">upgrades</span>
+        (discussed later).<br /><br />
+
+        Destroying a sponsor email will lower company reputation and lose a
+        random amount of sponsors between 0 - 5. Allowing a malicious email to
+        reach the company lowers company reputation. The goal is to make as
+        much money / gain as many sponsors as possible and completely max out
+        the upgrades.
+      </p>
+
+      <h3><span class="blue-word">Upgrades...</span></h3>
+      <p>
+        <span class="green-word">Size Upgrade</span>
+        : Reduces the defender's size to make it easier to block emails.<br />
+        <span class="green-word">Filter Upgrade</span>
+        : Increases the chance of not losing company reputation and sponsors
+        (filtering) when blocking a sponsor email.<br />
+        <span class="green-word">Revenue Upgrade</span>
+        : Increases the amount of passive income that the company pays you.
+      </p>
+
+      <h3><span class="blue-word">Controls...</span></h3>
+      <p>
+        <span class="green-word">Movement</span>
+        : A & D or Left & Right Arrow Keys<br />
+        <span class="green-word">Size Upgrade</span>
+        : Q<br />
+        <span class="green-word">Filter Upgrade</span>
+        : W<br />
+        <span class="green-word">Revenue Upgrade</span>
+        : E<br />
+      </p>
+      <!-- ADD THE GAME HERE -->
+      <iframe src="https://i.simmer.io/@VevaanVerma/defender" style="width: 95%; aspect-ratio: 16 / 9"></iframe>
+      <div class="right-side_rectangle-buttons">
+        <a href="../../Courses and Activities/Course 3/SQLInjectionActivitycourse3.html">&lt; Previous</a>
+        <a href="../../Courses and Activities/Course 4/Introductioncourse4.html">Next ></a>
+        <a href="../../Courses and Activities/Course 4/Introductioncourse4.html" class="next_course">Skip to Next
+          Course</a>
       </div>
     </header>
 
@@ -219,7 +279,10 @@
       </footer> -->
     </section>
     <script src="../../../Javascript/footer.js"></script>
-    <script>
+<script src="../../../Javascript/header.js"></script>
+
+</html>
+<script>
       (function () {
         if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
           window.chatbase = (...arguments) => {

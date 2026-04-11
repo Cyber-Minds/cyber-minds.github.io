@@ -20,8 +20,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const core = require("@actions/core")
-
             const owner = context.repo.owner
             const repo = context.repo.repo
             const dateUtc = new Date().toISOString().slice(0, 10)
@@ -43,7 +41,7 @@ jobs:
               "",
               "### Next-Week Priorities",
               "- ",
-            ].join("\\n")
+            ].join("\n")
 
             const { data: issues } = await github.rest.issues.listForRepo({
               owner,

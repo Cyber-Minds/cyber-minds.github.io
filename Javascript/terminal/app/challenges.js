@@ -1,6 +1,16 @@
 /**
  * @file Challenge navigation and validation flow.
  */
+function queueAnalyticsEvent(eventName, payload) {
+  var queueKey = '__cybermindsAnalyticsQueue';
+  var queue = window[queueKey];
+  if (!Array.isArray(queue)) {
+    queue = [];
+    window[queueKey] = queue;
+  }
+  queue.push({ eventName, payload: payload || {} });
+}
+
 function loadChallenge(challengeId, updateUrl = true) {
 
   let resolvedChallengeId = challengeId;
@@ -69,7 +79,7 @@ function loadChallenge(challengeId, updateUrl = true) {
 function renderChallengeNav() {
   const container = document.querySelector('.challenge-nav-list') || document.getElementById('challengeNav');
   if (!container) return;
-  
+
   container.innerHTML = '';
   const renderedGroups = new Set();
 

@@ -16,9 +16,15 @@
 // Umami config — single source of truth; update here to change all pages
 var UMAMI_WEBSITE_ID = '4f3f4eed-fd85-4f62-9469-d5440c9bf000';
 var UMAMI_DOMAINS = 'cyber-minds.github.io';
+var EVENT_QUEUE_KEY = '__cybermindsAnalyticsQueue';
+var MAX_QUEUED_EVENTS = 200;
+var eventQueue = window[EVENT_QUEUE_KEY];
+if (!Array.isArray(eventQueue)) {
+  eventQueue = [];
+  window[EVENT_QUEUE_KEY] = eventQueue;
+}
 
-var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id',
-                    'email', 'password', 'key', 'secret', 'auth'];
+var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id', 'email', 'password', 'key', 'secret', 'auth'];
 
 function isBlockedKey(k) {
   var lower = k.toLowerCase();
@@ -57,10 +63,33 @@ function trackEvent(eventName, payload) {
 
     if (typeof window.umami !== 'undefined' && typeof window.umami.track === 'function') {
       window.umami.track(eventName, safePayload);
+    } else {
+      if (eventQueue.length >= MAX_QUEUED_EVENTS) {
+        eventQueue.shift();
+      }
+      eventQueue.push({ eventName, payload: safePayload });
     }
   } catch (err) {
     // Analytics errors must never break page functionality
     console.warn('Analytics event failed silently:', err);
+  }
+}
+
+/**
+ * Flush queued events once Umami is ready.
+ * Queue exists to prevent losing early events on first page load.
+ */
+function flushQueuedEvents() {
+  if (!(typeof window.umami !== 'undefined' && typeof window.umami.track === 'function')) {
+    return;
+  }
+
+  while (eventQueue.length > 0) {
+    var queued = eventQueue.shift();
+    if (!queued || typeof queued.eventName !== 'string') {
+      continue;
+    }
+    trackEvent(queued.eventName, queued.payload || {});
   }
 }
 
@@ -105,6 +134,7 @@ function trackPageView() {
   };
   s.onload = function () {
     trackPageView();
+    flushQueuedEvents();
   };
   document.head.appendChild(s);
 })();
