@@ -430,19 +430,19 @@
       <span class="sev sev-critical">Critical</span>
     </div>
     <div class="checklist">
-      <div class="check-item" onclick="toggle(this)">
+      <div class="check-item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false');" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false'); }">
         <div class="check-box"><i class="fa-solid fa-check"></i></div>
         <div class="check-text"><strong>No real API keys or tokens</strong> — confirm no <code>API_KEY</code>, AWS credentials, or personal access tokens appear anywhere in fixture files, starter code, or challenge prompts.</div>
       </div>
-      <div class="check-item" onclick="toggle(this)">
+      <div class="check-item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false');" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false'); }">
         <div class="check-box"><i class="fa-solid fa-check"></i></div>
         <div class="check-text"><strong>No real passwords or secrets</strong> — all passwords in sample logs, HTTP traces, or config files are clearly fictional (e.g., <code>hunter2</code>, <code>changeme123</code>).</div>
       </div>
-      <div class="check-item" onclick="toggle(this)">
+      <div class="check-item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false');" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false'); }">
         <div class="check-box"><i class="fa-solid fa-check"></i></div>
         <div class="check-text"><strong>No real SSH private keys</strong> — fixture files containing key material must use obviously fake RSA/EC key stubs that fail validation.</div>
       </div>
-      <div class="check-item" onclick="toggle(this)">
+      <div class="check-item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false');" onkeydown="if (event.key === ' ' || event.key === 'Enter') { event.preventDefault(); toggle(this); this.setAttribute('aria-checked', this.classList.contains('checked') ? 'true' : 'false'); }">
         <div class="check-box"><i class="fa-solid fa-check"></i></div>
         <div class="check-text"><strong>No production hostnames or IPs</strong> — all IP addresses must be RFC 5737 documentation ranges (<code>192.0.2.x</code>, <code>198.51.100.x</code>) or clearly fictional.</div>
       </div>
