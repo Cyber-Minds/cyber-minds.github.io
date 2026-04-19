@@ -29,7 +29,8 @@ function ensureSharedHeaderStyles() {
 
     #site-header .cmh-content {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: stretch;
       gap: 0.85rem;
       width: 100%;
     }
@@ -40,11 +41,11 @@ function ensureSharedHeaderStyles() {
       text-decoration: none;
       line-height: 0;
       flex-shrink: 0;
-      margin-right: auto;
+      justify-content: center;
     }
 
     #site-header .cmh-logo img {
-      display: block;
+      display: none;
       width: auto;
       height: 3rem;
       margin: 0;
@@ -54,35 +55,44 @@ function ensureSharedHeaderStyles() {
 
     #site-header #cmh-menu-toggle {
       display: none;
-      width: 2.6rem;
-      height: 2.6rem;
-      border: 1px solid rgba(98, 170, 220, 0.42);
-      border-radius: 0.75rem;
-      background: rgba(13, 23, 34, 0.9);
+      width: 3rem;
+      height: 3rem;
+      border: 2px solid rgba(98, 170, 220, 0.6);
+      border-radius: 1rem;
+      background: rgba(22, 66, 93, 0.4);
       color: #fff;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       padding: 0;
       margin: 0;
-      z-index: 1202;
+      z-index: 1204;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px rgba(98, 170, 220, 0.15), inset 0 0 20px rgba(98, 170, 220, 0.08);
+    }
+
+    #site-header #cmh-menu-toggle:hover {
+      border-color: rgba(98, 170, 220, 0.8);
+      background: rgba(22, 66, 93, 0.6);
+      box-shadow: 0 0 30px rgba(98, 170, 220, 0.25), inset 0 0 20px rgba(98, 170, 220, 0.12);
     }
 
     #site-header .cmh-hamburger {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      width: 1.25rem;
-      height: 0.95rem;
+      width: 1.4rem;
+      height: 1rem;
       pointer-events: none;
     }
 
     #site-header .cmh-hamburger span {
       width: 100%;
-      height: 2px;
-      border-radius: 999px;
+      height: 2.5px;
+      border-radius: 2px;
       background: #fff;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: transform 0.3s ease, opacity 0.3s ease;
       transform-origin: center;
     }
 
@@ -100,10 +110,10 @@ function ensureSharedHeaderStyles() {
 
     #site-header #cmh-main-nav {
       display: flex;
-      flex: 1;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 0.5rem;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      gap: 0.45rem;
       margin: 0;
       padding: 0;
       background: transparent;
@@ -117,9 +127,9 @@ function ensureSharedHeaderStyles() {
       padding: 0.5em 0.9em;
       border-radius: 0.7em;
       background: #16425d;
-      white-space: nowrap;
       transition: background-color 0.2s ease;
       margin: 0;
+      text-align: left;
     }
 
     #site-header #cmh-main-nav a:hover {
@@ -128,6 +138,94 @@ function ensureSharedHeaderStyles() {
 
     #site-header #cmh-menu-backdrop {
       display: none;
+    }
+
+    /* Always show hamburger and hide menu by default */
+    #site-header #cmh-menu-toggle {
+      display: inline-flex;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1204;
+    }
+
+    #site-header .cmh-content {
+      flex-direction: column;
+    }
+
+    #site-header #cmh-main-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 98vw;
+      max-width: 320px;
+      height: auto;
+      max-height: min(90dvh, 35rem);
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 3.75rem 0.75rem 0.75rem;
+      overflow-y: auto;
+      background: rgba(4, 8, 14, 0.97);
+      border: 1px solid rgba(98, 170, 220, 0.24);
+      border-radius: 0 0 0.85rem 0.85rem;
+      box-sizing: border-box;
+      z-index: 1202;
+      gap: 0.45rem;
+    }
+
+    #site-header #cmh-main-nav.open {
+      display: flex;
+    }
+
+    #site-header #cmh-main-nav a {
+      width: 100%;
+      font-size: 0.95rem;
+      text-align: left;
+      padding: 0.62em 0.8em;
+      border-radius: 0.62em;
+    }
+
+    #site-header #cmh-menu-backdrop.open {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 1201;
+      background: rgba(0, 0, 0, 0.58);
+      backdrop-filter: blur(2px);
+    }
+
+    /* Desktop: menu in sidebar style when open */
+    @media (min-width: 1024px) {
+      #site-header .cmh-content {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      #site-header .cmh-logo {
+        flex-shrink: 0;
+        margin-right: 1.5rem;
+      }
+
+      #site-header #cmh-main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 240px;
+        max-width: 240px;
+        max-height: 100vh;
+        padding-top: 5.5rem;
+        border-radius: 0;
+        border: none;
+        border-right: 1px solid rgba(98, 170, 220, 0.24);
+      }
+
+      #site-header #cmh-main-nav a {
+        width: auto;
+        white-space: normal;
+      }
     }
 
     @media (max-width: 1023px) {
@@ -141,49 +239,6 @@ function ensureSharedHeaderStyles() {
 
       #site-header .cmh-logo img {
         height: 2.35rem;
-      }
-
-      #site-header #cmh-main-nav {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 98vw;
-        height: auto;
-        max-height: min(64dvh, 26rem);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        gap: 0.45rem;
-        padding: 3.75rem 0.75rem 0.75rem;
-        overflow-y: auto;
-        background: rgba(4, 8, 14, 0.97);
-        border: 1px solid rgba(98, 170, 220, 0.24);
-        border-radius: 0 0 0.85rem 0.85rem;
-        box-sizing: border-box;
-        z-index: 1202;
-      }
-
-      #site-header #cmh-main-nav.open {
-        display: flex;
-      }
-
-      #site-header #cmh-main-nav a {
-        width: 95%;
-        font-size: 0.95rem;
-        text-align: left;
-        padding: 0.62em 0.8em;
-        border-radius: 0.62em;
-      }
-
-      #site-header #cmh-menu-backdrop.open {
-        display: block;
-        position: fixed;
-        inset: 0;
-        z-index: 1201;
-        background: rgba(0, 0, 0, 0.58);
-        backdrop-filter: blur(2px);
       }
     }
   `;
@@ -278,21 +333,23 @@ function renderHeader() {
     hamburger.classList.remove('open');
     backdrop.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
+    if (mobileQuery.matches) {
+      document.body.style.overflow = '';
+    }
     if (restoreFocus) {
       toggle.focus();
     }
   }
 
   function toggleMenu() {
-    if (!mobileQuery.matches) return;
-
     const isOpen = nav.classList.contains('open');
     nav.classList.toggle('open');
     hamburger.classList.toggle('open');
     backdrop.classList.toggle('open');
     toggle.setAttribute('aria-expanded', String(!isOpen));
-    document.body.style.overflow = isOpen ? '' : 'hidden';
+    if (mobileQuery.matches) {
+      document.body.style.overflow = isOpen ? '' : 'hidden';
+    }
     if (!isOpen) {
       // Focus first link
       const firstLink = nav.querySelector('a');
