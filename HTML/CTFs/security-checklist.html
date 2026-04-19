@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Review Checklist | CyberMinds CTF</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@600;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/5964d931e5.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg:      #0b1220;
+      --bg2:     #101928;
+      --bg3:     #162035;
+      --border:  #1e3050;
+      --accent:  #4ea0ff;
+      --green:   #22c55e;
+      --yellow:  #fabd2f;
+      --red:     #fb4934;
+      --orange:  #f97316;
+      --fg:      #e6effa;
+      --fg2:     #9cb9d8;
+      --fg3:     #5a7fa8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(78,160,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(78,160,255,.03) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+        background-color: #000000;
+        color: #ffffff;
+        padding: 0.75rem 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 1002;
+        border-bottom: 1px solid rgba(98, 170, 220, 0.2);
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header-logo {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .header-logo img {
+        height: 3rem;
+        width: auto;
+    }
+
+    .header-logo span {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-left: 0.5rem;
+    }
+
+    .header-buttons {
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+
+    .header-buttons a {
+        text-decoration: none;
+        font-size: 1rem;
+        color: #ffffff;
+        padding: 0.5em 0.9em;
+        background-color: #16425d; /* Your brand blue */
+        border-radius: 0.7em;
+        transition: background-color 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .header-buttons a:hover {
+        background-color: #286aa7;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: .7rem; }
+    .logo-wrap img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--border); }
+    .logo-wrap span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .95rem; }
+    nav a { color: var(--fg2); text-decoration: none; font-size: .8rem; font-weight: 500; padding: .3rem .65rem; border-radius: 6px; margin-left: .2rem; transition: color .15s, background .15s; }
+    nav a:hover { color: var(--fg); background: var(--bg3); }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      position: relative; z-index: 1;
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-hd {
+      margin-bottom: 2.5rem;
+    }
+    .page-hd .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .73rem; font-weight: 700; letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: rgba(251,73,52,.1);
+      border: 1px solid rgba(251,73,52,.25);
+      padding: .28rem .75rem; border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .page-hd h1 {
+      font-family: 'MuseoModerno', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      color: var(--fg);
+      margin-bottom: .6rem;
+    }
+    .page-hd h1 span { color: var(--red); }
+    .page-hd p { font-size: .92rem; color: var(--fg2); line-height: 1.65; max-width: 600px; }
+
+    .meta-chips {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .73rem; font-weight: 600; letter-spacing: .04em;
+      padding: .25rem .7rem; border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--fg3); background: rgba(255,255,255,.03);
+    }
+    .chip i { color: var(--accent); }
+    .chip.warn i { color: var(--red); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.3rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .progress-wrap .label { font-size: .82rem; color: var(--fg3); white-space: nowrap; }
+    .progress-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      border-radius: 999px;
+      transition: width .4s ease;
+      width: 0%;
+    }
+    .progress-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      color: var(--fg2);
+      white-space: nowrap;
+    }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 2rem; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--fg3);
+      margin-bottom: .9rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-title i { color: var(--accent); }
+    .section-title .sev {
+      margin-left: auto;
+      font-size: .7rem;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .sev-critical { color: var(--red);    border-color: rgba(251,73,52,.4);  background: rgba(251,73,52,.08); }
+    .sev-high     { color: var(--orange); border-color: rgba(249,115,22,.4); background: rgba(249,115,22,.08); }
+    .sev-medium   { color: var(--yellow); border-color: rgba(250,189,47,.4); background: rgba(250,189,47,.08); }
+
+    /* ── CHECKLIST ITEMS ── */
+    .checklist { display: flex; flex-direction: column; gap: .55rem; }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: .75rem 1rem;
+      background: rgba(16,25,40,.7);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .15s, background .15s;
+    }
+    .check-item:hover { border-color: rgba(78,160,255,.25); }
+    .check-item.done {
+      background: rgba(34,197,94,.04);
+      border-color: rgba(34,197,94,.2);
+    }
+    .check-item.done .check-text { color: var(--fg3); text-decoration: line-through; text-decoration-color: rgba(90,127,168,.5); }
+
+    .check-box {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 5px;
+      border: 2px solid var(--fg3);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: .05rem;
+      transition: border-color .15s, background .15s;
+    }
+    .check-item.done .check-box {
+      border-color: var(--green);
+      background: var(--green);
+    }
+    .check-box i { color: #0b1220; font-size: .65rem; opacity: 0; transition: opacity .15s; }
+    .check-item.done .check-box i { opacity: 1; }
+
+    .check-text {
+      font-size: .88rem;
+      color: var(--fg2);
+      line-height: 1.55;
+      transition: color .15s;
+    }
+    .check-text strong { color: var(--fg); font-weight: 600; }
+    .check-text code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      color: var(--accent2, #6fdbf0);
+      background: rgba(111,219,240,.08);
+      padding: .1rem .35rem;
+      border-radius: 4px;
+    }
+
+    /* ── SIGN-OFF ── */
+    .signoff {
+      background: rgba(17,26,46,.9);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-top: 2.5rem;
+    }
+    .signoff h3 {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--fg3);
+      margin-bottom: 1rem;
+    }
+    .signoff-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+    @media (max-width: 560px) { .signoff-fields { grid-template-columns: 1fr; } }
+    .signoff-field label {
+      display: block;
+      font-size: .75rem;
+      color: var(--fg3);
+      margin-bottom: .3rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+    .signoff-field input, .signoff-field select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--fg2);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .85rem;
+      padding: .55rem .8rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .signoff-field input:focus, .signoff-field select:focus { border-color: var(--accent); }
+    .signoff-field select option { background: var(--bg2); }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 1rem;
+      background: var(--accent);
+      color: #0b1220;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: .88rem;
+      padding: .65rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+    }
+    .submit-btn:hover { background: #6fb8ff; transform: translateY(-1px); }
+
+    .submit-confirm {
+      display: none;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 1rem;
+      font-size: .88rem;
+      color: var(--green);
+    }
+
+    footer {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 1.2rem;
+      border-top: 1px solid var(--border);
+      font-size: .76rem;
+      color: var(--fg3);
+    }
+
+    /* Color for the 'Approved' option */
+    .status-approved {
+        color: #2e7d32; /* Dark Green */
+        background-color: #e8f5e9; /* Light Green background */
+    }
+
+    /* Color for the 'Changes' option */
+    .status-changes {
+        color: #f57f17; /* Amber/Yellow-Orange */
+        background-color: #fffde7; /* Light Yellow background */
+    }
+
+    /* Color for the 'Blocked' option */
+    .status-blocked {
+        color: #d32f2f; /* Red */
+        background-color: #ffebee; /* Light Red background */
+    }
+
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-content">
+    <a href="../../index.html" class="header-logo">
+      <img src="../../Images/circle.jpg" alt="CyberMinds Logo" />
+      <span>Cyber<span style="font-weight: 500;">Minds</span></span>
+    </a>
+    <nav class="header-buttons">
+      <a href="../../index.html">Home</a>
+      <a href="../CTF.html">CTF</a>
+      <a href="../ourTeam.html">Our Team</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+
+  <div class="page-hd">
+    <div class="eyebrow"><i class="fa-solid fa-shield-halved"></i> Risk #3 Mitigation</div>
+    <h1>Security Review <span>Checklist</span></h1>
+    <p>
+      Complete this checklist before any CTF challenge dataset, prompt, starter template, or
+      fixture file is approved for release. Guards against accidental exposure of sensitive
+      internals, answer-key artifacts, or real credentials.
+    </p>
+    <div class="meta-chips">
+      <span class="chip"><i class="fa-solid fa-calendar"></i> Updated 2026-04-19</span>
+      <span class="chip"><i class="fa-solid fa-user"></i> Owner: @ADGEEJU</span>
+      <span class="chip warn"><i class="fa-solid fa-triangle-exclamation"></i> Required before every release</span>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <span class="label">Progress</span>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-count" id="progressCount">0 / 0</span>
+  </div>
+
+  <!-- ── SECTION 1: Secrets & Credentials ── -->
+  <div class="section">
+    <div class="section-title">
+      <i class="fa-solid fa-key"></i> Secrets &amp; Credentials
+      <span class="sev sev-critical">Critical</span>
+    </div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No real API keys or tokens</strong> — confirm no <code>API_KEY</code>, AWS credentials, or personal access tokens appear anywhere in fixture files, starter code, or challenge prompts.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No real passwords or secrets</strong> — all passwords in sample logs, HTTP traces, or config files are clearly fictional (e.g., <code>hunter2</code>, <code>changeme123</code>).</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No real SSH private keys</strong> — fixture files containing key material must use obviously fake RSA/EC key stubs that fail validation.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No production hostnames or IPs</strong> — all IP addresses must be RFC 5737 documentation ranges (<code>192.0.2.x</code>, <code>198.51.100.x</code>) or clearly fictional.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Answer Keys & Hints ── -->
+  <div class="section">
+    <div class="section-title">
+      <i class="fa-solid fa-book-open"></i> Answer Keys &amp; Spoilers
+      <span class="sev sev-critical">Critical</span>
+    </div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No checker answer embedded in starter template</strong> — the starter code must not contain the exact string or pattern the checker looks for (e.g., don't pre-fill <code>report.txt</code> with a passing answer).</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No answer-key files committed to repo</strong> — files like <code>solution.sh</code>, <code>answer.txt</code>, or <code>expected-output.txt</code> must live in a private branch or be excluded via <code>.gitignore</code>.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Challenge description does not over-hint</strong> — the objective text guides students toward the goal without revealing the exact command sequence or flag value.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Fixture Data ── -->
+  <div class="section">
+    <div class="section-title">
+      <i class="fa-solid fa-database"></i> Fixture Data &amp; Logs
+      <span class="sev sev-high">High</span>
+    </div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Log fixtures are synthetic</strong> — <code>sample.log</code>, access logs, and auth logs are machine-generated with no real user names, emails, or internal hostnames.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>HTTP traces are sanitised</strong> — any captured <code>curl</code> or proxy traces must have all <code>Authorization</code>, <code>Cookie</code>, and <code>X-Api-Key</code> headers redacted or replaced with <code>[REDACTED]</code>.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Fixtures versioned in repo</strong> — all seed datasets live under a versioned path (e.g., <code>fixtures/ctf-01/</code>) and are not generated at runtime from a hidden source.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No PII in fixture data</strong> — no real names, email addresses, phone numbers, or real usernames appear in any challenge dataset.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Exploit Payloads ── -->
+  <div class="section">
+    <div class="section-title">
+      <i class="fa-solid fa-bug"></i> Exploit Payloads &amp; Dangerous Code
+      <span class="sev sev-high">High</span>
+    </div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No working exploit code published</strong> — challenges requiring vulnerability identification (e.g., CTF-07 IDOR) must use analysis tasks only; no functional exploit payload may appear in any file.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Shell commands are non-destructive</strong> — check scripts and starter code must not contain <code>rm -rf</code>, <code>dd</code>, <code>curl | bash</code>, or any command with irreversible side effects outside <code>/workspace</code>.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>No network egress in check scripts</strong> — checker scripts must not make outbound HTTP requests; all validation is file-local to prevent data exfiltration vectors.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: Release Gate ── -->
+  <div class="section">
+    <div class="section-title">
+      <i class="fa-solid fa-gate-open" style="font-size:.8rem;"></i>
+      <i class="fa-solid fa-door-open"></i> Release Gate
+      <span class="sev sev-medium">Medium</span>
+    </div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>CI smoke check passes</strong> — <code>bash ctf01-check.sh</code> (or equivalent) runs green against the seeded fixture workspace in the CI pipeline before merge.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Peer review completed</strong> — at least one team member other than the challenge owner has read through all fixture files and the checker script.</div>
+      </div>
+      <div class="check-item" onclick="toggle(this)">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <div class="check-text"><strong>Roadmap leadership acknowledged</strong> — this checklist result is posted as a comment on the implementation sprint ticket before the challenge goes live.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SIGN-OFF ── -->
+  <div class="signoff">
+    <h3><i class="fa-solid fa-signature" style="color:var(--accent);margin-right:.4rem;"></i> Reviewer Sign-Off</h3>
+    <div class="signoff-fields">
+      <div class="signoff-field">
+        <label>Reviewer handle</label>
+        <input type="text" id="reviewer" placeholder="@handler" />
+      </div>
+      <div class="signoff-field">
+        <label>Challenge ID</label>
+        <input type="text" id="challengeId" placeholder="CTF1" />
+      </div>
+      <div class="signoff-field">
+        <label>Review date</label>
+        <input type="date" id="reviewDate" />
+      </div>
+      <div class="signoff-field">
+        <label>Decision</label>
+        <select name="status" id="roadmap-status">
+            <option value="">— select —</option>
+            <option value="approved" class="status-approved">Approved for release</option>
+            <option value="changes" class="status-changes">Changes required</option>
+            <option value="blocked" class="status-blocked">Blocked — security issue found</option>
+        </select>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="submitSignoff()">
+      <i class="fa-solid fa-circle-check"></i> Submit Sign-Off
+    </button>
+    <div class="submit-confirm" id="submitConfirm">
+      <i class="fa-solid fa-circle-check"></i>
+      <span>Sign-off recorded. Share this result in the sprint comment thread.</span>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<footer class="page-footer">
+      <p>&copy; 2026 CyberMinds, Inc. All rights reserved.</p>
+    </footer>
+    <script src="../Javascript/footer.js"></script>
+    <script src="../Javascript/analytics.js"></script>
+
+<script>
+  // ── Checkbox toggle ──
+  function toggle(el) {
+    el.classList.toggle('done');
+    updateProgress();
+  }
+
+  // ── Progress bar ──
+  function updateProgress() {
+    const all  = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.done');
+    const total = all.length;
+    const count = done.length;
+    const pct   = total ? (count / total) * 100 : 0;
+
+    document.getElementById('progressFill').style.width  = `${pct}%`;
+    document.getElementById('progressCount').textContent = `${count} / ${total}`;
+  }
+
+  // ── Prefill today's date ──
+  document.getElementById('reviewDate').value = new Date().toISOString().slice(0, 10);
+
+  // ── Sign-off ──
+  function submitSignoff() {
+    const reviewer   = document.getElementById('reviewer').value.trim();
+    const challengeId = document.getElementById('challengeId').value.trim();
+    const decision   = document.getElementById('decision').value;
+    const done       = document.querySelectorAll('.check-item.done').length;
+    const total      = document.querySelectorAll('.check-item').length;
+
+    if (!reviewer || !decision) {
+      alert('Please fill in reviewer handle and decision before submitting.');
+      return;
+    }
+
+    const confirm = document.getElementById('submitConfirm');
+    confirm.style.display = 'flex';
+    confirm.querySelector('span').textContent =
+      `Sign-off recorded: ${reviewer} — ${challengeId || 'CTF-?'} — ${decision} — ${done}/${total} items checked. Share this result in the sprint comment thread.`;
+
+    // Persist to localStorage so the record survives a page refresh
+    try {
+      const record = { reviewer, challengeId, decision, checkedCount: done, totalCount: total, ts: new Date().toISOString() };
+      localStorage.setItem('cm_security_review_' + (challengeId || 'unknown'), JSON.stringify(record));
+    } catch (_) {}
+  }
+
+  // ── Init ──
+  updateProgress();
+</script>
+
+</body>
+</html>
