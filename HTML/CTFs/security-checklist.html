@@ -620,9 +620,9 @@
       return;
     }
 
-    const confirm = document.getElementById('submitConfirm');
-    confirm.style.display = 'flex';
-    confirm.querySelector('span').textContent =
+    const confirmEl = document.getElementById('submitConfirm');
+    confirmEl.style.display = 'flex';
+    confirmEl.querySelector('span').textContent =
       `Sign-off recorded: ${reviewer} — ${challengeId || 'CTF-?'} — ${decision} — ${done}/${total} items checked. Share this result in the sprint comment thread.`;
 
     // Persist to localStorage so the record survives a page refresh
