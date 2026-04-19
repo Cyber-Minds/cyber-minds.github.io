@@ -93,7 +93,7 @@ const challengeCatalog = {
       'Click Check Solution to validate.',
     ],
     firstCommand: 'pwd',
-    checkScript: 'set -e; test -f report.txt; test -s report.txt; grep -Eqi "(owner|permission|user|group|root|cyberminds)" report.txt',
+    checkScript: 'set -e; test -f report.txt; test -s report.txt; grep -Eqi "(owner|permission|user|group)" report.txt',
     starterLang: 'python',
     starterCode: `# Linux Basics Warmup — starter\n# Run this to preview what the shell commands return.\nimport os, pwd, grp, stat\n\ncwd = os.getcwd()\ninfo = os.stat(cwd)\nowner = pwd.getpwuid(info.st_uid).pw_name\ngroup = grp.getgrgid(info.st_gid).gr_name\nperms = oct(stat.S_IMODE(info.st_mode))\n\nprint(f"Directory : {cwd}")\nprint(f"Owner     : {owner}")\nprint(f"Group     : {group}")\nprint(f"Permissions: {perms}")\n\n# When you're ready, write your summary to report.txt:\n# echo "owner: <name>, group: <group>, perms: <perms>" > report.txt\n`,
   },
