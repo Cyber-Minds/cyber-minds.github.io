@@ -106,7 +106,14 @@ const challengeCatalog = {
       'Record key headers and suspected tech stack.',
     ],
     firstCommand: 'ss -tulpen',
-    checkScript: 'set -e; test -f recon-notes.txt; test -s recon-notes.txt; grep -Eqi "(server|content-type|status|header|port)" recon-notes.txt',
+    checkScript: [
+      'set -e',
+      'test -f recon-notes.txt',
+      'test -s recon-notes.txt',
+      'grep -Eqi "(port|9090)" recon-notes.txt',
+      'grep -qi "php.7" recon-notes.txt',
+      'grep -qi "internalportal" recon-notes.txt',
+    ].join('; '),
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://example.com', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
   }

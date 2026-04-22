@@ -205,13 +205,17 @@ function checkChallengeSolution() {
     const report = getMockFile('report.txt') || '';
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
+    // Offline-mode validators: JS mirrors of the real bash/Python checkers.
+    // Runs when isMockTerminal is true (no live container available).
     const checksByChallenge = {
       'linux-basics':
         report.trim().length > 0 &&
         /(owner|permission|user|group)/i.test(report),
       'web-recon':
         recon.trim().length > 0 &&
-        /(server|content-type|status|header|port)/i.test(recon),
+        /(port|9090)/i.test(recon) &&
+        /php.7/i.test(recon) &&
+        /internalportal/i.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
     };
     const passed = !!checksByChallenge[activeChallengeId];

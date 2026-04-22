@@ -102,11 +102,32 @@ RUN mkdir -p /var/log/nginx /var/lib/nginx && \
 
 WORKDIR /workspace
 
+# CTF-02 Web Recon: nginx virtual host on port 9090 with fake tech stack headers
+RUN printf '%s\n' \
+    'server {' \
+    '    listen 9090;' \
+    '    server_tokens off;' \
+    '    root /workspace;' \
+    '    index index.html;' \
+    '    add_header X-Powered-By "PHP/7.4.3";' \
+    '    add_header X-Application "InternalPortal/2.1";' \
+    '    location / { try_files $uri $uri/ =404; }' \
+    '}' > /etc/nginx/sites-available/ctf-target \
+    && ln -sf /etc/nginx/sites-available/ctf-target \
+              /etc/nginx/sites-enabled/ctf-target \
+    && printf '%s\n' \
+    '<html><head><title>Internal Portal</title></head>' \
+    '<body><h1>Welcome to the Internal Portal</h1>' \
+    '<p>Version 2.1 | PHP 7.4.3</p></body></html>' \
+    > /workspace/index.html \
+    && chown terminal-user:terminal-user /workspace/index.html
+
 # Set default user
 USER terminal-user
 
-# Set up shell prompt
-RUN echo 'export PS1="\[\033[01;36m\]cyberminds\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \$ "' >> /home/terminal-user/.bashrc
+# Set up shell prompt and auto-start nginx for CTF web-recon challenge
+RUN echo 'export PS1="\[\033[01;36m\]cyberminds\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \$ "' >> /home/terminal-user/.bashrc \
+    && echo 'sudo nginx 2>/dev/null; true' >> /home/terminal-user/.bashrc
 
 # Default command
 CMD ["/bin/bash"]
