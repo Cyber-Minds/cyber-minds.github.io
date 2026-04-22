@@ -205,6 +205,7 @@ function checkChallengeSolution() {
     const report = getMockFile('report.txt') || '';
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
+    const escalationReport = getMockFile('escalation-report.txt') || '';
     // Offline-mode validators: JS mirrors of the real bash/Python checkers.
     // Runs when isMockTerminal is true (no live container available).
     const checksByChallenge = {
@@ -216,6 +217,13 @@ function checkChallengeSolution() {
         /(port|9090)/i.test(recon) &&
         /php.7/i.test(recon) &&
         /internalportal/i.test(recon),
+      'priv-esc': (() => {
+        if (!escalationReport.trim()) return false;
+        if (!/\bjsmith\b/i.test(escalationReport)) return false;
+        if (!/02:11/.test(escalationReport)) return false;
+        if (!/\bsu\b|escalat/i.test(escalationReport)) return false;
+        return true;
+      })(),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
     };
     const passed = !!checksByChallenge[activeChallengeId];

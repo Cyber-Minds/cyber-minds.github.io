@@ -122,6 +122,78 @@ RUN printf '%s\n' \
     > /workspace/index.html \
     && chown terminal-user:terminal-user /workspace/index.html
 
+# CTF-05 Privilege Escalation Trace: synthetic auth and sudo log fixtures
+RUN printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 15 02:08:42 server sshd[2841]: Failed password for jsmith from 10.0.0.50 port 52000 ssh2' \
+    'Jan 15 02:08:55 server sshd[2841]: Failed password for jsmith from 10.0.0.50 port 52001 ssh2' \
+    'Jan 15 02:09:03 server sshd[2841]: Failed password for jsmith from 10.0.0.50 port 52002 ssh2' \
+    'Jan 15 02:09:12 server sshd[2841]: Accepted password for jsmith from 10.0.0.50 port 52003 ssh2' \
+    'Jan 15 02:11:15 server su[3012]: Successful su for root by jsmith' \
+    'Jan 15 02:11:15 server su[3012]: + /dev/tty1 jsmith:root' \
+    'Jan 15 02:15:22 server sshd[3100]: Accepted password for alice from 10.0.0.51 port 44000 ssh2' \
+    'Jan 15 02:17:44 server sshd[3200]: Accepted password for bob from 10.0.0.52 port 44100 ssh2' \
+    > /workspace/auth.log \
+    && printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 15 02:11:20 server sudo: jsmith : TTY=tty1 ; PWD=/root ; USER=root ; COMMAND=/bin/bash' \
+    'Jan 15 02:12:45 server sudo: jsmith : TTY=tty1 ; PWD=/root ; USER=root ; COMMAND=/bin/cat /etc/shadow' \
+    'Jan 15 02:13:02 server sudo: jsmith : TTY=tty1 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/id' \
+    'Jan 15 02:20:10 server sudo: alice : TTY=pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=/usr/bin/apt-get update' \
+    'Jan 15 02:22:33 server sudo: bob : TTY=pts/1 ; PWD=/home/bob ; USER=root ; COMMAND=/usr/sbin/service nginx status' \
+    > /workspace/sudo.log \
+    && chown terminal-user:terminal-user /workspace/auth.log /workspace/sudo.log
+
+# CTF-05 Privilege Escalation Trace validator
+RUN printf '%s\n' \
+    '#!/usr/bin/env python3' \
+    '"""' \
+    'CTF-05 Privilege Escalation Trace validator.' \
+    '' \
+    'Pass condition (ALL three required independently):' \
+    '  (a) Impacted account jsmith is identified' \
+    '  (b) First escalation timestamp 02:11 is present' \
+    '      (from: Jan 15 02:11:15 su[3012]: Successful su for root by jsmith)' \
+    '  (c) Escalation method su is identified' \
+    '' \
+    'Fail closed: missing file, unreadable file, or any element absent -> exit 1.' \
+    '"""' \
+    'import sys, os, re' \
+    'REPORT_PATH = "/workspace/escalation-report.txt"' \
+    '' \
+    'def main():' \
+    '    if not os.path.isfile(REPORT_PATH):' \
+    '        print("FAIL: escalation-report.txt not found in /workspace")' \
+    '        sys.exit(1)' \
+    '    try:' \
+    '        with open(REPORT_PATH) as f:' \
+    '            content = f.read()' \
+    '    except OSError as e:' \
+    '        print(f"FAIL: could not read escalation-report.txt: {e}")' \
+    '        sys.exit(1)' \
+    '    if not content.strip():' \
+    '        print("FAIL: escalation-report.txt is empty")' \
+    '        sys.exit(1)' \
+    '    errors = []' \
+    '    if not re.search(r"\bjsmith\b", content, re.IGNORECASE):' \
+    '        errors.append("impacted account jsmith not identified")' \
+    '    if not re.search(r"02:11", content):' \
+    '        errors.append("first escalation timestamp 02:11 not identified")' \
+    '    if not re.search(r"\bsu\b|escalat", content, re.IGNORECASE):' \
+    '        errors.append("escalation method (su or escalation) not identified")' \
+    '    if errors:' \
+    '        for msg in errors:' \
+    '            print(f"FAIL: {msg}")' \
+    '        sys.exit(1)' \
+    '    print("PASS: jsmith identified; escalation via su at 02:11 confirmed")' \
+    '    sys.exit(0)' \
+    '' \
+    'if __name__ == "__main__":' \
+    '    main()' \
+    > /workspace/check-priv-esc.py \
+    && chmod +x /workspace/check-priv-esc.py \
+    && chown terminal-user:terminal-user /workspace/check-priv-esc.py
+
 # Set default user
 USER terminal-user
 

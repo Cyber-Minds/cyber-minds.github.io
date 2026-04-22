@@ -116,7 +116,23 @@ const challengeCatalog = {
     ].join('; '),
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://example.com', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
-  }
+  },
+  'priv-esc': {
+    title: 'Privilege Escalation Trace',
+    difficulty: 'Intermediate',
+    description: 'Analyse authentication and sudo logs to trace how an attacker moved from a normal account to root.',
+    objective: 'Identify the account, timestamp, and escalation method, then write findings to escalation-report.txt.',
+    steps: [
+      'Inspect /workspace/auth.log for failed and successful logins.',
+      'Check /workspace/sudo.log for suspicious root-level commands.',
+      'Identify the user who escalated to root and the exact timestamp.',
+      'Write account name, timestamp, and escalation method to escalation-report.txt.',
+    ],
+    firstCommand: 'cat /workspace/auth.log',
+    checkScript: 'python3 /workspace/check-priv-esc.py',
+    starterLang: 'python',
+    starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
+  },
 };
 
 /**
