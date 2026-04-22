@@ -194,6 +194,108 @@ RUN printf '%s\n' \
     && chmod +x /workspace/check-priv-esc.py \
     && chown terminal-user:terminal-user /workspace/check-priv-esc.py
 
+# CTF-06 Incident Timeline Reconstruction: mixed log fixtures
+RUN printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 20 03:12:05 server sshd[4001]: Failed password for deploy from 185.220.101.5 port 55000 ssh2' \
+    'Jan 20 03:12:22 server sshd[4001]: Failed password for deploy from 185.220.101.5 port 55001 ssh2' \
+    'Jan 20 03:12:41 server sshd[4001]: Accepted password for deploy from 185.220.101.5 port 55002 ssh2' \
+    'Jan 20 03:18:30 server su[4100]: Successful su for root by deploy' \
+    'Jan 20 04:02:15 server sshd[5001]: Accepted password for backup from 10.0.1.20 port 44200 ssh2' \
+    > /workspace/incident-auth.log \
+    && printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    '185.220.101.5 - - [20/Jan/2024:03:10:05 +0000] "GET /admin HTTP/1.1" 403 512' \
+    '185.220.101.5 - - [20/Jan/2024:03:10:18 +0000] "GET /admin/login HTTP/1.1" 200 2048' \
+    '185.220.101.5 - - [20/Jan/2024:03:11:55 +0000] "POST /admin/login HTTP/1.1" 302 0' \
+    '185.220.101.5 - - [20/Jan/2024:03:13:10 +0000] "GET /admin/dashboard HTTP/1.1" 200 8192' \
+    '185.220.101.5 - - [20/Jan/2024:03:15:44 +0000] "POST /api/export HTTP/1.1" 200 65536' \
+    > /workspace/incident-access.log \
+    && printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 20 03:14:10 server kernel: [audit] comm="wget" syscall=execve success=yes' \
+    'Jan 20 03:14:25 server kernel: [audit] comm="chmod" syscall=fchmodat success=yes' \
+    'Jan 20 03:16:00 server cron[4200]: (deploy) CMD persistence payload scheduled' \
+    'Jan 20 03:17:30 server kernel: [audit] comm="nc" syscall=execve success=yes' \
+    > /workspace/incident-syslog.log \
+    && chown terminal-user:terminal-user \
+       /workspace/incident-auth.log \
+       /workspace/incident-access.log \
+       /workspace/incident-syslog.log
+
+# CTF-06 Incident Timeline Reconstruction validator
+RUN printf '%s\n' \
+    '#!/usr/bin/env python3' \
+    '"""' \
+    'CTF-06 Incident Timeline Reconstruction validator.' \
+    '' \
+    'Pass condition (ALL must be satisfied):' \
+    '  1. /workspace/timeline.txt exists and is readable' \
+    '  2. Every non-empty line has a parseable HH:MM:SS timestamp' \
+    '     -- malformed or missing timestamps fail closed, never skipped' \
+    '  3. At least 8 events present' \
+    '  4. Events in strict ascending chronological order' \
+    '  5. No duplicate lines' \
+    '  6. At least one SSH authentication event (ssh|sshd|password)' \
+    '  7. At least one HTTP/web access event (http|GET|POST|/admin|access)' \
+    '' \
+    'Fail closed: missing file, unreadable, malformed timestamp, bad order,' \
+    '             duplicates, or missing coverage -> exit 1.' \
+    '"""' \
+    'import sys, os, re' \
+    'TIMELINE_PATH = "/workspace/timeline.txt"' \
+    'MIN_EVENTS = 8' \
+    'TS_RE = re.compile(r"\b(\d{2}:\d{2}:\d{2})\b")' \
+    '' \
+    'def main():' \
+    '    if not os.path.isfile(TIMELINE_PATH):' \
+    '        print("FAIL: timeline.txt not found in /workspace")' \
+    '        sys.exit(1)' \
+    '    try:' \
+    '        with open(TIMELINE_PATH) as f:' \
+    '            content = f.read()' \
+    '    except OSError as e:' \
+    '        print(f"FAIL: could not read timeline.txt: {e}")' \
+    '        sys.exit(1)' \
+    '    if not content.strip():' \
+    '        print("FAIL: timeline.txt is empty")' \
+    '        sys.exit(1)' \
+    '    lines = [l.rstrip() for l in content.splitlines() if l.strip()]' \
+    '    timestamps = []' \
+    '    for i, line in enumerate(lines, 1):' \
+    '        m = TS_RE.search(line)' \
+    '        if not m:' \
+    '            print(f"FAIL: line {i} has no HH:MM:SS timestamp: {line!r}")' \
+    '            sys.exit(1)' \
+    '        timestamps.append(m.group(1))' \
+    '    if len(lines) < MIN_EVENTS:' \
+    '        print(f"FAIL: need at least {MIN_EVENTS} events, found {len(lines)}")' \
+    '        sys.exit(1)' \
+    '    for i in range(1, len(timestamps)):' \
+    '        if timestamps[i] < timestamps[i - 1]:' \
+    '            print(f"FAIL: line {i + 1} ({timestamps[i]}) out of order after line {i} ({timestamps[i - 1]})")' \
+    '            sys.exit(1)' \
+    '    seen = set()' \
+    '    for i, line in enumerate(lines, 1):' \
+    '        if line in seen:' \
+    '            print(f"FAIL: duplicate event at line {i}: {line!r}")' \
+    '            sys.exit(1)' \
+    '        seen.add(line)' \
+    '    if not re.search(r"ssh|sshd|password", content, re.IGNORECASE):' \
+    '        print("FAIL: timeline must include at least one SSH authentication event")' \
+    '        sys.exit(1)' \
+    '    if not re.search(r"http|GET|POST|/admin|access", content, re.IGNORECASE):' \
+    '        print("FAIL: timeline must include at least one HTTP/web access event")' \
+    '        sys.exit(1)' \
+    '    print(f"PASS: {len(lines)} events, chronological, no duplicates, SSH and HTTP covered")' \
+    '    sys.exit(0)' \
+    '' \
+    'if __name__ == "__main__":' \
+    '    main()' \
+    > /workspace/check-timeline.py \
+    && chmod +x /workspace/check-timeline.py \
+    && chown terminal-user:terminal-user /workspace/check-timeline.py
+
 # Set default user
 USER terminal-user
 

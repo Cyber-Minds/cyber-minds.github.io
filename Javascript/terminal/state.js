@@ -133,6 +133,22 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
   },
+  'incident-timeline': {
+    title: 'Incident Timeline Reconstruction',
+    difficulty: 'Intermediate',
+    description: 'Correlate events across SSH, web access, and system logs to reconstruct the full attack timeline.',
+    objective: 'Build a chronological timeline of at least 8 key events and save it to timeline.txt.',
+    steps: [
+      'Review incident-auth.log, incident-access.log, and incident-syslog.log.',
+      'Identify the attacker IP and map their actions across all three logs.',
+      'Write at least 8 key events in chronological order to timeline.txt.',
+      'Run python3 /workspace/check-timeline.py to validate your timeline.',
+    ],
+    firstCommand: 'ls /workspace/*.log',
+    checkScript: 'python3 /workspace/check-timeline.py',
+    starterLang: 'python',
+    starterCode: `# Scan all incident logs for attacker activity\nimport os\n\nlogs = ['incident-auth.log', 'incident-access.log', 'incident-syslog.log']\nfor log in logs:\n    path = f'/workspace/{log}'\n    if os.path.exists(path):\n        print(f'--- {log} ---')\n        with open(path) as f:\n            print(f.read())\n`,
+  },
 };
 
 /**

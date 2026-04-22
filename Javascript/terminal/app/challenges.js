@@ -206,6 +206,7 @@ function checkChallengeSolution() {
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
     const escalationReport = getMockFile('escalation-report.txt') || '';
+    const timeline = getMockFile('timeline.txt') || '';
     // Offline-mode validators: JS mirrors of the real bash/Python checkers.
     // Runs when isMockTerminal is true (no live container available).
     const checksByChallenge = {
@@ -222,6 +223,26 @@ function checkChallengeSolution() {
         if (!/\bjsmith\b/i.test(escalationReport)) return false;
         if (!/02:11/.test(escalationReport)) return false;
         if (!/\bsu\b|escalat/i.test(escalationReport)) return false;
+        return true;
+      })(),
+      'incident-timeline': (() => {
+        if (!timeline.trim()) return false;
+        const lines = timeline.split('\n').filter((l) => l.trim());
+        if (lines.length < 8) return false;
+        const tsRe = /\b(\d{2}:\d{2}:\d{2})\b/;
+        const timestamps = [];
+        for (const line of lines) {
+          const m = tsRe.exec(line);
+          if (!m) return false; // fail closed on missing timestamp
+          timestamps.push(m[1]);
+        }
+        for (let i = 1; i < timestamps.length; i++) {
+          if (timestamps[i] < timestamps[i - 1]) return false;
+        }
+        const seen = new Set(lines);
+        if (seen.size !== lines.length) return false; // duplicates
+        if (!/(ssh|sshd|password)/i.test(timeline)) return false;
+        if (!/(http|GET|POST|\/admin|access)/i.test(timeline)) return false;
         return true;
       })(),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
