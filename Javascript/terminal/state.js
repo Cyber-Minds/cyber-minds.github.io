@@ -138,6 +138,23 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
   },
+  'incident-timeline': {
+    title: 'Incident Timeline Reconstruction',
+    difficulty: 'Intermediate',
+    description: 'Correlate SSH, HTTP access, and syslog events to reconstruct the full timeline of a simulated intrusion.',
+    objective: 'Read the three incident log files, correlate events by timestamp, and produce a chronological timeline in timeline.txt with at least 8 entries (HH:MM:SS format, ascending, no duplicates).',
+    steps: [
+      'Read /workspace/incident-auth.log, /workspace/incident-access.log, and /workspace/incident-syslog.log.',
+      'Identify the attacker IP and correlate events across all three logs by timestamp.',
+      'Write a chronological timeline to timeline.txt — one event per line, each starting with HH:MM:SS.',
+      'Include at least 8 events covering both SSH and HTTP activity.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/incident-auth.log',
+    checkScript: 'python3 /workspace/check-timeline.py',
+    starterLang: 'python',
+    starterCode: `import re\n\nTS_RE = re.compile(r'\\b(\\d{2}:\\d{2}:\\d{2})\\b')\nevents = []\n\nfor logfile in ['incident-auth.log', 'incident-access.log', 'incident-syslog.log']:\n    with open(f'/workspace/{logfile}') as f:\n        for line in f:\n            if line.startswith('#'):\n                continue\n            m = TS_RE.search(line)\n            if m:\n                events.append((m.group(1), line.strip()))\n\nevents.sort()\nfor ts, event in events:\n    print(f'{ts} {event}')\n`,
+  },
 };
 
 /**
