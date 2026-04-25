@@ -109,6 +109,47 @@ RUN useradd -m -s /bin/bash terminal-user && \
 RUN mkdir -p /workspace && \
     chown -R terminal-user:terminal-user /workspace
 
+# CTF-05: privilege escalation log fixtures (SYNTHETIC DATA)
+RUN printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 15 02:08:42 server sshd[2841]: Failed password for jsmith from 10.0.0.45 port 51234 ssh2' \
+    'Jan 15 02:08:55 server sshd[2841]: Failed password for jsmith from 10.0.0.45 port 51234 ssh2' \
+    'Jan 15 02:09:03 server sshd[2841]: Failed password for jsmith from 10.0.0.45 port 51234 ssh2' \
+    'Jan 15 02:09:17 server sshd[2841]: Accepted password for jsmith from 10.0.0.45 port 51234 ssh2' \
+    'Jan 15 02:09:18 server sshd[2841]: pam_unix(sshd:session): session opened for user jsmith' \
+    > /workspace/auth.log \
+    && printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    'Jan 15 02:11:20 server sudo: jsmith : TTY=pts/0 ; PWD=/home/jsmith ; USER=root ; COMMAND=/bin/su for root' \
+    'Jan 15 02:11:20 server sudo: pam_unix(sudo:session): session opened for user root by jsmith(uid=1001)' \
+    'Jan 15 02:11:45 server su[3102]: Successful su for root by jsmith' \
+    'Jan 15 02:12:01 server su[3102]: pam_unix(su:session): session opened for user root by jsmith(uid=0)' \
+    > /workspace/sudo.log
+
+# CTF-05: Python validator embedded in image
+RUN printf '%s\n' \
+    'import re, sys' \
+    'try:' \
+    '    with open("/workspace/priv-esc-report.txt") as f:' \
+    '        content = f.read()' \
+    'except Exception:' \
+    '    print("FAIL: cannot read priv-esc-report.txt")' \
+    '    sys.exit(1)' \
+    'if not content.strip():' \
+    '    print("FAIL: priv-esc-report.txt is empty")' \
+    '    sys.exit(1)' \
+    'checks = [' \
+    '    (r"\\bjsmith\\b", "must mention user jsmith"),' \
+    '    (r"02:11", "must include timestamp 02:11"),' \
+    '    (r"\\bsu\\b|escalat", "must reference su/escalation"),' \
+    ']' \
+    'for pattern, msg in checks:' \
+    '    if not re.search(pattern, content, re.IGNORECASE):' \
+    '        print(f"FAIL: {msg}")' \
+    '        sys.exit(1)' \
+    'print("PASS")' \
+    > /workspace/check-priv-esc.py
+
 # Give terminal-user write access to nginx runtime/log dirs to avoid startup alerts.
 RUN mkdir -p /var/log/nginx /var/lib/nginx && \
     chown -R terminal-user:terminal-user /var/log/nginx /var/lib/nginx

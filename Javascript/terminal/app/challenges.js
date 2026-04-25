@@ -209,6 +209,7 @@ function checkChallengeSolution() {
     const report = getMockFile('report.txt') || '';
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
+    const privEscReport = getMockFile('priv-esc-report.txt') || '';
     const checksByChallenge = {
       'linux-basics':
         report.trim().length > 0 &&
@@ -220,6 +221,11 @@ function checkChallengeSolution() {
         /php[/ ]?7/i.test(recon) &&
         /internal.?portal/i.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
+      'priv-esc':
+        privEscReport.trim().length > 0 &&
+        /\bjsmith\b/i.test(privEscReport) &&
+        /02:11/.test(privEscReport) &&
+        /\bsu\b|escalat/i.test(privEscReport),
     };
     const passed = !!checksByChallenge[activeChallengeId];
 

@@ -120,7 +120,24 @@ const challengeCatalog = {
     ].join('; '),
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://localhost:9090', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
-  }
+  },
+  'priv-esc': {
+    title: 'Privilege Escalation Trace',
+    difficulty: 'Intermediate',
+    description: 'Analyse authentication and sudo logs to trace how an attacker moved from a low-privilege SSH session to root.',
+    objective: 'Identify the escalating user, the exact timestamp of privilege escalation, and the method used. Record findings in priv-esc-report.txt.',
+    steps: [
+      'Read /workspace/auth.log to find the SSH login event for the attacker.',
+      'Read /workspace/sudo.log to find the privilege escalation event.',
+      'Identify the username, the timestamp (HH:MM), and the escalation method (su/sudo).',
+      'Write a summary to priv-esc-report.txt including all three findings.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/auth.log',
+    checkScript: 'python3 /workspace/check-priv-esc.py',
+    starterLang: 'python',
+    starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
+  },
 };
 
 /**
