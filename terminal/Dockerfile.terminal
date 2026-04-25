@@ -84,6 +84,19 @@ RUN printf '%s\n' \
     && sed -i 's/listen 80 default_server;/listen 9090 default_server;/' /etc/nginx/sites-available/default \
     && sed -i 's/listen \\[::\\]:80 default_server;/listen [::]:9090 default_server;/' /etc/nginx/sites-available/default
 
+# CTF-02: add fake tech-stack headers and deploy custom index page for the recon target
+RUN printf '%s\n' \
+    'add_header X-Powered-By "PHP/7.4.3" always;' \
+    'add_header X-Application "InternalPortal/2.1" always;' \
+    > /etc/nginx/conf.d/ctf02-headers.conf \
+    && printf '%s\n' \
+    '<!DOCTYPE html>' \
+    '<html><head><title>Internal Portal</title></head>' \
+    '<body><h1>InternalPortal - Employee Dashboard</h1>' \
+    '<p>Welcome to the internal company portal.</p>' \
+    '</body></html>' \
+    > /var/www/html/index.html
+
 # Set Java environment variables
 ENV JAVA_HOME=/usr/lib/jvm/default-java
 ENV PATH=$PATH:$JAVA_HOME/bin
@@ -105,8 +118,9 @@ WORKDIR /workspace
 # Set default user
 USER terminal-user
 
-# Set up shell prompt
-RUN echo 'export PS1="\[\033[01;36m\]cyberminds\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \$ "' >> /home/terminal-user/.bashrc
+# Set up shell prompt and auto-start nginx for CTF-02 recon target
+RUN echo 'export PS1="\[\033[01;36m\]cyberminds\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \$ "' >> /home/terminal-user/.bashrc \
+    && echo 'sudo nginx -q 2>/dev/null || true' >> /home/terminal-user/.bashrc
 
 # Default command
 CMD ["/bin/bash"]

@@ -216,7 +216,9 @@ function checkChallengeSolution() {
       'web-recon':
         recon.trim().length > 0 &&
         /(server|content-type|status|header)/i.test(recon) &&
-        /\b9090\b/.test(recon),
+        /\b9090\b/.test(recon) &&
+        /php[/ ]?7/i.test(recon) &&
+        /internal.?portal/i.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
     };
     const passed = !!checksByChallenge[activeChallengeId];
