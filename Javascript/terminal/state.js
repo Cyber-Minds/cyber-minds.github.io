@@ -138,6 +138,34 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
   },
+  'incident-timeline': {
+    title: 'Incident Timeline Reconstruction',
+    difficulty: 'Intermediate',
+    description: 'Correlate SSH, HTTP access, and syslog events to reconstruct the full timeline of a simulated intrusion.',
+    objective: 'Use provided synthetic event data to produce a chronological timeline in timeline.txt with at least 8 entries (HH:MM:SS format, ascending, no duplicates).',
+    steps: [
+      'Run the starter script to inspect synthetic SSH/HTTP/syslog events.',
+      'Correlate events across sources by timestamp.',
+      'Write a chronological timeline to timeline.txt — one event per line, each starting with HH:MM:SS.',
+      'Include at least 8 events covering both SSH and HTTP activity.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'python3 hello.py',
+    checkScript: [
+      'set -e',
+      'test -f timeline.txt',
+      'test -s timeline.txt',
+      "awk 'NF{print $1}' timeline.txt > /tmp/cm_timestamps.txt",
+      'test "$(wc -l < /tmp/cm_timestamps.txt)" -ge 8',
+      "if grep -Evq '^[0-9]{2}:[0-9]{2}:[0-9]{2}$' /tmp/cm_timestamps.txt; then echo 'FAIL: invalid timestamp format'; exit 1; fi",
+      'sort /tmp/cm_timestamps.txt | uniq > /tmp/cm_timestamps_sorted.txt',
+      'cmp -s /tmp/cm_timestamps.txt /tmp/cm_timestamps_sorted.txt',
+      "grep -Eqi '(ssh|login|accept)' timeline.txt",
+      "grep -Eqi '(http|get|post|request)' timeline.txt",
+    ].join('; '),
+    starterLang: 'python',
+    starterCode: `import re\n\nDATASETS = {\n    'auth': [\n        'Jan 20 03:10:14 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:29 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:47 sshd: Accepted password for admin from 192.168.50.22',\n        'Jan 20 03:10:48 sshd: session opened for user admin',\n        'Jan 20 03:12:05 sshd: session closed for user admin',\n    ],\n    'access': [\n        '03:10:50 GET /login HTTP/1.1 200',\n        '03:11:02 POST /login HTTP/1.1 302',\n        '03:11:05 GET /admin HTTP/1.1 200',\n        '03:11:33 GET /admin/export HTTP/1.1 200',\n        '03:12:01 GET /logout HTTP/1.1 200',\n    ],\n    'syslog': [\n        'Jan 20 03:10:47 audit: user admin logged in from 192.168.50.22',\n        'Jan 20 03:11:33 audit: file /var/data/export.csv accessed by admin',\n        'Jan 20 03:11:34 audit: 20480 bytes read from /var/data/export.csv',\n        'Jan 20 03:12:05 audit: user admin session terminated',\n    ],\n}\n\nTS_RE = re.compile(r'\\b(\\d{2}:\\d{2}:\\d{2})\\b')\nevents = []\nfor lines in DATASETS.values():\n    for line in lines:\n        m = TS_RE.search(line)\n        if m:\n            events.append((m.group(1), line))\n\nfor ts, event in sorted(events):\n    print(f'{ts} {event}')\n`,
+  },
 };
 
 /**
