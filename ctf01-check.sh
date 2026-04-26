@@ -9,16 +9,27 @@
 # Exit codes:
 #   0 = PASS — all checks satisfied
 #   1 = FAIL — one or more checks failed
-#
-# This script is the authoritative source for what constitutes a passing
-# submission. The inline checkScript in state.js must stay in sync with
-# this file. CI should run this script against a seeded fixture workspace
-# before releasing the challenge.
 # =============================================================================
 set -euo pipefail
 
 WORKSPACE="${1:-$(pwd)}"
 REPORT="$WORKSPACE/report.txt"
+
+# ---------------------------------------------------------------------------
+# Security: reject path traversal attempts
+# ---------------------------------------------------------------------------
+if [[ "$REPORT" != "$WORKSPACE/report.txt" ]]; then
+  echo "FAIL [CTF-01/security]: invalid report path detected."
+  exit 1
+fi
+
+# Resolve real path and re-check (catches symlink traversal)
+REAL_WORKSPACE="$(cd "$WORKSPACE" && pwd -P)"
+REAL_REPORT="$(cd "$WORKSPACE" && pwd -P)/report.txt"
+if [[ "$REAL_REPORT" != "$REAL_WORKSPACE/report.txt" ]]; then
+  echo "FAIL [CTF-01/security]: path traversal detected."
+  exit 1
+fi
 
 # ---------------------------------------------------------------------------
 # Step 1 — report.txt must exist
