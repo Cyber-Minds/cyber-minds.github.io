@@ -125,11 +125,11 @@ const challengeCatalog = {
     title: 'Privilege Escalation Trace',
     difficulty: 'Intermediate',
     description: 'Analyse authentication and sudo logs to trace how an attacker moved from a low-privilege SSH session to root.',
-    objective: 'Identify the escalating user, the exact timestamp of privilege escalation, and the method used. Record findings in priv-esc-report.txt.',
+    objective: 'Identify the escalating user, the exact timestamp of privilege escalation, and the escalation method (su). Record findings in priv-esc-report.txt.',
     steps: [
       'Read /workspace/auth.log to find the SSH login event for the attacker.',
       'Read /workspace/sudo.log to find the privilege escalation event.',
-      'Identify the username, the timestamp (HH:MM), and the escalation method (su/sudo).',
+      'Identify the username, the timestamp (HH:MM), and the escalation method (su).',
       'Write a summary to priv-esc-report.txt including all three findings.',
       'Click Check Solution to validate.',
     ],
