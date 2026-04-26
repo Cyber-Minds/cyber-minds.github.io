@@ -150,67 +150,6 @@ RUN printf '%s\n' \
     'print("PASS")' \
     > /workspace/check-priv-esc.py
 
-# CTF-06: incident timeline log fixtures (SYNTHETIC DATA)
-RUN printf '%s\n' \
-    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
-    'Jan 20 03:10:14 server sshd[4501]: Failed password for admin from 192.168.50.22 port 44312 ssh2' \
-    'Jan 20 03:10:29 server sshd[4501]: Failed password for admin from 192.168.50.22 port 44312 ssh2' \
-    'Jan 20 03:10:47 server sshd[4501]: Accepted password for admin from 192.168.50.22 port 44312 ssh2' \
-    'Jan 20 03:10:48 server sshd[4501]: pam_unix(sshd:session): session opened for user admin' \
-    'Jan 20 03:12:05 server sshd[4501]: pam_unix(sshd:session): session closed for user admin' \
-    > /workspace/incident-auth.log \
-    && printf '%s\n' \
-    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
-    '192.168.50.22 - - [20/Jan/2026:03:10:50 +0000] "GET /login HTTP/1.1" 200 512 "-" "curl/7.74.0"' \
-    '192.168.50.22 - - [20/Jan/2026:03:11:02 +0000] "POST /login HTTP/1.1" 302 0 "-" "curl/7.74.0"' \
-    '192.168.50.22 - - [20/Jan/2026:03:11:05 +0000] "GET /admin HTTP/1.1" 200 4096 "-" "curl/7.74.0"' \
-    '192.168.50.22 - - [20/Jan/2026:03:11:33 +0000] "GET /admin/export HTTP/1.1" 200 20480 "-" "curl/7.74.0"' \
-    '192.168.50.22 - - [20/Jan/2026:03:12:01 +0000] "GET /logout HTTP/1.1" 200 128 "-" "curl/7.74.0"' \
-    > /workspace/incident-access.log \
-    && printf '%s\n' \
-    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
-    'Jan 20 03:10:47 server kernel: [audit] user admin logged in from 192.168.50.22' \
-    'Jan 20 03:11:33 server kernel: [audit] file /var/data/export.csv accessed by admin' \
-    'Jan 20 03:11:34 server kernel: [audit] 20480 bytes read from /var/data/export.csv' \
-    'Jan 20 03:12:05 server kernel: [audit] user admin session terminated' \
-    > /workspace/incident-syslog.log
-
-# CTF-06: Python validator embedded in image
-RUN printf '%s\n' \
-    'import re, sys' \
-    'TS_RE = re.compile(r"\b(\d{2}:\d{2}:\d{2})\b")' \
-    'try:' \
-    '    with open("/workspace/timeline.txt") as f:' \
-    '        lines = [l.rstrip() for l in f if l.strip()]' \
-    'except Exception:' \
-    '    print("FAIL: cannot read timeline.txt")' \
-    '    sys.exit(1)' \
-    'if len(lines) < 8:' \
-    '    print(f"FAIL: need at least 8 events, got {len(lines)}")' \
-    '    sys.exit(1)' \
-    'timestamps = []' \
-    'for line in lines:' \
-    '    m = TS_RE.search(line)' \
-    '    if not m:' \
-    '        print(f"FAIL: line missing HH:MM:SS timestamp: {line!r}")' \
-    '        sys.exit(1)' \
-    '    timestamps.append(m.group(1))' \
-    'if timestamps != sorted(timestamps):' \
-    '    print("FAIL: events are not in ascending time order")' \
-    '    sys.exit(1)' \
-    'if len(timestamps) != len(set(timestamps)):' \
-    '    print("FAIL: duplicate timestamps found")' \
-    '    sys.exit(1)' \
-    'content = "\n".join(lines)' \
-    'if not re.search(r"ssh|login|accept", content, re.IGNORECASE):' \
-    '    print("FAIL: no SSH/login event found")' \
-    '    sys.exit(1)' \
-    'if not re.search(r"http|get|post|request", content, re.IGNORECASE):' \
-    '    print("FAIL: no HTTP event found")' \
-    '    sys.exit(1)' \
-    'print("PASS")' \
-    > /workspace/check-timeline.py
-
 # Give terminal-user write access to nginx runtime/log dirs to avoid startup alerts.
 RUN mkdir -p /var/log/nginx /var/lib/nginx && \
     chown -R terminal-user:terminal-user /var/log/nginx /var/lib/nginx
