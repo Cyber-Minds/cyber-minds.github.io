@@ -101,17 +101,43 @@ const challengeCatalog = {
     title: 'Web Recon Starter',
     difficulty: 'Beginner',
     description: 'Practice recon workflows: check open ports and inspect HTTP response headers safely.',
-    objective: 'Identify the local nginx service on port 9090 and capture header + port evidence in notes.',
+    objective: 'Identify the local nginx service on port 9090, capture its response headers (including X-Powered-By and X-Application), and record findings in recon-notes.txt.',
     steps: [
       'Run ss -tulpen to inspect listening services.',
-      'Run curl -I http://localhost:9090.',
-      'Record at least one response header value and port 9090 in recon-notes.txt.',
+      'Run curl -I http://localhost:9090 and observe the response headers.',
+      'Note the PHP version from X-Powered-By and the app name from X-Application.',
+      'Record the port, at least one standard header, the PHP version, and the portal name in recon-notes.txt.',
     ],
     firstCommand: 'ss -tulpen',
-    checkScript: 'set -e; test -f recon-notes.txt; test -s recon-notes.txt; grep -Eqi "(server|content-type|status|header)" recon-notes.txt; grep -Eq "(^|[^0-9])9090([^0-9]|$)" recon-notes.txt',
+    checkScript: [
+      'set -e',
+      'test -f recon-notes.txt',
+      'test -s recon-notes.txt',
+      'grep -Eqi "(server|content-type|status|header)" recon-notes.txt',
+      'grep -Eq "(^|[^0-9])9090([^0-9]|$)" recon-notes.txt',
+      'grep -Eqi "php[/ ]?7" recon-notes.txt',
+      'grep -Eqi "internal.?portal" recon-notes.txt',
+    ].join('; '),
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://localhost:9090', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
-  }
+  },
+  'priv-esc': {
+    title: 'Privilege Escalation Trace',
+    difficulty: 'Intermediate',
+    description: 'Analyse authentication and sudo logs to trace how an attacker moved from a low-privilege SSH session to root.',
+    objective: 'Identify the escalating user, the exact timestamp of privilege escalation, and the escalation method (su). Record findings in priv-esc-report.txt.',
+    steps: [
+      'Read /workspace/auth.log to find the SSH login event for the attacker.',
+      'Read /workspace/sudo.log to find the privilege escalation event.',
+      'Identify the username, the timestamp (HH:MM), and the escalation method (su).',
+      'Write a summary to priv-esc-report.txt including all three findings.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/auth.log',
+    checkScript: 'python3 /workspace/check-priv-esc.py',
+    starterLang: 'python',
+    starterCode: `# Read and analyse the auth log\nwith open('/workspace/auth.log') as f:\n    for line in f:\n        if 'Accepted' in line or 'su for root' in line:\n            print(line.strip())\n`,
+  },
 };
 
 /**
