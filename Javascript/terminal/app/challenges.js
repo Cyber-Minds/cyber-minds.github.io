@@ -209,6 +209,8 @@ function checkChallengeSolution() {
     const report = getMockFile('report.txt') || '';
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
+    const privEscReport = getMockFile('priv-esc-report.txt') || '';
+    const timeline = getMockFile('timeline.txt') || '';
     const checksByChallenge = {
       'linux-basics':
         report.trim().length > 0 &&
@@ -216,8 +218,27 @@ function checkChallengeSolution() {
       'web-recon':
         recon.trim().length > 0 &&
         /(server|content-type|status|header)/i.test(recon) &&
-        /\b9090\b/.test(recon),
+        /\b9090\b/.test(recon) &&
+        /php[/ ]?7/i.test(recon) &&
+        /internal.?portal/i.test(recon),
       'log-hunt': /(failed|error|denied)/i.test(sampleLog),
+      'priv-esc':
+        privEscReport.trim().length > 0 &&
+        /\bjsmith\b/i.test(privEscReport) &&
+        /02:11/.test(privEscReport) &&
+        /\bsu\b|escalat/i.test(privEscReport),
+      'incident-timeline': (() => {
+        const lines = timeline.split('\n').filter((l) => l.trim());
+        if (lines.length < 8) return false;
+        const tsRe = /\b(\d{2}:\d{2}:\d{2})\b/;
+        const timestamps = lines.map((l) => { const m = tsRe.exec(l); return m ? m[1] : null; });
+        if (timestamps.some((t) => t === null)) return false;
+        const sorted = [...timestamps].sort();
+        if (JSON.stringify(timestamps) !== JSON.stringify(sorted)) return false;
+        if (new Set(timestamps).size !== timestamps.length) return false;
+        const joined = lines.join('\n');
+        return /(ssh|login|accept)/i.test(joined) && /(http|get|post|request)/i.test(joined);
+      })(),
     };
     const passed = !!checksByChallenge[activeChallengeId];
 
