@@ -104,8 +104,10 @@ header {
 section {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 2rem;
   padding: 20px;
+  align-items: stretch;
 }
 
 @keyframes rotateBoxShadow1 {
@@ -158,15 +160,14 @@ footer {
 }
 
 .course-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 22rem;
   background-color: #0d0d0d;
   border-radius: 1rem;
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 0 1rem rgba(0,0,0,0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer; /* makes the CARD clickable */
 }
 
 .course-card:hover {
@@ -176,7 +177,8 @@ footer {
 
 .course-image {
   width: 100%;
-  height: auto;
+  height: 200px;
   display: block;
+  object-fit: cover;
   cursor: default; /* prevents image from looking like the link */
 }
