@@ -226,7 +226,7 @@ function checkChallengeSolution() {
         if (!findings.trim()) return false;
         if (!findings.includes('192.168.1.45')) return false;
         const m = /(\d+)\s+192\.168\.1\.45/.exec(findings);
-        if (!m || parseInt(m[1]) < 10) return false;
+        if (!m || parseInt(m[1], 10) < 10) return false;
         return /(failed|attempt|auth|spike|brute)/i.test(findings);
       })(),
       'priv-esc':
