@@ -158,6 +158,23 @@ const challengeCatalog = {
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://localhost:9090', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
   },
+  'log-hunt': {
+    title: 'Log Hunt: Failed Auth Spike',
+    difficulty: 'Intermediate',
+    description: 'Analyse a server authentication log to identify a brute-force spike and rank the top offending source IPs.',
+    objective: 'Use grep, sort, and uniq to extract and rank offending IPs from /workspace/sample.log. Record the ranked IP list and a one-line incident summary in findings.txt.',
+    steps: [
+      'Run grep "Failed" /workspace/sample.log | awk \'{print $11}\' | sort | uniq -c | sort -rn to rank IPs by attempt count.',
+      'Identify the top offending IP and confirm its attempt count.',
+      'Write the ranked IP list to findings.txt.',
+      'Add a one-line incident summary describing the attack (e.g. brute-force, auth spike).',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'grep "Failed" /workspace/sample.log | wc -l',
+    checkScript: 'python3 /workspace/check-log-hunt.py',
+    starterLang: 'python',
+    starterCode: `# Log Hunt: Failed Auth Spike — starter\nfrom collections import Counter\n\nwith open('/workspace/sample.log') as f:\n    lines = [l for l in f if 'Failed' in l and not l.startswith('#')]\n\nips = []\nfor line in lines:\n    parts = line.split()\n    try:\n        idx = parts.index('from')\n        ips.append(parts[idx + 1])\n    except (ValueError, IndexError):\n        pass\n\nfor ip, count in Counter(ips).most_common():\n    print(f'{count:4d}  {ip}')\n\n# Write to findings.txt when ready:\n# with open('/workspace/findings.txt', 'w') as out:\n#     for ip, count in Counter(ips).most_common():\n#         out.write(f'{count:4d}  {ip}\\n')\n#     out.write('Summary: brute-force auth spike from 192.168.1.45\\n')\n`,
+  },
   'priv-esc': {
     title: 'Privilege Escalation Trace',
     difficulty: 'Intermediate',
@@ -233,11 +250,6 @@ for (let i = 1; i <= 10; i++) {
 // Re-calculate order and set active challenge
 const challengeOrder = Object.keys(challengeCatalog);
 let activeChallengeId = query.get('challenge') || challengeOrder[0];
-
-// If the URL has an old "log-hunt" ID, redirect it to "log-hunt-1"
-if (activeChallengeId === 'log-hunt') {
-    activeChallengeId = 'log-hunt-1';
-}
 
 if (!challengeCatalog[activeChallengeId]) {
   activeChallengeId = challengeOrder[0];

@@ -221,7 +221,14 @@ function checkChallengeSolution() {
         /\b9090\b/.test(recon) &&
         /php[/ ]?7/i.test(recon) &&
         /internal.?portal/i.test(recon),
-      'log-hunt': /(failed|error|denied)/i.test(sampleLog),
+      'log-hunt': (() => {
+        const findings = getMockFile('findings.txt') || '';
+        if (!findings.trim()) return false;
+        if (!findings.includes('192.168.1.45')) return false;
+        const m = /(\d+)\s+192\.168\.1\.45/.exec(findings);
+        if (!m || parseInt(m[1]) < 10) return false;
+        return /(failed|attempt|auth|spike|brute)/i.test(findings);
+      })(),
       'priv-esc':
         privEscReport.trim().length > 0 &&
         /\bjsmith\b/i.test(privEscReport) &&
