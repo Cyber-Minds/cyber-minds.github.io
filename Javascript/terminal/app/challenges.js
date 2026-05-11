@@ -12,7 +12,6 @@ function queueAnalyticsEvent(eventName, payload) {
 }
 
 function loadChallenge(challengeId, updateUrl = true) {
-
   let resolvedChallengeId = challengeId;
 
   if (
@@ -78,6 +77,29 @@ function loadChallenge(challengeId, updateUrl = true) {
   } else {
     queueAnalyticsEvent('challenge_start', { challenge: resolvedChallengeId });
   }
+
+  ensureChallengeWorkspace(challenge);
+}
+
+function ensureChallengeWorkspace(challenge) {
+  if (!challenge || !challenge.setupScript) {
+    return;
+  }
+
+  if (isMockTerminal) {
+    if (activeChallengeId === 'log-hunt') {
+      setMockFile('sample.log', `${logHuntSampleLog}\n`);
+    }
+    syncWorkspaceFiles();
+    return;
+  }
+
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    return;
+  }
+
+  ws.send(`bash -lc ${shellQuote(challenge.setupScript)}\n`);
+  syncWorkspaceFiles();
 }
 
 function renderChallengeNav() {
@@ -291,6 +313,9 @@ function checkChallengeSolution() {
   };
 
   ws.send(`echo "\\n--- Checking ${challenge.title} ---"\n`);
+  if (challenge.setupScript) {
+    ws.send(`bash -lc ${shellQuote(challenge.setupScript)}\n`);
+  }
   ws.send(`printf '%s\\n' '${startMarker}'\n`);
   ws.send(`bash -lc ${shellQuote(challenge.checkScript)}\n`);
   ws.send(`printf '%s:%s\\n' '${resultMarker}' \"$?\"\n`);
@@ -344,9 +369,10 @@ function handleCheckOutput(chunk) {
     // Sync completion to server-side progression enforcement.
     // This prevents localStorage bypass — the backend is the source of truth.
     if (sessionId) {
-      fetch(`/api/session/${sessionId}/progress/${challengeId}`, {
-        method: 'POST',
-      }).catch((err) =>
+      const progressUrl = `${apiOrigin}/api/session/${encodeURIComponent(
+        sessionId
+      )}/progress/${encodeURIComponent(challengeId)}`;
+      fetch(progressUrl, { method: 'POST' }).catch((err) =>
         console.warn('Failed to sync progress to server:', err)
       );
     }
