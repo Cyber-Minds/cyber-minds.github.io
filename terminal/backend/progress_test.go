@@ -34,6 +34,12 @@ func TestGetChallengeIndex(t *testing.T) {
 	if got := getChallengeIndex("linux-basics"); got != 0 {
 		t.Fatalf("expected index 0, got %d", got)
 	}
+	if got := getChallengeIndex("log-hunt"); got != 2 {
+		t.Fatalf("expected log-hunt index 2, got %d", got)
+	}
+	if got := getChallengeIndex("log-hunt-10"); got != 14 {
+		t.Fatalf("expected log-hunt-10 index 14, got %d", got)
+	}
 	if got := getChallengeIndex("unknown"); got != -1 {
 		t.Fatalf("expected -1 for unknown challenge, got %d", got)
 	}
@@ -103,6 +109,34 @@ func TestHandleCompleteChallengeAndAccessFlow(t *testing.T) {
 		}
 		if !resp["allowed"] {
 			t.Fatal("expected allowed=true")
+		}
+	})
+
+	t.Run("can complete web recon", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodPost, "/api/session/s1/progress/web-recon", nil)
+		req = mux.SetURLVars(req, map[string]string{"sessionId": "s1", "challengeId": "web-recon"})
+		rr := httptest.NewRecorder()
+		handleCompleteChallenge(rr, req)
+		if rr.Code != http.StatusOK {
+			t.Fatalf("expected 200, got %d", rr.Code)
+		}
+	})
+
+	t.Run("can complete canonical log hunt challenge", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodPost, "/api/session/s1/progress/log-hunt", nil)
+		req = mux.SetURLVars(req, map[string]string{"sessionId": "s1", "challengeId": "log-hunt"})
+		rr := httptest.NewRecorder()
+		handleCompleteChallenge(rr, req)
+		if rr.Code != http.StatusOK {
+			t.Fatalf("expected 200, got %d", rr.Code)
+		}
+
+		var resp map[string]string
+		if err := json.Unmarshal(rr.Body.Bytes(), &resp); err != nil {
+			t.Fatalf("failed to decode response: %v", err)
+		}
+		if resp["challengeId"] != "log-hunt" {
+			t.Fatalf("unexpected challenge id: %#v", resp)
 		}
 	})
 }
