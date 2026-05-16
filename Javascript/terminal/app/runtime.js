@@ -231,6 +231,7 @@ async function initTerminal() {
       }
       sendResizeMessage();
       scheduleInitialResizeSync();
+      ensureChallengeWorkspace(challengeCatalog[activeChallengeId]);
     };
     ws.onmessage = (event) => {
       if (!hasReceivedTerminalOutput) {

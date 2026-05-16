@@ -57,15 +57,8 @@ function seedMockWorkspace() {
   if (!hasMockFile('recon-notes.txt')) {
     setMockFile('recon-notes.txt', '');
   }
-  if (!hasMockFile('sample.log')) {
-    setMockFile(
-      'sample.log',
-      [
-        '2026-02-16T10:30:12Z auth failed user=admin ip=10.0.0.2',
-        '2026-02-16T10:31:05Z auth failed user=root ip=10.0.0.2',
-        '2026-02-16T10:33:44Z auth denied user=test ip=192.168.1.7',
-      ].join('\n') + '\n'
-    );
+  if (!hasMockFile('sample.log') && typeof logHuntSampleLog === 'string') {
+    setMockFile('sample.log', `${logHuntSampleLog}\n`);
   }
 }
 

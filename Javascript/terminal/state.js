@@ -79,6 +79,64 @@ const templateFilenames = {
   go: 'hello.go',
 };
 
+const logHuntSampleLog = [
+  '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
+  'Jan 20 14:00:01 server sshd[1101]: Failed password for root from 192.168.1.45 port 51001 ssh2',
+  'Jan 20 14:00:05 server sshd[1102]: Failed password for admin from 192.168.1.45 port 51002 ssh2',
+  'Jan 20 14:00:09 server sshd[1103]: Failed password for ubuntu from 192.168.1.45 port 51003 ssh2',
+  'Jan 20 14:00:14 server sshd[1104]: Failed password for root from 192.168.1.45 port 51004 ssh2',
+  'Jan 20 14:00:18 server sshd[1105]: Failed password for pi from 192.168.1.45 port 51005 ssh2',
+  'Jan 20 14:00:22 server sshd[1106]: Failed password for test from 192.168.1.45 port 51006 ssh2',
+  'Jan 20 14:00:26 server sshd[1107]: Failed password for guest from 192.168.1.45 port 51007 ssh2',
+  'Jan 20 14:00:31 server sshd[1108]: Failed password for user from 192.168.1.45 port 51008 ssh2',
+  'Jan 20 14:00:35 server sshd[1109]: Failed password for admin from 192.168.1.45 port 51009 ssh2',
+  'Jan 20 14:00:39 server sshd[1110]: Failed password for root from 192.168.1.45 port 51010 ssh2',
+  'Jan 20 14:00:43 server sshd[1111]: Failed password for deploy from 192.168.1.45 port 51011 ssh2',
+  'Jan 20 14:00:47 server sshd[1112]: Failed password for root from 192.168.1.45 port 51012 ssh2',
+  'Jan 20 14:01:05 server sshd[1201]: Failed password for root from 10.0.0.12 port 52001 ssh2',
+  'Jan 20 14:01:33 server sshd[1202]: Failed password for admin from 10.0.0.12 port 52002 ssh2',
+  'Jan 20 14:02:07 server sshd[1203]: Failed password for ubuntu from 10.0.0.12 port 52003 ssh2',
+  'Jan 20 14:02:41 server sshd[1204]: Failed password for root from 10.0.0.12 port 52004 ssh2',
+  'Jan 20 14:03:10 server sshd[1205]: Failed password for test from 10.0.0.12 port 52005 ssh2',
+  'Jan 20 14:03:22 server sshd[1206]: Failed password for pi from 10.0.0.12 port 52006 ssh2',
+  'Jan 20 14:05:10 server sshd[1301]: Failed password for root from 172.16.0.99 port 53001 ssh2',
+  'Jan 20 14:05:45 server sshd[1302]: Failed password for admin from 172.16.0.99 port 53002 ssh2',
+  'Jan 20 14:06:03 server sshd[1303]: Failed password for ubuntu from 172.16.0.99 port 53003 ssh2',
+  'Jan 20 14:10:00 server sshd[1401]: Accepted password for deploy from 10.0.50.1 port 43210 ssh2',
+].join('\n');
+
+const logHuntSetupScript = [
+  "cat > /workspace/sample.log <<'CM_LOG_HUNT_SAMPLE'",
+  logHuntSampleLog,
+  'CM_LOG_HUNT_SAMPLE',
+].join('\n');
+
+const logHuntCheckScript = [
+  "python3 - <<'CM_LOG_HUNT_CHECK'",
+  'import re, sys',
+  'try:',
+  '    with open("/workspace/findings.txt") as f:',
+  '        content = f.read()',
+  'except Exception:',
+  '    print("FAIL: cannot read findings.txt")',
+  '    sys.exit(1)',
+  'if not content.strip():',
+  '    print("FAIL: findings.txt is empty")',
+  '    sys.exit(1)',
+  'if "192.168.1.45" not in content:',
+  '    print("FAIL: top offending IP 192.168.1.45 not identified")',
+  '    sys.exit(1)',
+  'm = re.search(r"(\\d+)\\s+192\\.168\\.1\\.45", content)',
+  'if not m or int(m.group(1)) < 10:',
+  '    print("FAIL: include the attempt count for 192.168.1.45")',
+  '    sys.exit(1)',
+  'if not re.search(r"failed|attempt|auth|spike|brute", content, re.I):',
+  '    print("FAIL: add an incident summary mentioning the attack type")',
+  '    sys.exit(1)',
+  'print("PASS")',
+  'CM_LOG_HUNT_CHECK',
+].join('\n');
+
 const challengeCatalog = {
   'linux-basics': {
     title: 'Linux Basics Warmup',
@@ -158,6 +216,24 @@ const challengeCatalog = {
     starterLang: 'javascript',
     starterCode: `const http = require('http');\n\nhttp.get('http://localhost:9090', (res) => {\n  console.log('Status:', res.statusCode);\n  console.log('Headers:', res.headers);\n});\n`,
   },
+  'log-hunt': {
+    title: 'Log Hunt: Failed Auth Spike',
+    difficulty: 'Intermediate',
+    description: 'Analyse a server authentication log to identify a brute-force spike and rank the top offending source IPs.',
+    objective: 'Use grep, sort, and uniq to extract and rank offending IPs from /workspace/sample.log. Record the ranked IP list and a one-line incident summary in findings.txt.',
+    steps: [
+      'Run grep "Failed" /workspace/sample.log | awk \'{print $11}\' | sort | uniq -c | sort -rn to rank IPs by attempt count.',
+      'Identify the top offending IP and confirm its attempt count.',
+      'Write the ranked IP list to findings.txt.',
+      'Add a one-line incident summary describing the attack (e.g. brute-force, auth spike).',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'grep "Failed" /workspace/sample.log | wc -l',
+    setupScript: logHuntSetupScript,
+    checkScript: logHuntCheckScript,
+    starterLang: 'python',
+    starterCode: `# Log Hunt: Failed Auth Spike — starter\nfrom collections import Counter\n\nwith open('/workspace/sample.log') as f:\n    lines = [l for l in f if 'Failed' in l and not l.startswith('#')]\n\nips = []\nfor line in lines:\n    parts = line.split()\n    try:\n        idx = parts.index('from')\n        ips.append(parts[idx + 1])\n    except (ValueError, IndexError):\n        pass\n\nfor ip, count in Counter(ips).most_common():\n    print(f'{count:4d}  {ip}')\n\n# Write to findings.txt when ready:\n# with open('/workspace/findings.txt', 'w') as out:\n#     for ip, count in Counter(ips).most_common():\n#         out.write(f'{count:4d}  {ip}\\n')\n#     out.write('Summary: brute-force auth spike from 192.168.1.45\\n')\n`,
+  },
   'priv-esc': {
     title: 'Privilege Escalation Trace',
     difficulty: 'Intermediate',
@@ -233,11 +309,6 @@ for (let i = 1; i <= 10; i++) {
 // Re-calculate order and set active challenge
 const challengeOrder = Object.keys(challengeCatalog);
 let activeChallengeId = query.get('challenge') || challengeOrder[0];
-
-// If the URL has an old "log-hunt" ID, redirect it to "log-hunt-1"
-if (activeChallengeId === 'log-hunt') {
-    activeChallengeId = 'log-hunt-1';
-}
 
 if (!challengeCatalog[activeChallengeId]) {
   activeChallengeId = challengeOrder[0];
