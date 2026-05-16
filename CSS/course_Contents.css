@@ -106,10 +106,11 @@ section {
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 20px;
+  gap: 0.5em;
 }
 
 .course-card {
-  width: 18.75em;
+  width: 22em;
   background-color: rgb(17, 25, 35);
   border-radius: 8px;
   overflow: hidden;
