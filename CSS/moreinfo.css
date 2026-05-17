@@ -1,6 +1,7 @@
 /* this page links to index */
 body {
   overflow-x: hidden;
+  background-color: #050d18;
 }
 
 .Parent-container {
@@ -9,6 +10,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: auto;
+  padding-bottom: 0;
 }
 
 body {
@@ -22,18 +24,10 @@ body {
 }
 
 @keyframes rotateBoxShadow {
-  0% {
-    box-shadow: inset 0px 0em 15em #102d42;
-  }
-  33% {
-    box-shadow: inset 0px 1em 20em #213f67;
-  }
-  66% {
-    box-shadow: inset 0px 0.5em 20em #132b49;
-  }
-  100% {
-    box-shadow: inset 0em 0em 15em #143852;
-  }
+  0%   { box-shadow: inset 0px 0em 15em #050d18; }
+  33%  { box-shadow: inset 0px 1em 20em #081526; }
+  66%  { box-shadow: inset 0px 0.5em 20em #060f1e; }
+  100% { box-shadow: inset 0em 0em 15em #050c1a; }
 }
 
 header {
@@ -49,8 +43,8 @@ header {
 
 .header-content {
   display: flex;
-  align-items: center; /* Center the items vertically */
-  justify-content: space-between; /* Space between the logo and nav */
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header-content img {
@@ -73,47 +67,40 @@ header {
   text-decoration: none;
   font-size: 14pt;
   color: #ffffff;
-  padding: 0.5em 1em;
   transition: background-color 0.3s;
   background-color: #174867;
-  text-decoration: none;
   margin-right: 0.9em;
-  padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
-  border-radius: 0.8em; /* Make the buttons more rounded */
-  white-space: nowrap; /* Prevent text from wrapping */
+  padding: 0.4em 0.8em;
+  border-radius: 0.8em;
+  white-space: nowrap;
 }
 
 .header-buttons a:hover {
   background-color: #286aa7;
 }
 
-main {
-  padding-bottom: 3.5rem;
-}
-
 .page-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 4em;
   font-weight: 700;
-  font-style: normal;
   word-spacing: 0.2em;
   letter-spacing: 0.1em;
-  color: transparent; /* Set initial text color to transparent */
+  color: transparent;
   background: linear-gradient(
     to left,
     rgba(0, 0, 0, 0.5),
     rgba(0, 0, 0, 0),
     rgba(255, 255, 255, 0.8)
-  ); /* Adjust the colors and stops as needed */
+  );
   background-clip: text;
   -webkit-background-clip: text;
-  animation: fadeIn 3s forwards; /* Set the duration of the animation */
+  animation: fadeIn 3s forwards;
 }
 
 @keyframes fadeIn {
   to {
     color: rgb(255, 255, 255);
-    background-size: 200% 100%; /* Adjust the size of the gradient */
+    background-size: 200% 100%;
   }
 }
 
@@ -122,6 +109,7 @@ p {
   color: white;
   padding-left: 20px;
   padding-right: 20px;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 ul {
@@ -134,12 +122,13 @@ ul {
 li {
   margin-bottom: 5px;
   color: white;
-  scale: 100%;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 a {
   color: #ffffff;
   text-decoration: none;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 h2 {
@@ -147,7 +136,6 @@ h2 {
   margin-top: 30px;
   margin-bottom: 15px;
   color: white;
-  /*border-bottom: 2px solid #333;*/
   padding-bottom: 5px;
   text-align: center;
   font-family: 'Space Grotesk', sans-serif;
@@ -159,65 +147,51 @@ footer {
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
-}
-
-.page-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-a {
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-li {
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-p {
-  font-family: 'Space Grotesk', sans-serif;
+  margin-top: auto;
 }
 
 .emailForCyberminds {
-  color: #ffffff; /* Light blue color */
-  text-decoration: none; /* No underline */
-  font-size: 1em; /* Smaller font size */
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1em;
 }
 
-/* Hover effect for the email link */
 .emailForCyberminds:hover {
-  color: #ffffff; /* Dark blue color on hover */
-  text-decoration: underline; /* Underline on hover */
-  font-weight: bold; /* Bold on hover */
+  color: #ffffff;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* ── LAYOUT ── */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding: 1em 4em 1.5em;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5em;
+}
+
+.bottom-span {
+  grid-column: 1 / -1;
 }
 
 .text-container {
-  background: linear-gradient(to bottom, #0b121e6d, #1b2e489c);
+  background: linear-gradient(to bottom, #0d1b2a, #111f30);
   border-radius: 1em;
-  padding: 1em;
-  margin-left: 4em;
-  margin-right: 4em;
-  margin-top: 1em;
-  margin-bottom: 3em;
+  padding: 1.5em;
+  margin: 0;
+  border: 1px solid #1a2f4a;
   animation: rotateBoxShadow1 4s infinite linear;
 }
 
 @keyframes rotateBoxShadow1 {
-  0%,
-  100% {
-    box-shadow: 0.05em 0.05em 0.9em #4f7ab25c;
-  }
-  25% {
-    box-shadow:
-      0.05em 0.1em 1.3em #4f7ab2a2,
-      0 0 0 transparent; /* Add the second shadow to cancel out the bottom shadow */
-  }
-  50%,
-  75% {
-    box-shadow: 0 0 0 transparent; /* Completely remove the shadow for the middle of the animation */
-  }
+  0%, 100% { box-shadow: 0 0 14px rgba(20, 50, 90, 0.7); }
+  25%       { box-shadow: 0 0 22px rgba(25, 65, 120, 0.6); }
+  50%, 75%  { box-shadow: 0 0 8px rgba(15, 40, 75, 0.4); }
 }
+

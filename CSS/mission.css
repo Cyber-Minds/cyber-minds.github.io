@@ -17,23 +17,15 @@ body {
   padding: 0;
   overflow-x: hidden;
   text-align: center;
-  background-color: black;
+  background-color: #050d18;
   animation: rotateBoxShadow 4s infinite linear;
 }
 
 @keyframes rotateBoxShadow {
-  0% {
-    box-shadow: inset 0px 0em 15em #102d42;
-  }
-  33% {
-    box-shadow: inset 0px 1em 20em #213f67;
-  }
-  66% {
-    box-shadow: inset 0px 0.5em 20em #132b49;
-  }
-  100% {
-    box-shadow: inset 0em 0em 15em #143852;
-  }
+  0%   { box-shadow: inset 0px 0em 15em #050d18; }
+  33%  { box-shadow: inset 0px 1em 20em #081526; }
+  66%  { box-shadow: inset 0px 0.5em 20em #060f1e; }
+  100% { box-shadow: inset 0em 0em 15em #050c1a; }
 }
 
 header {
@@ -124,6 +116,7 @@ p {
   padding-right: 2em;
   font-family: 'Space Grotesk', sans-serif;
   line-height: 1.7em;
+  font-size: 2.2em;
 }
 
 ul {
@@ -133,11 +126,10 @@ ul {
   list-style: none;
   font-family: 'Space Grotesk', sans-serif;
 }
-
+ 
 li {
   margin-bottom: 0.3em;
   color: white;
-  scale: 100%;
   font-family: 'Space Grotesk', sans-serif;
   line-height: 1.5em;
 }
@@ -160,12 +152,37 @@ h2 {
 }
 
 h3 {
-  font-size: 1.6em;
+  font-size: 2.6em;
   color: white;
   /*border-bottom: 2px solid #333;*/
+  padding-bottom: 0em;
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.card-heading {
+  font-size: 1.8em;
+  color: white;
   padding-bottom: 0.25em;
   text-align: center;
   font-family: 'Space Grotesk', sans-serif;
+}
+ 
+.card-text {
+  font-size: 1em;
+  color: white;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1.7em;
+}
+ 
+li.card-text {
+  font-size: 2em;
+  line-height: 1.6em;
+  margin-bottom: 0.5em;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 footer {
@@ -186,49 +203,52 @@ footer {
 }
 
 .flex1 {
-  border-radius: 0.6em 0.6em 0.6em 0.6em;
+ border-radius: 0.6em;
   display: flex;
   flex-direction: row;
-  background-color: rgb(17, 25, 35);
+  background-color: #0d1b2a;
+  border: 1px solid #1a2f4a;
   margin-bottom: 2.5em;
   margin-top: 2.5em;
-  margin-left: 5em;
-  margin-right: 5em;
-  height: 25em;
+  margin-left: 12em;
+  margin-right: 12em;
+  height: 30em;
 }
 
 .flex2 {
-  border-radius: 0.6em 0.6em 0.6em 0.6em;
+ border-radius: 0.6em;
   display: flex;
   flex-direction: row;
-  background-color: rgb(17, 25, 35);
+  background-color: #0d1b2a;
+  border: 1px solid #1a2f4a;
   margin-bottom: 2.5em;
   margin-top: 2.5em;
-  margin-left: 5em;
-  margin-right: 5em;
-  height: 25em;
+  margin-left: 12em;
+  margin-right: 12em;
+  height: 30em;
 }
 
 .flex3 {
-  border-radius: 0.6em 0.6em 0.6em 0.6em;
+ border-radius: 0.6em;
   display: flex;
   flex-direction: row;
-  background-color: rgb(17, 25, 35);
+  background-color: #0d1b2a;
+  border: 1px solid #1a2f4a;
   margin-bottom: 2.5em;
   margin-top: 2.5em;
-  margin-left: 5em;
-  margin-right: 5em;
-  height: 25em;
+  margin-left: 12em;
+  margin-right: 12em;
+  height: 30em;
 }
 
 .theIMAGE img {
   margin-top: 3em;
   align-self: center;
-  height: 20em;
+  height: 24em;
   width: auto;
   flex: 5;
-  margin-left: 4em;
-  margin-right: 4em;
+  margin-left: 1em;
+  margin-right: 1em;
   margin-bottom: 2em;
   border-radius: 0.3em 0.3em 0.3em 0.3em;
   animation: rotateBoxShadow1 4s infinite linear;
