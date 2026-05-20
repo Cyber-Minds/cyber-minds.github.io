@@ -232,6 +232,7 @@ function checkChallengeSolution() {
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
     const privEscReport = getMockFile('priv-esc-report.txt') || '';
+    const beaconReport = getMockFile('beacon-report.txt') || '';
     const timeline = getMockFile('timeline.txt') || '';
     const checksByChallenge = {
       'linux-basics':
@@ -250,6 +251,12 @@ function checkChallengeSolution() {
         const m = /(\d+)\s+192\.168\.1\.45/.exec(findings);
         if (!m || parseInt(m[1], 10) < 10) return false;
         return /(failed|attempt|auth|spike|brute)/i.test(findings);
+      })(),
+      'ua-beacon': (() => {
+        if (!beaconReport.trim()) return false;
+        if (!beaconReport.includes('10.0.0.55')) return false;
+        if (!beaconReport.includes('python-requests')) return false;
+        return /(beacon|interval|periodic|repeat|frequen)/i.test(beaconReport);
       })(),
       'priv-esc':
         privEscReport.trim().length > 0 &&

@@ -137,6 +137,57 @@ const logHuntCheckScript = [
   'CM_LOG_HUNT_CHECK',
 ].join('\n');
 
+const uaBeaconAccessLog = [
+  '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
+  '10.0.0.55 - - [20/Jan/2026:14:00:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '192.168.1.10 - - [20/Jan/2026:14:00:15 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"',
+  '10.0.0.55 - - [20/Jan/2026:14:01:03 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '10.0.0.55 - - [20/Jan/2026:14:02:01 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '172.20.0.5 - - [20/Jan/2026:14:02:30 +0000] "GET /index.html HTTP/1.1" 200 2048 "-" "Mozilla/5.0 (Macintosh) Safari/537.36"',
+  '10.0.0.55 - - [20/Jan/2026:14:03:04 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '10.0.0.55 - - [20/Jan/2026:14:04:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '192.168.1.20 - - [20/Jan/2026:14:04:50 +0000] "GET /about HTTP/1.1" 200 3072 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"',
+  '10.0.0.55 - - [20/Jan/2026:14:05:05 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '10.0.0.55 - - [20/Jan/2026:14:06:01 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '10.0.0.55 - - [20/Jan/2026:14:07:03 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '172.20.0.5 - - [20/Jan/2026:14:07:20 +0000] "GET /contact HTTP/1.1" 200 1536 "-" "Mozilla/5.0 (Macintosh) Safari/537.36"',
+  '10.0.0.55 - - [20/Jan/2026:14:08:00 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '10.0.0.55 - - [20/Jan/2026:14:09:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
+  '192.168.1.10 - - [20/Jan/2026:14:09:45 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"',
+].join('\n');
+
+const uaBeaconSetupScript = [
+  "cat > /workspace/access.log <<'CM_UA_BEACON_ACCESS'",
+  uaBeaconAccessLog,
+  'CM_UA_BEACON_ACCESS',
+].join('\n');
+
+const uaBeaconCheckScript = [
+  "python3 - <<'CM_UA_BEACON_CHECK'",
+  'import re, sys',
+  'MAX_BYTES = 10_000',
+  'try:',
+  '    with open("/workspace/beacon-report.txt") as f:',
+  '        content = f.read(MAX_BYTES)',
+  'except Exception:',
+  '    print("FAIL: cannot read beacon-report.txt")',
+  '    sys.exit(1)',
+  'if not content.strip():',
+  '    print("FAIL: beacon-report.txt is empty")',
+  '    sys.exit(1)',
+  'if "10.0.0.55" not in content:',
+  '    print("FAIL: beacon source IP 10.0.0.55 not identified")',
+  '    sys.exit(1)',
+  'if "python-requests" not in content:',
+  '    print("FAIL: suspicious user-agent python-requests not identified")',
+  '    sys.exit(1)',
+  'if not re.search(r"beacon|interval|periodic|repeat|frequen", content, re.I):',
+  '    print("FAIL: report must describe the pattern (beacon/interval/periodic)")',
+  '    sys.exit(1)',
+  'print("PASS")',
+  'CM_UA_BEACON_CHECK',
+].join('\n');
+
 const challengeCatalog = {
   'linux-basics': {
     title: 'Linux Basics Warmup',
@@ -233,6 +284,24 @@ const challengeCatalog = {
     checkScript: logHuntCheckScript,
     starterLang: 'python',
     starterCode: `# Log Hunt: Failed Auth Spike — starter\nfrom collections import Counter\n\nwith open('/workspace/sample.log') as f:\n    lines = [l for l in f if 'Failed' in l and not l.startswith('#')]\n\nips = []\nfor line in lines:\n    parts = line.split()\n    try:\n        idx = parts.index('from')\n        ips.append(parts[idx + 1])\n    except (ValueError, IndexError):\n        pass\n\nfor ip, count in Counter(ips).most_common():\n    print(f'{count:4d}  {ip}')\n\n# Write to findings.txt when ready:\n# with open('/workspace/findings.txt', 'w') as out:\n#     for ip, count in Counter(ips).most_common():\n#         out.write(f'{count:4d}  {ip}\\n')\n#     out.write('Summary: brute-force auth spike from 192.168.1.45\\n')\n`,
+  },
+  'ua-beacon': {
+    title: 'Suspicious User-Agent Beaconing',
+    difficulty: 'Intermediate',
+    description: 'Detect a C2 beaconing pattern hidden in HTTP access logs by analysing user-agent strings and request intervals.',
+    objective: 'Identify the beaconing source IP, the suspicious user-agent, and the approximate callback interval. Record all three findings in beacon-report.txt.',
+    steps: [
+      'Run the starter script to parse /workspace/access.log and rank IPs by hit count.',
+      'Identify the IP using a non-browser user-agent making requests at consistent intervals.',
+      'Calculate the average time delta between requests from that IP.',
+      'Write the beacon source IP, user-agent, and interval to beacon-report.txt.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/access.log',
+    setupScript: uaBeaconSetupScript,
+    checkScript: uaBeaconCheckScript,
+    starterLang: 'python',
+    starterCode: `# Suspicious User-Agent Beaconing — starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i+1]-times[i]).seconds for i in range(len(times)-1)]\n    avg = sum(deltas)/len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
   },
   'priv-esc': {
     title: 'Privilege Escalation Trace',
