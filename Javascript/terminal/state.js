@@ -175,6 +175,23 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `# Log Hunt: Failed Auth Spike — starter\nfrom collections import Counter\n\nwith open('/workspace/sample.log') as f:\n    lines = [l for l in f if 'Failed' in l and not l.startswith('#')]\n\nips = []\nfor line in lines:\n    parts = line.split()\n    try:\n        idx = parts.index('from')\n        ips.append(parts[idx + 1])\n    except (ValueError, IndexError):\n        pass\n\nfor ip, count in Counter(ips).most_common():\n    print(f'{count:4d}  {ip}')\n\n# Write to findings.txt when ready:\n# with open('/workspace/findings.txt', 'w') as out:\n#     for ip, count in Counter(ips).most_common():\n#         out.write(f'{count:4d}  {ip}\\n')\n#     out.write('Summary: brute-force auth spike from 192.168.1.45\\n')\n`,
   },
+  'ua-beacon': {
+    title: 'Suspicious User-Agent Beaconing',
+    difficulty: 'Intermediate',
+    description: 'Detect a C2 beaconing pattern hidden in HTTP access logs by analysing user-agent strings and request intervals.',
+    objective: 'Identify the beaconing source IP, the suspicious user-agent, and the approximate callback interval. Record all three findings in beacon-report.txt.',
+    steps: [
+      'Run the starter script to parse /workspace/access.log and rank IPs by hit count.',
+      'Identify the IP with non-browser user-agent making repeated requests at consistent intervals.',
+      'Calculate the average time delta between requests from that IP.',
+      'Write the beacon source IP, user-agent, and interval to beacon-report.txt.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/access.log',
+    checkScript: 'python3 /workspace/check-beacon.py',
+    starterLang: 'python',
+    starterCode: `# Suspicious User-Agent Beaconing — starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i+1]-times[i]).seconds for i in range(len(times)-1)]\n    avg = sum(deltas)/len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
+  },
   'priv-esc': {
     title: 'Privilege Escalation Trace',
     difficulty: 'Intermediate',

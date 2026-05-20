@@ -161,6 +161,51 @@ RUN printf '%s\n' \
     'print("PASS")' \
     > /workspace/check-log-hunt.py
 
+# CTF-04: suspicious user-agent beaconing fixture (SYNTHETIC DATA)
+RUN printf '%s\n' \
+    '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
+    '10.0.0.55 - - [20/Jan/2026:14:00:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '192.168.1.10 - - [20/Jan/2026:14:00:15 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"' \
+    '10.0.0.55 - - [20/Jan/2026:14:01:03 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '10.0.0.55 - - [20/Jan/2026:14:02:01 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '172.20.0.5 - - [20/Jan/2026:14:02:30 +0000] "GET /index.html HTTP/1.1" 200 2048 "-" "Mozilla/5.0 (Macintosh) Safari/537.36"' \
+    '10.0.0.55 - - [20/Jan/2026:14:03:04 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '10.0.0.55 - - [20/Jan/2026:14:04:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '192.168.1.20 - - [20/Jan/2026:14:04:50 +0000] "GET /about HTTP/1.1" 200 3072 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"' \
+    '10.0.0.55 - - [20/Jan/2026:14:05:05 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '10.0.0.55 - - [20/Jan/2026:14:06:01 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '10.0.0.55 - - [20/Jan/2026:14:07:03 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '172.20.0.5 - - [20/Jan/2026:14:07:20 +0000] "GET /contact HTTP/1.1" 200 1536 "-" "Mozilla/5.0 (Macintosh) Safari/537.36"' \
+    '10.0.0.55 - - [20/Jan/2026:14:08:00 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '10.0.0.55 - - [20/Jan/2026:14:09:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"' \
+    '192.168.1.10 - - [20/Jan/2026:14:09:45 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"' \
+    > /workspace/access.log
+
+# CTF-04: Python validator embedded in image
+RUN printf '%s\n' \
+    'import re, sys' \
+    'MAX_BYTES = 10_000' \
+    'try:' \
+    '    with open("/workspace/beacon-report.txt") as f:' \
+    '        content = f.read(MAX_BYTES)' \
+    'except Exception:' \
+    '    print("FAIL: cannot read beacon-report.txt")' \
+    '    sys.exit(1)' \
+    'if not content.strip():' \
+    '    print("FAIL: beacon-report.txt is empty")' \
+    '    sys.exit(1)' \
+    'if "10.0.0.55" not in content:' \
+    '    print("FAIL: beacon source IP 10.0.0.55 not identified")' \
+    '    sys.exit(1)' \
+    'if "python-requests" not in content:' \
+    '    print("FAIL: suspicious user-agent python-requests not identified")' \
+    '    sys.exit(1)' \
+    'if not re.search(r"beacon|interval|periodic|repeat|frequen", content, re.IGNORECASE):' \
+    '    print("FAIL: report must describe the pattern (beacon/interval/periodic)")' \
+    '    sys.exit(1)' \
+    'print("PASS")' \
+    > /workspace/check-beacon.py
+
 # CTF-05: privilege escalation log fixtures (SYNTHETIC DATA)
 RUN printf '%s\n' \
     '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT' \
