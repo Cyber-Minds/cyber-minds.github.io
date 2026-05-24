@@ -137,6 +137,64 @@ const logHuntCheckScript = [
   'CM_LOG_HUNT_CHECK',
 ].join('\n');
 
+const beaconAccessLog = [
+  '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
+  '192.0.2.10 - - [20/Jan/2026:09:00:00 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:00:30 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:01:00 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:01:30 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:02:00 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:02:30 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:03:00 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '192.0.2.10 - - [20/Jan/2026:09:03:30 +0000] "GET /ping HTTP/1.1" 200 12 "-" "Mozilla/5.0 (Windows NT 10.0)"',
+  '198.51.100.5 - - [20/Jan/2026:09:00:05 +0000] "GET /index.html HTTP/1.1" 200 512 "-" "curl/7.68.0"',
+  '198.51.100.5 - - [20/Jan/2026:09:05:22 +0000] "GET /about.html HTTP/1.1" 200 340 "-" "curl/7.68.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:00:15 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:00:45 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:01:15 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:01:45 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:02:15 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '203.0.113.77 - - [20/Jan/2026:09:02:45 +0000] "GET /login HTTP/1.1" 200 800 "-" "python-requests/2.28.0"',
+  '10.0.0.88 - - [20/Jan/2026:09:10:00 +0000] "GET /home HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Macintosh)"',
+  '10.0.0.88 - - [20/Jan/2026:09:15:33 +0000] "POST /api/data HTTP/1.1" 201 256 "-" "Mozilla/5.0 (Macintosh)"',
+].join('\n');
+ 
+const beaconSetupScript = [
+  "cat > /workspace/access.log <<'CM_BEACON_LOG'",
+  beaconAccessLog,
+  'CM_BEACON_LOG',
+].join('\n');
+ 
+const beaconCheckScript = [
+  "python3 - <<'CM_BEACON_CHECK'",
+  'import re, sys',
+  '# Safety: cap input size to prevent ReDoS-style hangs',
+  'try:',
+  '    with open("/workspace/beacon-report.txt") as f:',
+  '        raw = f.read(65536)',
+  'except Exception:',
+  '    print("FAIL: cannot read beacon-report.txt")',
+  '    sys.exit(1)',
+  'content = raw[:65536]',
+  'if not content.strip():',
+  '    print("FAIL: beacon-report.txt is empty")',
+  '    sys.exit(1)',
+  '# Must identify at least one beaconing IP',
+  'if not re.search(r"192\\.0\\.2\\.10|203\\.0\\.113\\.77", content):',
+  '    print("FAIL: suspected beacon source IP not found (192.0.2.10 or 203.0.113.77)")',
+  '    sys.exit(1)',
+  '# Must mention the user-agent',
+  'if not re.search(r"(user.?agent|ua|Mozilla|python.requests)", content, re.I):',
+  '    print("FAIL: include the suspicious user-agent string in your report")',
+  '    sys.exit(1)',
+  '# Must mention interval or pattern analysis',
+  'if not re.search(r"(interval|period|every|beacon|repeat|callback|pattern|30s|30 sec)", content, re.I):',
+  '    print("FAIL: describe the beaconing interval or pattern in your report")',
+  '    sys.exit(1)',
+  'print("PASS: beacon-report.txt is valid.")',
+  'CM_BEACON_CHECK',
+].join('\n');
+
 const challengeCatalog = {
   'linux-basics': {
     title: 'Linux Basics Warmup',
@@ -279,32 +337,61 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `import re\n\nDATASETS = {\n    'auth': [\n        'Jan 20 03:10:14 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:29 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:47 sshd: Accepted password for admin from 192.168.50.22',\n        'Jan 20 03:10:48 sshd: session opened for user admin',\n        'Jan 20 03:12:05 sshd: session closed for user admin',\n    ],\n    'access': [\n        '03:10:50 GET /login HTTP/1.1 200',\n        '03:11:02 POST /login HTTP/1.1 302',\n        '03:11:05 GET /admin HTTP/1.1 200',\n        '03:11:33 GET /admin/export HTTP/1.1 200',\n        '03:12:01 GET /logout HTTP/1.1 200',\n    ],\n    'syslog': [\n        'Jan 20 03:10:47 audit: user admin logged in from 192.168.50.22',\n        'Jan 20 03:11:33 audit: file /var/data/export.csv accessed by admin',\n        'Jan 20 03:11:34 audit: 20480 bytes read from /var/data/export.csv',\n        'Jan 20 03:12:05 audit: user admin session terminated',\n    ],\n}\n\nTS_RE = re.compile(r'\\b(\\d{2}:\\d{2}:\\d{2})\\b')\nevents = []\nfor lines in DATASETS.values():\n    for line in lines:\n        m = TS_RE.search(line)\n        if m:\n            events.append((m.group(1), line))\n\nfor ts, event in sorted(events):\n    print(f'{ts} {event}')\n`,
   },
-};
-
-/**
- * UPDATED: Loop to generate 10 identical Log Hunt subsections with grouping metadata.
- * These will be accessible via keys like 'log-hunt-1', 'log-hunt-2', etc.
- */
-for (let i = 1; i <= 10; i++) {
-  const taskId = `log-hunt-${i}`;
-  challengeCatalog[taskId] = {
-    title: `Task ${i}`,            // Shortened so the UI reads neatly inside the dropdown
-    groupId: 'log-hunt-group',     // NEW: Identifies which group this belongs to
-    groupTitle: 'Log Hunt',        // NEW: The text for the parent dropdown button
+  'suspicious-beaconing': {
+    title: 'Log Hunt: Suspicious User-Agent Beaconing',
     difficulty: 'Intermediate',
-    description: 'Use grep, awk, and sorting to identify suspicious events from logs.',
-    objective: 'Find top suspicious IPs from sample logs and summarize findings.',
+    description: 'Detect a periodic callback pattern in an HTTP access log by analysing user-agent strings and request intervals.',
+    objective: 'Identify which IPs and user-agents are beaconing, determine the callback interval, and record your findings in beacon-report.txt.',
     steps: [
-      'Create sample.log with repeated test entries.',
-      'Filter for failed login patterns.',
-      'Sort and count source IP occurrences.',
+      'Run cat /workspace/access.log to read the fixture log.',
+      'Use grep and awk to extract unique user-agents: grep -oP \'"[^"]+"\' access.log | sort | uniq -c | sort -rn',
+      'For each suspicious user-agent, extract its request timestamps and calculate the interval.',
+      'List suspected beacon source IPs, their user-agent, and interval in beacon-report.txt.',
+      'Click Check Solution to validate.',
     ],
-    firstCommand: 'grep -i "failed" sample.log',
-    checkScript: 'set -e; test -f sample.log; grep -Eqi "failed|error|denied" sample.log',
+    firstCommand: 'cat /workspace/access.log',
+    setupScript: beaconSetupScript,
+    checkScript: beaconCheckScript,
     starterLang: 'python',
-    starterCode: `from collections import Counter\n\nips = [\n    "10.0.0.2", "10.0.0.2", "192.168.1.7", "10.0.0.2", "192.168.1.7"\n]\nfor ip, count in Counter(ips).most_common():\n    print(ip, count)\n`,
-  };
-}
+    starterCode: [
+      '# CTF-04: Suspicious User-Agent Beaconing — starter',
+      '# STEP 1: Read the access log',
+      '# STEP 2: Extract user-agents and count requests per UA',
+      '# STEP 3: For suspicious UAs, extract timestamps and check interval',
+      '# STEP 4: Write findings to beacon-report.txt',
+      '#',
+      '# VALID beacon-report.txt example (passes checker):',
+      '#   IP: 192.0.2.10  UA: Mozilla/5.0 (Windows NT 10.0)  interval: 30s  path: /ping',
+      '#   IP: 203.0.113.77  UA: python-requests/2.28.0  interval: 30s  path: /login',
+      '#   Pattern: periodic callback every 30 seconds — suspected beaconing',
+      '#',
+      '# INVALID example (fails checker):',
+      '#   There are some requests in the log.  <- no IP, no UA, no interval',
+      '',
+      'import re',
+      'from collections import defaultdict',
+      '',
+      'entries = []',
+      "with open('/workspace/access.log') as f:",
+      '    for line in f:',
+      "        if line.startswith('#'): continue",
+      "        m = re.match(r'(\\S+).*\\[(.*?)\\].*\"\\S+ (\\S+).*?\"(\\S.*?)\"$', line)",
+      '        if m:',
+      "            ip, ts, path, ua = m.group(1), m.group(2), m.group(3), m.group(4).strip('\"')",
+      '            entries.append((ip, ts, path, ua))',
+      '',
+      '# Group by user-agent',
+      'by_ua = defaultdict(list)',
+      'for ip, ts, path, ua in entries:',
+      '    by_ua[ua].append((ip, ts, path))',
+      '',
+      'for ua, hits in sorted(by_ua.items(), key=lambda x: -len(x[1])):',
+      "    print(f'UA: {ua}  count: {len(hits)}')",
+      '    for ip, ts, path in hits[:3]:',
+      "        print(f'  {ip}  {ts}  {path}')",
+    ].join('\n'),
+  },
+};
 
 // Re-calculate order and set active challenge
 const challengeOrder = Object.keys(challengeCatalog);

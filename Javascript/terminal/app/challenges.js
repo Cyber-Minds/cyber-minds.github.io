@@ -90,6 +90,9 @@ function ensureChallengeWorkspace(challenge) {
     if (activeChallengeId === 'log-hunt') {
       setMockFile('sample.log', `${logHuntSampleLog}\n`);
     }
+    if (activeChallengeId === 'suspicious-beaconing') {
+      setMockFile('access.log', `${beaconAccessLog}\n`);
+    }
     syncWorkspaceFiles();
     return;
   }
@@ -267,6 +270,15 @@ function checkChallengeSolution() {
         if (new Set(timestamps).size !== timestamps.length) return false;
         const joined = lines.join('\n');
         return /(ssh|login|accept)/i.test(joined) && /(http|get|post|request)/i.test(joined);
+      })(),
+      'suspicious-beaconing': (() => {
+        const beacon = getMockFile('beacon-report.txt') || '';
+        return (
+          beacon.trim().length > 0 &&
+          /(192\.0\.2\.10|203\.0\.113\.77)/.test(beacon) &&
+          /(user.?agent|ua|Mozilla|python.requests)/i.test(beacon) &&
+          /(interval|period|every|beacon|repeat|callback|pattern|30s|30 sec)/i.test(beacon)
+        );
       })(),
     };
     const passed = !!checksByChallenge[activeChallengeId];
