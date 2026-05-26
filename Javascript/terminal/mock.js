@@ -61,8 +61,8 @@ function seedMockWorkspace() {
     setMockFile('sample.log', `${logHuntSampleLog}\n`);
   }
   if (!hasMockFile('beacon-report.txt')) {
-  setMockFile('beacon-report.txt', '');
-}
+    setMockFile('beacon-report.txt', '');
+  }
 }
 
 function getMockWorkspaceFiles() {

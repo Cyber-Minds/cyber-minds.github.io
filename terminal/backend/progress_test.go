@@ -37,8 +37,8 @@ func TestGetChallengeIndex(t *testing.T) {
 	if got := getChallengeIndex("log-hunt"); got != 2 {
 		t.Fatalf("expected log-hunt index 2, got %d", got)
 	}
-	if got := getChallengeIndex("log-hunt-10"); got != 14 {
-		t.Fatalf("expected log-hunt-10 index 14, got %d", got)
+	if got := getChallengeIndex("suspicious-beaconing"); got != 5 {
+		t.Fatalf("expected suspicious-beaconing index 5, got %d", got)
 	}
 	if got := getChallengeIndex("unknown"); got != -1 {
 		t.Fatalf("expected -1 for unknown challenge, got %d", got)
@@ -137,6 +137,18 @@ func TestHandleCompleteChallengeAndAccessFlow(t *testing.T) {
 		}
 		if resp["challengeId"] != "log-hunt" {
 			t.Fatalf("unexpected challenge id: %#v", resp)
+		}
+	})
+
+	t.Run("can complete remaining challenges including suspicious beaconing", func(t *testing.T) {
+		for _, challengeID := range []string{"priv-esc", "incident-timeline", "suspicious-beaconing"} {
+			req := httptest.NewRequest(http.MethodPost, "/api/session/s1/progress/"+challengeID, nil)
+			req = mux.SetURLVars(req, map[string]string{"sessionId": "s1", "challengeId": challengeID})
+			rr := httptest.NewRecorder()
+			handleCompleteChallenge(rr, req)
+			if rr.Code != http.StatusOK {
+				t.Fatalf("expected 200 for %s, got %d: %s", challengeID, rr.Code, rr.Body.String())
+			}
 		}
 	})
 }
