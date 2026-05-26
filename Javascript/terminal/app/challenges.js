@@ -90,6 +90,9 @@ function ensureChallengeWorkspace(challenge) {
     if (activeChallengeId === 'log-hunt') {
       setMockFile('sample.log', `${logHuntSampleLog}\n`);
     }
+    if (activeChallengeId === 'suspicious-beaconing') {
+      setMockFile('access.log', `${beaconAccessLog}\n`);
+    }
     syncWorkspaceFiles();
     return;
   }
@@ -252,12 +255,6 @@ function checkChallengeSolution() {
         if (!m || parseInt(m[1], 10) < 10) return false;
         return /(failed|attempt|auth|spike|brute)/i.test(findings);
       })(),
-      'ua-beacon': (() => {
-        if (!beaconReport.trim()) return false;
-        if (!beaconReport.includes('10.0.0.55')) return false;
-        if (!beaconReport.includes('python-requests')) return false;
-        return /(beacon|interval|periodic|repeat|frequen)/i.test(beaconReport);
-      })(),
       'priv-esc':
         privEscReport.trim().length > 0 &&
         /\bjsmith\b/i.test(privEscReport) &&
@@ -274,6 +271,12 @@ function checkChallengeSolution() {
         if (new Set(timestamps).size !== timestamps.length) return false;
         const joined = lines.join('\n');
         return /(ssh|login|accept)/i.test(joined) && /(http|get|post|request)/i.test(joined);
+      })(),
+      'suspicious-beaconing': (() => {
+        if (!beaconReport.trim()) return false;
+        if (!beaconReport.includes('10.0.0.55')) return false;
+        if (!beaconReport.includes('python-requests')) return false;
+        return /(~?\s*60\s*(s|sec|secs|second|seconds)|1\s*(min|minute)|interval\s*[:=]?\s*~?\s*60|every\s+~?\s*60)/i.test(beaconReport);
       })(),
     };
     const passed = !!checksByChallenge[activeChallengeId];

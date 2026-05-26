@@ -137,7 +137,7 @@ const logHuntCheckScript = [
   'CM_LOG_HUNT_CHECK',
 ].join('\n');
 
-const uaBeaconAccessLog = [
+const beaconAccessLog = [
   '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
   '10.0.0.55 - - [20/Jan/2026:14:00:02 +0000] "GET /api/health HTTP/1.1" 200 42 "-" "python-requests/2.27.1"',
   '192.168.1.10 - - [20/Jan/2026:14:00:15 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"',
@@ -156,14 +156,14 @@ const uaBeaconAccessLog = [
   '192.168.1.10 - - [20/Jan/2026:14:09:45 +0000] "GET / HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0) Chrome/120.0"',
 ].join('\n');
 
-const uaBeaconSetupScript = [
-  "cat > /workspace/access.log <<'CM_UA_BEACON_ACCESS'",
-  uaBeaconAccessLog,
-  'CM_UA_BEACON_ACCESS',
+const beaconSetupScript = [
+  "cat > /workspace/access.log <<'CM_BEACON_ACCESS'",
+  beaconAccessLog,
+  'CM_BEACON_ACCESS',
 ].join('\n');
 
-const uaBeaconCheckScript = [
-  "python3 - <<'CM_UA_BEACON_CHECK'",
+const beaconCheckScript = [
+  "python3 - <<'CM_BEACON_CHECK'",
   'import re, sys',
   'MAX_BYTES = 10_000',
   'try:',
@@ -181,11 +181,12 @@ const uaBeaconCheckScript = [
   'if "python-requests" not in content:',
   '    print("FAIL: suspicious user-agent python-requests not identified")',
   '    sys.exit(1)',
-  'if not re.search(r"beacon|interval|periodic|repeat|frequen", content, re.I):',
-  '    print("FAIL: report must describe the pattern (beacon/interval/periodic)")',
+  'interval_re = r"(~?\\s*60\\s*(s|sec|secs|second|seconds)|1\\s*(min|minute)|interval\\s*[:=]?\\s*~?\\s*60|every\\s+~?\\s*60)"',
+  'if not re.search(interval_re, content, re.I):',
+  '    print("FAIL: report must include the approximate callback interval, such as 60s or 1 minute")',
   '    sys.exit(1)',
   'print("PASS")',
-  'CM_UA_BEACON_CHECK',
+  'CM_BEACON_CHECK',
 ].join('\n');
 
 const challengeCatalog = {
@@ -285,24 +286,6 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `# Log Hunt: Failed Auth Spike — starter\nfrom collections import Counter\n\nwith open('/workspace/sample.log') as f:\n    lines = [l for l in f if 'Failed' in l and not l.startswith('#')]\n\nips = []\nfor line in lines:\n    parts = line.split()\n    try:\n        idx = parts.index('from')\n        ips.append(parts[idx + 1])\n    except (ValueError, IndexError):\n        pass\n\nfor ip, count in Counter(ips).most_common():\n    print(f'{count:4d}  {ip}')\n\n# Write to findings.txt when ready:\n# with open('/workspace/findings.txt', 'w') as out:\n#     for ip, count in Counter(ips).most_common():\n#         out.write(f'{count:4d}  {ip}\\n')\n#     out.write('Summary: brute-force auth spike from 192.168.1.45\\n')\n`,
   },
-  'ua-beacon': {
-    title: 'Suspicious User-Agent Beaconing',
-    difficulty: 'Intermediate',
-    description: 'Detect a C2 beaconing pattern hidden in HTTP access logs by analysing user-agent strings and request intervals.',
-    objective: 'Identify the beaconing source IP, the suspicious user-agent, and the approximate callback interval. Record all three findings in beacon-report.txt.',
-    steps: [
-      'Run the starter script to parse /workspace/access.log and rank IPs by hit count.',
-      'Identify the IP using a non-browser user-agent making requests at consistent intervals.',
-      'Calculate the average time delta between requests from that IP.',
-      'Write the beacon source IP, user-agent, and interval to beacon-report.txt.',
-      'Click Check Solution to validate.',
-    ],
-    firstCommand: 'cat /workspace/access.log',
-    setupScript: uaBeaconSetupScript,
-    checkScript: uaBeaconCheckScript,
-    starterLang: 'python',
-    starterCode: `# Suspicious User-Agent Beaconing — starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i+1]-times[i]).seconds for i in range(len(times)-1)]\n    avg = sum(deltas)/len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
-  },
   'priv-esc': {
     title: 'Privilege Escalation Trace',
     difficulty: 'Intermediate',
@@ -348,32 +331,26 @@ const challengeCatalog = {
     starterLang: 'python',
     starterCode: `import re\n\nDATASETS = {\n    'auth': [\n        'Jan 20 03:10:14 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:29 sshd: Failed password for admin from 192.168.50.22',\n        'Jan 20 03:10:47 sshd: Accepted password for admin from 192.168.50.22',\n        'Jan 20 03:10:48 sshd: session opened for user admin',\n        'Jan 20 03:12:05 sshd: session closed for user admin',\n    ],\n    'access': [\n        '03:10:50 GET /login HTTP/1.1 200',\n        '03:11:02 POST /login HTTP/1.1 302',\n        '03:11:05 GET /admin HTTP/1.1 200',\n        '03:11:33 GET /admin/export HTTP/1.1 200',\n        '03:12:01 GET /logout HTTP/1.1 200',\n    ],\n    'syslog': [\n        'Jan 20 03:10:47 audit: user admin logged in from 192.168.50.22',\n        'Jan 20 03:11:33 audit: file /var/data/export.csv accessed by admin',\n        'Jan 20 03:11:34 audit: 20480 bytes read from /var/data/export.csv',\n        'Jan 20 03:12:05 audit: user admin session terminated',\n    ],\n}\n\nTS_RE = re.compile(r'\\b(\\d{2}:\\d{2}:\\d{2})\\b')\nevents = []\nfor lines in DATASETS.values():\n    for line in lines:\n        m = TS_RE.search(line)\n        if m:\n            events.append((m.group(1), line))\n\nfor ts, event in sorted(events):\n    print(f'{ts} {event}')\n`,
   },
-};
-
-/**
- * UPDATED: Loop to generate 10 identical Log Hunt subsections with grouping metadata.
- * These will be accessible via keys like 'log-hunt-1', 'log-hunt-2', etc.
- */
-for (let i = 1; i <= 10; i++) {
-  const taskId = `log-hunt-${i}`;
-  challengeCatalog[taskId] = {
-    title: `Task ${i}`,            // Shortened so the UI reads neatly inside the dropdown
-    groupId: 'log-hunt-group',     // NEW: Identifies which group this belongs to
-    groupTitle: 'Log Hunt',        // NEW: The text for the parent dropdown button
+  'suspicious-beaconing': {
+    title: 'Log Hunt: Suspicious User-Agent Beaconing',
     difficulty: 'Intermediate',
-    description: 'Use grep, awk, and sorting to identify suspicious events from logs.',
-    objective: 'Find top suspicious IPs from sample logs and summarize findings.',
+    description: 'Detect a periodic callback pattern in an HTTP access log by analysing user-agent strings and request intervals.',
+    objective: 'Identify the beaconing source IP, suspicious user-agent, and approximate callback interval. Record all three findings in beacon-report.txt.',
     steps: [
-      'Create sample.log with repeated test entries.',
-      'Filter for failed login patterns.',
-      'Sort and count source IP occurrences.',
+      'Run cat /workspace/access.log to read the fixture log.',
+      'Use grep, awk, or the starter script to group requests by source IP and user-agent.',
+      'Find the non-browser user-agent making requests at consistent intervals.',
+      'Calculate the approximate time delta between repeated requests.',
+      'Write the source IP, user-agent, and interval in beacon-report.txt.',
+      'Click Check Solution to validate.',
     ],
-    firstCommand: 'grep -i "failed" sample.log',
-    checkScript: 'set -e; test -f sample.log; grep -Eqi "failed|error|denied" sample.log',
+    firstCommand: 'cat /workspace/access.log',
+    setupScript: beaconSetupScript,
+    checkScript: beaconCheckScript,
     starterLang: 'python',
-    starterCode: `from collections import Counter\n\nips = [\n    "10.0.0.2", "10.0.0.2", "192.168.1.7", "10.0.0.2", "192.168.1.7"\n]\nfor ip, count in Counter(ips).most_common():\n    print(ip, count)\n`,
-  };
-}
+    starterCode: `# CTF-04: Suspicious User-Agent Beaconing - starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i + 1] - times[i]).seconds for i in range(len(times) - 1)]\n    avg = sum(deltas) / len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
+  },
+};
 
 // Re-calculate order and set active challenge
 const challengeOrder = Object.keys(challengeCatalog);

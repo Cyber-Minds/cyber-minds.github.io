@@ -17,16 +17,7 @@ var challengeOrder = []string{
 	"log-hunt",
 	"priv-esc",
 	"incident-timeline",
-	"log-hunt-1",
-	"log-hunt-2",
-	"log-hunt-3",
-	"log-hunt-4",
-	"log-hunt-5",
-	"log-hunt-6",
-	"log-hunt-7",
-	"log-hunt-8",
-	"log-hunt-9",
-	"log-hunt-10",
+	"suspicious-beaconing",
 }
 
 // ChallengeProgress tracks which challenges a session has completed.
