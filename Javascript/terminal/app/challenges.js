@@ -93,6 +93,9 @@ function ensureChallengeWorkspace(challenge) {
     if (activeChallengeId === 'suspicious-beaconing') {
       setMockFile('access.log', `${beaconAccessLog}\n`);
     }
+    if (activeChallengeId === 'idor-triage') {
+      setMockFile('requests.log', `${idorRequestLog}\n`);
+    }
     syncWorkspaceFiles();
     return;
   }
@@ -237,6 +240,7 @@ function checkChallengeSolution() {
     const privEscReport = getMockFile('priv-esc-report.txt') || '';
     const beaconReport = getMockFile('beacon-report.txt') || '';
     const timeline = getMockFile('timeline.txt') || '';
+    const idorReport = getMockFile('idor-report.txt') || '';
     const checksByChallenge = {
       'linux-basics':
         report.trim().length > 0 &&
@@ -277,6 +281,12 @@ function checkChallengeSolution() {
         if (!beaconReport.includes('10.0.0.55')) return false;
         if (!beaconReport.includes('python-requests')) return false;
         return /(~?\s*60\s*(s|sec|secs|second|seconds)|1\s*(min|minute)|interval\s*[:=]?\s*~?\s*60|every\s+~?\s*60)/i.test(beaconReport);
+      })(),
+      'idor-triage': (() => {
+        if (!idorReport.trim()) return false;
+        if (!/\/api\/users|endpoint|path/i.test(idorReport)) return false;
+        if (!/idor|insecure.{0,20}direct|object.{0,20}ref|sequential|enumerat|unauthori/i.test(idorReport)) return false;
+        return /(authoriz|least.{0,10}priv|ownership|permission|access.{0,10}control|object.{0,10}level)/i.test(idorReport);
       })(),
     };
     const passed = !!checksByChallenge[activeChallengeId];

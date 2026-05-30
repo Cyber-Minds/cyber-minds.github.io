@@ -189,6 +189,48 @@ const beaconCheckScript = [
   'CM_BEACON_CHECK',
 ].join('\n');
 
+const idorRequestLog = [
+  '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:01 +0000] "GET /api/users/1042 HTTP/1.1" 200 312 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:03 +0000] "GET /api/users/1041 HTTP/1.1" 200 309 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:05 +0000] "GET /api/users/1043 HTTP/1.1" 200 315 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:06 +0000] "GET /api/users/1040 HTTP/1.1" 200 301 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:08 +0000] "GET /api/users/1039 HTTP/1.1" 404 54 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '10.0.0.1 - admin [20/Jan/2026:09:15:20 +0000] "GET /api/users/1042 HTTP/1.1" 200 312 "-" "Mozilla/5.0" "session=adminXXX"',
+].join('\n');
+
+const idorSetupScript = [
+  "cat > /workspace/requests.log <<'CM_IDOR_REQUESTS'",
+  idorRequestLog,
+  'CM_IDOR_REQUESTS',
+].join('\n');
+
+const idorCheckScript = [
+  "python3 - <<'CM_IDOR_CHECK'",
+  'import re, sys',
+  'MAX_BYTES = 10_000',
+  'try:',
+  '    with open("/workspace/idor-report.txt") as f:',
+  '        content = f.read(MAX_BYTES)',
+  'except Exception:',
+  '    print("FAIL: cannot read idor-report.txt")',
+  '    sys.exit(1)',
+  'if not content.strip():',
+  '    print("FAIL: idor-report.txt is empty")',
+  '    sys.exit(1)',
+  'if not re.search(r"/api/users|endpoint|path", content, re.I):',
+  '    print("FAIL: vulnerable endpoint /api/users not identified")',
+  '    sys.exit(1)',
+  'if not re.search(r"idor|insecure.{0,20}direct|object.{0,20}ref|sequential|enumerat|unauthori", content, re.I):',
+  '    print("FAIL: IDOR vulnerability pattern not named")',
+  '    sys.exit(1)',
+  'if not re.search(r"authoriz|least.{0,10}priv|ownership|permission|access.{0,10}control|object.{0,10}level", content, re.I):',
+  '    print("FAIL: report must recommend a mitigation or control")',
+  '    sys.exit(1)',
+  'print("PASS")',
+  'CM_IDOR_CHECK',
+].join('\n');
+
 const challengeCatalog = {
   'linux-basics': {
     title: 'Linux Basics Warmup',
@@ -348,7 +390,26 @@ const challengeCatalog = {
     setupScript: beaconSetupScript,
     checkScript: beaconCheckScript,
     starterLang: 'python',
-    starterCode: `# CTF-04: Suspicious User-Agent Beaconing - starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i + 1] - times[i]).seconds for i in range(len(times) - 1)]\n    avg = sum(deltas) / len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
+    starterCode: `# CTF-04: Suspicious User-Agent Beaconing — starter\nfrom datetime import datetime\nfrom collections import defaultdict\n\nhits = defaultdict(list)\nwith open('/workspace/access.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 6:\n            continue\n        ip = line.split()[0]\n        ts_raw = line.split('[')[1].split(']')[0]\n        ua = parts[5]\n        try:\n            ts = datetime.strptime(ts_raw, '%d/%b/%Y:%H:%M:%S %z')\n            hits[(ip, ua)].append(ts)\n        except ValueError:\n            pass\n\nfor (ip, ua), times in sorted(hits.items(), key=lambda x: -len(x[1])):\n    if len(times) < 3:\n        continue\n    times.sort()\n    deltas = [(times[i + 1] - times[i]).seconds for i in range(len(times) - 1)]\n    avg = sum(deltas) / len(deltas)\n    print(f'IP: {ip}  hits: {len(times)}  avg_interval: {avg:.0f}s')\n    print(f'  UA: {ua[:60]}')\n\n# When ready, write beacon-report.txt:\n# with open('/workspace/beacon-report.txt', 'w') as out:\n#     out.write('Beacon source: 10.0.0.55\\n')\n#     out.write('User-agent: python-requests/2.27.1\\n')\n#     out.write('Interval: ~60s (beaconing)\\n')\n`,
+  },
+  'idor-triage': {
+    title: 'Web Exploit Triage: IDOR Detection',
+    difficulty: 'Advanced',
+    description: 'Analyse HTTP access logs to detect an Insecure Direct Object Reference (IDOR) vulnerability being exploited against a REST API.',
+    objective: 'Identify the vulnerable endpoint, characterise the IDOR exploitation pattern, and recommend a mitigation. Record all three findings in idor-report.txt.',
+    steps: [
+      'Run cat /workspace/requests.log to read the fixture HTTP access log.',
+      'Identify which user is making requests and which user IDs they are accessing.',
+      'Determine which requests access resources belonging to other users (IDOR).',
+      'Name the vulnerable endpoint and describe the exploitation technique.',
+      'Write your findings and a recommended mitigation to idor-report.txt.',
+      'Click Check Solution to validate.',
+    ],
+    firstCommand: 'cat /workspace/requests.log',
+    setupScript: idorSetupScript,
+    checkScript: idorCheckScript,
+    starterLang: 'python',
+    starterCode: `# CTF-07: Web Exploit Triage: IDOR Detection — starter\nfrom collections import defaultdict\n\nuser_requests = defaultdict(list)\nwith open('/workspace/requests.log') as f:\n    for line in f:\n        if line.startswith('#'):\n            continue\n        parts = line.split('"')\n        if len(parts) < 2:\n            continue\n        ip = line.split()[0]\n        user = line.split()[2]\n        request = parts[1] if len(parts) > 1 else ''\n        user_requests[user].append((ip, request))\n\nfor user, reqs in sorted(user_requests.items()):\n    print('User:', user)\n    for ip, req in reqs:\n        print(' ', ip, req)\n\n# Write your findings to /workspace/idor-report.txt:\n# with open('/workspace/idor-report.txt', 'w') as out:\n#     out.write('Vulnerable endpoint: /api/users\\n')\n#     out.write('IDOR: user1042 accessed /api/users/1041 and /api/users/1043 (sequential ID enumeration)\\n')\n#     out.write('Mitigation: implement object-level authorization checks\\n')\n`,
   },
 };
 
