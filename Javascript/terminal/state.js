@@ -195,6 +195,48 @@ const beaconCheckScript = [
   'CM_BEACON_CHECK',
 ].join('\n');
 
+const idorRequestLog = [
+  '# SYNTHETIC DATA - NOT FROM A REAL INCIDENT',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:01 +0000] "GET /api/users/1042 HTTP/1.1" 200 312 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:03 +0000] "GET /api/users/1041 HTTP/1.1" 200 309 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:05 +0000] "GET /api/users/1043 HTTP/1.1" 200 315 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:06 +0000] "GET /api/users/1040 HTTP/1.1" 200 301 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '192.168.1.77 - user1042 [20/Jan/2026:09:14:08 +0000] "GET /api/users/1039 HTTP/1.1" 404 54 "-" "Mozilla/5.0" "session=abc123xyz"',
+  '10.0.0.1 - admin [20/Jan/2026:09:15:20 +0000] "GET /api/users/1042 HTTP/1.1" 200 312 "-" "Mozilla/5.0" "session=adminXXX"',
+].join('\n');
+
+const idorSetupScript = [
+  "cat > /workspace/requests.log <<'CM_IDOR_REQUESTS'",
+  idorRequestLog,
+  'CM_IDOR_REQUESTS',
+].join('\n');
+
+const idorCheckScript = [
+  "python3 - <<'CM_IDOR_CHECK'",
+  'import re, sys',
+  'MAX_BYTES = 10_000',
+  'try:',
+  '    with open("/workspace/idor-report.txt") as f:',
+  '        content = f.read(MAX_BYTES)',
+  'except Exception:',
+  '    print("FAIL: cannot read idor-report.txt")',
+  '    sys.exit(1)',
+  'if not content.strip():',
+  '    print("FAIL: idor-report.txt is empty")',
+  '    sys.exit(1)',
+  'if not re.search(r"/api/users|endpoint|path", content, re.I):',
+  '    print("FAIL: vulnerable endpoint /api/users not identified")',
+  '    sys.exit(1)',
+  'if not re.search(r"idor|insecure.{0,20}direct|object.{0,20}ref|sequential|enumerat|unauthori", content, re.I):',
+  '    print("FAIL: IDOR vulnerability pattern not named")',
+  '    sys.exit(1)',
+  'if not re.search(r"authoriz|least.{0,10}priv|ownership|permission|access.{0,10}control|object.{0,10}level", content, re.I):',
+  '    print("FAIL: report must recommend a mitigation or control")',
+  '    sys.exit(1)',
+  'print("PASS")',
+  'CM_IDOR_CHECK',
+].join('\n');
+
 const challengeCatalog = {
   'linux-basics': {
     title: 'Linux Basics Warmup',
