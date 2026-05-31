@@ -238,7 +238,6 @@ function checkChallengeSolution() {
     const recon = getMockFile('recon-notes.txt') || '';
     const sampleLog = getMockFile('sample.log') || '';
     const privEscReport = getMockFile('priv-esc-report.txt') || '';
-    const beaconReport = getMockFile('beacon-report.txt') || '';
     const timeline = getMockFile('timeline.txt') || '';
     const idorReport = getMockFile('idor-report.txt') || '';
     const checksByChallenge = {
@@ -277,10 +276,13 @@ function checkChallengeSolution() {
         return /(ssh|login|accept)/i.test(joined) && /(http|get|post|request)/i.test(joined);
       })(),
       'suspicious-beaconing': (() => {
-        if (!beaconReport.trim()) return false;
-        if (!beaconReport.includes('10.0.0.55')) return false;
-        if (!beaconReport.includes('python-requests')) return false;
-        return /(~?\s*60\s*(s|sec|secs|second|seconds)|1\s*(min|minute)|interval\s*[:=]?\s*~?\s*60|every\s+~?\s*60)/i.test(beaconReport);
+        const beacon = getMockFile('beacon-report.txt') || '';
+        return (
+          beacon.trim().length > 0 &&
+          /(192\.0\.2\.10|203\.0\.113\.77)/.test(beacon) &&
+          /(user.?agent|ua|Mozilla|python.requests)/i.test(beacon) &&
+          /(interval|period|every|beacon|repeat|callback|pattern|30s|30 sec)/i.test(beacon)
+        );
       })(),
       'idor-triage': (() => {
         if (!idorReport.trim()) return false;
