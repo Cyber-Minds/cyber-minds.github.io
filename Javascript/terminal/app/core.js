@@ -134,6 +134,14 @@ function getCommandPaletteActions() {
       },
     },
     {
+      id: 'browse-drafts',
+      label: 'Browse Saved Drafts',
+      hint: '',
+      keywords: 'browse restore recover saved drafts local',
+      disabled: false,
+      run: browseSavedDrafts,
+    },
+    {
       id: 'copy',
       label: 'Copy First Command',
       hint: '',
@@ -322,9 +330,52 @@ function getDraftStorageKey() {
   return `${DRAFT_STORAGE_PREFIX}:${activeChallengeId}:template:${activeEditorFile.lang}`;
 }
 
+function getSavedDraftSummaries() {
+  const prefix = `${DRAFT_STORAGE_PREFIX}:`;
+  const summaries = [];
+
+  try {
+    Object.keys(localStorage).forEach((key) => {
+      if (!key.startsWith(prefix)) {
+        return;
+      }
+
+      const parts = key.slice(prefix.length).split(':');
+      const challengeId = parts[0];
+      const kind = parts[1];
+      const scope = parts.slice(2).join(':');
+      if (!challengeId || !kind || !scope) {
+        return;
+      }
+
+      const value = localStorage.getItem(key);
+      if (value === null) {
+        return;
+      }
+
+      const challenge = challengeCatalog[challengeId];
+      const challengeTitle = challenge ? challenge.title : challengeId;
+      const preview = value
+        .split('\n')
+        .find((line) => line.trim().length > 0);
+      summaries.push({
+        key,
+        challengeId,
+        kind,
+        scope,
+        label: `${challengeTitle} - ${kind === 'workspace' ? scope : scope}`,
+        preview: preview || '(empty draft)',
+      });
+    });
+  } catch (e) {
+    console.warn('Draft list failed:', e);
+  }
+
+  return summaries.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 function restoreDraftOrDefault(fallback) {
   const key = getDraftStorageKey();
-  console.log('restoreDraftOrDefault called, key:', key);
   let saved = null;
   try {
     saved = localStorage.getItem(key);
@@ -332,20 +383,10 @@ function restoreDraftOrDefault(fallback) {
     console.warn('Draft read failed:', e);
   }
 
-  console.log('saved:', saved ? saved.substring(0, 50) : 'null');
-  console.log('fallback:', fallback ? fallback.substring(0, 50) : 'null');
-
   if (saved !== null) {
     try {
       editor.setValue(saved);
-      const originalDefault = {
-        python: '# Python starter\nprint("CyberMinds terminal ready")\n',
-        javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
-        java: 'public class Hello {\n',
-        go: 'package main\n',
-      }[currentLang] || fallback;
-      if (saved !== fallback && saved !== originalDefault) {
-        console.log('Draft differs — showing banner');
+      if (saved !== fallback) {
         window.setTimeout(showDraftRecoveryBanner, 3000);
       }
     } catch (e) {
@@ -361,7 +402,11 @@ function persistActiveDraft() {
   if (!editor) {
     return;
   }
-  localStorage.setItem(getDraftStorageKey(), editor.getValue());
+  try {
+    localStorage.setItem(getDraftStorageKey(), editor.getValue());
+  } catch (e) {
+    console.warn('Draft save failed:', e);
+  }
 }
 
 function queueDraftSave() {
@@ -476,8 +521,9 @@ function renderFileTabs() {
   });
 }
 
-function switchLanguage(lang) {
-  if (editor && !isInitialLoad) {
+function switchLanguage(lang, options = {}) {
+  const { persistCurrent = true } = options;
+  if (editor && persistCurrent) {
     persistActiveDraft();
   }
 

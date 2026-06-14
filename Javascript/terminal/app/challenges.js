@@ -35,6 +35,12 @@ function loadChallenge(challengeId, updateUrl = true) {
   }
 
   activeChallengeId = resolvedChallengeId;
+  currentLang = challenge.starterLang;
+  codeSamples[currentLang] = challenge.starterCode;
+
+  if (editor) {
+    switchLanguage(currentLang, { persistCurrent: false });
+  }
 
   document.getElementById('challengeTitle').textContent = challenge.title;
   document.getElementById('challengeDifficulty').textContent =
@@ -197,10 +203,7 @@ function applyChallengeStarter(userTriggered = false) {
     persistActiveDraft();
     showToast('Starter code loaded');
   } else {
-    // On auto-load, just set the language without touching editor content
-    monaco.editor.setModelLanguage(editor.getModel(), challenge.starterLang);
-    renderFileTabs();
-    refreshLanguageBadge();
+    switchLanguage(currentLang, { persistCurrent: false });
   }
 }
 

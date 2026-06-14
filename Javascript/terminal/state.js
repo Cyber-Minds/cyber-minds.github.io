@@ -5,7 +5,6 @@
  * and challenge metadata used by `mock.js` and `app.js`.
  */
 let editor;
-let isInitialLoad = true;
 let terminal;
 let fitAddon;
 let ws;

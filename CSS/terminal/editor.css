@@ -72,12 +72,24 @@
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.draft-recovery-icon { font-size: 14px; flex-shrink: 0; }
-.draft-recovery-msg  { flex: 1; color: #9cb9d8; }
+.draft-recovery-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.draft-recovery-msg {
+  flex: 1;
+  color: #9cb9d8;
+}
 
 .draft-recovery-discard {
   padding: 3px 10px;
@@ -90,7 +102,24 @@
   cursor: pointer;
   transition: background 0.15s;
 }
-.draft-recovery-discard:hover { background: rgba(251,73,52,0.12); }
+.draft-recovery-discard:hover {
+  background: rgba(251, 73, 52, 0.12);
+}
+
+.draft-recovery-browse {
+  padding: 3px 10px;
+  background: transparent;
+  border: 1px solid var(--accent, #4ea0ff);
+  border-radius: 4px;
+  color: var(--accent, #4ea0ff);
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.draft-recovery-browse:hover {
+  background: rgba(78, 160, 255, 0.12);
+}
 
 .draft-recovery-dismiss {
   padding: 3px 7px;
@@ -103,4 +132,6 @@
   cursor: pointer;
   transition: background 0.15s;
 }
-.draft-recovery-dismiss:hover { background: var(--bg2, #213448); }
+.draft-recovery-dismiss:hover {
+  background: var(--bg2, #213448);
+}

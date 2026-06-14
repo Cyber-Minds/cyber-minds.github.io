@@ -8,3 +8,23 @@
 Entry point:
 
 - `../terminal.js` loads these modules in dependency order.
+
+## Local Draft Recovery
+
+Terminal editor drafts are stored in browser `localStorage` only. They are not
+sent to analytics or synced to the terminal backend.
+
+Draft keys use the `cm_terminal_draft_v1` prefix and include the active
+challenge plus the editor surface:
+
+- Template tab: `cm_terminal_draft_v1:<challenge-id>:template:<language>`
+- Workspace file: `cm_terminal_draft_v1:<challenge-id>:workspace:<file-path>`
+
+The app restores the active draft when the same challenge and tab/file loads
+again. If restored content differs from the starter or backend file, a recovery
+banner appears with discard and browse actions. The command palette also exposes
+`Browse Saved Drafts` so learners can restore another locally saved challenge or
+file draft in the same browser.
+
+Do not add terminal session IDs, credentials, authentication material, or other
+server-side secrets to draft keys or values.
