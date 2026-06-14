@@ -71,6 +71,159 @@ function handleGlobalShortcuts(event) {
   }
 }
 
+function showDraftRecoveryBanner() {
+  const existing = document.getElementById('draftRecoveryBanner');
+  if (existing) existing.remove();
+
+  const hasMultipleDrafts = getSavedDraftSummaries().length > 1;
+  const banner = document.createElement('div');
+  banner.id = 'draftRecoveryBanner';
+  banner.className = 'draft-recovery-banner';
+  banner.innerHTML = `
+    <span class="draft-recovery-icon">&#128196;</span>
+    <span class="draft-recovery-msg">Draft recovered from your last session.</span>
+    ${
+      hasMultipleDrafts
+        ? '<button class="draft-recovery-browse" id="draftBrowseBtn" type="button">Browse</button>'
+        : ''
+    }
+    <button class="draft-recovery-discard" id="draftDiscardBtn" type="button">Discard</button>
+    <button class="draft-recovery-dismiss" id="draftDismissBtn" type="button">&#10005;</button>
+  `;
+
+  const editorPanel = document.getElementById('editorPanel');
+  if (editorPanel) {
+    editorPanel.insertBefore(banner, editorPanel.querySelector('.editor-container'));
+  }
+
+  document.getElementById('draftDiscardBtn').addEventListener('click', () => {
+    if (window.confirm('Discard this draft and reload the starter code? This cannot be undone.')) {
+      discardActiveDraft();
+    }
+  });
+
+  const browseButton = document.getElementById('draftBrowseBtn');
+  if (browseButton) {
+    browseButton.addEventListener('click', browseSavedDrafts);
+  }
+
+  document.getElementById('draftDismissBtn').addEventListener('click', () => {
+    banner.remove();
+  });
+
+  setTimeout(() => {
+    if (document.getElementById('draftRecoveryBanner')) {
+      banner.remove();
+    }
+  }, 8000);
+}
+
+function discardActiveDraft() {
+  try {
+    const key = getDraftStorageKey();
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.warn('Draft discard failed:', e);
+  }
+
+  const banner = document.getElementById('draftRecoveryBanner');
+  if (banner) banner.remove();
+
+  const challenge = challengeCatalog[activeChallengeId];
+  const starterLang = challenge?.starterLang || currentLang;
+  const starterCode = challenge?.starterCode || codeSamples[starterLang] || '';
+  currentLang = starterLang;
+  codeSamples[currentLang] = starterCode;
+  activeEditorFile = {
+    kind: 'template',
+    lang: currentLang,
+    filename: templateFilenames[currentLang],
+    path: '',
+  };
+  editor.setValue(starterCode);
+  monaco.editor.setModelLanguage(editor.getModel(), currentLang);
+  renderFileTabs();
+  refreshLanguageBadge();
+  persistActiveDraft();
+  showToast('Draft discarded. Starter code loaded.');
+}
+
+function browseSavedDrafts() {
+  const drafts = getSavedDraftSummaries();
+  if (drafts.length === 0) {
+    showToast('No saved drafts found.');
+    return;
+  }
+
+  const choices = drafts
+    .map((draft, index) => {
+      const preview =
+        draft.preview.length > 60
+          ? `${draft.preview.slice(0, 57)}...`
+          : draft.preview;
+      return `${index + 1}. ${draft.label} - ${preview}`;
+    })
+    .join('\n');
+  const selection = window.prompt(
+    `Saved drafts stay in this browser only.\n\n${choices}\n\nEnter a draft number to restore:`
+  );
+  if (selection === null) {
+    return;
+  }
+
+  const index = Number.parseInt(selection, 10) - 1;
+  if (!Number.isInteger(index) || index < 0 || index >= drafts.length) {
+    showToast('No draft restored.');
+    return;
+  }
+
+  restoreSavedDraft(drafts[index]);
+}
+
+function restoreSavedDraft(draft) {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(draft.key);
+  } catch (e) {
+    console.warn('Draft restore failed:', e);
+  }
+
+  if (saved === null) {
+    showToast('Saved draft was not found.');
+    return;
+  }
+
+  loadChallenge(draft.challengeId);
+
+  if (draft.kind === 'workspace') {
+    const language = detectLanguageFromPath(draft.scope);
+    currentLang = language;
+    activeEditorFile = {
+      kind: 'workspace',
+      lang: language,
+      filename: getFilename(draft.scope),
+      path: draft.scope,
+    };
+    if (!workspaceFiles.some((entry) => entry.path === draft.scope)) {
+      workspaceFiles = [{ path: draft.scope }, ...workspaceFiles].slice(
+        0,
+        MAX_WORKSPACE_FILE_TABS
+      );
+    }
+    editor.setValue(saved);
+    monaco.editor.setModelLanguage(editor.getModel(), language);
+    renderFileTabs();
+    refreshLanguageBadge();
+  } else {
+    switchLanguage(draft.scope, { persistCurrent: false });
+    editor.setValue(saved);
+  }
+
+  const banner = document.getElementById('draftRecoveryBanner');
+  if (banner) banner.remove();
+  showToast('Saved draft restored.');
+}
+
 function attachUiHandlers() {
   document
     .getElementById('fileTabs')
@@ -190,7 +343,7 @@ function attachUiHandlers() {
 
   document
     .getElementById('loadStarterBtn')
-    .addEventListener('click', applyChallengeStarter);
+    .addEventListener('click', () => applyChallengeStarter(true));
   document
     .getElementById('copyCommandBtn')
     .addEventListener('click', copyFirstCommand);
@@ -312,6 +465,7 @@ function initEditor() {
     switchLanguage('python');
     renderFileTabs();
     loadChallenge(activeChallengeId, false);
+
   });
 }
 

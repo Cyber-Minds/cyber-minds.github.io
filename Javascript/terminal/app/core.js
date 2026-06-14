@@ -122,6 +122,26 @@ function getCommandPaletteActions() {
       run: () => document.getElementById('loadStarterBtn').click(),
     },
     {
+      id: 'discard-draft',
+      label: 'Discard Draft',
+      hint: '',
+      keywords: 'discard draft delete clear reset starter',
+      disabled: false,
+      run: () => {
+        if (window.confirm('Discard this draft and reload the starter code?')) {
+          discardActiveDraft();
+        }
+      },
+    },
+    {
+      id: 'browse-drafts',
+      label: 'Browse Saved Drafts',
+      hint: '',
+      keywords: 'browse restore recover saved drafts local',
+      disabled: false,
+      run: browseSavedDrafts,
+    },
+    {
       id: 'copy',
       label: 'Copy First Command',
       hint: '',
@@ -310,11 +330,69 @@ function getDraftStorageKey() {
   return `${DRAFT_STORAGE_PREFIX}:${activeChallengeId}:template:${activeEditorFile.lang}`;
 }
 
+function getSavedDraftSummaries() {
+  const prefix = `${DRAFT_STORAGE_PREFIX}:`;
+  const summaries = [];
+
+  try {
+    Object.keys(localStorage).forEach((key) => {
+      if (!key.startsWith(prefix)) {
+        return;
+      }
+
+      const parts = key.slice(prefix.length).split(':');
+      const challengeId = parts[0];
+      const kind = parts[1];
+      const scope = parts.slice(2).join(':');
+      if (!challengeId || !kind || !scope) {
+        return;
+      }
+
+      const value = localStorage.getItem(key);
+      if (value === null) {
+        return;
+      }
+
+      const challenge = challengeCatalog[challengeId];
+      const challengeTitle = challenge ? challenge.title : challengeId;
+      const preview = value
+        .split('\n')
+        .find((line) => line.trim().length > 0);
+      summaries.push({
+        key,
+        challengeId,
+        kind,
+        scope,
+        label: `${challengeTitle} - ${kind === 'workspace' ? scope : scope}`,
+        preview: preview || '(empty draft)',
+      });
+    });
+  } catch (e) {
+    console.warn('Draft list failed:', e);
+  }
+
+  return summaries.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 function restoreDraftOrDefault(fallback) {
   const key = getDraftStorageKey();
-  const saved = localStorage.getItem(key);
+  let saved = null;
+  try {
+    saved = localStorage.getItem(key);
+  } catch (e) {
+    console.warn('Draft read failed:', e);
+  }
+
   if (saved !== null) {
-    editor.setValue(saved);
+    try {
+      editor.setValue(saved);
+      if (saved !== fallback) {
+        window.setTimeout(showDraftRecoveryBanner, 3000);
+      }
+    } catch (e) {
+      console.warn('Draft restore failed, falling back:', e);
+      editor.setValue(fallback);
+    }
     return;
   }
   editor.setValue(fallback);
@@ -324,7 +402,11 @@ function persistActiveDraft() {
   if (!editor) {
     return;
   }
-  localStorage.setItem(getDraftStorageKey(), editor.getValue());
+  try {
+    localStorage.setItem(getDraftStorageKey(), editor.getValue());
+  } catch (e) {
+    console.warn('Draft save failed:', e);
+  }
 }
 
 function queueDraftSave() {
@@ -439,8 +521,9 @@ function renderFileTabs() {
   });
 }
 
-function switchLanguage(lang) {
-  if (editor) {
+function switchLanguage(lang, options = {}) {
+  const { persistCurrent = true } = options;
+  if (editor && persistCurrent) {
     persistActiveDraft();
   }
 

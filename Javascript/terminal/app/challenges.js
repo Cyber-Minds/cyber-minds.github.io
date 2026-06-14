@@ -35,6 +35,12 @@ function loadChallenge(challengeId, updateUrl = true) {
   }
 
   activeChallengeId = resolvedChallengeId;
+  currentLang = challenge.starterLang;
+  codeSamples[currentLang] = challenge.starterCode;
+
+  if (editor) {
+    switchLanguage(currentLang, { persistCurrent: false });
+  }
 
   document.getElementById('challengeTitle').textContent = challenge.title;
   document.getElementById('challengeDifficulty').textContent =
@@ -182,7 +188,7 @@ function renderChallengeNav() {
   });
 }
 
-function applyChallengeStarter() {
+function applyChallengeStarter(userTriggered = false) {
   const challenge = challengeCatalog[activeChallengeId];
   if (!challenge || !editor) {
     return;
@@ -190,10 +196,15 @@ function applyChallengeStarter() {
 
   currentLang = challenge.starterLang;
   codeSamples[currentLang] = challenge.starterCode;
-  switchLanguage(currentLang);
-  editor.setValue(challenge.starterCode);
-  persistActiveDraft();
-  showToast('Starter code loaded');
+
+  if (userTriggered) {
+    switchLanguage(currentLang);
+    editor.setValue(challenge.starterCode);
+    persistActiveDraft();
+    showToast('Starter code loaded');
+  } else {
+    switchLanguage(currentLang, { persistCurrent: false });
+  }
 }
 
 function copyFirstCommand() {
@@ -308,7 +319,7 @@ function checkChallengeSolution() {
           `Moving to next challenge: ${challengeCatalog[nextChallengeId].title}`
         );
         loadChallenge(nextChallengeId);
-        applyChallengeStarter();
+        applyChallengeStarter(true);
         showToast('Challenge completed. Moved to next.');
       } else {
         showToast('All challenges completed.');
@@ -413,7 +424,7 @@ function handleCheckOutput(chunk) {
         `echo "Moving to next challenge: ${challengeCatalog[nextChallengeId].title}"\n`
       );
       loadChallenge(nextChallengeId);
-      applyChallengeStarter();
+      applyChallengeStarter(true);
       showToast('Challenge completed. Moved to next.');
     } else {
       showToast('All challenges completed.');
