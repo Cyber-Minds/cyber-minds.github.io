@@ -67,8 +67,70 @@ function handleGlobalShortcuts(event) {
 
   if (event.shiftKey && (code === 'KeyS' || key === 's')) {
     event.preventDefault();
-    document.getElementById('loadStarterBtn').click();
+    document
+      .getElementById('loadStarterBtn')
+      .addEventListener('click', () => applyChallengeStarter(true));
   }
+}
+
+function showDraftRecoveryBanner() {
+  const existing = document.getElementById('draftRecoveryBanner');
+  if (existing) existing.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'draftRecoveryBanner';
+  banner.className = 'draft-recovery-banner';
+  banner.innerHTML = `
+    <span class="draft-recovery-icon">&#128196;</span>
+    <span class="draft-recovery-msg">Draft recovered from your last session.</span>
+    <button class="draft-recovery-discard" id="draftDiscardBtn" type="button">Discard</button>
+    <button class="draft-recovery-dismiss" id="draftDismissBtn" type="button">&#10005;</button>
+  `;
+
+  const editorPanel = document.getElementById('editorPanel');
+  if (editorPanel) {
+    editorPanel.insertBefore(banner, editorPanel.querySelector('.editor-container'));
+  }
+
+  document.getElementById('draftDiscardBtn').addEventListener('click', () => {
+    if (window.confirm('Discard this draft and reload the starter code? This cannot be undone.')) {
+      discardActiveDraft();
+    }
+  });
+
+  document.getElementById('draftDismissBtn').addEventListener('click', () => {
+    banner.remove();
+  });
+
+  setTimeout(() => {
+    if (document.getElementById('draftRecoveryBanner')) {
+      banner.remove();
+    }
+  }, 8000);
+}
+
+function discardActiveDraft() {
+  try {
+    const key = getDraftStorageKey();
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.warn('Draft discard failed:', e);
+  }
+
+  const banner = document.getElementById('draftRecoveryBanner');
+  if (banner) banner.remove();
+
+  const originalDefaults = {
+    python: '# Python starter\nprint("CyberMinds terminal ready")\n',
+    javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
+    java: 'public class Hello {\n    public static void main(String[] args) {\n        System.out.println("CyberMinds terminal ready");\n    }\n}\n',
+    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("CyberMinds terminal ready")\n}\n',
+  };
+  const defaultCode = originalDefaults[currentLang] || '';
+  editor.setValue(defaultCode);
+  persistActiveDraft();
+  showToast('Draft discarded. Editor reset.');
+  showToast('Draft discarded. Starter code loaded.');
 }
 
 function attachUiHandlers() {
@@ -312,6 +374,11 @@ function initEditor() {
     switchLanguage('python');
     renderFileTabs();
     loadChallenge(activeChallengeId, false);
+
+    // Mark initial load complete after boot settles
+    window.setTimeout(() => {
+      isInitialLoad = false;
+    }, 500);
   });
 }
 
@@ -324,6 +391,13 @@ attachUiHandlers();
 initPanelResizers();
 initEditor();
 initTerminal();
+switchLanguage('python');
+renderFileTabs();
+loadChallenge(activeChallengeId, false);  // ← this triggers applyChallengeStarter
+
+
+
+
 
 window.addEventListener('resize', () => {
   if (window.innerWidth > 980) {

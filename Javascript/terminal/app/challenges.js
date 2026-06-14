@@ -182,7 +182,7 @@ function renderChallengeNav() {
   });
 }
 
-function applyChallengeStarter() {
+function applyChallengeStarter(userTriggered = false) {
   const challenge = challengeCatalog[activeChallengeId];
   if (!challenge || !editor) {
     return;
@@ -190,10 +190,18 @@ function applyChallengeStarter() {
 
   currentLang = challenge.starterLang;
   codeSamples[currentLang] = challenge.starterCode;
-  switchLanguage(currentLang);
-  editor.setValue(challenge.starterCode);
-  persistActiveDraft();
-  showToast('Starter code loaded');
+
+  if (userTriggered) {
+    switchLanguage(currentLang);
+    editor.setValue(challenge.starterCode);
+    persistActiveDraft();
+    showToast('Starter code loaded');
+  } else {
+    // On auto-load, just set the language without touching editor content
+    monaco.editor.setModelLanguage(editor.getModel(), challenge.starterLang);
+    renderFileTabs();
+    refreshLanguageBadge();
+  }
 }
 
 function copyFirstCommand() {
@@ -308,7 +316,7 @@ function checkChallengeSolution() {
           `Moving to next challenge: ${challengeCatalog[nextChallengeId].title}`
         );
         loadChallenge(nextChallengeId);
-        applyChallengeStarter();
+        applyChallengeStarter(true);
         showToast('Challenge completed. Moved to next.');
       } else {
         showToast('All challenges completed.');
@@ -413,7 +421,7 @@ function handleCheckOutput(chunk) {
         `echo "Moving to next challenge: ${challengeCatalog[nextChallengeId].title}"\n`
       );
       loadChallenge(nextChallengeId);
-      applyChallengeStarter();
+      applyChallengeStarter(true);
       showToast('Challenge completed. Moved to next.');
     } else {
       showToast('All challenges completed.');

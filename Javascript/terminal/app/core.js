@@ -122,6 +122,18 @@ function getCommandPaletteActions() {
       run: () => document.getElementById('loadStarterBtn').click(),
     },
     {
+      id: 'discard-draft',
+      label: 'Discard Draft',
+      hint: '',
+      keywords: 'discard draft delete clear reset starter',
+      disabled: false,
+      run: () => {
+        if (window.confirm('Discard this draft and reload the starter code?')) {
+          discardActiveDraft();
+        }
+      },
+    },
+    {
       id: 'copy',
       label: 'Copy First Command',
       hint: '',
@@ -312,9 +324,34 @@ function getDraftStorageKey() {
 
 function restoreDraftOrDefault(fallback) {
   const key = getDraftStorageKey();
-  const saved = localStorage.getItem(key);
+  console.log('restoreDraftOrDefault called, key:', key);
+  let saved = null;
+  try {
+    saved = localStorage.getItem(key);
+  } catch (e) {
+    console.warn('Draft read failed:', e);
+  }
+
+  console.log('saved:', saved ? saved.substring(0, 50) : 'null');
+  console.log('fallback:', fallback ? fallback.substring(0, 50) : 'null');
+
   if (saved !== null) {
-    editor.setValue(saved);
+    try {
+      editor.setValue(saved);
+      const originalDefault = {
+        python: '# Python starter\nprint("CyberMinds terminal ready")\n',
+        javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
+        java: 'public class Hello {\n',
+        go: 'package main\n',
+      }[currentLang] || fallback;
+      if (saved !== fallback && saved !== originalDefault) {
+        console.log('Draft differs — showing banner');
+        window.setTimeout(showDraftRecoveryBanner, 3000);
+      }
+    } catch (e) {
+      console.warn('Draft restore failed, falling back:', e);
+      editor.setValue(fallback);
+    }
     return;
   }
   editor.setValue(fallback);
@@ -440,7 +477,7 @@ function renderFileTabs() {
 }
 
 function switchLanguage(lang) {
-  if (editor) {
+  if (editor && !isInitialLoad) {
     persistActiveDraft();
   }
 
