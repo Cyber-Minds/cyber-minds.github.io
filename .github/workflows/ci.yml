@@ -49,3 +49,28 @@ jobs:
         run: npm run lint:frontend
       - name: Check HTML files are non-empty
         run: if find HTML -name "*.html" -empty | grep -q .; then echo "Empty HTML files found"; exit 1; fi
+
+  smoke-tests:
+    name: Frontend Smoke Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Chromium browser
+        run: npx playwright install --with-deps chromium
+      - name: Run smoke tests
+        run: npm run test:smoke
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
