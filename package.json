@@ -2,7 +2,10 @@
   "scripts": {
     "lint:frontend": "eslint --max-warnings=0 \"Javascript/*.js\" \"Javascript/terminal/**/*.js\" \"Javascript/*.mjs\"",
     "format": "npx prettier \"**/*.{html,css}\" --write",
-    "format:check": "npx prettier \"**/*.{html,css}\" --check"
+    "format:check": "npx prettier \"**/*.{html,css}\" --check",
+    "test:smoke": "playwright test",
+    "test:smoke:headed": "playwright test --headed",
+    "test:smoke:ui": "playwright test --ui"
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.2.1",
@@ -12,9 +15,11 @@
     "rollup": "^4.53.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.0",
     "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.32.0",
+    "http-server": "^14.1.1",
     "prettier": "^3.7.4"
   }
 }
