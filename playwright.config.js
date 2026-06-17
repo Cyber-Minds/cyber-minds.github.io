@@ -9,13 +9,16 @@ const { defineConfig, devices } = require('@playwright/test');
  *   npx playwright test --headed         # watch the browser
  *   npx playwright test --ui             # interactive UI mode
  *
- * The web server (`http-server`) starts automatically on port 8080 and serves
- * the repo root as a static site — no backend, Docker, or Go required.
+ * The web server (`http-server`) starts automatically on 127.0.0.1:3939 and
+ * serves the repo root as a static site — no backend, Docker, or Go required.
  * Pass PLAYWRIGHT_SERVER_URL to point at an already-running server instead:
- *   PLAYWRIGHT_SERVER_URL=http://localhost:8080 npx playwright test
+ *   PLAYWRIGHT_SERVER_URL=http://localhost:3939 npx playwright test
  */
 
-const serverUrl = process.env.PLAYWRIGHT_SERVER_URL || 'http://localhost:3939';
+const defaultServerUrl = 'http://127.0.0.1:3939';
+const externalServerUrl = process.env.PLAYWRIGHT_SERVER_URL;
+const serverUrl = externalServerUrl || defaultServerUrl;
+const defaultServer = new URL(defaultServerUrl);
 
 module.exports = defineConfig({
   testDir: './tests',
@@ -52,14 +55,23 @@ module.exports = defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
 
-  webServer: {
-    /* Serve the repo root as a static site on port 8080.
-     * http-server is a devDependency so npx picks up the local copy. */
-    command: 'npx http-server . -p 3939 -s --cors',
-    url: serverUrl,
-    /* In CI always spin up a fresh server; locally reuse one if it is already
-     * running (speeds up interactive test runs). */
-    reuseExistingServer: !process.env.CI,
-    timeout: 15_000,
-  },
+  webServer: externalServerUrl
+    ? undefined
+    : {
+        /* Serve the repo root on loopback only.
+         * http-server is a devDependency so npx picks up the local copy. */
+        command: [
+          'npx http-server .',
+          `-a ${defaultServer.hostname}`,
+          `-p ${defaultServer.port}`,
+          '-s',
+          '-d false',
+          '--no-dotfiles',
+        ].join(' '),
+        url: serverUrl,
+        /* In CI always spin up a fresh server; locally reuse one if it is
+         * already running (speeds up interactive test runs). */
+        reuseExistingServer: !process.env.CI,
+        timeout: 15_000,
+      },
 });
