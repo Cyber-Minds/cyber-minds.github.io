@@ -75,6 +75,7 @@
       return;
     }
 
+    global.document.body.dataset.quizId = config.quizId;
     submitButton.type = 'button';
     resultElement.setAttribute('aria-live', 'polite');
     var retryButton = ensureRetryButton(submitButton);

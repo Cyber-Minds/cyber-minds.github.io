@@ -1,0 +1,52 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - docker.io
+
+write_files:
+  - path: /etc/systemd/system/cyberminds-terminal.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=CyberMinds terminal deployment
+      Requires=docker.service
+      After=docker.service network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      WorkingDirectory=${project_dir}/terminal
+      ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml --env-file .env up -d --build
+      ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml --env-file .env down
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - systemctl enable --now docker
+  - mkdir -p ${project_dir}
+  - |
+    if [ ! -d "${project_dir}/.git" ]; then
+      git clone --branch ${repo_branch} ${repo_url} ${project_dir}
+    else
+      cd ${project_dir}
+      git fetch --all --prune
+      git checkout ${repo_branch}
+      git reset --hard origin/${repo_branch}
+    fi
+  - |
+    cat > ${project_dir}/terminal/.env <<'EOF'
+    PORT=3000
+    ENVIRONMENT=production
+    APP_DOMAIN=${app_domain}
+    CADDY_HTTP_PORT=${caddy_http_port}
+    CADDY_HTTPS_PORT=${caddy_https_port}
+    ALLOWED_ORIGINS=${allowed_origins}
+    EOF
+  - systemctl daemon-reload
+  - systemctl enable cyberminds-terminal.service
+  - systemctl restart cyberminds-terminal.service

@@ -1,0 +1,13 @@
+tenancy_ocid     = "ocid1.tenancy.oc1..example"
+compartment_ocid = "ocid1.compartment.oc1..example"
+user_ocid        = "ocid1.user.oc1..example"
+fingerprint      = "aa:bb:cc:dd:ee:ff"
+private_key_path = "~/.oci/oci_api_key.pem"
+region           = "us-chicago-1"
+image_ocid       = "ocid1.image.oc1.us-chicago-1.example"
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+
+app_domain = "terminal.example.com"
+allowed_origins = [
+  "https://cyber-minds.github.io",
+]

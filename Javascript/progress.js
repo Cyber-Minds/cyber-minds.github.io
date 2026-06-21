@@ -198,6 +198,12 @@
 
   function derivePageMeta() {
     var path = normalizeHref(global.location.pathname);
+    var decodedPath = path;
+    try {
+      decodedPath = decodeURIComponent(path);
+    } catch (error) {
+      decodedPath = path;
+    }
     var query = new URLSearchParams(global.location.search);
     var challengeId = query.get('challenge');
     var pageTitleElement = global.document.querySelector('.page-title');
@@ -213,8 +219,8 @@
       };
     }
 
-    if (path.indexOf('/HTML/Courses and Activities/') !== -1) {
-      var segments = path.split('/');
+    if (decodedPath.indexOf('/HTML/Courses and Activities/') !== -1) {
+      var segments = decodedPath.split('/');
       var courseSegment = sanitizeSegment(segments[segments.length - 2]);
       var pageSegment = sanitizeSegment(segments[segments.length - 1]);
       var type = pageSegment.indexOf('quiz') !== -1 ? 'quiz' : 'course-page';
@@ -227,7 +233,7 @@
       };
     }
 
-    if (path.indexOf('/HTML/CTF.html') !== -1) {
+    if (decodedPath.indexOf('/HTML/CTF.html') !== -1) {
       return {
         id: 'ctf-catalog',
         title,
@@ -279,6 +285,41 @@
         total_questions: Number(payload.totalQuestions) || 0,
       });
     }
+  }
+
+  function initLegacyQuizTracking() {
+    var meta = derivePageMeta();
+    if (!meta || meta.type !== 'quiz') {
+      return;
+    }
+
+    var resultElement = global.document.getElementById('result');
+    if (!resultElement) {
+      return;
+    }
+
+    var persistFromResult = function () {
+      var text = String(resultElement.textContent || '').trim();
+      var match = text.match(/Your score is:\s*(\d+)\s*\/\s*(\d+)/i);
+      if (!match) {
+        return;
+      }
+
+      var quizId = global.document.body.dataset.quizId || meta.id;
+      markQuizComplete(quizId, {
+        score: Number(match[1]),
+        totalQuestions: Number(match[2]),
+      });
+    };
+
+    var observer = new MutationObserver(persistFromResult);
+    observer.observe(resultElement, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+
+    persistFromResult();
   }
 
   function getRecommendation(state) {
@@ -375,6 +416,7 @@
 
   function init() {
     trackCurrentPage();
+    initLegacyQuizTracking();
     renderDashboard();
   }
 
