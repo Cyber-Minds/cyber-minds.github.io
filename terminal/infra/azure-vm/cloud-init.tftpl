@@ -1,0 +1,52 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - ca-certificates
+  - curl
+  - git
+  - docker.io
+  - docker-compose-v2
+
+write_files:
+  - path: /etc/systemd/system/cyberminds-terminal.service
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=CyberMinds terminal deployment
+      Requires=docker.service
+      After=docker.service network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      WorkingDirectory=${project_dir}/terminal
+      ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml --env-file .env up -d --build
+      ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml --env-file .env down
+      TimeoutStartSec=0
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - usermod -aG docker ${admin_username}
+  - systemctl enable docker
+  - systemctl start docker
+  - mkdir -p ${project_dir}
+  - |
+    if [ ! -d "${project_dir}/.git" ]; then
+      git clone --branch ${repo_branch} --depth 1 ${repo_url} ${project_dir}
+    else
+      git -C ${project_dir} fetch origin ${repo_branch}
+      git -C ${project_dir} checkout ${repo_branch}
+      git -C ${project_dir} reset --hard origin/${repo_branch}
+    fi
+  - |
+    cat > ${project_dir}/terminal/.env <<'EOF'
+    APP_DOMAIN=${app_domain}
+    ALLOWED_ORIGINS=${allowed_origins}
+    EOF
+  - systemctl daemon-reload
+  - systemctl enable cyberminds-terminal.service
+  - systemctl restart cyberminds-terminal.service

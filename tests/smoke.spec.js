@@ -186,6 +186,34 @@ test.describe('Navigation', () => {
   });
 });
 
+test.describe('Content pages', () => {
+  test('mission page exposes a clear h1 and responsive content cards', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/mission.html');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Our Mission'
+    );
+
+    const overflowing = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > window.innerWidth;
+    });
+    expect(overflowing).toBe(false);
+  });
+
+  test('more info page uses semantic headings and visible contact link', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/moreinfo.html');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'More Info'
+    );
+    await expect(
+      page.getByRole('link', { name: /CYBER-MINDS@outlook\.com/i })
+    ).toBeVisible();
+  });
+});
+
 // ─── Learner progress ───────────────────────────────────────────────────────
 
 test.describe('Learner progress dashboard', () => {
@@ -479,5 +507,26 @@ test.describe('Mock terminal', () => {
     // Toast text persists in the DOM even after the visible class is removed,
     // so toContainText() matches reliably within the retry window.
     await expect(page.locator('#toast')).toContainText(/completed/i);
+  });
+
+  test('completed mock challenge appears in learner progress dashboard', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+
+    await page.evaluate(() => {
+      // eslint-disable-next-line no-undef
+      window.setMockFile(
+        'report.txt',
+        'owner: cyberminds, group: staff, perms: 0755\n'
+      );
+    });
+
+    await page.locator('#checkSolutionBtn').click();
+    await expect(page.locator('#progressChip')).toContainText('1/');
+
+    await page.goto('/HTML/course_Contents.html');
+    await expect(page.locator('#continueLearningCtfCount')).toContainText('1');
   });
 });
