@@ -51,16 +51,20 @@ resource "azurerm_network_security_group" "terminal" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  security_rule {
-    name                       = "allow-ssh"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = length(var.ssh_allowed_source_addresses) > 0 ? [1] : []
+
+    content {
+      name                       = "allow-ssh"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "22"
+      source_address_prefixes    = var.ssh_allowed_source_addresses
+      destination_address_prefix = "*"
+    }
   }
 
   security_rule {

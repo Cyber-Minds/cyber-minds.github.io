@@ -74,7 +74,7 @@ window.monaco = {
       const model = { language: options.language || 'plaintext' };
       const listeners = [];
       if (element) element.textContent = value;
-      return {
+      const editor = {
         getValue: () => value,
         setValue(nextValue) {
           value = String(nextValue || '');
@@ -87,6 +87,8 @@ window.monaco = {
           return { dispose() {} };
         },
       };
+      window.__cybermindsMonacoEditor = editor;
+      return editor;
     },
   },
 };
@@ -528,5 +530,53 @@ test.describe('Mock terminal', () => {
 
     await page.goto('/HTML/course_Contents.html');
     await expect(page.locator('#continueLearningCtfCount')).toContainText('1');
+  });
+
+  test('draft autosaves before a fast reload and restores the edit', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(
+        '# recovered draft\nprint("keep this after reload")\n'
+      );
+    });
+
+    const savedDraftKeys = await page.evaluate(() =>
+      Object.keys(window.localStorage).filter((key) =>
+        key.startsWith('cm_terminal_draft_v1')
+      )
+    );
+
+    expect(savedDraftKeys).toContain(
+      'cm_terminal_draft_v1:linux-basics:template:python'
+    );
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    const restoredDraft = await page.evaluate(() =>
+      window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      )
+    );
+
+    expect(restoredDraft).toContain('keep this after reload');
+
+    await expect(page.locator('#editor')).toContainText(
+      'keep this after reload'
+    );
   });
 });

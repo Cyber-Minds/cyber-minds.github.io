@@ -32,6 +32,12 @@ variable "admin_ssh_public_key" {
   type        = string
 }
 
+variable "ssh_allowed_source_addresses" {
+  description = "Optional CIDR ranges allowed to reach SSH on the VM. Leave empty to disable public SSH."
+  type        = list(string)
+  default     = []
+}
+
 variable "project_dir" {
   description = "Directory on the VM where the repo will be cloned."
   type        = string

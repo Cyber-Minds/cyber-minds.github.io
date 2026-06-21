@@ -45,6 +45,7 @@ Edit `terraform.tfvars` and set:
 - `subscription_id`
 - `admin_ssh_public_key`
 - optionally `domain_name_label` if the default is already taken
+- optionally `ssh_allowed_source_addresses` if you want public SSH access
 
 Then run:
 
@@ -71,6 +72,8 @@ SSH access:
 ```bash
 terraform output -raw ssh_command
 ```
+
+Public SSH is disabled unless you set `ssh_allowed_source_addresses`.
 
 ## Notes
 

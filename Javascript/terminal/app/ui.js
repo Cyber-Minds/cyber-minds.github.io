@@ -462,7 +462,19 @@ function initEditor() {
       queueDraftSave();
     });
 
-    switchLanguage('python');
+    const flushDraftOnExit = () => {
+      flushDraftSave();
+    };
+
+    window.addEventListener('pagehide', flushDraftOnExit);
+    window.addEventListener('beforeunload', flushDraftOnExit);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        flushDraftSave();
+      }
+    });
+
+    switchLanguage('python', { persistCurrent: false });
     renderFileTabs();
     loadChallenge(activeChallengeId, false);
 

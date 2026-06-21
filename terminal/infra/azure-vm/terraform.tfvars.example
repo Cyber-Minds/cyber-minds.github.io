@@ -6,6 +6,10 @@ admin_username        = "azureuser"
 admin_ssh_public_key  = "ssh-ed25519 AAAA..."
 domain_name_label     = "cyberminds-terminal-20260621-ncus"
 
+ssh_allowed_source_addresses = [
+  "203.0.113.10/32",
+]
+
 allowed_origins = [
   "https://cyber-minds.github.io",
 ]
