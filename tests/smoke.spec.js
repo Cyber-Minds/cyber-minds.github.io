@@ -285,6 +285,49 @@ test.describe('Learner progress dashboard', () => {
       /Introductioncourse1\.html/
     );
   });
+
+  test('progress links resolve correctly for project pages paths', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/course_Contents.html');
+
+    const resolved = await page.evaluate(() =>
+      window.CyberMindsProgress.resolveSitePath(
+        '/HTML/Courses and Activities/Course 1/Introductioncourse1.html',
+        '/CyberMinds/HTML/course_Contents.html'
+      )
+    );
+
+    expect(decodeURIComponent(resolved)).toBe(
+      '/CyberMinds/HTML/Courses and Activities/Course 1/Introductioncourse1.html'
+    );
+  });
+
+  test('progress links keep project-site paths and challenge query strings', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/course_Contents.html');
+
+    const resolvedCourse = await page.evaluate(() =>
+      window.CyberMindsProgress.resolveSitePath(
+        '/CyberMinds/HTML/Courses%20and%20Activities/Course%203/SocialEngineeringcourse3.html',
+        '/CyberMinds/HTML/course_Contents.html'
+      )
+    );
+    const resolvedChallenge = await page.evaluate(() =>
+      window.CyberMindsProgress.resolveSitePath(
+        '/CyberMinds/HTML/terminal/index.html?challenge=linux-basics',
+        '/CyberMinds/HTML/course_Contents.html'
+      )
+    );
+
+    expect(decodeURIComponent(resolvedCourse)).toBe(
+      '/CyberMinds/HTML/Courses and Activities/Course 3/SocialEngineeringcourse3.html'
+    );
+    expect(resolvedChallenge).toBe(
+      '/CyberMinds/HTML/terminal/index.html?challenge=linux-basics'
+    );
+  });
 });
 
 // ─── Shared quiz engine ─────────────────────────────────────────────────────
