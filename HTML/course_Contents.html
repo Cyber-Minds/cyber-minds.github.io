@@ -37,6 +37,51 @@ If you are working on this please ask for the cybersecurity word doc content (Th
     </header>
     <p class="page-title">Courses</p>
 
+    <section
+      class="continue-learning-panel"
+      id="continueLearningPanel"
+      aria-label="Continue learning"
+    >
+      <div class="continue-learning-copy">
+        <p class="continue-learning-kicker">Continue learning</p>
+        <h2>Pick up from your local progress on this device.</h2>
+        <p class="continue-learning-summary">
+          Last visited lesson:
+          <span id="continueLearningLastVisited">No course progress yet</span>
+        </p>
+        <div class="continue-learning-stats">
+          <p>Completed quizzes: <span id="continueLearningQuizCount">0</span></p>
+          <p>Completed CTFs: <span id="continueLearningCtfCount">0</span></p>
+        </div>
+        <p class="continue-learning-summary">
+          Recommended next step:
+          <a
+            id="continueLearningRecommendationLink"
+            href="../HTML/Courses and Activities/Course 1/Introductioncourse1.html"
+          >
+            <span id="continueLearningRecommendation"
+              >Course 1 - Introduction</span
+            >
+          </a>
+        </p>
+      </div>
+      <div class="continue-learning-actions">
+        <a
+          id="continueLearningLink"
+          class="continue-learning-cta"
+          href="../HTML/Courses and Activities/Course 1/Introductioncourse1.html"
+          >Start your first lesson</a
+        >
+        <button
+          id="progressResetBtn"
+          class="continue-learning-reset"
+          type="button"
+        >
+          Reset local progress
+        </button>
+      </div>
+    </section>
+
     <section>
       <!-- Course 1 -->
       <a
@@ -292,6 +337,7 @@ If you are working on this please ask for the cybersecurity word doc content (Th
     <script src="../Javascript/header.js"></script>
     <script src="../Javascript/popUp_Courses.js"></script>
     <script src="../Javascript/footer.js"></script>
+    <script src="../Javascript/progress.js"></script>
     <script src="../Javascript/analytics.js"></script>
   </body>
 </html>

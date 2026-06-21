@@ -11,6 +11,7 @@ const navItems = [
 ];
 
 const SHARED_HEADER_STYLE_ID = 'cmh-shared-styles';
+const SHARED_PROGRESS_SCRIPT_ID = 'cm-progress-script';
 
 function ensureSharedHeaderStyles() {
   if (document.getElementById(SHARED_HEADER_STYLE_ID)) {
@@ -221,6 +222,17 @@ function joinBasePath(basePath, relativePath) {
   return `${cleanBase}/${cleanRelative}`;
 }
 
+function ensureProgressScript(basePath) {
+  if (document.getElementById(SHARED_PROGRESS_SCRIPT_ID)) {
+    return;
+  }
+
+  const script = document.createElement('script');
+  script.id = SHARED_PROGRESS_SCRIPT_ID;
+  script.src = joinBasePath(basePath, 'Javascript/progress.js');
+  document.head.appendChild(script);
+}
+
 function renderHeader() {
   let header = document.getElementById('site-header');
   if (!header) {
@@ -238,6 +250,7 @@ function renderHeader() {
   ensureSharedHeaderStyles();
 
   const basePath = getBasePath();
+  ensureProgressScript(basePath);
   const adjustedNav = navItems.map((item) => ({
     ...item,
     href: joinBasePath(basePath, item.href)
