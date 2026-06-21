@@ -11,23 +11,28 @@
 
   var STORAGE_KEY = 'cm_learning_progress_v1';
   var CTF_STORAGE_KEY = 'cm_ctf_progress_v1';
+  var DEFAULT_RESUME_PATH =
+    '/HTML/Courses and Activities/Course 1/Introductioncourse1.html';
+  var CTF_CATALOG_PATH = '/HTML/CTF.html';
   var DEFAULT_RESUME = {
     id: 'course-1-introduction',
     title: 'Course 1 - Introduction',
-    href: '/HTML/Courses and Activities/Course 1/Introductioncourse1.html',
+    href: DEFAULT_RESUME_PATH,
     type: 'course-page',
   };
   var RECOMMENDATIONS = {
     'course-3-social-engineering': {
       id: 'course-3-threat-actors-social-engineering',
       title: 'Threat Actors and Social Engineering Quiz',
-      href: '/HTML/Courses and Activities/Course 3/TAandSEquizcourse3.html',
+      href:
+        '/HTML/Courses and Activities/Course 3/TAandSEquizcourse3.html',
       type: 'quiz',
     },
     'course-4-automationwithpythoncourse4': {
       id: 'course-4-technical-measures-quiz',
       title: 'Course 4 - Technical Measures Quiz',
-      href: '/HTML/Courses and Activities/Course 4/TechnicalDefenseQUIZ.html',
+      href:
+        '/HTML/Courses and Activities/Course 4/TechnicalDefenseQUIZ.html',
       type: 'quiz',
     },
   };
@@ -74,10 +79,46 @@
     }
 
     try {
-      return new URL(href, global.location.origin).pathname;
+      var parsed = new URL(href, global.location.origin);
+      return parsed.pathname + parsed.search;
     } catch (error) {
       return String(href);
     }
+  }
+
+  function getSiteBasePath(pathname) {
+    var currentPath = pathname || normalizeHref(global.location.pathname);
+    var decoded = currentPath;
+    try {
+      decoded = decodeURIComponent(currentPath);
+    } catch (error) {
+      decoded = currentPath;
+    }
+
+    var htmlIndex = decoded.indexOf('/HTML/');
+    if (htmlIndex !== -1) {
+      return decoded.slice(0, htmlIndex);
+    }
+
+    if (decoded === DEFAULT_RESUME_PATH || decoded === CTF_CATALOG_PATH) {
+      return '';
+    }
+
+    return '';
+  }
+
+  function resolveSitePath(targetPath, pathname) {
+    var normalizedTarget = normalizeHref(targetPath);
+    var basePath = getSiteBasePath(pathname);
+    var baseStrippedTarget = normalizedTarget.indexOf(basePath) === 0
+      ? normalizedTarget.slice(basePath.length) || '/'
+      : normalizedTarget;
+
+    if (!isSafeInternalHref(baseStrippedTarget)) {
+      return normalizedTarget;
+    }
+
+    return basePath + baseStrippedTarget;
   }
 
   function readState() {
@@ -150,7 +191,9 @@
   }
 
   function toSafeHref(href, fallbackHref) {
-    return isSafeInternalHref(href) ? normalizeHref(href) : fallbackHref;
+    return isSafeInternalHref(href)
+      ? resolveSitePath(href)
+      : resolveSitePath(fallbackHref);
   }
 
   function derivePageMeta() {
@@ -165,7 +208,7 @@
       return {
         id: 'ctf-' + sanitizeSegment(challengeId),
         title,
-        href: toSafeHref(path + global.location.search, '/HTML/CTF.html'),
+        href: toSafeHref(path + global.location.search, CTF_CATALOG_PATH),
         type: 'ctf-challenge',
       };
     }
@@ -179,7 +222,7 @@
       return {
         id: courseSegment + '-' + pageSegment,
         title,
-        href: toSafeHref(path, DEFAULT_RESUME.href),
+        href: toSafeHref(path, DEFAULT_RESUME_PATH),
         type,
       };
     }
@@ -188,7 +231,7 @@
       return {
         id: 'ctf-catalog',
         title,
-        href: toSafeHref(path, '/HTML/CTF.html'),
+        href: toSafeHref(path, CTF_CATALOG_PATH),
         type: 'ctf-catalog',
       };
     }
@@ -206,7 +249,7 @@
     var record = {
       id: meta.id,
       title: meta.title,
-      href: toSafeHref(meta.href, DEFAULT_RESUME.href),
+      href: toSafeHref(meta.href, DEFAULT_RESUME_PATH),
       type: meta.type,
       visitedAt: new Date().toISOString(),
     };
@@ -254,7 +297,7 @@
       return {
         id: lastVisited.id,
         title: 'Resume ' + lastVisited.title,
-        href: toSafeHref(lastVisited.href, DEFAULT_RESUME.href),
+        href: toSafeHref(lastVisited.href, DEFAULT_RESUME_PATH),
         type: lastVisited.type,
       };
     }
@@ -295,14 +338,11 @@
     var resetButton = global.document.getElementById('progressResetBtn');
 
     if (summary.lastVisited) {
-      resumeLink.setAttribute(
-        'href',
-        toSafeHref(summary.lastVisited.href, DEFAULT_RESUME.href)
-      );
+      resumeLink.setAttribute('href', toSafeHref(summary.lastVisited.href, DEFAULT_RESUME_PATH));
       resumeLink.textContent = 'Resume where you left off';
       lastVisited.textContent = summary.lastVisited.title;
     } else {
-      resumeLink.setAttribute('href', DEFAULT_RESUME.href);
+      resumeLink.setAttribute('href', resolveSitePath(DEFAULT_RESUME_PATH));
       resumeLink.textContent = 'Start your first lesson';
       lastVisited.textContent = 'No course progress yet';
     }
@@ -312,7 +352,7 @@
     recommendation.textContent = summary.recommendation.title;
     recommendationLink.setAttribute(
       'href',
-      toSafeHref(summary.recommendation.href, DEFAULT_RESUME.href)
+      toSafeHref(summary.recommendation.href, DEFAULT_RESUME_PATH)
     );
 
     if (resetButton && !resetButton.dataset.bound) {
@@ -342,6 +382,7 @@
     markQuizComplete,
     getSummary,
     renderDashboard,
+    resolveSitePath,
     STORAGE_KEY,
   };
 
