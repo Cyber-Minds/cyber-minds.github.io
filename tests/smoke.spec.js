@@ -574,6 +574,7 @@ test.describe('Mock terminal', () => {
     );
 
     expect(restoredDraft).toContain('keep this after reload');
+    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(0);
 
     await expect(page.locator('#editor')).toContainText(
       'keep this after reload'
