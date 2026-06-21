@@ -186,6 +186,170 @@ test.describe('Navigation', () => {
   });
 });
 
+// ─── Learner progress ───────────────────────────────────────────────────────
+
+test.describe('Learner progress dashboard', () => {
+  test('course catalog shows local progress, recommendation, and reset flow', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'cm_learning_progress_v1',
+        JSON.stringify({
+          lastVisited: {
+            id: 'course-3-social-engineering',
+            title: 'Course 3 - Social Engineering',
+            href: '/HTML/Courses and Activities/Course 3/SocialEngineeringcourse3.html',
+            type: 'course-page',
+            visitedAt: '2026-06-21T12:00:00.000Z',
+          },
+          visitedPages: {
+            'course-3-introduction': {
+              id: 'course-3-introduction',
+              title: 'Course 3 - Introduction',
+              href: '/HTML/Courses and Activities/Course 3/Introductioncourse3.html',
+              type: 'course-page',
+              visitedAt: '2026-06-21T11:00:00.000Z',
+            },
+          },
+          completedQuizzes: {
+            'course-3-threat-actors-social-engineering': {
+              score: 4,
+              totalQuestions: 4,
+              completedAt: '2026-06-21T12:05:00.000Z',
+            },
+          },
+        })
+      );
+      window.localStorage.setItem(
+        'cm_ctf_progress_v1',
+        JSON.stringify({
+          'linux-basics': {
+            passed: true,
+            passedAt: '2026-06-21T12:10:00.000Z',
+          },
+        })
+      );
+    });
+
+    await page.goto('/HTML/course_Contents.html');
+
+    await expect(page.locator('#continueLearningPanel')).toBeVisible();
+    await expect(page.locator('#continueLearningLastVisited')).toContainText(
+      'Course 3 - Social Engineering'
+    );
+    await expect(page.locator('#continueLearningQuizCount')).toContainText('1');
+    await expect(page.locator('#continueLearningCtfCount')).toContainText('1');
+    await expect(page.locator('#continueLearningLink')).toHaveAttribute(
+      'href',
+      /SocialEngineeringcourse3\.html/
+    );
+    await expect(page.locator('#continueLearningRecommendation')).toContainText(
+      /Threat Actors and Social Engineering Quiz|resume/i
+    );
+
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.locator('#progressResetBtn').click();
+
+    await expect(page.locator('#continueLearningQuizCount')).toContainText('0');
+    await expect(page.locator('#continueLearningCtfCount')).toContainText('0');
+    await expect(page.locator('#continueLearningLastVisited')).toContainText(
+      /No course progress yet/i
+    );
+  });
+
+  test('course catalog ignores unsafe persisted resume links', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem(
+        'cm_learning_progress_v1',
+        JSON.stringify({
+          lastVisited: {
+            id: 'bad-link',
+            title: 'Injected link',
+            href: 'javascript:alert(1)',
+            type: 'course-page',
+            visitedAt: '2026-06-21T12:00:00.000Z',
+          },
+          visitedPages: {},
+          completedQuizzes: {},
+        })
+      );
+    });
+
+    await page.goto('/HTML/course_Contents.html');
+
+    await expect(page.locator('#continueLearningLink')).toHaveAttribute(
+      'href',
+      /Introductioncourse1\.html/
+    );
+  });
+});
+
+// ─── Shared quiz engine ─────────────────────────────────────────────────────
+
+test.describe('Shared quiz engine', () => {
+  test('migrated quiz shows explanations, score, and saves completion locally', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 3/TAandSEquizcourse3.html'
+    );
+
+    await page.locator('label[for="q1-ES"]').click();
+    await page.locator('label[for="q2-ignore"]').click();
+    await page.locator('label[for="q3-a1"]').click();
+    await page.locator('label[for="q4-phishing"]').click();
+    await page.getByRole('button', { name: /submit quiz/i }).click();
+
+    await expect(page.locator('#result')).toContainText('4/4');
+    await expect(page.locator('#q1-ES-detail')).toBeVisible();
+    await expect(page.locator('#q1-SW-detail')).toBeVisible();
+
+    const saved = await page.evaluate(() => {
+      const raw = window.localStorage.getItem('cm_learning_progress_v1');
+      return raw ? JSON.parse(raw) : null;
+    });
+
+    expect(saved.completedQuizzes).toHaveProperty(
+      'course-3-threat-actors-social-engineering'
+    );
+    expect(
+      saved.completedQuizzes['course-3-threat-actors-social-engineering'].score
+    ).toBe(4);
+  });
+
+  test('second migrated quiz supports alternate correct answer and retry', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 4/TechnicalDefenseQUIZ.html'
+    );
+
+    await page.locator('label[for="q1-ES"]').click();
+    await page.locator('label[for="q2-ignore"]').click();
+    await page.locator('label[for="q3-false"]').click();
+    await page.locator('label[for="q4-phishing"]').click();
+    await page.getByRole('button', { name: /submit quiz/i }).click();
+
+    await expect(page.locator('#result')).toContainText('4/4');
+
+    const saved = await page.evaluate(() => {
+      const raw = window.localStorage.getItem('cm_learning_progress_v1');
+      return raw ? JSON.parse(raw) : null;
+    });
+
+    expect(saved.completedQuizzes).toHaveProperty(
+      'course-4-technical-measures-quiz'
+    );
+
+    await page.getByRole('button', { name: /retry quiz/i }).click();
+    await expect(page.locator('#result')).toHaveText('');
+    await expect(page.locator('#retryQuizBtn')).toBeHidden();
+  });
+});
+
 // ─── Mock terminal ───────────────────────────────────────────────────────────
 
 test.describe('Mock terminal', () => {
