@@ -74,7 +74,7 @@ window.monaco = {
       const model = { language: options.language || 'plaintext' };
       const listeners = [];
       if (element) element.textContent = value;
-      return {
+      const editor = {
         getValue: () => value,
         setValue(nextValue) {
           value = String(nextValue || '');
@@ -87,6 +87,8 @@ window.monaco = {
           return { dispose() {} };
         },
       };
+      window.__cybermindsMonacoEditor = editor;
+      return editor;
     },
   },
 };
@@ -183,6 +185,34 @@ test.describe('Navigation', () => {
     await page.locator('a[href*="challenge=linux-basics"]').click();
     await expect(page).toHaveURL(/terminal\/index\.html/);
     await expect(page).toHaveTitle('CyberMinds Terminal');
+  });
+});
+
+test.describe('Content pages', () => {
+  test('mission page exposes a clear h1 and responsive content cards', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/mission.html');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Our Mission'
+    );
+
+    const overflowing = await page.evaluate(() => {
+      return document.documentElement.scrollWidth > window.innerWidth;
+    });
+    expect(overflowing).toBe(false);
+  });
+
+  test('more info page uses semantic headings and visible contact link', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/moreinfo.html');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'More Info'
+    );
+    await expect(
+      page.getByRole('link', { name: /CYBER-MINDS@outlook\.com/i })
+    ).toBeVisible();
   });
 });
 
@@ -479,5 +509,74 @@ test.describe('Mock terminal', () => {
     // Toast text persists in the DOM even after the visible class is removed,
     // so toContainText() matches reliably within the retry window.
     await expect(page.locator('#toast')).toContainText(/completed/i);
+  });
+
+  test('completed mock challenge appears in learner progress dashboard', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+
+    await page.evaluate(() => {
+      // eslint-disable-next-line no-undef
+      window.setMockFile(
+        'report.txt',
+        'owner: cyberminds, group: staff, perms: 0755\n'
+      );
+    });
+
+    await page.locator('#checkSolutionBtn').click();
+    await expect(page.locator('#progressChip')).toContainText('1/');
+
+    await page.goto('/HTML/course_Contents.html');
+    await expect(page.locator('#continueLearningCtfCount')).toContainText('1');
+  });
+
+  test('draft autosaves before a fast reload and restores the edit', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(
+        '# recovered draft\nprint("keep this after reload")\n'
+      );
+    });
+
+    const savedDraftKeys = await page.evaluate(() =>
+      Object.keys(window.localStorage).filter((key) =>
+        key.startsWith('cm_terminal_draft_v1')
+      )
+    );
+
+    expect(savedDraftKeys).toContain(
+      'cm_terminal_draft_v1:linux-basics:template:python'
+    );
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    const restoredDraft = await page.evaluate(() =>
+      window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      )
+    );
+
+    expect(restoredDraft).toContain('keep this after reload');
+
+    await expect(page.locator('#editor')).toContainText(
+      'keep this after reload'
+    );
   });
 });

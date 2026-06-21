@@ -414,7 +414,17 @@ function queueDraftSave() {
     return;
   }
   window.clearTimeout(autoSaveTimer);
-  autoSaveTimer = window.setTimeout(persistActiveDraft, 250);
+  autoSaveTimer = null;
+  persistActiveDraft();
+}
+
+function flushDraftSave() {
+  if (!editor) {
+    return;
+  }
+  window.clearTimeout(autoSaveTimer);
+  autoSaveTimer = null;
+  persistActiveDraft();
 }
 
 function setMobileView(view) {
