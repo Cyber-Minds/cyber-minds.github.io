@@ -189,6 +189,21 @@ test.describe('Navigation', () => {
 // ─── Learner progress ───────────────────────────────────────────────────────
 
 test.describe('Learner progress dashboard', () => {
+  test('visiting a course page records last visited lesson', async ({ page }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 3/SocialEngineeringcourse3.html'
+    );
+    await page.goto('/HTML/course_Contents.html');
+
+    await expect(page.locator('#continueLearningLastVisited')).toContainText(
+      'Course 3 - Social Engineering'
+    );
+    await expect(page.locator('#continueLearningLink')).toHaveAttribute(
+      'href',
+      /SocialEngineeringcourse3\.html/
+    );
+  });
+
   test('course catalog shows local progress, recommendation, and reset flow', async ({
     page,
   }) => {
@@ -390,6 +405,25 @@ test.describe('Shared quiz engine', () => {
     await page.getByRole('button', { name: /retry quiz/i }).click();
     await expect(page.locator('#result')).toHaveText('');
     await expect(page.locator('#retryQuizBtn')).toBeHidden();
+  });
+});
+
+test.describe('Legacy quiz progress', () => {
+  test('legacy quiz submission updates local progress dashboard', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 6/QuizLinuxcourse6.html'
+    );
+
+    await page.locator('label[for="q1-VS"]').first().click();
+    await page.locator('label[for="q2-ignore"]').first().click();
+    await page.locator('label[for="q4-phishing"]').first().click();
+    await page.getByRole('button', { name: /submit quiz/i }).click();
+    await expect(page.locator('#result')).toContainText('/4');
+
+    await page.goto('/HTML/course_Contents.html');
+    await expect(page.locator('#continueLearningQuizCount')).toContainText('1');
   });
 });
 
