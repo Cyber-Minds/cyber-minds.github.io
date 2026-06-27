@@ -116,6 +116,9 @@ function trackPageView() {
     }
 
     trackEvent('page_view', { category });
+    if (category === 'chatbox') {
+      trackEvent('live_help_opened', {});
+    }
   } catch (e) {
     // silent fail
   }

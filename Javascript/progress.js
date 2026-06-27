@@ -263,6 +263,13 @@
     state.lastVisited = record;
     state.visitedPages[meta.id] = record;
     writeState(state);
+
+    if ((meta.type === 'course-page' || meta.type === 'quiz') && typeof global.trackEvent === 'function') {
+      global.trackEvent('course_progress', {
+        page_id: meta.id,
+        page_type: meta.type,
+      });
+    }
   }
 
   function markQuizComplete(quizId, payload) {
