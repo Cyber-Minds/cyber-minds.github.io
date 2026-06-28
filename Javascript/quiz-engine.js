@@ -150,6 +150,7 @@
         });
       }
     });
+
   }
 
   global.CyberMindsQuizEngine = {
