@@ -26,6 +26,7 @@ let activeEditorFile = {
   filename: 'hello.py',
   path: '',
 };
+let isInitialLoad = true;
 const PROGRESS_STORAGE_KEY = 'cm_ctf_progress_v1';
 const THEME_STORAGE_KEY = 'cm_terminal_theme_v1';
 const DRAFT_STORAGE_PREFIX = 'cm_terminal_draft_v1';

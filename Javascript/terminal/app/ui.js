@@ -71,6 +71,9 @@ function handleGlobalShortcuts(event) {
   }
 }
 
+/**
+ * Show a banner above the editor when a non-default draft was restored.
+ */
 function showDraftRecoveryBanner() {
   const existing = document.getElementById('draftRecoveryBanner');
   if (existing) existing.remove();
@@ -80,7 +83,7 @@ function showDraftRecoveryBanner() {
   banner.id = 'draftRecoveryBanner';
   banner.className = 'draft-recovery-banner';
   banner.innerHTML = `
-    <span class="draft-recovery-icon">&#128196;</span>
+    <span class="draft-recovery-icon"></span>
     <span class="draft-recovery-msg">Draft recovered from your last session.</span>
     ${
       hasMultipleDrafts
@@ -118,66 +121,136 @@ function showDraftRecoveryBanner() {
   }, 8000);
 }
 
+/**
+ * Discard the active draft and reset the editor to the original language default
+ * (not the challenge's hint-laden starter code).
+ */
 function discardActiveDraft() {
+  const key = getDraftStorageKey();
+ 
   try {
-    const key = getDraftStorageKey();
+    const discardedContent = localStorage.getItem(key);
+    if (discardedContent !== null) {
+      // Archive under a "discarded:" prefix so it still appears in Browse,
+      // labeled clearly, in case the student wants it back.
+      const archiveKey = `${DRAFT_STORAGE_PREFIX}:discarded:${Date.now()}:${key.slice(DRAFT_STORAGE_PREFIX.length + 1)}`;
+      localStorage.setItem(archiveKey, discardedContent);
+    }
     localStorage.removeItem(key);
   } catch (e) {
     console.warn('Draft discard failed:', e);
   }
-
+ 
   const banner = document.getElementById('draftRecoveryBanner');
   if (banner) banner.remove();
-
-  const challenge = challengeCatalog[activeChallengeId];
-  const starterLang = challenge?.starterLang || currentLang;
-  const starterCode = challenge?.starterCode || codeSamples[starterLang] || '';
-  currentLang = starterLang;
-  codeSamples[currentLang] = starterCode;
+ 
+  const originalDefaults = {
+    python: '# Python starter\nprint("CyberMinds terminal ready")\n',
+    javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
+    java: 'public class Hello {\n    public static void main(String[] args) {\n        System.out.println("CyberMinds terminal ready");\n    }\n}\n',
+    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("CyberMinds terminal ready")\n}\n',
+  };
+  const defaultCode = originalDefaults[currentLang] || '';
+ 
+  codeSamples[currentLang] = defaultCode;
   activeEditorFile = {
     kind: 'template',
     lang: currentLang,
     filename: templateFilenames[currentLang],
     path: '',
   };
-  editor.setValue(starterCode);
+  editor.setValue(defaultCode);
   monaco.editor.setModelLanguage(editor.getModel(), currentLang);
   renderFileTabs();
   refreshLanguageBadge();
-  persistActiveDraft();
-  showToast('Draft discarded. Starter code loaded.');
+  showToast('Draft discarded. You can still recover it from Browse Drafts.');
 }
 
+/**
+ * Open a styled modal listing all saved drafts across challenges/files.
+ * Replaces the old window.prompt()-based browser.
+ */
 function browseSavedDrafts() {
-  const drafts = getSavedDraftSummaries();
-  if (drafts.length === 0) {
-    showToast('No saved drafts found.');
-    return;
-  }
+  const allDrafts = getSavedDraftSummaries();
 
-  const choices = drafts
-    .map((draft, index) => {
-      const preview =
-        draft.preview.length > 60
-          ? `${draft.preview.slice(0, 57)}...`
-          : draft.preview;
-      return `${index + 1}. ${draft.label} - ${preview}`;
-    })
-    .join('\n');
-  const selection = window.prompt(
-    `Saved drafts stay in this browser only.\n\n${choices}\n\nEnter a draft number to restore:`
+  // Scope to the current challenge only — show all files/languages for this challenge
+  const drafts = allDrafts.filter(
+    (draft) => draft.challengeId === activeChallengeId
   );
-  if (selection === null) {
+
+  if (drafts.length === 0) {
+    showToast('No saved drafts found for this challenge.');
     return;
   }
 
-  const index = Number.parseInt(selection, 10) - 1;
-  if (!Number.isInteger(index) || index < 0 || index >= drafts.length) {
-    showToast('No draft restored.');
-    return;
+  const existing = document.getElementById('draftBrowseOverlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'draftBrowseOverlay';
+  overlay.className = 'draft-browse-overlay';
+
+  const modal = document.createElement('div');
+  modal.className = 'draft-browse-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+
+  const challengeTitle = challengeCatalog[activeChallengeId]?.title || activeChallengeId;
+
+  modal.innerHTML = `
+    <div class="draft-browse-head">
+      <span>Saved Drafts — ${challengeTitle}</span>
+      <button class="draft-browse-close" id="draftBrowseCloseBtn" type="button">&#10005;</button>
+    </div>
+    <div class="draft-browse-subhead">Saved drafts stay in this browser only.</div>
+    <div class="draft-browse-list" id="draftBrowseList"></div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  const list = modal.querySelector('#draftBrowseList');
+  drafts.forEach((draft) => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'draft-browse-item';
+
+    const preview =
+      draft.preview.length > 70
+        ? `${draft.preview.slice(0, 67)}...`
+        : draft.preview;
+
+    item.innerHTML = `
+      <span class="draft-browse-item-label">${draft.scope}</span>
+      <span class="draft-browse-item-preview">${preview}</span>
+    `;
+
+    item.addEventListener('click', () => {
+      restoreSavedDraft(draft);
+      overlay.remove();
+    });
+
+    list.appendChild(item);
+  });
+
+  function closeModal() {
+    overlay.remove();
   }
 
-  restoreSavedDraft(drafts[index]);
+  modal.querySelector('#draftBrowseCloseBtn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closeModal();
+    }
+  });
+
+  const escHandler = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
 }
 
 function restoreSavedDraft(draft) {
@@ -187,14 +260,14 @@ function restoreSavedDraft(draft) {
   } catch (e) {
     console.warn('Draft restore failed:', e);
   }
-
+ 
   if (saved === null) {
     showToast('Saved draft was not found.');
     return;
   }
-
+ 
   loadChallenge(draft.challengeId);
-
+ 
   if (draft.kind === 'workspace') {
     const language = detectLanguageFromPath(draft.scope);
     currentLang = language;
@@ -218,10 +291,21 @@ function restoreSavedDraft(draft) {
     switchLanguage(draft.scope, { persistCurrent: false });
     editor.setValue(saved);
   }
-
+ 
+  // If this was a discarded/archived draft, promote it back to the active key
+  // and clean up the archive entry.
+  if (draft.isDiscarded) {
+    try {
+      localStorage.removeItem(draft.key);
+    } catch (e) {
+      console.warn('Failed to clean up archived draft:', e);
+    }
+  }
+  persistActiveDraft();
+ 
   const banner = document.getElementById('draftRecoveryBanner');
   if (banner) banner.remove();
-  showToast('Saved draft restored.');
+  showToast(draft.isDiscarded ? 'Discarded draft restored.' : 'Saved draft restored.');
 }
 
 function attachUiHandlers() {
@@ -466,6 +550,11 @@ function initEditor() {
     renderFileTabs();
     loadChallenge(activeChallengeId, false);
 
+    // Mark initial load complete after boot settles so switchLanguage/persistActiveDraft
+    // calls during boot don't overwrite a freshly-restored draft.
+    window.setTimeout(() => {
+      isInitialLoad = false;
+    }, 500);
   });
 }
 
