@@ -40,13 +40,13 @@ test.describe('Analytics payload validation', () => {
       window.umami.track = function (name, payload) {
         events.push({ name, payload });
       };
-      window.trackEvent('test_event', {
+      window.trackEvent('quiz_complete', {
         quiz: 'quiz-1',
         email: 'user@example.com',
         password: 'secret123',
         token: 'abc123',
         score: 5,
-        safe_bool: true,
+        total_questions: 10,
       });
       return events;
     });
@@ -56,7 +56,7 @@ test.describe('Analytics payload validation', () => {
     expect(captured[0].payload).not.toHaveProperty('token');
     expect(captured[0].payload).toHaveProperty('quiz', 'quiz-1');
     expect(captured[0].payload).toHaveProperty('score', 5);
-    expect(captured[0].payload).toHaveProperty('safe_bool', true);
+    expect(captured[0].payload).toHaveProperty('total_questions', 10);
   });
 
   test('trackEvent drops object and array payload values', async ({ page }) => {
@@ -66,18 +66,45 @@ test.describe('Analytics payload validation', () => {
       window.umami.track = function (name, payload) {
         events.push({ name, payload });
       };
-      window.trackEvent('test_event', {
-        safe_str: 'hello',
+      window.trackEvent('quiz_complete', {
+        quiz: 'quiz-1',
         nested_obj: { secret: 'data' },
         array_val: ['a', 'b'],
-        safe_num: 42,
+        score: 42,
+        total_questions: 50,
       });
       return events;
     });
-    expect(captured[0].payload).toHaveProperty('safe_str', 'hello');
-    expect(captured[0].payload).toHaveProperty('safe_num', 42);
+    expect(captured[0].payload).toHaveProperty('quiz', 'quiz-1');
+    expect(captured[0].payload).toHaveProperty('score', 42);
+    expect(captured[0].payload).toHaveProperty('total_questions', 50);
     expect(captured[0].payload).not.toHaveProperty('nested_obj');
     expect(captured[0].payload).not.toHaveProperty('array_val');
+  });
+
+  test('trackEvent drops unknown primitive keys outside the event allowlist', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    const captured = await page.evaluate(() => {
+      const events = [];
+      window.umami.track = function (name, payload) {
+        events.push({ name, payload });
+      };
+      window.trackEvent('quiz_complete', {
+        quiz: 'quiz-1',
+        score: 4,
+        total_questions: 4,
+        answer: 'red',
+        text: 'free form',
+      });
+      return events;
+    });
+    expect(captured[0].payload).toEqual({
+      quiz: 'quiz-1',
+      score: 4,
+      total_questions: 4,
+    });
   });
 
   test('BLOCKED_KEYS covers all required sensitive field names', async ({ page }) => {
@@ -193,6 +220,26 @@ test.describe('quiz_start event', () => {
       }
     }
   });
+
+  test('fires on legacy quiz pages that do not use the shared quiz engine', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 6/QuizLinuxcourse6.html'
+    );
+    await page.waitForFunction(
+      () => window.__capturedAnalyticsEvents.some((e) => e.name === 'quiz_start'),
+      null,
+      { timeout: 10_000 }
+    );
+
+    const payload = await page.evaluate(
+      () =>
+        window.__capturedAnalyticsEvents.find((e) => e.name === 'quiz_start').payload
+    );
+    expect(payload.quiz).toBe('course-6-quizlinuxcourse6');
+    expect(payload.total_questions).toBe(4);
+  });
 });
 
 // ─── course_progress event ───────────────────────────────────────────────────
@@ -271,6 +318,28 @@ test.describe('course_progress event', () => {
       window.__capturedAnalyticsEvents.some((e) => e.name === 'course_progress')
     );
     expect(hasCourseProgress).toBe(false);
+  });
+
+  test('fires on course pages that load analytics.js without header progress injection', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 12/Introductioncourse12.html'
+    );
+    await page.waitForFunction(
+      () => window.__capturedAnalyticsEvents.some((e) => e.name === 'course_progress'),
+      null,
+      { timeout: 10_000 }
+    );
+
+    const payload = await page.evaluate(
+      () =>
+        window.__capturedAnalyticsEvents.find((e) => e.name === 'course_progress').payload
+    );
+    expect(payload).toEqual({
+      page_id: 'course-12-introductioncourse12',
+      page_type: 'course-page',
+    });
   });
 });
 

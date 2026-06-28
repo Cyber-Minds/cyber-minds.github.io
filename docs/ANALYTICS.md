@@ -40,7 +40,9 @@ Challenge answers, terminal input, quiz answers, session credentials, and free-f
 
 ## Forbidden payload fields
 
-The following keys are **never allowed** in any analytics event payload. `trackEvent()` strips them silently before sending — no exception is thrown.
+Each analytics event now has a small allowlist of expected keys. If a field is not explicitly allowed for that event, `trackEvent()` drops it silently before sending.
+
+The following keys are **never allowed** in any analytics event payload, even if someone tries to add them to an event schema. `trackEvent()` strips them silently before sending — no exception is thrown.
 
 | Blocked key pattern | Why |
 |---|---|
@@ -67,7 +69,7 @@ In addition, `trackEvent()` rejects any value that is not a primitive (`string`,
 
 ## Privacy guardrails
 
-**No PII.** Every custom event goes through `trackEvent()` in `analytics.js` before being sent. That function strips any field whose key contains: token, session_id, user_id, email, password, key, secret, or auth. If someone accidentally passes a sensitive field it gets silently dropped.
+**No PII.** Every custom event goes through `trackEvent()` in `analytics.js` before being sent. That function only forwards event-specific allowlisted keys and also strips any field whose key contains: token, session_id, user_id, email, password, key, secret, or auth. If someone accidentally passes a sensitive or unknown field it gets silently dropped.
 
 **No query strings.** The Umami script tag includes `data-exclude-search="true"` which means URL parameters like session tokens or challenge IDs in the address bar are never forwarded to Umami.
 
