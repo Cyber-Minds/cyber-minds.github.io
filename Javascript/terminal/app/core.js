@@ -345,8 +345,6 @@ function getSavedDraftSummaries() {
         return;
       }
  
-      const challenge = challengeCatalog[challengeId];
-      const challengeTitle = challenge ? challenge.title : challengeId;
       const preview = value
         .split('\n')
         .find((line) => line.trim().length > 0);
