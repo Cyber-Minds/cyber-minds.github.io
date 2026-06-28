@@ -420,7 +420,7 @@ function queueDraftSave() {
     return;
   }
   window.clearTimeout(autoSaveTimer);
-  autoSaveTimer = window.setTimeout(persistActiveDraft, 250);
+  persistActiveDraft();
 }
 
 function flushDraftSave() {
