@@ -113,38 +113,18 @@ function getCommandPaletteActions() {
       disabled: false,
       run: () => document.getElementById('clearBtn').click(),
     },
-    {
-      id: 'starter',
-      label: 'Load Starter Code',
-      hint: 'Ctrl/Cmd + Shift + S',
-      keywords: 'starter template',
-      disabled: false,
-      run: () => document.getElementById('loadStarterBtn').click(),
-    },
-    {
-      id: 'discard-draft',
-      label: 'Discard Draft',
-      hint: '',
-      keywords: 'discard draft delete clear reset starter',
-      disabled: false,
-      run: () => {
-        if (window.confirm('Discard this draft and reload the starter code?')) {
-          discardActiveDraft();
-        }
-      },
-    },
-    {
-      id: 'browse-drafts',
-      label: 'Browse Saved Drafts',
-      hint: '',
-      keywords: 'browse restore recover saved drafts local',
-      disabled: false,
-      run: browseSavedDrafts,
-    },
-    {
-      id: 'copy',
-      label: 'Copy First Command',
-      hint: '',
+  {
+    id: 'starter',
+    label: 'Load Starter Code',
+    hint: 'Ctrl/Cmd + Shift + S',
+    keywords: 'starter template',
+    disabled: false,
+    run: () => document.getElementById('loadStarterBtn').click(),
+  },
+  {
+    id: 'copy',
+    label: 'Copy First Command',
+    hint: '',
       keywords: 'copy first command',
       disabled: false,
       run: () => document.getElementById('copyCommandBtn').click(),
@@ -406,9 +386,6 @@ function restoreDraftOrDefault(fallback) {
   if (saved !== null) {
     try {
       editor.setValue(saved);
-      if (saved !== fallback) {
-        window.setTimeout(showDraftRecoveryBanner, 3000);
-      }
     } catch (e) {
       console.warn('Draft restore failed, falling back:', e);
       editor.setValue(fallback);
@@ -446,6 +423,15 @@ function queueDraftSave() {
   }
   window.clearTimeout(autoSaveTimer);
   autoSaveTimer = window.setTimeout(persistActiveDraft, 10000);
+}
+
+function flushDraftSave() {
+  if (!editor) {
+    return;
+  }
+  window.clearTimeout(autoSaveTimer);
+  autoSaveTimer = null;
+  persistActiveDraft();
 }
 
 function setMobileView(view) {

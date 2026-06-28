@@ -24,6 +24,18 @@ if (!Array.isArray(eventQueue)) {
   window[EVENT_QUEUE_KEY] = eventQueue;
 }
 
+var EVENT_SCHEMAS = {
+  page_view: { category: 'string' },
+  ctf_entry_click: { source: 'string' },
+  course_entry_click: { source: 'string' },
+  get_started_click: { source: 'string' },
+  course_progress: { page_id: 'string', page_type: 'string' },
+  quiz_start: { quiz: 'string', total_questions: 'number' },
+  quiz_complete: { quiz: 'string', score: 'number', total_questions: 'number' },
+  live_help_opened: {},
+  challenge_start: { challenge: 'string' },
+  challenge_complete: { challenge: 'string' },
+};
 var BLOCKED_KEYS = ['token', 'sessionid', 'session_id', 'userid', 'user_id', 'email', 'password', 'key', 'secret', 'auth'];
 
 function isBlockedKey(k) {
@@ -32,6 +44,86 @@ function isBlockedKey(k) {
     if (lower.indexOf(BLOCKED_KEYS[i]) !== -1) return true;
   }
   return false;
+}
+
+function matchesExpectedType(value, expectedType) {
+  return (
+    (expectedType === 'string' && typeof value === 'string') ||
+    (expectedType === 'number' && typeof value === 'number') ||
+    (expectedType === 'boolean' && typeof value === 'boolean')
+  );
+}
+
+function sanitizeSegment(segment) {
+  return String(segment || '')
+    .toLowerCase()
+    .replace(/\.html?$/, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function deriveCourseMeta() {
+  var path = window.location.pathname;
+  var decodedPath = path;
+
+  try {
+    decodedPath = decodeURIComponent(path);
+  } catch (error) {
+    decodedPath = path;
+  }
+
+  if (decodedPath.indexOf('/HTML/Courses and Activities/') === -1) {
+    return null;
+  }
+
+  var segments = decodedPath.split('/');
+  var courseSegment = sanitizeSegment(segments[segments.length - 2]);
+  var pageSegment = sanitizeSegment(segments[segments.length - 1]);
+
+  return {
+    id: courseSegment + '-' + pageSegment,
+    type: pageSegment.indexOf('quiz') !== -1 ? 'quiz' : 'course-page',
+  };
+}
+
+function countQuizQuestions() {
+  var questionNames = {};
+  document
+    .querySelectorAll('input[type="radio"][name], input[type="checkbox"][name]')
+    .forEach(function (input) {
+      if (input.name) {
+        questionNames[input.name] = true;
+      }
+    });
+
+  return Object.keys(questionNames).length;
+}
+
+function trackCourseAnalytics() {
+  var meta = deriveCourseMeta();
+  if (!meta) {
+    return;
+  }
+
+  trackEvent('course_progress', {
+    page_id: meta.id,
+    page_type: meta.type,
+  });
+
+  if (meta.type !== 'quiz') {
+    return;
+  }
+
+  var totalQuestions = countQuizQuestions();
+  var payload = {
+    quiz: String(document.body.dataset.quizId || meta.id),
+  };
+
+  if (totalQuestions > 0) {
+    payload.total_questions = totalQuestions;
+  }
+
+  trackEvent('quiz_start', payload);
 }
 
 /**
@@ -49,14 +141,14 @@ function trackEvent(eventName, payload) {
       return;
     }
 
-    // Strip any fields that could contain PII or tokens
+    var schema = EVENT_SCHEMAS[eventName] || {};
     var safePayload = {};
     for (var k in payload) {
       if (!Object.prototype.hasOwnProperty.call(payload, k)) continue;
       var v = payload[k];
       if (isBlockedKey(k)) continue;
-      // Only allow string, number, boolean values — no objects or arrays
-      if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
+      if (!Object.prototype.hasOwnProperty.call(schema, k)) continue;
+      if (matchesExpectedType(v, schema[k])) {
         safePayload[k] = v;
       }
     }
@@ -116,6 +208,9 @@ function trackPageView() {
     }
 
     trackEvent('page_view', { category });
+    if (category === 'chatbox') {
+      trackEvent('live_help_opened', {});
+    }
   } catch (e) {
     // silent fail
   }
@@ -141,7 +236,9 @@ function trackPageView() {
 
 // Click tracking — DOMContentLoaded is fine here (just registering listeners,
 // no umami call happens until the user actually clicks by which point it's loaded)
-document.addEventListener('DOMContentLoaded', function () {
+function bindAnalyticsDomHandlers() {
+  trackCourseAnalytics();
+
   // Track CTF nav link clicks
   document.querySelectorAll('a[href*="CTF"], a[href*="ctf"]').forEach(function (link) {
     link.addEventListener('click', function () {
@@ -171,7 +268,13 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindAnalyticsDomHandlers);
+} else {
+  bindAnalyticsDomHandlers();
+}
 
 /**
  * Track challenge completion milestone.

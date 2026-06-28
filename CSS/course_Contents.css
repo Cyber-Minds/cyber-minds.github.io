@@ -109,6 +109,79 @@ section {
   gap: 0.5em;
 }
 
+.continue-learning-panel {
+  width: min(74rem, calc(100% - 2rem));
+  margin: 0 auto 1.5rem;
+  padding: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(111, 219, 240, 0.24);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(9, 21, 34, 0.96), rgba(20, 54, 82, 0.84)),
+    rgba(0, 0, 0, 0.92);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.28);
+}
+
+.continue-learning-copy {
+  max-width: 44rem;
+}
+
+.continue-learning-kicker {
+  margin: 0 0 0.35rem;
+  color: #6fdbf0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}
+
+.continue-learning-copy h2 {
+  margin: 0 0 0.5rem;
+}
+
+.continue-learning-summary {
+  margin: 0.5rem 0;
+}
+
+.continue-learning-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.continue-learning-stats p {
+  margin: 0.35rem 0;
+}
+
+.continue-learning-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.continue-learning-cta,
+.continue-learning-reset {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.continue-learning-cta {
+  background: #6fdbf0;
+  color: #091522;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.continue-learning-reset {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+}
+
 .course-card {
   width: 22em;
   background-color: rgb(17, 25, 35);
@@ -170,6 +243,20 @@ section {
 @media only screen and (max-width: 600px) {
   header {
     position: static;
+  }
+
+  .continue-learning-panel {
+    padding: 1.2rem;
+  }
+
+  .continue-learning-actions {
+    width: 100%;
+  }
+
+  .continue-learning-cta,
+  .continue-learning-reset {
+    width: 100%;
+    text-align: center;
   }
 }
 .course-card {

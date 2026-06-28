@@ -1,299 +1,135 @@
-/* this page links to index */
+:root {
+  --page-bg: #040b14;
+  --panel-bg: linear-gradient(180deg, rgba(16, 33, 52, 0.95), rgba(10, 22, 36, 0.98));
+  --panel-border: rgba(83, 151, 220, 0.26);
+  --text-main: #f5fbff;
+  --text-muted: #bfd4e6;
+  --accent: #5eb7ff;
+  --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-  overflow-x: hidden;
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(circle at top, rgba(33, 85, 133, 0.3), transparent 34%),
+    linear-gradient(180deg, #02070d 0%, var(--page-bg) 44%, #03070d 100%);
 }
 
 .Parent-container {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  width: auto;
-  padding-bottom: 2em;
+  min-height: 100vh;
 }
 
-body {
-  font-family: 'Georgia', sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+.mission-main {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.hero {
+  padding: 1rem 0 2rem;
   text-align: center;
-  background-color: #050d18;
-  animation: rotateBoxShadow 4s infinite linear;
 }
 
-@keyframes rotateBoxShadow {
-  0%   { box-shadow: inset 0px 0em 15em #050d18; }
-  33%  { box-shadow: inset 0px 1em 20em #081526; }
-  66%  { box-shadow: inset 0px 0.5em 20em #060f1e; }
-  100% { box-shadow: inset 0em 0em 15em #050c1a; }
-}
-
-header {
-  background-color: #000000;
-  color: #ffffff;
-  text-align: center;
-  padding-left: 1em;
-  padding-bottom: 0.2em;
-  padding-right: 1em;
-  padding-top: 1em;
-  margin-bottom: 20px;
-}
-
-.header-content {
-  display: flex;
-  align-items: center; /* Center the items vertically */
-  justify-content: space-between; /* Space between the logo and nav */
-}
-
-.header-content img {
-  max-height: 3em;
-  margin-right: 3em;
-}
-
-.header-buttons {
-  display: flex;
-  justify-content: space-between;
-  background-color: #000000;
-  padding: 0.5em;
-  padding-left: 6em;
-  padding-right: 6em;
-  align-items: center;
-  flex-grow: 1;
-}
-
-.header-buttons a {
-  text-decoration: none;
-  font-size: 14pt;
-  color: #ffffff;
-  padding: 0.5em 1em;
-  transition: background-color 0.3s;
-  background-color: #174867;
-  text-decoration: none;
-  margin-right: 0.9em;
-  padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
-  border-radius: 0.8em; /* Make the buttons more rounded */
-  white-space: nowrap; /* Prevent text from wrapping */
-}
-
-.header-buttons a:hover {
-  background-color: #286aa7;
-}
-
-main {
-  padding-bottom: 3.5rem;
+.eyebrow {
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-size: 0.82rem;
 }
 
 .page-title {
   margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 4em;
-  font-weight: 700;
-  font-style: normal;
-  word-spacing: 0.2em;
-  letter-spacing: 0.1em;
-  color: transparent; /* Set initial text color to transparent */
-  background: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0),
-    rgba(255, 255, 255, 0.8)
-  ); /* Adjust the colors and stops as needed */
-  background-clip: text;
-  -webkit-background-clip: text;
-  animation: fadeIn 3s forwards; /* Set the duration of the animation */
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
-@keyframes fadeIn {
-  to {
-    color: rgb(255, 255, 255);
-    background-size: 200% 100%; /* Adjust the size of the gradient */
-  }
+.hero-copy {
+  width: min(720px, 100%);
+  margin: 1.25rem auto 0;
+  color: var(--text-muted);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.75;
 }
 
-p {
-  color: white;
-  padding-left: 2em;
-  padding-right: 2em;
-  font-family: 'Space Grotesk', sans-serif;
-  line-height: 1.7em;
-  font-size: 2.2em;
+.mission-grid {
+  display: grid;
+  gap: 1.5rem;
 }
 
-ul {
-  padding-left: 1em;
-  color: white;
-  text-align: center;
-  list-style: none;
-  font-family: 'Space Grotesk', sans-serif;
-}
- 
-li {
-  margin-bottom: 0.3em;
-  color: white;
-  font-family: 'Space Grotesk', sans-serif;
-  line-height: 1.5em;
+.mission-card {
+  display: grid;
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel-bg);
+  box-shadow: var(--shadow);
 }
 
-a {
-  color: #ffffff;
-  text-decoration: none;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-h2 {
-  font-size: 1.2em;
-  margin-top: 1.9em;
-  margin-bottom: 0.95em;
-  color: white;
-  /*border-bottom: 2px solid #333;*/
-  padding-bottom: 5px;
-  text-align: center;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-h3 {
-  font-size: 2.6em;
-  color: white;
-  /*border-bottom: 2px solid #333;*/
-  padding-bottom: 0em;
-  text-align: center;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.card-heading {
-  font-size: 1.8em;
-  color: white;
-  padding-bottom: 0.25em;
-  text-align: center;
-  font-family: 'Space Grotesk', sans-serif;
-}
- 
-.card-text {
-  font-size: 1em;
-  color: white;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
-  font-family: 'Space Grotesk', sans-serif;
-  line-height: 1.7em;
-}
- 
-li.card-text {
-  font-size: 2em;
-  line-height: 1.6em;
-  margin-bottom: 0.5em;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-}
-
-.page-footer {
-  background-color: #0a0a0a;
-  color: #fff;
-  text-align: center;
-  padding: 1em 0;
-  font-size: 0.9em;
-  font-family: 'Space Grotesk', sans-serif;
-}
-
-.flex1 {
- border-radius: 0.6em;
-  display: flex;
-  flex-direction: row;
-  background-color: #0d1b2a;
-  border: 1px solid #1a2f4a;
-  margin-bottom: 2.5em;
-  margin-top: 2.5em;
-  margin-left: 12em;
-  margin-right: 12em;
-  height: 30em;
-}
-
-.flex2 {
- border-radius: 0.6em;
-  display: flex;
-  flex-direction: row;
-  background-color: #0d1b2a;
-  border: 1px solid #1a2f4a;
-  margin-bottom: 2.5em;
-  margin-top: 2.5em;
-  margin-left: 12em;
-  margin-right: 12em;
-  height: 30em;
-}
-
-.flex3 {
- border-radius: 0.6em;
-  display: flex;
-  flex-direction: row;
-  background-color: #0d1b2a;
-  border: 1px solid #1a2f4a;
-  margin-bottom: 2.5em;
-  margin-top: 2.5em;
-  margin-left: 12em;
-  margin-right: 12em;
-  height: 30em;
+.media-right {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
 }
 
 .theIMAGE img {
-  margin-top: 3em;
-  align-self: center;
-  height: 24em;
-  width: auto;
-  flex: 5;
-  margin-left: 1em;
-  margin-right: 1em;
-  margin-bottom: 2em;
-  border-radius: 0.3em 0.3em 0.3em 0.3em;
-  animation: rotateBoxShadow1 4s infinite linear;
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(126, 187, 255, 0.24);
 }
 
-@keyframes rotateBoxShadow1 {
-  0% {
-    box-shadow: 0.05em 0.05em 0.9em rgba(24, 55, 68, 0.974);
-  }
-  33% {
-    box-shadow: 0.05em 0.1em 1.3em #4f7ab2;
-  }
-  66% {
-    box-shadow: 0.05em 0.15em 1.5em #38557d;
-  }
-  100% {
-    box-shadow: 0.05em 0.1em 0.95em rgba(17, 48, 70, 0.8);
-  }
+.flexwording h2 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
 }
 
-.flexwording {
-  background: linear-gradient(to bottom, #0000009f, #17263b);
-  flex: 6;
-  border-width: 0.6em;
-  border-style: solid; /* Add this line */
-  border-color: #111a23;
-  margin-top: 3em;
-  margin-bottom: 2.5em;
-  margin-left: 3.6em;
-  margin-right: 3.6em;
-  border-radius: 0.3em 0.3em 0.3em 0.3em;
-  animation: rotateBoxShadow1 4s infinite linear;
+.flexwording p,
+.values-list {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
 
-@keyframes rotateBoxShadow1 {
-  0% {
-    box-shadow: 0.05em 0.05em 0.9em rgba(24, 55, 68, 0.974);
+.values-list {
+  padding-left: 1.25rem;
+}
+
+.values-list li + li {
+  margin-top: 0.85rem;
+}
+
+#footer {
+  padding: 1.25rem 1rem 2rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+@media (max-width: 840px) {
+  .mission-main {
+    width: min(100% - 1rem, 1120px);
+    padding-top: 1rem;
   }
-  33% {
-    box-shadow: 0.05em 0.1em 1.3em #4f7ab2ac;
+
+  .mission-card,
+  .media-right {
+    grid-template-columns: 1fr;
   }
-  66% {
-    box-shadow: 0.05em 0.15em 1.5em #395e93d3;
-  }
-  100% {
-    box-shadow: 0.05em 0.1em 0.95em rgba(17, 48, 70, 0.8);
+
+  .theIMAGE {
+    order: -1;
   }
 }

@@ -381,6 +381,14 @@ label.selected {
   ); /* Change the background color for the selected label */
 }
 
+label.is-correct {
+  color: lightgreen;
+}
+
+label.is-incorrect {
+  color: #ff8b8b;
+}
+
 .answer-detail {
   display: none;
   margin-top: 0.6px;
@@ -411,4 +419,9 @@ label.selected {
   text-align: center;
   color: #ffffff;
   margin: 0.6em auto 0.6em auto;
+}
+
+.retry-submit {
+  background-color: #16425d;
+  border-color: #286aa7;
 }

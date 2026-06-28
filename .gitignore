@@ -3,3 +3,9 @@ HTML/tesfile.html
 replit.nix
 node_modules/
 .env
+playwright-report/
+test-results/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars

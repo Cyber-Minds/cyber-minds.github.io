@@ -52,8 +52,8 @@ This project is licensed under the MIT License, see the [LICENSE](LICENSE) file 
 
 ## Team
 
-CyberMinds is built by students passionate about cybersecurity education. Visit our [Team Page](https://cyber-minds.github.io/CyberMinds/HTML/ourTeam.html) to learn more.
+CyberMinds is built by students passionate about cybersecurity education. Visit our [Team Page](https://cyber-minds.github.io/HTML/ourTeam.html) to learn more.
 
 ## Contact
 
-- Website: [CyberMinds](https://cyber-minds.github.io/CyberMinds/)
+- Website: [CyberMinds](https://cyber-minds.github.io/)

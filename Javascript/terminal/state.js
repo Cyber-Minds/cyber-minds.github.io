@@ -42,7 +42,7 @@ const isLocalHost = ['localhost', '127.0.0.1'].includes(
 );
 const defaultApiOrigin = isLocalHost
   ? window.location.origin
-  : 'https://terminal.egeuysal.com';
+  : 'https://cyberminds-terminal-20260621-ncus.northcentralus.cloudapp.azure.com';
 const configuredApiOrigin = query.get('apiOrigin') || defaultApiOrigin;
 const apiOrigin = (() => {
   try {
