@@ -143,26 +143,16 @@ function discardActiveDraft() {
  
   const banner = document.getElementById('draftRecoveryBanner');
   if (banner) banner.remove();
- 
-  const originalDefaults = {
-    python: '# Python starter\nprint("CyberMinds terminal ready")\n',
-    javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
-    java: 'public class Hello {\n    public static void main(String[] args) {\n        System.out.println("CyberMinds terminal ready");\n    }\n}\n',
-    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("CyberMinds terminal ready")\n}\n',
-  };
-  const defaultCode = originalDefaults[currentLang] || '';
- 
-  codeSamples[currentLang] = defaultCode;
-  activeEditorFile = {
-    kind: 'template',
-    lang: currentLang,
-    filename: templateFilenames[currentLang],
-    path: '',
-  };
-  editor.setValue(defaultCode);
-  monaco.editor.setModelLanguage(editor.getModel(), currentLang);
-  renderFileTabs();
-  refreshLanguageBadge();
+
+  const challenge = challengeCatalog[activeChallengeId];
+  if (challenge) {
+    currentLang = challenge.starterLang;
+    codeSamples[currentLang] = challenge.starterCode;
+    switchLanguage(currentLang, { persistCurrent: false });
+    editor.setValue(challenge.starterCode);
+  } else {
+    editor.setValue(codeSamples[currentLang] || '');
+  }
   showToast('Draft discarded. You can still recover it from Browse Drafts.');
 }
 
