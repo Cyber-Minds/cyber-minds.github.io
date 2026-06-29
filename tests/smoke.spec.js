@@ -197,9 +197,9 @@ test.describe('Content pages', () => {
       'Our Mission'
     );
 
-    const overflowing = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > window.innerWidth;
-    });
+    const overflowing = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth
+    );
     expect(overflowing).toBe(false);
   });
 
@@ -574,9 +574,36 @@ test.describe('Mock terminal', () => {
     );
 
     expect(restoredDraft).toContain('keep this after reload');
-    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(0);
+    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(1);
 
     await expect(page.locator('#editor')).toContainText(
+      'keep this after reload'
+    );
+
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.locator('#draftDiscardBtn').click();
+
+    const clearedDraft = await page.evaluate(() =>
+      window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      )
+    );
+    expect(clearedDraft).toBeNull();
+
+    await expect(page.locator('#editor')).toContainText(
+      'Linux Basics Warmup'
+    );
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(0);
+    await expect(page.locator('#editor')).not.toContainText(
       'keep this after reload'
     );
   });

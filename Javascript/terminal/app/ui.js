@@ -127,43 +127,34 @@ function showDraftRecoveryBanner() {
  */
 function discardActiveDraft() {
   const key = getDraftStorageKey();
- 
+
   try {
-    const discardedContent = localStorage.getItem(key);
-    if (discardedContent !== null) {
-      // Archive under a "discarded:" prefix so it still appears in Browse,
-      // labeled clearly, in case the student wants it back.
-      const archiveKey = `${DRAFT_STORAGE_PREFIX}:discarded:${Date.now()}:${key.slice(DRAFT_STORAGE_PREFIX.length + 1)}`;
-      localStorage.setItem(archiveKey, discardedContent);
-    }
     localStorage.removeItem(key);
   } catch (e) {
     console.warn('Draft discard failed:', e);
   }
- 
+
   const banner = document.getElementById('draftRecoveryBanner');
   if (banner) banner.remove();
- 
-  const originalDefaults = {
-    python: '# Python starter\nprint("CyberMinds terminal ready")\n',
-    javascript: '// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n',
-    java: 'public class Hello {\n    public static void main(String[] args) {\n        System.out.println("CyberMinds terminal ready");\n    }\n}\n',
-    go: 'package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("CyberMinds terminal ready")\n}\n',
-  };
-  const defaultCode = originalDefaults[currentLang] || '';
- 
-  codeSamples[currentLang] = defaultCode;
-  activeEditorFile = {
-    kind: 'template',
-    lang: currentLang,
-    filename: templateFilenames[currentLang],
-    path: '',
-  };
-  editor.setValue(defaultCode);
-  monaco.editor.setModelLanguage(editor.getModel(), currentLang);
-  renderFileTabs();
-  refreshLanguageBadge();
-  showToast('Draft discarded. You can still recover it from Browse Drafts.');
+
+  if (activeEditorFile.kind === 'workspace') {
+    openWorkspaceFile(activeEditorFile.path);
+    showToast('Draft discarded.');
+    return;
+  }
+
+  const challenge = challengeCatalog[activeChallengeId];
+  if (!challenge) {
+    editor.setValue(codeSamples[currentLang] || '');
+    showToast('Draft discarded.');
+    return;
+  }
+
+  currentLang = challenge.starterLang;
+  codeSamples[currentLang] = challenge.starterCode;
+  switchLanguage(currentLang, { persistCurrent: false });
+  editor.setValue(challenge.starterCode);
+  showToast('Draft discarded.');
 }
 
 /**
@@ -220,10 +211,16 @@ function browseSavedDrafts() {
         ? `${draft.preview.slice(0, 67)}...`
         : draft.preview;
 
-    item.innerHTML = `
-      <span class="draft-browse-item-label">${draft.scope}</span>
-      <span class="draft-browse-item-preview">${preview}</span>
-    `;
+    const label = document.createElement('span');
+    label.className = 'draft-browse-item-label';
+    label.textContent = draft.scope;
+
+    const previewLine = document.createElement('span');
+    previewLine.className = 'draft-browse-item-preview';
+    previewLine.textContent = preview;
+
+    item.appendChild(label);
+    item.appendChild(previewLine);
 
     item.addEventListener('click', () => {
       restoreSavedDraft(draft);

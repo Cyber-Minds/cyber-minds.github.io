@@ -384,6 +384,9 @@ function restoreDraftOrDefault(fallback) {
   if (saved !== null) {
     try {
       editor.setValue(saved);
+      if (typeof showDraftRecoveryBanner === 'function') {
+        showDraftRecoveryBanner();
+      }
     } catch (e) {
       console.warn('Draft restore failed, falling back:', e);
       editor.setValue(fallback);
@@ -403,6 +406,9 @@ function persistActiveDraft() {
     // Don't save a draft that's identical to the unmodified starter —
     // there's nothing to "recover" in that case.
     if (value === starterValue) {
+      if (activeEditorFile.kind === 'template') {
+        localStorage.removeItem(getDraftStorageKey());
+      }
       return;
     }
     localStorage.setItem(getDraftStorageKey(), value);
