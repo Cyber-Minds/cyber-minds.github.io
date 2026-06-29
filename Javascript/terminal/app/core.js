@@ -384,9 +384,6 @@ function restoreDraftOrDefault(fallback) {
   if (saved !== null) {
     try {
       editor.setValue(saved);
-      if (typeof showDraftRecoveryBanner === 'function') {
-        showDraftRecoveryBanner();
-      }
     } catch (e) {
       console.warn('Draft restore failed, falling back:', e);
       editor.setValue(fallback);
