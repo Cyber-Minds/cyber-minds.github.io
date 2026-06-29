@@ -71,6 +71,240 @@ function handleGlobalShortcuts(event) {
   }
 }
 
+/**
+ * Show a banner above the editor when a non-default draft was restored.
+ */
+function showDraftRecoveryBanner() {
+  const existing = document.getElementById('draftRecoveryBanner');
+  if (existing) existing.remove();
+
+  const hasMultipleDrafts = getSavedDraftSummaries().length > 1;
+  const banner = document.createElement('div');
+  banner.id = 'draftRecoveryBanner';
+  banner.className = 'draft-recovery-banner';
+  banner.innerHTML = `
+    <span class="draft-recovery-icon"></span>
+    <span class="draft-recovery-msg">Draft recovered from your last session.</span>
+    ${
+      hasMultipleDrafts
+        ? '<button class="draft-recovery-browse" id="draftBrowseBtn" type="button">Browse</button>'
+        : ''
+    }
+    <button class="draft-recovery-discard" id="draftDiscardBtn" type="button">Discard</button>
+    <button class="draft-recovery-dismiss" id="draftDismissBtn" type="button">&#10005;</button>
+  `;
+
+  const editorPanel = document.getElementById('editorPanel');
+  if (editorPanel) {
+    editorPanel.insertBefore(banner, editorPanel.querySelector('.editor-container'));
+  }
+
+  document.getElementById('draftDiscardBtn').addEventListener('click', () => {
+    if (window.confirm('Discard this draft and reload the starter code? This cannot be undone.')) {
+      discardActiveDraft();
+    }
+  });
+
+  const browseButton = document.getElementById('draftBrowseBtn');
+  if (browseButton) {
+    browseButton.addEventListener('click', browseSavedDrafts);
+  }
+
+  document.getElementById('draftDismissBtn').addEventListener('click', () => {
+    banner.remove();
+  });
+
+  setTimeout(() => {
+    if (document.getElementById('draftRecoveryBanner')) {
+      banner.remove();
+    }
+  }, 8000);
+}
+
+/**
+ * Discard the active draft and reset the editor to the original language default
+ * (not the challenge's hint-laden starter code).
+ */
+function discardActiveDraft() {
+  const key = getDraftStorageKey();
+
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    console.warn('Draft discard failed:', e);
+  }
+
+  const banner = document.getElementById('draftRecoveryBanner');
+  if (banner) banner.remove();
+
+  if (activeEditorFile.kind === 'workspace') {
+    openWorkspaceFile(activeEditorFile.path);
+    showToast('Draft discarded.');
+    return;
+  }
+
+  const challenge = challengeCatalog[activeChallengeId];
+  if (!challenge) {
+    editor.setValue(codeSamples[currentLang] || '');
+    showToast('Draft discarded.');
+    return;
+  }
+
+  currentLang = challenge.starterLang;
+  codeSamples[currentLang] = challenge.starterCode;
+  switchLanguage(currentLang, { persistCurrent: false });
+  editor.setValue(challenge.starterCode);
+  showToast('Draft discarded.');
+}
+
+/**
+ * Open a styled modal listing all saved drafts across challenges/files.
+ * Replaces the old window.prompt()-based browser.
+ */
+function browseSavedDrafts() {
+  const allDrafts = getSavedDraftSummaries();
+
+  // Scope to the current challenge only — show all files/languages for this challenge
+  const drafts = allDrafts.filter(
+    (draft) => draft.challengeId === activeChallengeId
+  );
+
+  if (drafts.length === 0) {
+    showToast('No saved drafts found for this challenge.');
+    return;
+  }
+
+  const existing = document.getElementById('draftBrowseOverlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'draftBrowseOverlay';
+  overlay.className = 'draft-browse-overlay';
+
+  const modal = document.createElement('div');
+  modal.className = 'draft-browse-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+
+  const challengeTitle = challengeCatalog[activeChallengeId]?.title || activeChallengeId;
+
+  modal.innerHTML = `
+    <div class="draft-browse-head">
+      <span>Saved Drafts — ${challengeTitle}</span>
+      <button class="draft-browse-close" id="draftBrowseCloseBtn" type="button">&#10005;</button>
+    </div>
+    <div class="draft-browse-subhead">Saved drafts stay in this browser only.</div>
+    <div class="draft-browse-list" id="draftBrowseList"></div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  const list = modal.querySelector('#draftBrowseList');
+  drafts.forEach((draft) => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'draft-browse-item';
+
+    const preview =
+      draft.preview.length > 70
+        ? `${draft.preview.slice(0, 67)}...`
+        : draft.preview;
+
+    const label = document.createElement('span');
+    label.className = 'draft-browse-item-label';
+    label.textContent = draft.scope;
+
+    const previewLine = document.createElement('span');
+    previewLine.className = 'draft-browse-item-preview';
+    previewLine.textContent = preview;
+
+    item.appendChild(label);
+    item.appendChild(previewLine);
+
+    item.addEventListener('click', () => {
+      restoreSavedDraft(draft);
+      overlay.remove();
+    });
+
+    list.appendChild(item);
+  });
+
+  function closeModal() {
+    overlay.remove();
+  }
+
+  modal.querySelector('#draftBrowseCloseBtn').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closeModal();
+    }
+  });
+
+  const escHandler = (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+}
+
+function restoreSavedDraft(draft) {
+  let saved = null;
+  try {
+    saved = localStorage.getItem(draft.key);
+  } catch (e) {
+    console.warn('Draft restore failed:', e);
+  }
+ 
+  if (saved === null) {
+    showToast('Saved draft was not found.');
+    return;
+  }
+ 
+  loadChallenge(draft.challengeId);
+ 
+  if (draft.kind === 'workspace') {
+    const language = detectLanguageFromPath(draft.scope);
+    currentLang = language;
+    activeEditorFile = {
+      kind: 'workspace',
+      lang: language,
+      filename: getFilename(draft.scope),
+      path: draft.scope,
+    };
+    if (!workspaceFiles.some((entry) => entry.path === draft.scope)) {
+      workspaceFiles = [{ path: draft.scope }, ...workspaceFiles].slice(
+        0,
+        MAX_WORKSPACE_FILE_TABS
+      );
+    }
+    editor.setValue(saved);
+    monaco.editor.setModelLanguage(editor.getModel(), language);
+    renderFileTabs();
+    refreshLanguageBadge();
+  } else {
+    switchLanguage(draft.scope, { persistCurrent: false });
+    editor.setValue(saved);
+  }
+ 
+  // If this was a discarded/archived draft, promote it back to the active key
+  // and clean up the archive entry.
+  if (draft.isDiscarded) {
+    try {
+      localStorage.removeItem(draft.key);
+    } catch (e) {
+      console.warn('Failed to clean up archived draft:', e);
+    }
+  }
+  persistActiveDraft();
+ 
+  const banner = document.getElementById('draftRecoveryBanner');
+  if (banner) banner.remove();
+  showToast(draft.isDiscarded ? 'Discarded draft restored.' : 'Saved draft restored.');
+}
+
 function attachUiHandlers() {
   document
     .getElementById('fileTabs')
@@ -325,6 +559,11 @@ function initEditor() {
     renderFileTabs();
     loadChallenge(activeChallengeId, false);
 
+    // Mark initial load complete after boot settles so switchLanguage/persistActiveDraft
+    // calls during boot don't overwrite a freshly-restored draft.
+    window.setTimeout(() => {
+      isInitialLoad = false;
+    }, 500);
   });
 }
 
