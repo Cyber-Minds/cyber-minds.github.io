@@ -4,13 +4,20 @@
 
 # CyberMinds
 
-Cybersecurity you actually practice, not just read about. Short courses, a real Linux terminal in your browser, CTF challenges, and an AI helper on standby. Free, no account required.
+[![CI](https://github.com/Cyber-Minds/CyberMinds/actions/workflows/ci.yml/badge.svg)](https://github.com/Cyber-Minds/CyberMinds/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Cybersecurity you actually practice, not just read about. Short courses, a real Linux terminal in your browser, CTF challenges, and an AI helper on standby.
+
+<p align="center">
+  <img src="./Images/readme/screenshot.png" width="100%" alt="CyberMinds product screenshot" />
+</p>
 
 </div>
 
 ## What It Does
 
-CyberMinds pairs short lessons and quizzes with a real Linux terminal, backed by an isolated Docker container per session, so you're running commands instead of just reading about them. Six guided CTF challenges give you something concrete to apply what you've learned to, and an AI chatbot is available the entire time if you get stuck.
+CyberMinds pairs short lessons and quizzes with a real Linux terminal, so you're running commands instead of just reading about them. Six guided CTF challenges give you something concrete to apply what you've learned to, and an AI chatbot is available the entire time if you get stuck.
 
 ## Features
 
@@ -30,16 +37,27 @@ Pick a course, read the lesson, take the quiz, then practice in the terminal and
 
 ## CTF Challenges
 
-- Linux Basics Warmup
-- Web Recon Starter
-- Log Hunt
-- Privilege Escalation Trace
-- Incident Timeline Reconstruction
-- Suspicious Beaconing
+- **Linux Basics Warmup** — get comfortable moving around a real shell
+- **Web Recon Starter** — find what a website is quietly exposing
+- **Log Hunt** — dig the evidence of an attack out of raw logs
+- **Privilege Escalation Trace** — follow how a low-priv user became root
+- **Incident Timeline Reconstruction** — piece together what happened, and when
+- **Suspicious Beaconing** — spot malware phoning home in network traffic
+
+## Getting Started
+
+```bash
+git clone https://github.com/Cyber-Minds/CyberMinds.git
+cd CyberMinds
+npm ci
+make dev
+```
+
+`make dev` starts the terminal backend in Docker and serves the site at `http://localhost:8080`.
 
 ## Tech Stack
 
-HTML, CSS, and JavaScript on the frontend. A Go backend runs the terminal API and spins up an isolated Docker container per session, deployable to Azure or Oracle Cloud with the included Terraform configs. Hosted on GitHub Pages. Playwright and Go's test tooling cover CI.
+HTML, CSS, and JavaScript on the frontend. A Go backend runs the terminal API, deployable to Azure or Oracle Cloud with the included Terraform configs. Hosted on GitHub Pages. Playwright and Go's test tooling cover CI.
 
 ## Architecture
 
@@ -54,17 +72,6 @@ The frontend serves the course viewer, quiz and game, and CTF terminal. The back
 </p>
 
 Each terminal session opens a WebSocket to the Go backend, which spins up a dedicated Docker container and streams stdin and stdout back to the browser.
-
-## Getting Started
-
-```bash
-git clone https://github.com/Cyber-Minds/CyberMinds.git
-cd CyberMinds
-npm ci
-make dev
-```
-
-`make dev` starts the terminal backend in Docker and serves the site at `http://localhost:8080`.
 
 ---
 
