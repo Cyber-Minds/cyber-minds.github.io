@@ -9,10 +9,6 @@
 
 Cybersecurity you actually practice, not just read about. Short courses, a real Linux terminal in your browser, CTF challenges, and an AI helper on standby.
 
-<p align="center">
-  <img src="./Images/readme/screenshot.png" width="100%" alt="CyberMinds product screenshot" />
-</p>
-
 </div>
 
 ## What It Does
@@ -30,12 +26,16 @@ CyberMinds pairs short lessons and quizzes with a real Linux terminal, so you're
 ## How It Works
 
 <p align="center">
-  <img src="./Images/readme/learning-path.svg" width="100%" alt="Learning path: Learn short courses and quizzes, Practice in a real terminal, Compete in guided CTF challenges, Get Help from the AI chatbot anytime" />
+  <img src="./Images/readme/learning-path.svg" width="88%" alt="Learning path: Learn short courses and quizzes, Practice in a real terminal, Compete in guided CTF challenges, Get Help from the AI chatbot anytime" />
 </p>
 
 Pick a course, read the lesson, take the quiz, then practice in the terminal and try a CTF challenge. Ask the chatbot anytime.
 
 ## CTF Challenges
+
+<p align="center">
+  <img src="./Images/readme/screenshot.png" width="88%" alt="CyberMinds product screenshot" />
+</p>
 
 - **Linux Basics Warmup** — get comfortable moving around a real shell
 - **Web Recon Starter** — find what a website is quietly exposing
@@ -62,13 +62,13 @@ HTML, CSS, and JavaScript on the frontend. A Go backend runs the terminal API, d
 ## Architecture
 
 <p align="center">
-  <img src="./Images/readme/architecture.svg" width="100%" alt="Architecture: frontend course viewer, quiz and game, and CTF terminal; backend AI chatbox and flag verifier" />
+  <img src="./Images/readme/architecture.svg" width="88%" alt="Architecture: frontend course viewer, quiz and game, and CTF terminal; backend AI chatbox and flag verifier" />
 </p>
 
 The frontend serves the course viewer, quiz and game, and CTF terminal. The backend runs the AI chatbox and the flag verifier that grades CTF submissions.
 
 <p align="center">
-  <img src="./Images/readme/terminal-flow.svg" width="100%" alt="Terminal session flow: browser terminal connects over WebSocket to the Go backend, which spawns an isolated Docker container per session and streams stdin and stdout" />
+  <img src="./Images/readme/terminal-flow.svg" width="88%" alt="Terminal session flow: browser terminal connects over WebSocket to the Go backend, which spawns an isolated Docker container per session and streams stdin and stdout" />
 </p>
 
 Each terminal session opens a WebSocket to the Go backend, which spins up a dedicated Docker container and streams stdin and stdout back to the browser.
