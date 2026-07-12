@@ -1,0 +1,38 @@
+# Runs the static HTML QA script on every push and pull request.
+# Only touches frontend files — no Go build or backend required.
+
+name: QA Static HTML
+
+on:
+  push:
+    paths:
+      - '**.html'
+      - 'CSS/**'
+      - 'Javascript/**'
+      - 'Images/**'
+      - 'scripts/**'
+      - '.github/workflows/qa-static.yml'
+  pull_request:
+    paths:
+      - '**.html'
+      - 'CSS/**'
+      - 'Javascript/**'
+      - 'Images/**'
+      - 'scripts/**'
+      - '.github/workflows/qa-static.yml'
+
+jobs:
+  qa-static:
+    name: Static HTML QA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run QA script
+        run: node scripts/qa-static.js

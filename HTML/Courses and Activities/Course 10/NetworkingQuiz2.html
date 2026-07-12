@@ -323,7 +323,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Course 10 - Introduction
+              alt="">Course 10 - Introduction
           </a>
           <a
             href="../../Courses and Activities/Course 10/NetworkingBasicscourse10.html"
@@ -332,7 +332,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
+              alt="">
             Networking Basics
           </a>
           <a
@@ -341,7 +341,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
+              alt="">
             Protocols & Ports
           </a>
           <a
@@ -350,7 +350,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
+              alt="">
             Addresses & Packets
           </a>
           <a
@@ -359,7 +359,7 @@
               src="../../../Images/ICON_QUIZ.png"
               width="40"
               height="40"
-            />Networking Quiz 1
+              alt="">Networking Quiz 1
           </a>
           <a
             href="../../../HTML/Courses and Activities/Course 10/OSI&TCPcourse10.html"
@@ -367,7 +367,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
+              alt="">
             The OSI & TCP/IP Models
           </a>
           <a
@@ -378,12 +378,12 @@
               width="40"
               height="40"
               class="act-img"
-            />
+            / alt="">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />
+              alt="">
             Network Topologies
           </a>
           <a
@@ -392,11 +392,11 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Network Security Methods
+              alt="">Network Security Methods
           </a>
           <a
             href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz2.html"
-            ><img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
+            ><img src="../../../Images/ICON_QUIZ.png" width="40" height="40" / alt="">
             Networking Quiz 2
           </a>
           <!-- <a href="add here">  >add more here </a>
@@ -532,13 +532,12 @@
 </html>
 <script>
       (function () {
-        if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
-          window.chatbase = (...arguments) => {
-            if (!window.chatbase.q) {
-              window.chatbase.q = [];
-            }
-            window.chatbase.q.push(arguments);
-          };
+        window.chatbase = (...args) => {
+        if (!window.chatbase.q) {
+          window.chatbase.q = [];
+        }
+        window.chatbase.q.push(args);
+      };
           window.chatbase = new Proxy(window.chatbase, {
             get(target, prop) {
               if (prop === 'q') {
@@ -547,7 +546,7 @@
               return (...args) => target(prop, ...args);
             },
           });
-        }
+        })
         const onLoad = function () {
           const script = document.createElement('script');
           script.src = 'https://www.chatbase.co/embed.min.js';
@@ -560,7 +559,7 @@
         } else {
           window.addEventListener('load', onLoad);
         }
-      })();
+      ;
     </script>
     <script src="../../../Javascript/analytics.js"></script>
   </body>

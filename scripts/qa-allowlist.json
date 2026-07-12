@@ -1,0 +1,11 @@
+{
+  "externalUrls": [
+    "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com",
+    "https://kit.fontawesome.com",
+    "https://cdn.jsdelivr.net",
+    "https://cdnjs.cloudflare.com"
+  ],
+  "skipFiles": [],
+  "skipAltChecks": []
+}

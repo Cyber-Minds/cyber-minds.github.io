@@ -203,70 +203,103 @@
           </div>
 
           <div class="leftRectangle-section2">
-            <p class="leftRectangle-section2-button-title">Table of Contents</p>
-            <a href="Introductioncourse11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />Course 11 - Introduction
-            </a>
-            <a href="SharedResponsibilityModel11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Shared Responsibility Model
-            </a>
-            <a href="CloudIdentityandAccessManagement11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Cloud Identity and Access Management
-            </a>
-            <a href="CommonCloudThreats11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Common Cloud Threats
-            </a>
-            <a href="CybersecurityCloudQuiz1Course11.html">
-              <img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
-              Networking Quiz 1
-            </a>
-            <a href="NetworkSecurityintheCloud.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Network Security in the Cloud
-            </a>
-            <a href="CloudEncryptionandDataProtection11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Cloud Encryption and Data Protection
-            </a>
-            <a href="CloudIncidentResponse11.html">
-              <img
-                src="../../../Images/ICON_ARTICLE.png"
-                width="40"
-                height="40"
-              />
-              Cloud Incident Response
-            </a>
-            <a href="CybersecurityCloudQuiz2Course11.html">
-              <img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
-              Networking Quiz 2
-            </a>
+          <p class="leftRectangle-section2-button-title">Table of Contents</p>
+          <a href="Introductioncourse10.html">
+            <img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">Course 10 - Introduction
+          </a>
+          <a
+            href="../../Courses and Activities/Course 10/NetworkingBasicscourse10.html"
+          >
+            <img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">
+            Networking Basics
+          </a>
+          <a
+            href="../../Courses and Activities/Course 10/Protocols&Portscourse10.html"
+            ><img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">
+            Protocols & Ports
+          </a>
+          <a
+            href="../../Courses and Activities/Course 10/Addresses&Packetscourse10.html"
+            ><img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">
+            Addresses & Packets
+          </a>
+          <a
+            href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz1course10.html"
+            ><img
+              src="../../../Images/ICON_QUIZ.png"
+              width="40"
+              height="40"
+              alt="">Networking Quiz 1
+          </a>
+          <a
+            href="../../../HTML/Courses and Activities/Course 10/OSI&TCPcourse10.html"
+            ><img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">
+            The OSI & TCP/IP Models
+          </a>
+          <a
+            href="../../../HTML/Courses and Activities/Course 10/NetworkTopologiescourse10.html"
+          >
+            <img
+              src="../../../Images/ICON_ACTIVITY.png"
+              width="40"
+              height="40"
+              class="act-img"
+            / alt="">
+            <img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">
+            Network Topologies
+          </a>
+          <a
+            href="../../../HTML/Courses and Activities/Course 10/NetworkSecurityMethodscourse10.html"
+            ><img
+              src="../../../Images/ICON_ARTICLE.png"
+              width="40"
+              height="40"
+              alt="">Network Security Methods
+          </a>
+          <a
+            href="../../../HTML/Courses and Activities/Course 10/NetworkingQuiz2.html"
+            ><img src="../../../Images/ICON_QUIZ.png" width="40" height="40" / alt="">
+            Networking Quiz 2
+          </a>
+          <!-- <a href="add here">  >add more here </a>
+          <a href="add here"> >add more here </a>
+          <a href="add activity here"> >add more here </a>
+          <a href="add game here">  >add more here </a> -->
+        </div>
+        <div class="Empty-section2">
+          <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
+        </div>
+
+        <div class="leftRectangle-section3">
+          <p class="leftRectangle-section3-button-title">Need Help?</p>
+          <a href="../../LiveHelp.html">Chat Box</a>
+        </div>
+
+        <div class="Empty-section3">
 
             <!-- <a href="add here">  >add more here </a>
           <a href="add here"> >add more here </a>
@@ -315,8 +348,8 @@
 
 // Add 'selected' class to the clicked label
           label.classList.add("selected");
-        });
-      });
+        };
+      
     </script>
     <script src="../../../Javascript/popUp_Pages.js"></script>
       <script src="../../../Javascript/footer.js"></script>
@@ -370,7 +403,7 @@
             // Display the result
             var resultElement = document.getElementById('result');
             resultElement.innerHTML = 'Your score is: ' + score + '/4';
-          }
+          
 
           function showAnswerDetail(detailId) {
             var detailElement = document.getElementById(detailId);
