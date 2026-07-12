@@ -62,7 +62,6 @@ const HREF_RE        = /\bhref\s*=\s*["']([^"'#][^"']*)["']/gi;
 const SRC_RE         = /\bsrc\s*=\s*["']([^"']+)["']/gi;
 const FOOTER_YEAR_RE = /&copy;\s*(\d{4})/gi;
 const FOOTER_TAG_RE  = /<footer[^>]*>([\s\S]*?)<\/footer>/gi;
-const FOOTER_ID_RE   = /id\s*=\s*["']footer["']/i;
 const FOOTER_JS_SCRIPT_RE = /footer\.js/;
 
 // ── Run checks ────────────────────────────────────────────────────────────────
