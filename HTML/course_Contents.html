@@ -82,11 +82,184 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       </div>
     </section>
 
+    <section class="path-section" aria-labelledby="learningPathsHeading">
+      <div class="path-section-header">
+        <div>
+          <p class="path-section-kicker">Guided learning paths</p>
+          <h2 id="learningPathsHeading">Choose a path that fits your goal</h2>
+          <p class="path-section-copy">
+            Follow a recommended sequence built from the courses already in this
+            catalog, or switch back to the full course list whenever you want.
+          </p>
+        </div>
+        <div class="path-filters" role="group" aria-label="Course path filters">
+          <button class="path-filter active" data-filter="all" type="button">
+            All courses
+          </button>
+          <button
+            class="path-filter"
+            data-filter="beginner-internet-safety"
+            type="button"
+          >
+            Beginner Internet Safety
+          </button>
+          <button
+            class="path-filter"
+            data-filter="linux-terminal-basics"
+            type="button"
+          >
+            Linux + Terminal Basics
+          </button>
+          <button
+            class="path-filter"
+            data-filter="networking-foundations"
+            type="button"
+          >
+            Networking Foundations
+          </button>
+          <button class="path-filter" data-filter="cloud-security" type="button">
+            Cloud Security
+          </button>
+        </div>
+      </div>
+
+      <div class="active-path-guide" id="activePathGuide" aria-live="polite">
+        <div class="active-path-guide-top">
+          <div>
+            <p class="path-section-kicker">Your current path</p>
+            <h3 id="activePathTitle">No path selected yet</h3>
+            <p id="activePathSummary">
+              Pick a guided path to see the next recommended course.
+            </p>
+          </div>
+          <div class="path-guide-actions">
+            <a id="activePathPrimaryAction" class="path-guide-button" href="../HTML/Courses and Activities/Course 1/Introductioncourse1.html"
+              >Start a path</a
+            >
+            <button id="activePathClearBtn" class="path-guide-button secondary" type="button">
+              Browse all courses
+            </button>
+          </div>
+        </div>
+        <ol id="activePathSteps" class="active-path-steps"></ol>
+      </div>
+
+      <div class="path-cards">
+        <article class="path-card">
+          <div class="path-card-header">
+            <h3>Beginner Internet Safety</h3>
+            <span class="path-pill">Best for first-time learners</span>
+          </div>
+          <p class="path-summary">
+            Build safe habits before diving deeper into technical topics.
+          </p>
+          <div class="path-meta">
+            <span>Estimated depth: 3–5 hours</span>
+            <span>First action: Start with Course 1</span>
+          </div>
+          <ol class="path-sequence">
+            <li>Course 1 - Introduction to Security</li>
+            <li>Course 2 - Individuals vs. Companies</li>
+            <li>Course 4 - Defensive Measures</li>
+            <li>Course 8 - Your Cybersecurity Position</li>
+          </ol>
+          <a
+            class="path-action"
+            href="../HTML/Courses and Activities/Course 1/Introductioncourse1.html"
+            data-path-id="beginner-internet-safety"
+            >Start the path</a
+          >
+        </article>
+
+        <article class="path-card">
+          <div class="path-card-header">
+            <h3>Linux + Terminal Basics</h3>
+            <span class="path-pill">Hands-on command practice</span>
+          </div>
+          <p class="path-summary">
+            Learn the operating environment that powers many security workflows.
+          </p>
+          <div class="path-meta">
+            <span>Estimated depth: 2–4 hours</span>
+            <span>First action: Start with Course 6</span>
+          </div>
+          <ol class="path-sequence">
+            <li>Course 6 - Intro to Linux</li>
+            <li>Course 1 - Core security fundamentals</li>
+            <li>Course 4 - Defensive habits</li>
+          </ol>
+          <a
+            class="path-action"
+            href="../HTML/Courses and Activities/Course 6/Introductioncourse6.html"
+            data-path-id="linux-terminal-basics"
+            >Start the path</a
+          >
+        </article>
+
+        <article class="path-card">
+          <div class="path-card-header">
+            <h3>Networking Foundations</h3>
+            <span class="path-pill">Understand the traffic behind attacks</span>
+          </div>
+          <p class="path-summary">
+            Connect security concepts with the systems and protocols that carry
+            data across networks.
+          </p>
+          <div class="path-meta">
+            <span>Estimated depth: 4–6 hours</span>
+            <span>First action: Start with Course 10</span>
+          </div>
+          <ol class="path-sequence">
+            <li>Course 10 - Networking for Security</li>
+            <li>Course 3 - Attacks in Security</li>
+            <li>Course 4 - Defensive Measures</li>
+            <li>Course 1 - Core concepts</li>
+          </ol>
+          <a
+            class="path-action"
+            href="../HTML/Courses and Activities/Course 10/Introductioncourse10.html"
+            data-path-id="networking-foundations"
+            >Start the path</a
+          >
+        </article>
+
+        <article class="path-card">
+          <div class="path-card-header">
+            <h3>Cloud Security</h3>
+            <span class="path-pill">Secure modern platforms</span>
+          </div>
+          <p class="path-summary">
+            Explore how cloud systems are protected and why shared-responsibility
+            matters.
+          </p>
+          <div class="path-meta">
+            <span>Estimated depth: 3–5 hours</span>
+            <span>First action: Start with Course 11</span>
+          </div>
+          <ol class="path-sequence">
+            <li>Course 11 - Cybersecurity in the Cloud</li>
+            <li>Course 10 - Networking for Security</li>
+            <li>Course 4 - Defensive Measures</li>
+            <li>Course 1 - Core concepts</li>
+          </ol>
+          <a
+            class="path-action"
+            href="../HTML/Courses and Activities/Course 11/Introductioncourse11.html"
+            data-path-id="cloud-security"
+            >Start the path</a
+          >
+        </article>
+      </div>
+    </section>
+
     <section>
       <!-- Course 1 -->
       <a
         href="../HTML/Courses and Activities/Course 1/Introductioncourse1.html"
         class="course-card"
+        data-paths="beginner-internet-safety,linux-terminal-basics,networking-foundations,cloud-security"
+        data-course-id="course-1"
+        data-course-number="1"
       >
         <img
           class="course-image"
@@ -107,6 +280,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 2/Introductioncourse2.html"
         class="course-card"
+        data-paths="beginner-internet-safety"
+        data-course-id="course-2"
+        data-course-number="2"
       >
         <img
           class="course-image"
@@ -127,6 +303,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 3/Introductioncourse3.html"
         class="course-card"
+        data-paths="networking-foundations"
+        data-course-id="course-3"
+        data-course-number="3"
       >
         <img
           class="course-image"
@@ -148,6 +327,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 4/Introductioncourse4.html"
         class="course-card"
+        data-paths="beginner-internet-safety,linux-terminal-basics,networking-foundations,cloud-security"
+        data-course-id="course-4"
+        data-course-number="4"
       >
         <img
           class="course-image"
@@ -167,6 +349,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 5/Introductioncourse5.html"
         class="course-card"
+        data-paths=""
+        data-course-id="course-5"
+        data-course-number="5"
       >
         <img
           class="course-image"
@@ -186,6 +371,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 6/Introductioncourse6.html"
         class="course-card"
+        data-paths="linux-terminal-basics"
+        data-course-id="course-6"
+        data-course-number="6"
       >
         <img
           class="course-image"
@@ -208,6 +396,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 7/Introductioncourse7.html"
         class="course-card"
+        data-paths=""
+        data-course-id="course-7"
+        data-course-number="7"
       >
         <img
           class="course-image"
@@ -228,6 +419,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 8/Introductioncourse8.html"
         class="course-card"
+        data-paths="beginner-internet-safety"
+        data-course-id="course-8"
+        data-course-number="8"
       >
         <img
           class="course-image"
@@ -247,6 +441,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 9/Introductioncourse9.html"
         class="course-card"
+        data-paths=""
+        data-course-id="course-9"
+        data-course-number="9"
       >
         <img
           class="course-image"
@@ -268,6 +465,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 10/Introductioncourse10.html"
         class="course-card"
+        data-paths="networking-foundations,cloud-security"
+        data-course-id="course-10"
+        data-course-number="10"
       >
         <img
           class="course-image"
@@ -287,6 +487,9 @@ If you are working on this please ask for the cybersecurity word doc content (Th
       <a
         href="../HTML/Courses and Activities/Course 11/Introductioncourse11.html"
         class="course-card"
+        data-paths="cloud-security"
+        data-course-id="course-11"
+        data-course-number="11"
       >
         <img
           class="course-image"
@@ -331,9 +534,291 @@ If you are working on this please ask for the cybersecurity word doc content (Th
         </p>
       </div>
     </section>
+    <div id="courseCompletionModal" class="completion-modal" role="dialog" aria-modal="true" aria-labelledby="courseCompletionTitle">
+      <div class="completion-modal-card">
+        <p class="path-section-kicker">Continue learning</p>
+        <h3 id="courseCompletionTitle">Choose your next step</h3>
+        <p id="courseCompletionBody">
+          After finishing this course, you can follow the active path or move to the next course in numeric order.
+        </p>
+        <div class="completion-modal-actions">
+          <button id="continuePathAction" class="path-guide-button" type="button">
+            Continue along path
+          </button>
+          <button id="nextNumericAction" class="path-guide-button secondary" type="button">
+            Next course in order
+          </button>
+          <button id="openCurrentCourseAction" class="completion-dismiss" type="button">
+            Open this course
+          </button>
+        </div>
+      </div>
+    </div>
+
     <footer class="page-footer">
       <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
     </footer>
+    <script>
+      const pathFilterButtons = document.querySelectorAll('.path-filter');
+      const catalogCards = document.querySelectorAll('.course-card');
+      const pathActionButtons = document.querySelectorAll('.path-action');
+      const storageKey = 'cybermindsPathwayState';
+      const activePathGuide = document.getElementById('activePathGuide');
+      const activePathTitle = document.getElementById('activePathTitle');
+      const activePathSummary = document.getElementById('activePathSummary');
+      const activePathPrimaryAction = document.getElementById('activePathPrimaryAction');
+      const activePathClearBtn = document.getElementById('activePathClearBtn');
+      const activePathSteps = document.getElementById('activePathSteps');
+      const completionModal = document.getElementById('courseCompletionModal');
+      const continuePathAction = document.getElementById('continuePathAction');
+      const nextNumericAction = document.getElementById('nextNumericAction');
+      const openCurrentCourseAction = document.getElementById('openCurrentCourseAction');
+      let pendingCourseHref = null;
+      let pendingNextPathHref = null;
+      let pendingNextNumericHref = null;
+
+      const pathwayDefinitions = {
+        'beginner-internet-safety': {
+          title: 'Beginner Internet Safety',
+          summary:
+            'Start with the basics of staying safe online and build confidence before moving on.',
+          steps: [
+            { id: 'course-1', label: 'Course 1 - Introduction to Security', href: '../HTML/Courses and Activities/Course 1/Introductioncourse1.html' },
+            { id: 'course-2', label: 'Course 2 - Individuals vs. Companies', href: '../HTML/Courses and Activities/Course 2/Introductioncourse2.html' },
+            { id: 'course-4', label: 'Course 4 - Defensive Measures', href: '../HTML/Courses and Activities/Course 4/Introductioncourse4.html' },
+            { id: 'course-8', label: 'Course 8 - Your Cybersecurity Position', href: '../HTML/Courses and Activities/Course 8/Introductioncourse8.html' }
+          ]
+        },
+        'linux-terminal-basics': {
+          title: 'Linux + Terminal Basics',
+          summary:
+            'Learn the command line environment used in many security workflows and practice basic navigation.',
+          steps: [
+            { id: 'course-6', label: 'Course 6 - Intro to Linux', href: '../HTML/Courses and Activities/Course 6/Introductioncourse6.html' },
+            { id: 'course-1', label: 'Course 1 - Core Security Fundamentals', href: '../HTML/Courses and Activities/Course 1/Introductioncourse1.html' },
+            { id: 'course-4', label: 'Course 4 - Defensive Measures', href: '../HTML/Courses and Activities/Course 4/Introductioncourse4.html' }
+          ]
+        },
+        'networking-foundations': {
+          title: 'Networking Foundations',
+          summary:
+            'Connect security concepts with the networks and traffic that carry information around the world.',
+          steps: [
+            { id: 'course-10', label: 'Course 10 - Networking for Security', href: '../HTML/Courses and Activities/Course 10/Introductioncourse10.html' },
+            { id: 'course-3', label: 'Course 3 - Attacks in Security', href: '../HTML/Courses and Activities/Course 3/Introductioncourse3.html' },
+            { id: 'course-4', label: 'Course 4 - Defensive Measures', href: '../HTML/Courses and Activities/Course 4/Introductioncourse4.html' },
+            { id: 'course-1', label: 'Course 1 - Core Concepts', href: '../HTML/Courses and Activities/Course 1/Introductioncourse1.html' }
+          ]
+        },
+        'cloud-security': {
+          title: 'Cloud Security',
+          summary:
+            'Work through the essentials of securing modern cloud environments and protecting shared resources.',
+          steps: [
+            { id: 'course-11', label: 'Course 11 - Cybersecurity in the Cloud', href: '../HTML/Courses and Activities/Course 11/Introductioncourse11.html' },
+            { id: 'course-10', label: 'Course 10 - Networking for Security', href: '../HTML/Courses and Activities/Course 10/Introductioncourse10.html' },
+            { id: 'course-4', label: 'Course 4 - Defensive Measures', href: '../HTML/Courses and Activities/Course 4/Introductioncourse4.html' },
+            { id: 'course-1', label: 'Course 1 - Core Concepts', href: '../HTML/Courses and Activities/Course 1/Introductioncourse1.html' }
+          ]
+        }
+      };
+
+      function loadState() {
+        try {
+          return JSON.parse(localStorage.getItem(storageKey)) || { pathId: null, completed: [] };
+        } catch (error) {
+          return { pathId: null, completed: [] };
+        }
+      }
+
+      function saveState(state) {
+        localStorage.setItem(storageKey, JSON.stringify(state));
+      }
+
+      let activePathState = loadState();
+
+      function getNextStepIndex(pathId) {
+        const definition = pathwayDefinitions[pathId];
+        if (!definition) {
+          return 0;
+        }
+
+        const nextIndex = definition.steps.findIndex((step) => !activePathState.completed.includes(step.id));
+        return nextIndex >= 0 ? nextIndex : definition.steps.length - 1;
+      }
+
+      function getNextPathHref(courseId) {
+        if (!activePathState.pathId) {
+          return null;
+        }
+
+        const definition = pathwayDefinitions[activePathState.pathId];
+        if (!definition) {
+          return null;
+        }
+
+        const currentIndex = definition.steps.findIndex((step) => step.id === courseId);
+        if (currentIndex === -1) {
+          return null;
+        }
+
+        return definition.steps[currentIndex + 1]?.href || null;
+      }
+
+      function getNextNumericHref(courseId) {
+        const courseNumber = Number((courseId || '').split('-').pop());
+        if (!Number.isInteger(courseNumber)) {
+          return null;
+        }
+
+        const nextCard = document.querySelector(
+          `.course-card[data-course-number="${courseNumber + 1}"]`
+        );
+        return nextCard ? nextCard.getAttribute('href') : null;
+      }
+
+      function renderActivePathGuide() {
+        if (!activePathState.pathId) {
+          activePathGuide.classList.remove('is-visible');
+          activePathTitle.textContent = 'No path selected yet';
+          activePathSummary.textContent = 'Pick a guided path to see the next recommended course.';
+          activePathPrimaryAction.textContent = 'Start a path';
+          activePathPrimaryAction.href = '../HTML/Courses and Activities/Course 1/Introductioncourse1.html';
+          activePathSteps.innerHTML = '';
+          return;
+        }
+
+        const definition = pathwayDefinitions[activePathState.pathId];
+        const nextStepIndex = getNextStepIndex(activePathState.pathId);
+        const nextStep = definition.steps[nextStepIndex];
+
+        activePathGuide.classList.add('is-visible');
+        activePathTitle.textContent = definition.title;
+        activePathSummary.textContent = definition.summary;
+        activePathPrimaryAction.textContent = nextStep
+          ? `Continue with ${nextStep.label}`
+          : 'Review your path';
+        activePathPrimaryAction.href = nextStep ? nextStep.href : '../HTML/Courses and Activities/Course 1/Introductioncourse1.html';
+
+        activePathSteps.innerHTML = definition.steps
+          .map((step, index) => {
+            const isCompleted = activePathState.completed.includes(step.id);
+            const isCurrent = index === nextStepIndex;
+            return `
+              <li class="path-guide-step ${isCompleted ? 'done' : ''} ${isCurrent ? 'current' : ''}">
+                <span class="path-guide-step-index">${index + 1}</span>
+                <span>${step.label}</span>
+              </li>
+            `;
+          })
+          .join('');
+      }
+
+      function activatePath(pathId) {
+        activePathState = { pathId, completed: [] };
+        saveState(activePathState);
+        renderActivePathGuide();
+      }
+
+      function openCompletionModal(courseCard) {
+        const courseId = courseCard.getAttribute('data-course-id');
+        pendingCourseHref = courseCard.getAttribute('href');
+        pendingNextPathHref = getNextPathHref(courseId);
+        pendingNextNumericHref = getNextNumericHref(courseId);
+
+        continuePathAction.style.display = pendingNextPathHref ? 'inline-flex' : 'none';
+        nextNumericAction.style.display = pendingNextNumericHref ? 'inline-flex' : 'none';
+        completionModal.classList.add('is-visible');
+      }
+
+      function closeCompletionModal() {
+        completionModal.classList.remove('is-visible');
+      }
+
+      function markCourseComplete(courseId) {
+        if (!activePathState.pathId) {
+          return;
+        }
+
+        if (!activePathState.completed.includes(courseId)) {
+          activePathState.completed = [...activePathState.completed, courseId];
+          saveState(activePathState);
+        }
+
+        renderActivePathGuide();
+      }
+
+      pathFilterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const selectedFilter = button.getAttribute('data-filter');
+
+          pathFilterButtons.forEach((filterButton) => {
+            filterButton.classList.toggle('active', filterButton === button);
+          });
+
+          catalogCards.forEach((card) => {
+            const assignedPaths = card.getAttribute('data-paths') || '';
+            const shouldShow =
+              selectedFilter === 'all' || assignedPaths.includes(selectedFilter);
+
+            card.classList.toggle('is-hidden', !shouldShow);
+          });
+        });
+      });
+
+      pathActionButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const pathId = button.getAttribute('data-path-id');
+          if (pathId) {
+            activatePath(pathId);
+          }
+        });
+      });
+
+      catalogCards.forEach((card) => {
+        card.addEventListener('click', (event) => {
+          event.preventDefault();
+          const courseId = card.getAttribute('data-course-id');
+          if (courseId) {
+            markCourseComplete(courseId);
+            openCompletionModal(card);
+          }
+        });
+      });
+
+      continuePathAction.addEventListener('click', () => {
+        closeCompletionModal();
+        if (pendingNextPathHref) {
+          window.location.assign(pendingNextPathHref);
+        } else if (pendingCourseHref) {
+          window.location.assign(pendingCourseHref);
+        }
+      });
+
+      nextNumericAction.addEventListener('click', () => {
+        closeCompletionModal();
+        if (pendingNextNumericHref) {
+          window.location.assign(pendingNextNumericHref);
+        } else if (pendingCourseHref) {
+          window.location.assign(pendingCourseHref);
+        }
+      });
+
+      openCurrentCourseAction.addEventListener('click', () => {
+        closeCompletionModal();
+        if (pendingCourseHref) {
+          window.location.assign(pendingCourseHref);
+        }
+      });
+
+      activePathClearBtn.addEventListener('click', () => {
+        activePathState = { pathId: null, completed: [] };
+        saveState(activePathState);
+        renderActivePathGuide();
+      });
+
+      renderActivePathGuide();
+    </script>
     <script src="../Javascript/header.js"></script>
     <script src="../Javascript/popUp_Courses.js"></script>
     <script src="../Javascript/footer.js"></script>

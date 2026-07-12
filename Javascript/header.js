@@ -231,6 +231,10 @@ function ensureProgressScript(basePath) {
   script.id = SHARED_PROGRESS_SCRIPT_ID;
   script.src = joinBasePath(basePath, 'Javascript/progress.js');
   document.head.appendChild(script);
+
+  const continuationScript = document.createElement('script');
+  continuationScript.src = joinBasePath(basePath, 'Javascript/pathContinuation.js');
+  document.head.appendChild(continuationScript);
 }
 
 function renderHeader() {
