@@ -51,6 +51,15 @@
         background: linear-gradient(135deg, rgba(9, 21, 34, 0.95), rgba(20, 54, 82, 0.9));
         border: 1px solid rgba(111, 219, 240, 0.24);
         box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.32);
+        color: #ffffff;
+      }
+
+      .completion-modal-card h3 {
+        color: #ffffff;
+      }
+
+      .completion-modal-card p {
+        color: #ffffff;
       }
 
       .completion-modal-actions {
@@ -183,9 +192,6 @@
 
     dismissBtn.onclick = () => {
       modal.remove();
-      if (pendingTargetHref) {
-        window.location.assign(pendingTargetHref);
-      }
     };
 
     modal.classList.add('is-visible');
@@ -203,13 +209,14 @@
     }
 
     const label = (link.textContent || '').trim().toLowerCase();
-    const isNextLink =
+    const isEndOfCourseLink =
       link.classList.contains('next_course') ||
+      label.includes('skip to next course') ||
+      label.includes('skip to next') ||
       label === 'next' ||
-      label === 'next >' ||
-      (label.includes('next') && !label.includes('previous'));
+      label === 'next >';
 
-    if (!isNextLink) {
+    if (!isEndOfCourseLink) {
       return;
     }
 
