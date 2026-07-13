@@ -33,6 +33,14 @@ test('accepts valid local links, allowlisted assets, and decorative images', () 
   assert.equal(result.status, 0, result.stderr);
 });
 
+test('ignores inactive markup inside HTML comments', () => {
+  const result = run({
+    'index.html':
+      '<title>Home</title><!-- <img src="missing.png"><a href="add here">Draft</a> -->'
+  });
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test('rejects unsafe references and unmarked empty alt without logging queries', () => {
   const result = run({
     'index.html': '<title>Home</title><img src="image.png" alt=""><a href="add here?token=super-secret">Placeholder</a><a href="https://evil.example/path?token=super-secret">External</a><a href="javascript:alert(1)">Unsafe</a>',
