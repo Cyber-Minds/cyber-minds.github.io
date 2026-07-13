@@ -109,6 +109,115 @@ section {
   gap: 0.5em;
 }
 
+.path-section {
+  display: block;
+  width: min(74rem, calc(100% - 2rem));
+  margin: 0 auto 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(111, 219, 240, 0.24);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(8, 18, 31, 0.96), rgba(16, 45, 66, 0.84)),
+    rgba(0, 0, 0, 0.92);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.24);
+}
+
+.path-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.path-section-kicker {
+  margin: 0 0 0.35rem;
+  color: #6fdbf0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+}
+
+.path-section-copy {
+  max-width: 40rem;
+  margin: 0.5rem 0 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.path-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.path-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.path-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.path-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.1rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  flex-shrink: 0;
+}
+
+.path-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(111, 219, 240, 0.16);
+  color: #6fdbf0;
+  font-size: 0.75rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.path-summary {
+  margin: 0 0 0.75rem;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.path-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.8rem;
+  color: #6fdbf0;
+  font-size: 0.9rem;
+}
+
+.path-sequence {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.path-sequence li {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.path-action {
+  display: inline-block;
+  color: #6fdbf0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
 .continue-learning-panel {
   width: min(74rem, calc(100% - 2rem));
   margin: 0 auto 1.5rem;
@@ -243,6 +352,10 @@ section {
 @media only screen and (max-width: 600px) {
   header {
     position: static;
+  }
+
+  .path-section-header {
+    flex-direction: column;
   }
 
   .continue-learning-panel {
