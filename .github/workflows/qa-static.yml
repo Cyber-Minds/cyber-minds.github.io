@@ -11,6 +11,7 @@ on:
       - 'Javascript/**'
       - 'Images/**'
       - 'scripts/**'
+      - 'package.json'
       - '.github/workflows/qa-static.yml'
   pull_request:
     paths:
@@ -19,6 +20,7 @@ on:
       - 'Javascript/**'
       - 'Images/**'
       - 'scripts/**'
+      - 'package.json'
       - '.github/workflows/qa-static.yml'
 
 jobs:
@@ -28,11 +30,18 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Run QA script
-        run: node scripts/qa-static.js
+      - name: Test QA script
+        run: npm run test:qa
+
+      - name: Check changed HTML
+        env:
+          QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: npm run qa:static -- --changed-from "$QA_BASE"

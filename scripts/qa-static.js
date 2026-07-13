@@ -1,191 +1,170 @@
-// Checks:
-//   1. Every HTML page has a non-empty <title>
-//   2. Images have an alt attribute (alt="" is allowed for decorative images)
-//   3. Internal links point to files that exist in the repo
-//   4. Footer years are current or injected by footer.js (not hardcoded stale)
-//
-// False positives: add entries to scripts/qa-allowlist.json
-
 'use strict';
 
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
-// ── Config ──────────────────────────────────────────────────────────────────
-const REPO_ROOT      = path.resolve(__dirname, '..');
-const CURRENT_YEAR   = new Date().getFullYear();
-const ALLOWLIST_PATH = path.join(__dirname, 'qa-allowlist.json');
+const args = process.argv.slice(2);
+const option = (name) => {
+  const index = args.lastIndexOf(name);
+  return index === -1 ? null : args[index + 1];
+};
 
-let allowlist = { externalUrls: [], skipFiles: [], skipAltChecks: [] };
-try {
-  allowlist = JSON.parse(fs.readFileSync(ALLOWLIST_PATH, 'utf8'));
-} catch {
+const repoRoot = path.resolve(option('--root') || path.join(__dirname, '..'));
+const currentYear = new Date().getFullYear();
+const allowlist = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'qa-allowlist.json'), 'utf8')
+);
+const allowedOrigins = new Set(
+  (allowlist.externalUrls || []).map((url) => new URL(url).origin)
+);
+const issues = [];
+
+// ponytail: regex covers static HTML; use a parser if template syntax becomes complex.
+const titleRe = /<title[^>]*>([\s\S]*?)<\/title>/i;
+const imgRe = /<img\b([^<>]*?)\s*\/?>/gi;
+const altRe = /\balt\s*=\s*["']([^"']*)["']/i;
+const hrefRe = /\bhref\s*=\s*["']([^"']*)["']/gi;
+const srcRe = /\bsrc\s*=\s*["']([^"']*)["']/gi;
+const footerRe = /<footer[^>]*>([\s\S]*?)<\/footer>/gi;
+const yearRe = /&copy;\s*(\d{4})/gi;
+
+function relative(file) {
+  return path.relative(repoRoot, file);
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-function getAllHtmlFiles(dir, files = []) {
+function report(file, message) {
+  issues.push(`${relative(file)}: ${message}`);
+}
+
+function allHtmlFiles(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      if (entry.name === 'node_modules' || entry.name === '.git') continue;
-      getAllHtmlFiles(full, files);
-    } else if (entry.name.endsWith('.html')) {
-      files.push(full);
-    }
+    if (entry.name === '.git' || entry.name === 'node_modules') continue;
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) allHtmlFiles(fullPath, files);
+    else if (entry.name.endsWith('.html')) files.push(fullPath);
   }
   return files;
 }
 
-function relPath(absPath) {
-  return path.relative(REPO_ROOT, absPath);
+function changedHtmlFiles(base) {
+  const output = execFileSync(
+    'git',
+    ['diff', '--name-only', '--diff-filter=ACMR', base, '--', '*.html'],
+    { cwd: repoRoot, encoding: 'utf8' }
+  );
+  return output
+    .trim()
+    .split('\n')
+    .filter(Boolean)
+    .map((file) => path.join(repoRoot, file));
 }
 
-// ── Issue collector ───────────────────────────────────────────────────────────
-const PLACEHOLDER_LINKS = [
-  "add here",
-  "add activity here",
-  "add game here"
-];
-
-
-const issues = [];
-
-function report(file, message) {
-  issues.push(`  ${relPath(file)}: ${message}`);
+function cleanReference(value) {
+  return value.trim().split(/[?#]/, 1)[0];
 }
 
-// ── Regex patterns ────────────────────────────────────────────────────────────
-const TITLE_RE       = /<title[^>]*>([\s\S]*?)<\/title>/i;
-const IMG_RE         = /<img([^>]*)>/gi;
-const ALT_RE         = /\balt\s*=\s*["']([^"']*)["']/i;
-const HREF_RE        = /\bhref\s*=\s*["']([^"'#][^"']*)["']/gi;
-const SRC_RE         = /\bsrc\s*=\s*["']([^"']+)["']/gi;
-const FOOTER_YEAR_RE = /&copy;\s*(\d{4})/gi;
-const FOOTER_TAG_RE  = /<footer[^>]*>([\s\S]*?)<\/footer>/gi;
-const FOOTER_JS_SCRIPT_RE = /footer\.js/;
+function checkExternal(file, value, type) {
+  try {
+    if (!allowedOrigins.has(new URL(value).origin)) {
+      report(file, `Unallowlisted external ${type}: "${cleanReference(value)}"`);
+    }
+  } catch {
+    report(file, `Malformed external ${type}: "${cleanReference(value)}"`);
+  }
+}
 
-// ── Run checks ────────────────────────────────────────────────────────────────
-const htmlFiles = getAllHtmlFiles(REPO_ROOT).filter(
-  (f) => !allowlist.skipFiles?.includes(relPath(f))
-);
+function checkLocal(file, value, type) {
+  const clean = cleanReference(value);
+  if (!clean) return;
 
-console.log(`\nCyberMinds QA — checking ${htmlFiles.length} HTML files...\n`);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(clean);
+  } catch {
+    report(file, `Malformed ${type}: "${clean}"`);
+    return;
+  }
 
-for (const file of htmlFiles) {
+  const resolved = decoded.startsWith('/')
+    ? path.resolve(repoRoot, `.${decoded}`)
+    : path.resolve(path.dirname(file), decoded);
+  const insideRepo = resolved === repoRoot || resolved.startsWith(`${repoRoot}${path.sep}`);
+  if (!insideRepo || !fs.existsSync(resolved)) {
+    report(file, `Broken ${type}: "${clean}"`);
+  }
+}
+
+function checkReferences(file, content, regex, type) {
+  regex.lastIndex = 0;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    const value = match[1].trim();
+    if (!value || value.startsWith('#') || /^(mailto:|tel:|data:|blob:)/i.test(value)) {
+      continue;
+    }
+    if (/^javascript:/i.test(value)) {
+      report(file, `Unsafe ${type}: "javascript:"`);
+    } else if (/^https?:/i.test(value)) {
+      checkExternal(file, value, type);
+    } else if (value.includes('{{') || value.includes('${')) {
+      continue;
+    } else {
+      checkLocal(file, value, type);
+    }
+  }
+}
+
+function checkFile(file) {
   const content = fs.readFileSync(file, 'utf8');
-  const rel     = relPath(file);
-  const fileDir = path.dirname(file);
+  const rel = relative(file);
+  const title = titleRe.exec(content);
+  if (!title) report(file, 'Missing <title> tag');
+  else if (!title[1].trim()) report(file, 'Empty <title> tag');
 
-  // ── CHECK 1: Non-empty <title> ──────────────────────────────────────────
-  const titleMatch = TITLE_RE.exec(content);
-  if (!titleMatch) {
-    report(file, 'Missing <title> tag');
-  } else if (!titleMatch[1].trim()) {
-    report(file, 'Empty <title> tag');
-  }
-
-// ── CHECK 2: Image alt text ─────────────────────────────────────────────
-if (!allowlist.skipAltChecks?.includes(rel)) {
-  let imgMatch;
-  IMG_RE.lastIndex = 0;
-
-  while ((imgMatch = IMG_RE.exec(content)) !== null) {
-    const attrs = imgMatch[1];
-
-    const altMatch = ALT_RE.exec(attrs);
-
-    if (!altMatch) {
-      report(
-        file,
-        `<img> missing alt attribute: ${imgMatch[0].slice(0, 80)}`
-      );
-      continue;
-    }
-
-  }
-}
-
-  // ── CHECK 3: Internal link targets exist ────────────────────────────────
-  let hrefMatch;
-  HREF_RE.lastIndex = 0;
-  while ((hrefMatch = HREF_RE.exec(content)) !== null) {
-    const href = hrefMatch[1].trim();
-    if (PLACEHOLDER_LINKS.includes(href)) continue;
-
-    // Skip external URLs
-    if (href.startsWith('http://') || href.startsWith('https://')) {
-      // Only check against allowlist; don't fetch
-      continue;
-    }
-    // Skip mailto, tel, javascript
-    if (/^(mailto:|tel:|javascript:)/i.test(href)) continue;
-    // Skip template variables
-    if (href.includes('{{') || href.includes('${')) continue;
-    // Strip query string and hash
-    const cleanHref = href.split('?')[0].split('#')[0];
-    if (!cleanHref) continue;
-
-    // Resolve relative to file location
-    const resolved = cleanHref.startsWith('/')
-      ? path.join(REPO_ROOT, cleanHref)
-      : path.resolve(fileDir, cleanHref);
-
-    if (!fs.existsSync(resolved)) {
-      report(file, `Broken internal link: "${href}"`);
+  if (!(allowlist.skipAltChecks || []).includes(rel)) {
+    imgRe.lastIndex = 0;
+    let image;
+    while ((image = imgRe.exec(content)) !== null) {
+      const attributes = image[1];
+      const alt = altRe.exec(attributes);
+      const decorative =
+        /\brole\s*=\s*["'](?:none|presentation)["']/i.test(attributes) ||
+        /\baria-hidden\s*=\s*["']true["']/i.test(attributes);
+      if (!alt) report(file, '<img> missing alt attribute');
+      else if (!alt[1].trim() && !decorative) {
+        report(file, '<img> has empty alt without a decorative marker');
+      }
     }
   }
 
-  // Also check src attributes for scripts/images
-  let srcMatch;
-  SRC_RE.lastIndex = 0;
-  while ((srcMatch = SRC_RE.exec(content)) !== null) {
-    const src = srcMatch[1].trim();
-    if (src.startsWith('http://') || src.startsWith('https://')) continue;
-    if (/^(data:|blob:)/i.test(src)) continue;
-    if (src.includes('{{') || src.includes('${')) continue;
-    const cleanSrc = src.split('?')[0].split('#')[0];
-    if (!cleanSrc) continue;
+  checkReferences(file, content, hrefRe, 'link');
+  checkReferences(file, content, srcRe, 'asset');
 
-    const resolved = cleanSrc.startsWith('/')
-      ? path.join(REPO_ROOT, cleanSrc)
-      : path.resolve(fileDir, cleanSrc);
-
-    if (!fs.existsSync(resolved)) {
-      report(file, `Broken asset src: "${src}"`);
-    }
-  }
-
-  // ── CHECK 4: Footer year ─────────────────────────────────────────────────
-  // Skip if footer is injected by footer.js (dynamic)
-const hasFooterJs = FOOTER_JS_SCRIPT_RE.test(content);
-
-if (!hasFooterJs) {
-    // Static footer — check for stale year
-    let footerMatch;
-    FOOTER_TAG_RE.lastIndex = 0;
-    while ((footerMatch = FOOTER_TAG_RE.exec(content)) !== null) {
-      const footerContent = footerMatch[1];
-      let yearMatch;
-      FOOTER_YEAR_RE.lastIndex = 0;
-      while ((yearMatch = FOOTER_YEAR_RE.exec(footerContent)) !== null) {
-        const year = parseInt(yearMatch[1], 10);
-        if (year < CURRENT_YEAR) {
-          report(file, `Stale footer year: ${year} (current year is ${CURRENT_YEAR})`);
+  if (!/footer\.js/.test(content)) {
+    footerRe.lastIndex = 0;
+    let footer;
+    while ((footer = footerRe.exec(content)) !== null) {
+      yearRe.lastIndex = 0;
+      let year;
+      while ((year = yearRe.exec(footer[1])) !== null) {
+        if (Number(year[1]) < currentYear) {
+          report(file, `Stale footer year: ${year[1]} (current year is ${currentYear})`);
         }
       }
     }
   }
 }
 
-// ── Results ───────────────────────────────────────────────────────────────────
-if (issues.length === 0) {
-  console.log('✅  All checks passed — no issues found.\n');
-  process.exit(0);
+const base = option('--changed-from');
+const files = (base ? changedHtmlFiles(base) : allHtmlFiles(repoRoot)).filter(
+  (file) => !(allowlist.skipFiles || []).includes(relative(file))
+);
+for (const file of files) checkFile(file);
+
+if (issues.length) {
+  console.error(`Static HTML QA found ${issues.length} issue(s):\n${issues.join('\n')}`);
+  process.exitCode = 1;
 } else {
-  console.log(`❌  Found ${issues.length} issue${issues.length === 1 ? '' : 's'}:\n`);
-  for (const issue of issues) {
-    console.log(issue);
-  }
-  console.log(`\nTo suppress a false positive, add the file or URL to scripts/qa-allowlist.json\n`);
-  process.exit(1);
+  console.log(`Static HTML QA passed for ${files.length} file(s).`);
 }

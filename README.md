@@ -52,6 +52,12 @@ make dev
 
 `make dev` starts the terminal backend in Docker and serves the site at `http://localhost:8080`.
 
+Run the static HTML quality checks locally with:
+
+```bash
+npm run qa:static
+```
+
 ## Tech Stack
 
 HTML, CSS, and JavaScript on the frontend. A Go backend runs the terminal API, deployable to Azure or Oracle Cloud with the included Terraform configs. Hosted on GitHub Pages. Playwright and Go's test tooling cover CI.
