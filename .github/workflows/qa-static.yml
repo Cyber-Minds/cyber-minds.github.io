@@ -5,6 +5,7 @@ name: QA Static HTML
 
 on:
   push:
+    branches: [main]
     paths:
       - '**.html'
       - 'CSS/**'
