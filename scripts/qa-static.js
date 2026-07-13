@@ -117,15 +117,16 @@ function checkReferences(file, content, regex, type) {
 
 function checkFile(file) {
   const content = fs.readFileSync(file, 'utf8');
+  const activeContent = content.replace(/<!--[\s\S]*?-->/g, '');
   const rel = relative(file);
-  const title = titleRe.exec(content);
+  const title = titleRe.exec(activeContent);
   if (!title) report(file, 'Missing <title> tag');
   else if (!title[1].trim()) report(file, 'Empty <title> tag');
 
   if (!(allowlist.skipAltChecks || []).includes(rel)) {
     imgRe.lastIndex = 0;
     let image;
-    while ((image = imgRe.exec(content)) !== null) {
+    while ((image = imgRe.exec(activeContent)) !== null) {
       const attributes = image[1];
       const alt = altRe.exec(attributes);
       const decorative =
@@ -138,13 +139,13 @@ function checkFile(file) {
     }
   }
 
-  checkReferences(file, content, hrefRe, 'link');
-  checkReferences(file, content, srcRe, 'asset');
+  checkReferences(file, activeContent, hrefRe, 'link');
+  checkReferences(file, activeContent, srcRe, 'asset');
 
-  if (!/footer\.js/.test(content)) {
+  if (!/footer\.js/.test(activeContent)) {
     footerRe.lastIndex = 0;
     let footer;
-    while ((footer = footerRe.exec(content)) !== null) {
+    while ((footer = footerRe.exec(activeContent)) !== null) {
       yearRe.lastIndex = 0;
       let year;
       while ((year = yearRe.exec(footer[1])) !== null) {
