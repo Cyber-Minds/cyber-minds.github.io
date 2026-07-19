@@ -177,6 +177,10 @@ function browseSavedDrafts() {
   const existing = document.getElementById('draftBrowseOverlay');
   if (existing) existing.remove();
 
+  const restoreFocus = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
+
   const overlay = document.createElement('div');
   overlay.id = 'draftBrowseOverlay';
   overlay.className = 'draft-browse-overlay';
@@ -232,6 +236,9 @@ function browseSavedDrafts() {
 
   function closeModal() {
     overlay.remove();
+    if (restoreFocus && document.contains(restoreFocus)) {
+      restoreFocus.focus();
+    }
   }
 
   modal.querySelector('#draftBrowseCloseBtn').addEventListener('click', closeModal);
@@ -248,6 +255,10 @@ function browseSavedDrafts() {
     }
   };
   document.addEventListener('keydown', escHandler);
+  const closeButton = modal.querySelector('#draftBrowseCloseBtn');
+  if (closeButton) {
+    closeButton.focus();
+  }
 }
 
 function restoreSavedDraft(draft) {
