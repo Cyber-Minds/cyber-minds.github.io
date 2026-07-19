@@ -328,6 +328,23 @@ section {
   transform: scale(1.05);
 }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+.course-card:focus-visible,
+.course-card:focus {
+  outline: 3px solid rgba(111, 219, 240, 0.95);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(111, 219, 240, 0.18);
+}
+
+.course-card.is-hidden {
+  display: none;
+}
+
+=======
+>>>>>>> 171dd390034d91a6a8147a4eeb93cdcd495e1e86
+>>>>>>> Stashed changes
 .course-image {
   width: 100%;
   height: 150px;

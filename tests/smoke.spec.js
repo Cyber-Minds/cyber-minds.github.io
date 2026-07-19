@@ -101,6 +101,8 @@ window.require.config = function config() {};
 `;
 
 test.beforeEach(async ({ page }) => {
+  await clearBrowserStorage(page);
+
   await page.route('https://cdn.jsdelivr.net/**', async (route) => {
     const url = route.request().url();
 
@@ -147,6 +149,29 @@ async function waitForMockReady(page) {
   });
 }
 
+async function clearBrowserStorage(page) {
+  await page.evaluate(() => {
+    try {
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+    } catch (error) {
+      // Ignore startup pages (about:blank, file://, etc.) that do not expose storage.
+    }
+  });
+}
+
+async function tabUntilFocused(page, selector, { reverse = false } = {}) {
+  const target = page.locator(selector).first();
+  for (let index = 0; index < 100; index += 1) {
+    const isFocused = await target.evaluate((element) => element === document.activeElement);
+    if (isFocused) {
+      return target;
+    }
+    await page.keyboard.press(reverse ? 'Shift+Tab' : 'Tab');
+  }
+  throw new Error(`Unable to focus ${selector}`);
+}
+
 // ─── Home page ───────────────────────────────────────────────────────────────
 
 test.describe('Home page', () => {
@@ -185,6 +210,108 @@ test.describe('Navigation', () => {
     await page.locator('a[href*="challenge=linux-basics"]').click();
     await expect(page).toHaveURL(/terminal\/index\.html/);
     await expect(page).toHaveTitle('CyberMinds Terminal');
+  });
+
+  test('keyboard-only navigation reaches course and CTF links in reading order', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/course_Contents.html');
+
+    const firstCourseCard = await tabUntilFocused(page, '.course-card');
+    await expect(firstCourseCard).toBeFocused();
+    await expect(firstCourseCard).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#courseCompletionModal')).toHaveClass(/is-visible/);
+
+    const openCourseAction = await tabUntilFocused(page, '#openCurrentCourseAction');
+    await expect(openCourseAction).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/Introductioncourse1\.html/);
+
+    await page.goto('/HTML/CTF.html');
+    const firstCtfCard = await tabUntilFocused(page, 'a.course-card');
+    await expect(firstCtfCard).toBeFocused();
+    await expect(firstCtfCard).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/terminal\/index\.html\?challenge=linux-basics/);
+  });
+
+  test('command palette and draft recovery overlays restore focus after Escape', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const trigger = page.locator('#loadStarterBtn');
+    await trigger.focus();
+    await expect(trigger).toBeFocused();
+
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.locator('#commandPaletteOverlay');
+    await expect(palette).toBeVisible();
+    await expect(page.locator('#commandPaletteInput')).toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(palette).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(
+        '# saved draft\nprint("keep")\n'
+      );
+    });
+
+    await page.waitForFunction(() => {
+      const saved = window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      );
+      return !!saved && saved.includes('saved draft');
+    });
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const banner = page.locator('#draftRecoveryBanner');
+    await expect(banner).toBeVisible();
+    await expect(page.locator('#draftDismissBtn')).toBeVisible();
+
+    const dismissButton = await tabUntilFocused(page, '#draftDismissBtn');
+    await expect(dismissButton).toBeFocused();
+    await page.keyboard.press('Space');
+    await expect(banner).toHaveCount(0);
+  });
+
+  test('terminal challenge navigation and hidden controls stay out of tab order', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const firstNavButton = page.locator('#challengeNav button').first();
+    await firstNavButton.focus();
+    await expect(firstNavButton).toBeFocused();
+    await expect(firstNavButton).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#challengeTitle')).toContainText(/Linux Basics Warmup|Web Recon|Log Hunt/i);
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#loadStarterBtn')).not.toBeFocused();
+    await expect(page.locator('#commandPaletteInput')).not.toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#commandPaletteOverlay')).toBeHidden();
   });
 });
 
