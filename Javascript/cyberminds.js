@@ -324,3 +324,9 @@ function closePopup() {
     popup.classList.add("hidden");
   }
 }
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" || event.key === "Esc") {
+    closePopup();
+  }
+});

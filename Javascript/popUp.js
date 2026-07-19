@@ -3,14 +3,32 @@ const exitButton = document.querySelector('.exit-button');
 const nextCourse = document.querySelector('.next_course');
 const popUp = document.querySelector('.pop-up');
 
-nextCourse.addEventListener('click', () => {
-    popUp.classList.toggle('active');
-});
+function openPopup() {
+    if (popUp) {
+        popUp.classList.add('active');
+    }
+}
 
-nextButton.addEventListener('click', () => {
-    popUp.classList.toggle('active');
-});
+function closePopupDialog() {
+    if (popUp) {
+        popUp.classList.remove('active');
+    }
+}
 
-exitButton.addEventListener('click', () => {
-    popUp.classList.toggle('active');
+if (nextCourse) {
+    nextCourse.addEventListener('click', openPopup);
+}
+
+if (nextButton) {
+    nextButton.addEventListener('click', openPopup);
+}
+
+if (exitButton) {
+    exitButton.addEventListener('click', closePopupDialog);
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' || event.key === 'Esc') {
+        closePopupDialog();
+    }
 });
