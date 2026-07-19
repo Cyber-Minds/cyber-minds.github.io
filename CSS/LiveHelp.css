@@ -185,6 +185,10 @@ body {
   justify-content: center;
 }
 
+.chat-fallback[hidden] {
+  display: none;
+}
+
 .fallback-icon {
   font-size: 2.5rem;
   color: #fabd2f;

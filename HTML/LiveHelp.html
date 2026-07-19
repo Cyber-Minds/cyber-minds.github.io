@@ -27,7 +27,7 @@
           <h1 class="livehelp-title">Live Help</h1>
           <p class="livehelp-subtitle">
             Ask our cybersecurity assistant anything — from basic Linux commands
-            to how HTTPS works. No sign-up required. Ask anything, anytime. 
+            to how HTTPS works. No sign-up required. Ask anything, anytime.
           </p>
         </div>
 
@@ -38,7 +38,7 @@
           </div>
           <div class="safety-notice-body">
             <strong>Before you chat — a quick safety note:</strong>
-            <ul>
+            <ul class="safety-list">
               <li>Never share passwords, API keys, or private credentials.</li>
               <li>Do not paste real log files containing hostnames, IPs, or tokens from live systems.</li>
               <li>Do not share personal account details or private system configurations.</li>
@@ -163,19 +163,6 @@
     <script src="../Javascript/analytics.js"></script>
 
     <script>
-      // ── Analytics: log page open only, no prompt text ──────────────────
-      (function trackPageOpen() {
-        try {
-          if (typeof window.analytics !== 'undefined' && window.analytics.track) {
-            window.analytics.track('live_help_opened', {
-              timestamp: new Date().toISOString(),
-            });
-          }
-        } catch (e) {
-          // analytics not available — fail silently
-        }
-      })();
-
       // ── Iframe load handling ────────────────────────────────────────────
       let iframeLoaded = false;
       const IFRAME_TIMEOUT_MS = 12000;
