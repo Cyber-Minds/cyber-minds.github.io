@@ -107,17 +107,6 @@
   background: var(--bg1);
 }
 
-.command-item:focus-visible,
-.command-palette-input:focus-visible,
-.draft-browse-item:focus-visible,
-.draft-browse-close:focus-visible,
-.draft-recovery-browse:focus-visible,
-.draft-recovery-discard:focus-visible,
-.draft-recovery-dismiss:focus-visible {
-  outline: 3px solid rgba(111, 219, 240, 0.95);
-  outline-offset: 2px;
-}
-
 .command-item:disabled {
   opacity: 0.55;
   cursor: not-allowed;
