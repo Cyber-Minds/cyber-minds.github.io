@@ -1,6 +1,19 @@
-/* this page links to the CHAT BOX */
+/* LiveHelp.css — CyberMinds Live Help page */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
+  color: #ffffff;
+  text-align: center;
+  background-color: black;
 }
 
 .Parent-container {
@@ -13,56 +26,301 @@ body {
 }
 
 @keyframes rotateBoxShadow {
-  0% {
-    box-shadow: inset 0px 0em 15em #102d42;
-  }
-  33% {
-    box-shadow: inset 0px 1em 20em #213f67;
-  }
-  66% {
-    box-shadow: inset 0px 0.5em 20em #132b49;
-  }
-  100% {
-    box-shadow: inset 0em 0em 15em #143852;
-  }
+  0%   { box-shadow: inset 0px 0em 15em #102d42; }
+  33%  { box-shadow: inset 0px 1em 20em #213f67; }
+  66%  { box-shadow: inset 0px 0.5em 20em #132b49; }
+  100% { box-shadow: inset 0em 0em 15em #143852; }
 }
 
-body {
-  font-family: 'Georgia', sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /*this is body*/
-  color: #ffffff;
-  text-align: center;
-}
-.chat-container {
+/* ── MAIN ── */
+.livehelp-main {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0 20px;
-  margin-bottom: 20px;
-}
-
-.chat {
-  margin: 50;
-  opacity: 100%;
-}
-.white-rectangle {
-  background-color: #ffffff;
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
-  width: 50%;
-  height: 100%;
-  background-size: 50%, auto;
-  display: none;
-}
-
-main {
-  flex: 1;
+  padding: 2rem 1.5rem 4rem;
   display: flex;
   flex-direction: column;
-  padding: 20px 0;
+  gap: 1.5rem;
+  text-align: left;
 }
 
+/* ── HERO ── */
+.livehelp-hero {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.livehelp-title {
+  font-family: 'MuseoModerno', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+}
+
+.livehelp-subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* ── SAFETY NOTICE ── */
+.safety-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(251,73,52,0.06);
+  border: 1px solid rgba(251,73,52,0.22);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+}
+
+.safety-notice-icon {
+  color: #fb4934;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.safety-notice-body {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+}
+
+.safety-notice-body strong {
+  color: #ffffff;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.safety-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0;
+}
+
+.safety-list li::before {
+  content: '⚠ ';
+  color: #fb4934;
+  font-size: 0.8rem;
+}
+
+/* ── SUGGESTED PROMPTS ── */
+.prompts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prompts-label {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.prompts-label i { color: #fabd2f; }
+
+.prompts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.6rem;
+}
+
+.prompt-chip {
+  background: #111f30;
+  border: 1px solid #1a3a5c;
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.85);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  line-height: 1.45;
+}
+
+.prompt-chip:hover {
+  border-color: #4ea0ff;
+  color: #ffffff;
+  background: rgba(78,160,255,0.06);
+}
+
+.prompt-chip--copied {
+  border-color: #22c55e;
+  color: #22c55e;
+  background: rgba(34,197,94,0.06);
+}
+
+/* ── CHAT WRAPPER ── */
+.chat-wrapper { width: 100%; }
+
+.chat-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1a3a5c;
+}
+
+/* ── FALLBACK ── */
+.chat-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: #111f30;
+  min-height: 500px;
+  justify-content: center;
+}
+
+.fallback-icon {
+  font-size: 2.5rem;
+  color: #fabd2f;
+}
+
+.fallback-title {
+  font-family: 'MuseoModerno', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.fallback-desc {
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 480px;
+  line-height: 1.65;
+}
+
+.fallback-tips {
+  width: 100%;
+  max-width: 520px;
+}
+
+.fallback-tips-label {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.fallback-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fallback-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  background: #0d1a2a;
+  border: 1px solid #1a3a5c;
+  border-radius: 8px;
+  color: #4ea0ff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.fallback-link:hover {
+  border-color: #4ea0ff;
+  background: rgba(78,160,255,0.08);
+}
+
+/* ── FAQ ── */
+.fallback-quick-answers {
+  width: 100%;
+  max-width: 600px;
+  text-align: left;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.faq-item {
+  background: #0d1a2a;
+  border: 1px solid #1a3a5c;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.faq-item summary {
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; color: #4ea0ff; font-size: 1.1rem; }
+.faq-item[open] summary::after { content: '−'; }
+
+.faq-item p {
+  padding: 0 1rem 0.85rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  text-align: left;
+}
+
+.faq-item code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: #6fdbf0;
+  background: rgba(111,219,240,0.08);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* ── RETRY BUTTON ── */
+.fallback-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  background: transparent;
+  border: 1px solid #1a3a5c;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.fallback-retry-btn:hover {
+  border-color: #4ea0ff;
+  color: #4ea0ff;
+}
+
+/* ── HEADER (matches site) ── */
 header {
   background-color: #000000;
   color: #ffffff;
@@ -75,8 +333,8 @@ header {
 
 .header-content {
   display: flex;
-  align-items: center; /* Center the items vertically */
-  justify-content: space-between; /* Space between the logo and nav */
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header-content img {
@@ -88,9 +346,7 @@ header {
   display: flex;
   justify-content: space-between;
   background-color: #000000;
-  padding: 0.5em;
-  padding-left: 6em;
-  padding-right: 6em;
+  padding: 0.5em 6em;
   align-items: center;
   flex-grow: 1;
 }
@@ -99,67 +355,33 @@ header {
   text-decoration: none;
   font-size: 14pt;
   color: #ffffff;
-  padding: 0.5em 1em;
-  transition: background-color 0.3s;
   background-color: #16425d;
-  text-decoration: none;
   margin-right: 0.9em;
-  padding: 0.4em 0.8em; /* Smaller padding for a more compact button */
-  border-radius: 0.8em; /* Make the buttons more rounded */
-  white-space: nowrap; /* Prevent text from wrapping */
-}
-
-.header-buttons a:hover {
-  background-color: #286aa7;
-}
-.page-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 4em;
-  font-weight: 700;
-  font-style: normal;
-  word-spacing: 0.2em;
-  letter-spacing: 0.1em;
-  display: inline-block;
-  font-stretch: expanded;
-  position: absolute;
-  transform: translateX(-50%);
-  top: 8.5%;
-  left: 49%;
-  color: transparent; /* Set initial text color to transparent */
-  background: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0),
-    rgba(255, 255, 255, 0.8)
-  ); /* Adjust the colors and stops as needed */
-  background-clip: text;
-  -webkit-background-clip: text;
-  animation: fadeIn 3s forwards; /* Set the duration of the animation */
-}
-
-@keyframes fadeIn {
-  to {
-    color: rgb(255, 255, 255);
-    background-size: 200% 100%; /* Adjust the size of the gradient */
-  }
-}
-
-h2 {
-  font-family: 'MuseoModerno', sans-serif;
-}
-
-a {
+  padding: 0.4em 0.8em;
+  border-radius: 0.8em;
+  white-space: nowrap;
+  transition: background-color 0.3s;
   font-family: 'Space Grotesk', sans-serif;
 }
 
-p {
-  font-family: 'Space Grotesk', sans-serif;
-}
+.header-buttons a:hover { background-color: #286aa7; }
 
+/* ── FOOTER ── */
 footer {
-  color: #fff;
+  background-color: #0a0a0a;
+  color: rgba(255,255,255,0.55);
   text-align: center;
   padding: 1em 0;
   font-size: 0.9em;
   margin-top: auto;
+}
+
+a { font-family: 'Space Grotesk', sans-serif; }
+p { font-family: 'Space Grotesk', sans-serif; }
+h2 { font-family: 'MuseoModerno', sans-serif; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .prompts-grid { grid-template-columns: 1fr; }
+  .fallback-links { flex-direction: column; align-items: stretch; }
 }

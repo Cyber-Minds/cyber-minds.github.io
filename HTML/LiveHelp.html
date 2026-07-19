@@ -1,66 +1,239 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Chat Box</title>
+    <title>Live Help | CyberMinds</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="jpg" href="../Images/circle.jpg" />
-
+    <link rel="icon" type="image/jpeg" href="../Images/circle.jpg" />
     <link rel="stylesheet" href="../CSS/LiveHelp.css" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
+    <script src="https://kit.fontawesome.com/5964d931e5.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <div class="Parent-container">
-      <!--The navbar -->
-      <header>
-        <div class="header-content">
-          <a href="../index.html">
-            <img src="../Images/circle.jpg" alt="CyberMinds Logo" />
-          </a>
-          <nav class="header-buttons">
-            <a href="../index.html">Home</a>
-            <a href="moreinfo.html">More Info</a>
-            <a href="mission.html">Mission</a>
-            <a href="LiveHelp.html">Live Help</a>
-            <a href="course_Contents.html">Courses</a>
-            <a href="ourTeam.html">Our Team</a>
-            <a href="CTF.html">CTF</a>
-          </nav>
-        </div>
-      </header>
 
-      <!--Main page content -->
-      <main>
-        <div class="chat-container">
-          <iframe
-            src="https://www.chatbase.co/5zyd1xHaZEua96z-hkI37/help"
-            width="100%"
-            style="
-              height: 90vh;
-              min-height: 700px;
-              border: none;
-              border-radius: 12px;
-            "
-          ></iframe>
+      <header id="site-header"></header>
+
+      <main class="livehelp-main">
+
+        <!-- ── PAGE HEADER ── -->
+        <div class="livehelp-hero">
+          <h1 class="livehelp-title">Live Help</h1>
+          <p class="livehelp-subtitle">
+            Ask our cybersecurity assistant anything — from basic Linux commands
+            to how HTTPS works. No sign-up required. Ask anything, anytime. 
+          </p>
         </div>
+
+        <!-- ── PRIVACY / SAFETY NOTICE ── -->
+        <div class="safety-notice" role="note" aria-label="Safety notice">
+          <div class="safety-notice-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="safety-notice-body">
+            <strong>Before you chat — a quick safety note:</strong>
+            <ul>
+              <li>Never share passwords, API keys, or private credentials.</li>
+              <li>Do not paste real log files containing hostnames, IPs, or tokens from live systems.</li>
+              <li>Do not share personal account details or private system configurations.</li>
+              <li>This chat is powered by a third-party service (Chatbase) and is not end-to-end encrypted.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ── SUGGESTED PROMPTS ── -->
+        <div class="prompts-section">
+          <p class="prompts-label">
+            <i class="fa-solid"></i> Not sure what to ask? Try one of these:
+          </p>
+          <div class="prompts-grid">
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              What is the difference between HTTP and HTTPS?
+            </button>
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              How do I read file permissions with ls -la?
+            </button>
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              What is a brute-force attack and how do I defend against it?
+            </button>
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              Explain what SQL injection is in simple terms.
+            </button>
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              What does grep do and how do I use it?
+            </button>
+            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+              What is the difference between authentication and authorization?
+            </button>
+          </div>
+        </div>
+
+        <!-- ── CHAT IFRAME ── -->
+        <div class="chat-wrapper">
+          <div class="chat-container" id="chatContainer">
+            <iframe
+              id="chatIframe"
+              src="https://www.chatbase.co/chatbot-iframe/5zyd1xHaZEua96z-hkI37"
+              width="100%"
+              title="CyberMinds AI chat assistant"
+              allow="clipboard-write"
+              style="height: 90vh; min-height: 700px; border: none; border-radius: 12px;"
+              onload="handleIframeLoad()"
+              onerror="handleIframeError()"
+            ></iframe>
+
+            <!-- ── FALLBACK (hidden by default, shown if iframe fails) ── -->
+            <div class="chat-fallback" id="chatFallback" hidden>
+              <div class="fallback-icon">
+                <i class="fa-solid fa-circle-exclamation"></i>
+              </div>
+              <h2 class="fallback-title">Chat unavailable right now</h2>
+              <p class="fallback-desc">
+                The live assistant couldn't load — this sometimes happens when
+                a browser extension blocks third-party iframes, or when the
+                service is temporarily down.
+              </p>
+
+              <div class="fallback-tips">
+                <p class="fallback-tips-label">In the meantime, here are some resources:</p>
+                <div class="fallback-links">
+                  <a href="course_Contents.html" class="fallback-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Browse Courses</span>
+                  </a>
+                  <a href="CTF.html" class="fallback-link">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>Try a CTF Challenge</span>
+                  </a>
+                  <a href="moreinfo.html" class="fallback-link">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>More Info</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="fallback-quick-answers">
+                <p class="fallback-tips-label">Quick answers to common beginner questions:</p>
+                <div class="faq-list">
+                  <details class="faq-item">
+                    <summary>What is a firewall?</summary>
+                    <p>A firewall is a network security system that monitors and controls incoming and outgoing traffic based on predefined rules. It acts as a barrier between a trusted internal network and untrusted external networks.</p>
+                  </details>
+                  <details class="faq-item">
+                    <summary>What does pwd do in Linux?</summary>
+                    <p><code>pwd</code> stands for "print working directory". It shows you the full path of the directory you are currently in — useful for orienting yourself in the terminal.</p>
+                  </details>
+                  <details class="faq-item">
+                    <summary>What is phishing?</summary>
+                    <p>Phishing is a social engineering attack where an attacker impersonates a trusted entity (like a bank or a service) to trick users into revealing credentials or clicking malicious links.</p>
+                  </details>
+                  <details class="faq-item">
+                    <summary>What is the difference between encryption and hashing?</summary>
+                    <p>Encryption is reversible — a key can decrypt the data. Hashing is one-way — you cannot retrieve the original input from a hash. Passwords are typically stored as hashes, not encrypted.</p>
+                  </details>
+                  <details class="faq-item">
+                    <summary>What is a CTF (Capture The Flag)?</summary>
+                    <p>A CTF is a cybersecurity competition where participants solve security challenges to find hidden "flags". They are used for learning and practicing offensive and defensive security skills in a safe, legal environment.</p>
+                  </details>
+                </div>
+              </div>
+
+              <button class="fallback-retry-btn" type="button" onclick="retryIframe()">
+                <i class="fa-solid fa-rotate-right"></i> Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+
       </main>
 
-      <!--The footer and updated copyright -->
       <footer id="footer">
-        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
+        <p>&copy; 2026 CyberMinds, Inc. All rights reserved.</p>
       </footer>
     </div>
 
     <script src="../Javascript/header.js"></script>
     <script src="../Javascript/footer.js"></script>
     <script src="../Javascript/analytics.js"></script>
+
+    <script>
+      // ── Analytics: log page open only, no prompt text ──────────────────
+      (function trackPageOpen() {
+        try {
+          if (typeof window.analytics !== 'undefined' && window.analytics.track) {
+            window.analytics.track('live_help_opened', {
+              timestamp: new Date().toISOString(),
+            });
+          }
+        } catch (e) {
+          // analytics not available — fail silently
+        }
+      })();
+
+      // ── Iframe load handling ────────────────────────────────────────────
+      let iframeLoaded = false;
+      const IFRAME_TIMEOUT_MS = 12000;
+
+      const iframeTimeoutTimer = setTimeout(() => {
+        if (!iframeLoaded) {
+          handleIframeError();
+        }
+      }, IFRAME_TIMEOUT_MS);
+
+      function handleIframeLoad() {
+        iframeLoaded = true;
+        clearTimeout(iframeTimeoutTimer);
+        const iframe = document.getElementById('chatIframe');
+        if (iframe) iframe.style.display = 'block';
+        const fallback = document.getElementById('chatFallback');
+        if (fallback) fallback.hidden = true;
+      }
+
+      function handleIframeError() {
+        clearTimeout(iframeTimeoutTimer);
+        const iframe = document.getElementById('chatIframe');
+        if (iframe) iframe.style.display = 'none';
+        const fallback = document.getElementById('chatFallback');
+        if (fallback) fallback.hidden = false;
+      }
+
+      function retryIframe() {
+        const iframe = document.getElementById('chatIframe');
+        const fallback = document.getElementById('chatFallback');
+        if (!iframe) return;
+        iframeLoaded = false;
+        fallback.hidden = true;
+        iframe.style.display = 'block';
+        iframe.src = iframe.src;
+        clearTimeout(iframeTimeoutTimer);
+        setTimeout(() => {
+          if (!iframeLoaded) handleIframeError();
+        }, IFRAME_TIMEOUT_MS);
+      }
+
+      // ── Prompt chips ────────────────────────────────────────────────────
+      // Copies the prompt text to clipboard — user then pastes into the chat.
+      // We never inject text directly into a cross-origin iframe.
+      function injectPrompt(btn) {
+        const text = btn.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            btn.classList.add('prompt-chip--copied');
+            const original = btn.textContent;
+            btn.textContent = '✓ Copied — paste into chat';
+            setTimeout(() => {
+              btn.textContent = original;
+              btn.classList.remove('prompt-chip--copied');
+            }, 2000);
+          }).catch(() => {});
+        }
+      }
+    </script>
   </body>
 </html>
-
