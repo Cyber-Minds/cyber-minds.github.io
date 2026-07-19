@@ -30,6 +30,8 @@ function saveProgress() {
   localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(completedChallenges));
 }
 
+let commandPaletteRestoreFocus = null;
+
 function showToast(message) {
   const toast = document.getElementById('toast');
   if (!toast) {
@@ -216,6 +218,9 @@ function openCommandPalette() {
   if (!overlay || !input) {
     return;
   }
+  commandPaletteRestoreFocus = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
   overlay.hidden = false;
   input.value = '';
   renderCommandPalette();
@@ -228,6 +233,10 @@ function closeCommandPalette() {
   if (overlay) {
     overlay.hidden = true;
   }
+  if (commandPaletteRestoreFocus && document.contains(commandPaletteRestoreFocus)) {
+    commandPaletteRestoreFocus.focus();
+  }
+  commandPaletteRestoreFocus = null;
 }
 
 function moveCommandPaletteSelection(delta) {
