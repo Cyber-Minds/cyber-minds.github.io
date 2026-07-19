@@ -316,6 +316,16 @@ test.describe('Navigation', () => {
 });
 
 test.describe('Content pages', () => {
+  test('Live Help hides fallback after load and shows it when chat fails', async ({ page }) => {
+    await page.goto('/HTML/LiveHelp.html');
+    await expect(page.locator('#chatIframe')).toBeVisible();
+    await expect(page.locator('#chatFallback')).toBeHidden();
+
+    await page.evaluate(() => window.handleIframeError());
+    await expect(page.locator('#chatIframe')).toBeHidden();
+    await expect(page.locator('#chatFallback')).toBeVisible();
+  });
+
   test('mission page exposes a clear h1 and responsive content cards', async ({
     page,
   }) => {
