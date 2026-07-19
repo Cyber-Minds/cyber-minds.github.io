@@ -236,6 +236,7 @@ function closeCommandPalette() {
   if (commandPaletteRestoreFocus && document.contains(commandPaletteRestoreFocus)) {
     commandPaletteRestoreFocus.focus();
   }
+  commandPaletteRestoreFocus = null;
 }
 
 function moveCommandPaletteSelection(delta) {

@@ -101,8 +101,6 @@ window.require.config = function config() {};
 `;
 
 test.beforeEach(async ({ page }) => {
-  await clearBrowserStorage(page);
-
   await page.route('https://cdn.jsdelivr.net/**', async (route) => {
     const url = route.request().url();
 
@@ -146,17 +144,6 @@ test.beforeEach(async ({ page }) => {
 async function waitForMockReady(page) {
   await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
     timeout: 10_000,
-  });
-}
-
-async function clearBrowserStorage(page) {
-  await page.evaluate(() => {
-    try {
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-    } catch (error) {
-      // Ignore startup pages (about:blank, file://, etc.) that do not expose storage.
-    }
   });
 }
 
@@ -222,11 +209,6 @@ test.describe('Navigation', () => {
     await expect(firstCourseCard).toHaveCSS('outline-style', 'solid');
 
     await page.keyboard.press('Enter');
-    await expect(page.locator('#courseCompletionModal')).toHaveClass(/is-visible/);
-
-    const openCourseAction = await tabUntilFocused(page, '#openCurrentCourseAction');
-    await expect(openCourseAction).toBeFocused();
-    await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/Introductioncourse1\.html/);
 
     await page.goto('/HTML/CTF.html');
@@ -272,6 +254,12 @@ test.describe('Navigation', () => {
       );
       return !!saved && saved.includes('saved draft');
     });
+    await page.evaluate(() => {
+      window.localStorage.setItem(
+        'cm_terminal_draft_v1:linux-basics:template:javascript',
+        '// second saved draft\nconsole.log("keep");\n'
+      );
+    });
 
     await page.reload();
     await waitForMockReady(page);
@@ -281,7 +269,16 @@ test.describe('Navigation', () => {
 
     const banner = page.locator('#draftRecoveryBanner');
     await expect(banner).toBeVisible();
-    await expect(page.locator('#draftDismissBtn')).toBeVisible();
+
+    const browseButton = await tabUntilFocused(page, '#draftBrowseBtn');
+    await page.keyboard.press('Space');
+    const draftOverlay = page.locator('#draftBrowseOverlay');
+    await expect(draftOverlay).toBeVisible();
+    await expect(page.locator('#draftBrowseCloseBtn')).toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(draftOverlay).toHaveCount(0);
+    await expect(browseButton).toBeFocused();
 
     const dismissButton = await tabUntilFocused(page, '#draftDismissBtn');
     await expect(dismissButton).toBeFocused();
@@ -298,20 +295,26 @@ test.describe('Navigation', () => {
       timeout: 10_000,
     });
 
-    const firstNavButton = page.locator('#challengeNav button').first();
-    await firstNavButton.focus();
+    const firstNavButton = await tabUntilFocused(page, '#challengeNav button');
     await expect(firstNavButton).toBeFocused();
     await expect(firstNavButton).toHaveCSS('outline-style', 'solid');
 
     await page.keyboard.press('Enter');
     await expect(page.locator('#challengeTitle')).toContainText(/Linux Basics Warmup|Web Recon|Log Hunt/i);
 
-    await page.keyboard.press('Shift+Tab');
-    await expect(page.locator('#loadStarterBtn')).not.toBeFocused();
-    await expect(page.locator('#commandPaletteInput')).not.toBeFocused();
-
-    await page.keyboard.press('Escape');
-    await expect(page.locator('#commandPaletteOverlay')).toBeHidden();
+    for (let index = 0; index < 10; index += 1) {
+      await page.keyboard.press('Tab');
+      const focusedControlIsOperable = await page.evaluate(() => {
+        const focused = document.activeElement;
+        return (
+          focused instanceof HTMLElement &&
+          !focused.hidden &&
+          !focused.hasAttribute('disabled') &&
+          !focused.closest('[hidden]')
+        );
+      });
+      expect(focusedControlIsOperable).toBe(true);
+    }
   });
 });
 

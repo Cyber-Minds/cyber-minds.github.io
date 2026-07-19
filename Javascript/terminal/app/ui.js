@@ -235,6 +235,7 @@ function browseSavedDrafts() {
   });
 
   function closeModal() {
+    document.removeEventListener('keydown', escHandler);
     overlay.remove();
     if (restoreFocus && document.contains(restoreFocus)) {
       restoreFocus.focus();
@@ -251,7 +252,6 @@ function browseSavedDrafts() {
   const escHandler = (event) => {
     if (event.key === 'Escape') {
       closeModal();
-      document.removeEventListener('keydown', escHandler);
     }
   };
   document.addEventListener('keydown', escHandler);
