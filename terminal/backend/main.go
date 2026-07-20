@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -41,10 +42,7 @@ func main() {
 		port = defaultPort
 	}
 
-	srv := &http.Server{
-		Addr:    ":" + port,
-		Handler: router,
-	}
+	srv := newHTTPServer(":"+port, router)
 
 	// Cancel ctx when SIGINT or SIGTERM arrives.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -74,4 +72,14 @@ func main() {
 	// propagates an EOF to each handler and lets them exit naturally.
 	shutdownSessions()
 	log.Println("Shutdown complete")
+}
+
+func newHTTPServer(addr string, handler http.Handler) *http.Server {
+	return &http.Server{
+		Addr:              addr,
+		Handler:           handler,
+		ReadHeaderTimeout: 5 * time.Second,
+		IdleTimeout:       60 * time.Second,
+		MaxHeaderBytes:    64 << 10,
+	}
 }

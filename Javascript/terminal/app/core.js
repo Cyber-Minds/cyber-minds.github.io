@@ -30,6 +30,8 @@ function saveProgress() {
   localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(completedChallenges));
 }
 
+let commandPaletteRestoreFocus = null;
+
 function showToast(message) {
   const toast = document.getElementById('toast');
   if (!toast) {
@@ -216,6 +218,9 @@ function openCommandPalette() {
   if (!overlay || !input) {
     return;
   }
+  commandPaletteRestoreFocus = document.activeElement instanceof HTMLElement
+    ? document.activeElement
+    : null;
   overlay.hidden = false;
   input.value = '';
   renderCommandPalette();
@@ -228,6 +233,10 @@ function closeCommandPalette() {
   if (overlay) {
     overlay.hidden = true;
   }
+  if (commandPaletteRestoreFocus && document.contains(commandPaletteRestoreFocus)) {
+    commandPaletteRestoreFocus.focus();
+  }
+  commandPaletteRestoreFocus = null;
 }
 
 function moveCommandPaletteSelection(delta) {
@@ -310,6 +319,68 @@ function getDraftStorageKey() {
   return `${DRAFT_STORAGE_PREFIX}:${activeChallengeId}:template:${activeEditorFile.lang}`;
 }
 
+function getSavedDraftSummaries() {
+  const prefix = `${DRAFT_STORAGE_PREFIX}:`;
+  const summaries = [];
+ 
+  try {
+    Object.keys(localStorage).forEach((key) => {
+      if (!key.startsWith(prefix)) {
+        return;
+      }
+ 
+      const rest = key.slice(prefix.length);
+      let isDiscarded = false;
+      let lookupRest = rest;
+ 
+      // Discarded drafts are stored as: discarded:{timestamp}:{challengeId}:{kind}:{scope}
+      if (rest.startsWith('discarded:')) {
+        isDiscarded = true;
+        const afterDiscarded = rest.slice('discarded:'.length);
+        const firstColon = afterDiscarded.indexOf(':');
+        lookupRest = afterDiscarded.slice(firstColon + 1);
+      }
+ 
+      const parts = lookupRest.split(':');
+      const challengeId = parts[0];
+      const kind = parts[1];
+      const scope = parts.slice(2).join(':');
+      if (!challengeId || !kind || !scope) {
+        return;
+      }
+ 
+      const value = localStorage.getItem(key);
+      if (value === null) {
+        return;
+      }
+ 
+      const preview = value
+        .split('\n')
+        .find((line) => line.trim().length > 0);
+ 
+      summaries.push({
+        key,
+        challengeId,
+        kind,
+        scope,
+        isDiscarded,
+        label: isDiscarded
+          ? `${scope} (discarded — click to restore)`
+          : scope,
+        preview: preview || '(empty draft)',
+      });
+    });
+  } catch (e) {
+    console.warn('Draft list failed:', e);
+  }
+ 
+  // Active drafts first, then discarded ones
+  return summaries.sort((a, b) => {
+    if (a.isDiscarded !== b.isDiscarded) return a.isDiscarded ? 1 : -1;
+    return a.label.localeCompare(b.label);
+  });
+}
+
 function restoreDraftOrDefault(fallback) {
   const key = getDraftStorageKey();
   let saved = null;
@@ -322,6 +393,9 @@ function restoreDraftOrDefault(fallback) {
   if (saved !== null) {
     try {
       editor.setValue(saved);
+      if (typeof showDraftRecoveryBanner === 'function') {
+        showDraftRecoveryBanner();
+      }
     } catch (e) {
       console.warn('Draft restore failed, falling back:', e);
       editor.setValue(fallback);
@@ -336,18 +410,31 @@ function persistActiveDraft() {
     return;
   }
   try {
-    localStorage.setItem(getDraftStorageKey(), editor.getValue());
+    const value = editor.getValue();
+    const starterValue = codeSamples[currentLang] || '';
+    // Don't save a draft that's identical to the unmodified starter —
+    // there's nothing to "recover" in that case.
+    if (value === starterValue) {
+      if (activeEditorFile.kind === 'template') {
+        localStorage.removeItem(getDraftStorageKey());
+      }
+      return;
+    }
+    localStorage.setItem(getDraftStorageKey(), value);
   } catch (e) {
     console.warn('Draft save failed:', e);
   }
 }
 
+/**
+ * Debounced draft save. Waits 30 seconds after the user stops typing
+ * before persisting to localStorage, so drafts aren't rewritten on every keystroke.
+ */
 function queueDraftSave() {
   if (!editor) {
     return;
   }
   window.clearTimeout(autoSaveTimer);
-  autoSaveTimer = null;
   persistActiveDraft();
 }
 
@@ -466,7 +553,7 @@ function renderFileTabs() {
 
 function switchLanguage(lang, options = {}) {
   const { persistCurrent = true } = options;
-  if (editor && persistCurrent) {
+  if (editor && persistCurrent && !isInitialLoad) {
     persistActiveDraft();
   }
 

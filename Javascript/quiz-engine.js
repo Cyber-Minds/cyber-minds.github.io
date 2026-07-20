@@ -151,20 +151,6 @@
       }
     });
 
-    // quiz_start fires after DOMContentLoaded so that analytics.js (loaded last)
-    // has already defined trackEvent before we call it.
-    var quizId = String(config.quizId || '');
-    var questionCount = config.questions.length;
-    function emitQuizStart() {
-      if (typeof global.trackEvent === 'function') {
-        global.trackEvent('quiz_start', { quiz: quizId, total_questions: questionCount });
-      }
-    }
-    if (global.document.readyState === 'loading') {
-      global.document.addEventListener('DOMContentLoaded', emitQuizStart);
-    } else {
-      emitQuizStart();
-    }
   }
 
   global.CyberMindsQuizEngine = {

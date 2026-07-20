@@ -147,6 +147,18 @@ async function waitForMockReady(page) {
   });
 }
 
+async function tabUntilFocused(page, selector, { reverse = false } = {}) {
+  const target = page.locator(selector).first();
+  for (let index = 0; index < 100; index += 1) {
+    const isFocused = await target.evaluate((element) => element === document.activeElement);
+    if (isFocused) {
+      return target;
+    }
+    await page.keyboard.press(reverse ? 'Shift+Tab' : 'Tab');
+  }
+  throw new Error(`Unable to focus ${selector}`);
+}
+
 // ─── Home page ───────────────────────────────────────────────────────────────
 
 test.describe('Home page', () => {
@@ -186,9 +198,137 @@ test.describe('Navigation', () => {
     await expect(page).toHaveURL(/terminal\/index\.html/);
     await expect(page).toHaveTitle('CyberMinds Terminal');
   });
+
+  test('keyboard-only navigation reaches course and CTF links in reading order', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/course_Contents.html');
+
+    const firstCourseCard = await tabUntilFocused(page, '.course-card');
+    await expect(firstCourseCard).toBeFocused();
+    await expect(firstCourseCard).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/Introductioncourse1\.html/);
+
+    await page.goto('/HTML/CTF.html');
+    const firstCtfCard = await tabUntilFocused(page, 'a.course-card');
+    await expect(firstCtfCard).toBeFocused();
+    await expect(firstCtfCard).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/terminal\/index\.html\?challenge=linux-basics/);
+  });
+
+  test('command palette and draft recovery overlays restore focus after Escape', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const trigger = page.locator('#loadStarterBtn');
+    await trigger.focus();
+    await expect(trigger).toBeFocused();
+
+    await page.keyboard.press('Control+KeyK');
+    const palette = page.locator('#commandPaletteOverlay');
+    await expect(palette).toBeVisible();
+    await expect(page.locator('#commandPaletteInput')).toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(palette).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(
+        '# saved draft\nprint("keep")\n'
+      );
+    });
+
+    await page.waitForFunction(() => {
+      const saved = window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      );
+      return !!saved && saved.includes('saved draft');
+    });
+    await page.evaluate(() => {
+      window.localStorage.setItem(
+        'cm_terminal_draft_v1:linux-basics:template:javascript',
+        '// second saved draft\nconsole.log("keep");\n'
+      );
+    });
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const banner = page.locator('#draftRecoveryBanner');
+    await expect(banner).toBeVisible();
+
+    const browseButton = await tabUntilFocused(page, '#draftBrowseBtn');
+    await page.keyboard.press('Space');
+    const draftOverlay = page.locator('#draftBrowseOverlay');
+    await expect(draftOverlay).toBeVisible();
+    await expect(page.locator('#draftBrowseCloseBtn')).toBeFocused();
+
+    await page.keyboard.press('Escape');
+    await expect(draftOverlay).toHaveCount(0);
+    await expect(browseButton).toBeFocused();
+
+    const dismissButton = await tabUntilFocused(page, '#draftDismissBtn');
+    await expect(dismissButton).toBeFocused();
+    await page.keyboard.press('Space');
+    await expect(banner).toHaveCount(0);
+  });
+
+  test('terminal challenge navigation and hidden controls stay out of tab order', async ({
+    page,
+  }) => {
+    await page.goto(TERMINAL_MOCK_URL);
+    await waitForMockReady(page);
+    await page.waitForFunction(() => !!window.__cybermindsMonacoEditor, null, {
+      timeout: 10_000,
+    });
+
+    const firstNavButton = await tabUntilFocused(page, '#challengeNav button');
+    await expect(firstNavButton).toBeFocused();
+    await expect(firstNavButton).toHaveCSS('outline-style', 'solid');
+
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#challengeTitle')).toContainText(/Linux Basics Warmup|Web Recon|Log Hunt/i);
+
+    for (let index = 0; index < 10; index += 1) {
+      await page.keyboard.press('Tab');
+      const focusedControlIsOperable = await page.evaluate(() => {
+        const focused = document.activeElement;
+        return (
+          focused instanceof HTMLElement &&
+          !focused.hidden &&
+          !focused.hasAttribute('disabled') &&
+          !focused.closest('[hidden]')
+        );
+      });
+      expect(focusedControlIsOperable).toBe(true);
+    }
+  });
 });
 
 test.describe('Content pages', () => {
+  test('Live Help hides fallback after load and shows it when chat fails', async ({ page }) => {
+    await page.goto('/HTML/LiveHelp.html');
+    await expect(page.locator('#chatIframe')).toBeVisible();
+    await expect(page.locator('#chatFallback')).toBeHidden();
+
+    await page.evaluate(() => window.handleIframeError());
+    await expect(page.locator('#chatIframe')).toBeHidden();
+    await expect(page.locator('#chatFallback')).toBeVisible();
+  });
+
   test('mission page exposes a clear h1 and responsive content cards', async ({
     page,
   }) => {
@@ -197,9 +337,9 @@ test.describe('Content pages', () => {
       'Our Mission'
     );
 
-    const overflowing = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > window.innerWidth;
-    });
+    const overflowing = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth
+    );
     expect(overflowing).toBe(false);
   });
 
@@ -574,9 +714,36 @@ test.describe('Mock terminal', () => {
     );
 
     expect(restoredDraft).toContain('keep this after reload');
-    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(0);
+    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(1);
 
     await expect(page.locator('#editor')).toContainText(
+      'keep this after reload'
+    );
+
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.locator('#draftDiscardBtn').click();
+
+    const clearedDraft = await page.evaluate(() =>
+      window.localStorage.getItem(
+        'cm_terminal_draft_v1:linux-basics:template:python'
+      )
+    );
+    expect(clearedDraft).toBeNull();
+
+    await expect(page.locator('#editor')).toContainText(
+      'Linux Basics Warmup'
+    );
+
+    await page.reload();
+    await waitForMockReady(page);
+    await page.waitForFunction(
+      () => !!window.__cybermindsMonacoEditor,
+      null,
+      { timeout: 10_000 }
+    );
+
+    await expect(page.locator('#draftRecoveryBanner')).toHaveCount(0);
+    await expect(page.locator('#editor')).not.toContainText(
       'keep this after reload'
     );
   });
