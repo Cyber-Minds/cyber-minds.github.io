@@ -19,49 +19,58 @@
       rel="stylesheet"
     />
 
-    <title>Course 12 - Introduction</title>
+    <title>Course 12 - IoT Device Hardening</title>
   </head>
   <body class="body">
     <header id="site-header"></header>
 
-    <div><p class="page-title">Course 12 - Introduction</p></div>
+    <div><p class="page-title">Course 12 - IoT Device Hardening</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
-
-        <img
-          src="../../../Images/emergingtech.jpg"
-          alt="Cloud Computing Concept Img"
-          style="
-            width: auto;
-            height: auto;
-            margin-left: em;
-            margin-top: 1em;
-            margin-bottom: 1em;
-          "
-        />
-        
+        <h2>Hardening IoT Devices</h2>
         <p>
-        New technology tends to arrive faster than the security practices
-        needed to protect it. <span class="blue-word">Artificial intelligence</span>, <span class="blue-word">IoT devices</span>,
-        <span class="blue-word">blockchain systems</span>, and <span class="blue-word">quantum computing</span> are all
-        reshaping how people and companies work &mdash; and each one brings
-        its own new set of risks alongside its benefits.
+        <span class="blue-word">Internet of Things (IoT)</span> devices are everyday objects with
+        network connectivity &mdash; smart thermostats, cameras, printers,
+        warehouse sensors. <span class="green-word">Northwind Outfitters</span> recently installed a
+        smart shelf-sensor system called <span class="green-word">ClimateSense Hub</span> to track
+        warehouse humidity. IoT devices are frequently the weakest point in
+        a network because they're easy to forget about.
+      </p>
+      <h3><span class="blue-word">Default Credentials</span></h3>
+      <p>
+        Many IoT devices ship with a factory-set username and password, and
+        attackers routinely scan the internet looking for devices that still
+        use them. Changing default credentials before a device ever touches
+        a real network is one of the simplest, highest-value fixes
+        available.
+      </p>
+      <h3><span class="blue-word">Update Lifecycle</span></h3>
+      <p>
+        IoT devices need firmware updates just like a computer needs
+        software updates. A device that has reached
+        <span class="green-word">end-of-life</span> &mdash; meaning the manufacturer no longer
+        ships security updates for it &mdash; becomes a growing risk the
+        longer it stays connected, even if it still "works fine."
+      </p>
+      <h3><span class="blue-word">Network Isolation</span></h3>
+      <p>
+        Rather than placing IoT devices on the same network as computers
+        that handle sensitive data, many organizations put them on a
+        <span class="green-word">separate, isolated network segment</span>. If a shelf sensor were
+        compromised, network isolation limits an attacker to that isolated
+        segment instead of giving them a path into Northwind's customer
+        database.
       </p>
       <p>
-        This course won't turn you into an expert in any one of these fields.
-        Instead, it gives you a <span class="blue-word">defender’s mental model</span>: what can
-        go wrong, what a reasonable mitigation looks like, and where the
-        hype outpaces the reality. We'll use a fictional company,
-        <span class="green-word">Northwind Outfitters</span>, as a running example throughout.
-      </p>
-      <p>
-        Let's get into it!
+        Put together: change the defaults, keep firmware current, retire
+        devices that no longer receive updates, and keep IoT traffic away
+        from your most sensitive systems.
       </p>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html">&lt; Previous</a>
-          <a href="AISecuritycourse12.html">Next &gt;</a>
+          <a href="AISecuritycourse12.html">&lt; Previous</a>
+          <a href="BlockchainSecuritycourse12.html">Next &gt;</a>
           <a href="../../course_Contents.html" class="next_course">Back to All Courses</a>
         </div>
         <div class="pop-up">
@@ -81,7 +90,7 @@
 
         <div class="leftRectangle-section2">
           <p class="leftRectangle-section2-button-title">Table of Contents</p>
-          <a href="Introductioncourse12.html" aria-current="page">
+          <a href="Introductioncourse12.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -97,7 +106,7 @@
             alt="" role="presentation"/>
             AI Security Risks
           </a>
-          <a href="IoTSecuritycourse12.html">
+          <a href="IoTSecuritycourse12.html" aria-current="page">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"

@@ -19,49 +19,56 @@
       rel="stylesheet"
     />
 
-    <title>Course 12 - Introduction</title>
+    <title>Course 12 - Blockchain Security Fundamentals</title>
   </head>
   <body class="body">
     <header id="site-header"></header>
 
-    <div><p class="page-title">Course 12 - Introduction</p></div>
+    <div><p class="page-title">Course 12 - Blockchain Security Fundamentals</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
-
-        <img
-          src="../../../Images/emergingtech.jpg"
-          alt="Cloud Computing Concept Img"
-          style="
-            width: auto;
-            height: auto;
-            margin-left: em;
-            margin-top: 1em;
-            margin-bottom: 1em;
-          "
-        />
-        
+        <h2>Blockchain Security Fundamentals</h2>
         <p>
-        New technology tends to arrive faster than the security practices
-        needed to protect it. <span class="blue-word">Artificial intelligence</span>, <span class="blue-word">IoT devices</span>,
-        <span class="blue-word">blockchain systems</span>, and <span class="blue-word">quantum computing</span> are all
-        reshaping how people and companies work &mdash; and each one brings
-        its own new set of risks alongside its benefits.
+        A <span class="blue-word">blockchain</span> is a distributed ledger &mdash; a record of
+        transactions copied across many computers, where each new block of
+        data is cryptographically linked to the one before it. Northwind's
+        supply-chain team is evaluating a blockchain-based system to track
+        shipments between warehouses.
       </p>
       <p>
-        This course won't turn you into an expert in any one of these fields.
-        Instead, it gives you a <span class="blue-word">defender’s mental model</span>: what can
-        go wrong, what a reasonable mitigation looks like, and where the
-        hype outpaces the reality. We'll use a fictional company,
-        <span class="green-word">Northwind Outfitters</span>, as a running example throughout.
+        <span class="green-word">*Important:</span> being a blockchain does
+        not automatically make a system confidential, correct, or
+        trustworthy. Blockchains are good at making tampering with
+        <span class="green-word">already-recorded</span> data difficult to hide. They do nothing on
+        their own to guarantee that the data entered was accurate in the
+        first place, or that the software built on top of them is bug-free.
       </p>
+      <h3><span class="blue-word">Smart Contract Risk</span></h3>
       <p>
-        Let's get into it!
+        A <span class="blue-word">smart contract</span> is code that runs automatically on a
+        blockchain when certain conditions are met. Because deployed smart
+        contracts are often very difficult or impossible to change
+        afterward, a bug found after launch can be permanent and,
+        in some cases, directly exploitable for financial gain. This is why
+        independent security <span class="green-word">audits</span> before deployment are standard
+        practice, not optional extras.
+      </p>
+      <h3><span class="blue-word">Key Custody</span></h3>
+      <p>
+        Access to a blockchain account is controlled by a
+        <span class="blue-word">private key</span> &mdash; a piece of secret data that proves
+        ownership. Unlike a forgotten website password, there is usually no
+        "reset my key" option: if a private key is lost or stolen, whatever
+        it controls can be permanently lost or stolen along with it.
+        <span class="green-word">Key custody</span> &mdash; how carefully a private key is
+        generated, stored, and backed up &mdash; is often the single
+        biggest security factor in any blockchain system.
       </p>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html">&lt; Previous</a>
-          <a href="AISecuritycourse12.html">Next &gt;</a>
+          <a href="IoTSecuritycourse12.html">&lt; Previous</a>
+          <a href="QuantumComputingcourse12.html">Next &gt;</a>
           <a href="../../course_Contents.html" class="next_course">Back to All Courses</a>
         </div>
         <div class="pop-up">
@@ -81,7 +88,7 @@
 
         <div class="leftRectangle-section2">
           <p class="leftRectangle-section2-button-title">Table of Contents</p>
-          <a href="Introductioncourse12.html" aria-current="page">
+          <a href="Introductioncourse12.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -105,7 +112,7 @@
             alt="" role="presentation"/>
             IoT Device Hardening
           </a>
-          <a href="BlockchainSecuritycourse12.html">
+          <a href="BlockchainSecuritycourse12.html" aria-current="page">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
