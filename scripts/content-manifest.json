@@ -103,9 +103,11 @@
     {
       "id": "course-12",
       "type": "course",
-      "status": "intentionally-unpublished",
+      "status": "published",
       "owner": "Aditya",
-      "exceptionReason": "Course still in development. Catalog card intentionally has no href; popup tells learners to check back later."
+      "difficulty": "Intermediate",
+      "objective": "Emerging technologies and future of cybersecurity.",
+      "lastReviewedAt": "2026-09-13"
     },
     {
       "id": "ctf-linux-basics",
