@@ -47,7 +47,7 @@ const COURSE_CONTENTS_WITH_TEASER = `<html><body><section>
     <div class="course-info"><div class="course-number"><p class="courseclass">Course 3</p></div><h2 class="course-title">Intro</h2></div>
   </a>
   <a class="course-card c12trigger">
-    <div class="course-info"><div class="course-number"><p class="courseclass">Course 12</p></div><h2 class="course-title">Intro</h2></div>
+    <div class="course-info"><div class="course-number"><p class="courseclass">Course 12</p></div><h2 class="course-title">Coming soon!</h2></div>
   </a>
 </section></body></html>`;
 
