@@ -143,7 +143,11 @@
       submitButton.style.display = 'none';
       retryButton.style.display = config.allowRetry ? '' : 'none';
 
-      if (global.CyberMindsProgress && typeof global.CyberMindsProgress.markQuizComplete === 'function') {
+      if (
+        config.trackCompletion !== false &&
+        global.CyberMindsProgress &&
+        typeof global.CyberMindsProgress.markQuizComplete === 'function'
+      ) {
         global.CyberMindsProgress.markQuizComplete(config.quizId, {
           score,
           totalQuestions: config.questions.length,

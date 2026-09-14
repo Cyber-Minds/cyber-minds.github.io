@@ -1,0 +1,433 @@
+/* Course 12 — quiz/activity page styling.
+   Same base as course-lesson.css (shared layout), with the quiz-specific
+   rules from the site's existing quiz pages. Functional selectors that
+   quiz-engine.js depends on (input[type=radio], label, label.selected,
+   .answer-detail, #result, .submit) are preserved exactly -- only the
+   visual treatment and accessibility/responsiveness are improved. */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a2738;
+}
+
+header {
+  background-color: #000000;
+  color: #ffffff;
+  text-align: center;
+  padding: 1em 1em 0.2em;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-content img {
+  max-height: 3em;
+  margin-right: 3em;
+}
+
+.header-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000000;
+  padding: 0.5em 6em;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+
+.header-buttons a {
+  text-decoration: none;
+  font-size: 14pt;
+  color: #ffffff;
+  background-color: #174167;
+  margin-right: 0.9em;
+  padding: 0.4em 0.8em;
+  border-radius: 0.8em;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.header-buttons a:hover,
+.header-buttons a:focus-visible {
+  background-color: #286aa7;
+}
+
+.page-title {
+  display: flex;
+  justify-content: left;
+  margin: 2% 0 1% 8.75%;
+  padding: 0;
+  font-family: 'MuseoModerno', sans-serif !important;
+  letter-spacing: 0.05em;
+  font-weight: 400 !important;
+  color: transparent;
+  font-size: 2.5em;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.8)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: fadeIn 6s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    color: rgb(255, 255, 255);
+    background-size: 200% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-title {
+    animation: none;
+    color: rgb(255, 255, 255);
+  }
+}
+
+section {
+  display: flex;
+  justify-content: space-around;
+  margin-left: 8%;
+  margin-right: 8%;
+  background-color: #1a2738;
+  width: 84%;
+  justify-self: center;
+  flex-wrap: wrap;
+}
+
+.left-side_rectangle {
+  flex: 3;
+  margin: 2% 2% 2% 1%;
+  display: flex;
+  flex-direction: column;
+  gap: 2%;
+  align-items: center;
+  background-color: #1a2738;
+  min-width: 250px;
+  flex-shrink: 0;
+}
+
+.leftRectangle-section1-button-title,
+.leftRectangle-section2-button-title,
+.leftRectangle-section3-button-title {
+  margin-top: 5%;
+  margin-bottom: 3%;
+  font-weight: 700;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.leftRectangle-section1,
+.leftRectangle-section3 {
+  flex: 0.2;
+  background-color: #111927;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftRectangle-section1 a,
+.leftRectangle-section3 a {
+  margin: 3%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 2.5em;
+  border-radius: 0.5em;
+  background-color: #182a47;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.Empty-section1 {
+  flex: 1;
+}
+
+.leftRectangle-section2 {
+  flex: 2;
+  background-color: #111927;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftRectangle-section2 a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
+  border-radius: 0.5em;
+  background-color: #182a47;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  margin: 3%;
+  text-decoration: none;
+  padding: 0.5em;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.leftRectangle-section2 a:last-child {
+  margin-bottom: 9%;
+}
+
+.leftRectangle-section2 a[aria-current='page'] {
+  background-color: #1e6bb2;
+  box-shadow: inset 0 0 0 1px rgba(63, 225, 217, 0.6);
+}
+
+.Empty-section2 {
+  flex: 1;
+}
+
+.Empty-section3 {
+  flex: 2;
+}
+
+.right-side_rectangle {
+  flex: 8;
+  margin: 2% 0 2% 1%;
+  background-color: #1a2738;
+  color: rgb(212, 212, 212);
+  word-break: break-word;
+  min-width: 280px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.right-side_rectangle-buttons {
+  display: flex;
+  flex-direction: row;
+  background-color: #111927;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.2em;
+  flex-wrap: wrap;
+}
+
+.right-side_rectangle-buttons a {
+  border-radius: 0.5em;
+  background-color: #182a47;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0.6em 1em;
+  margin: 0.4em 0.6em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.right-side_rectangle-buttons .next_course {
+  margin-left: auto;
+}
+
+.right-side_rectangle-buttons a:hover,
+.right-side_rectangle-buttons a:focus-visible,
+.leftRectangle-section1 a:hover,
+.leftRectangle-section1 a:focus-visible,
+.leftRectangle-section2 a:hover,
+.leftRectangle-section2 a:focus-visible,
+.leftRectangle-section3 a:hover,
+.leftRectangle-section3 a:focus-visible {
+  background-color: #1e6bb2;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid rgb(63, 225, 217);
+  outline-offset: 2px;
+}
+
+h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1em;
+  margin-bottom: 0.8em;
+}
+
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+p {
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1.7em;
+  margin-bottom: 1.5em;
+  max-width: 68ch;
+}
+
+li {
+  font-family: 'Space Grotesk', sans-serif;
+  line-height: 1.7em;
+  margin-bottom: 0.5em;
+}
+
+a {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.blue-word {
+  color: rgb(63, 225, 217);
+}
+
+.act-img {
+  rotate: -1deg;
+}
+
+/* ── Quiz-specific ─────────────────────────────────────────────────── */
+
+.quiz-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+.question {
+  margin-bottom: 1em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1em;
+  line-height: 1.5em;
+}
+
+.options {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 1.5em;
+}
+
+.option {
+  margin-bottom: 0.6em;
+}
+
+/* Radios stay in the DOM (and in the tab order) for accessibility and for
+   quiz-engine.js to read; they're visually hidden, with the associated
+   label carrying the visible focus ring instead of disappearing entirely. */
+input[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+label {
+  display: block;
+  padding: 0.6em 1em;
+  background-color: #16305a;
+  cursor: pointer;
+  border-radius: 0.5em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1em;
+  line-height: 1.4em;
+  /* Full sentence answers (longer than the site's older short quiz
+     options) need real width and left-aligned reading, not a centered
+     half-width box. */
+  width: 100%;
+  max-width: 640px;
+  box-sizing: border-box;
+  text-align: left;
+  margin: 0.4em auto 0;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+label:hover {
+  background-color: #1c3c70;
+}
+
+input[type='radio']:focus-visible + label {
+  outline: 2px solid rgb(63, 225, 217);
+  outline-offset: 2px;
+}
+
+label.selected {
+  background-color: rgb(61, 78, 163);
+  box-shadow: inset 0 0 0 1px rgba(63, 225, 217, 0.5);
+}
+
+.answer-detail {
+  display: none;
+  margin-top: 0.5em;
+  padding: 0.6em 0.8em;
+  background-color: #111927;
+  border-left: 3px solid rgb(63, 225, 217);
+  border-radius: 0.3em;
+  font-size: 0.95em;
+  line-height: 1.5em;
+}
+
+#result {
+  font-weight: bold;
+  margin-top: 1.2em;
+  margin-bottom: 2em;
+  font-family: 'Space Grotesk', sans-serif;
+  display: block;
+  width: fit-content;
+}
+
+.submit {
+  display: block;
+  padding: 0.6em 1.4em;
+  margin: 1em auto 0.6em;
+  background-color: rgb(83, 168, 19);
+  border: 0.1em solid rgb(72, 151, 12);
+  cursor: pointer;
+  border-radius: 0.6em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1em;
+  color: #ffffff;
+  width: fit-content;
+  max-width: 90%;
+  transition: background-color 0.15s ease;
+}
+
+.submit:hover,
+.submit:focus-visible {
+  background-color: rgb(72, 151, 12);
+}
+
+@media (max-width: 980px) {
+  section {
+    flex-direction: column;
+    width: 92%;
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+
+  .left-side_rectangle,
+  .right-side_rectangle {
+    min-width: 0;
+    width: 100%;
+    margin: 1em 0;
+  }
+
+  .header-buttons {
+    padding: 0.5em 1em;
+  }
+
+  .page-title {
+    font-size: 1.8em;
+    margin-left: 5%;
+  }
+
+  label {
+    max-width: 100%;
+  }
+}

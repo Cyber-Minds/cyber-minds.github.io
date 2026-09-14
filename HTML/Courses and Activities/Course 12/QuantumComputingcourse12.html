@@ -19,49 +19,56 @@
       rel="stylesheet"
     />
 
-    <title>Course 12 - Introduction</title>
+    <title>Course 12 - Quantum Computing & Post-Quantum Migration</title>
   </head>
   <body class="body">
     <header id="site-header"></header>
 
-    <div><p class="page-title">Course 12 - Introduction</p></div>
+    <div><p class="page-title">Course 12 - Quantum Computing & Post-Quantum Migration</p></div>
 
     <section class="section">
       <div class="right-side_rectangle">
-
-        <img
-          src="../../../Images/emergingtech.jpg"
-          alt="A digital globe held by a hand, representing emerging technology"
-          style="
-            width: auto;
-            height: auto;
-            margin-left: 0;
-            margin-top: 1em;
-            margin-bottom: 1em;
-          "
-        />
-
+        <h2>Quantum Computing and Post-Quantum Migration</h2>
         <p>
-        New technology tends to arrive faster than the security practices
-        needed to protect it. <span class="blue-word">Artificial intelligence</span>, <span class="blue-word">IoT devices</span>,
-        <span class="blue-word">blockchain systems</span>, and <span class="blue-word">quantum computing</span> are all
-        reshaping how people and companies work &mdash; and each one brings
-        its own new set of risks alongside its benefits.
+        <span class="blue-word">Quantum computers</span> use fundamentally different physics than
+        the computers you use every day. A sufficiently powerful quantum
+        computer could, in theory, solve certain math problems much faster
+        than any classical computer &mdash; including some of the exact
+        problems that today's widely used <span class="green-word">public-key encryption</span>
+        (like RSA, which you saw back in Course 5) relies on being hard to
+        solve.
       </p>
       <p>
-        This course won't turn you into an expert in any one of these fields.
-        Instead, it gives you a <span class="blue-word">defender’s mental model</span>: what can
-        go wrong, what a reasonable mitigation looks like, and where the
-        hype outpaces the reality. We'll use a fictional company,
-        <span class="green-word">Northwind Outfitters</span>, as a running example throughout.
+        <span class="green-word">*Reality check:</span> today's quantum
+        computers are not yet powerful enough to break modern encryption in
+        practice. This is a
+        <span class="green-word">forward-looking planning problem</span>, not an active,
+        immediate threat.
       </p>
+      <h3><span class="blue-word">"Harvest Now, Decrypt Later"</span></h3>
       <p>
-        Let's get into it!
+        The reason organizations are planning for this now, rather than
+        waiting, is a concept called
+        <span class="blue-word">"harvest now, decrypt later."</span> An attacker could record
+        encrypted data today &mdash; even though they can't read it yet
+        &mdash; and simply store it, hoping to decrypt it once quantum
+        computers become powerful enough. Data that needs to stay
+        confidential for many years is most at risk from this strategy.
+      </p>
+      <h3><span class="blue-word">Post-Quantum Migration</span></h3>
+      <p>
+        <span class="blue-word">Post-quantum cryptography</span> refers to new encryption
+        algorithms designed to remain secure even against a future quantum
+        computer. <span class="green-word">Post-quantum migration</span> is the ongoing, gradual
+        process of replacing today's algorithms with these newer ones before
+        quantum computers become a practical threat &mdash; similar in
+        spirit to how organizations gradually retired older, weaker
+        encryption standards in the past.
       </p>
 
         <div class="right-side_rectangle-buttons">
-          <a href="../../../HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html">&lt; Previous</a>
-          <a href="AISecuritycourse12.html">Next &gt;</a>
+          <a href="BlockchainSecuritycourse12.html">&lt; Previous</a>
+          <a href="EmergingTechActivitycourse12.html">Next &gt;</a>
           <a href="../../course_Contents.html" class="next_course">Back to All Courses</a>
         </div>
         <div class="pop-up">
@@ -81,7 +88,7 @@
 
         <div class="leftRectangle-section2">
           <p class="leftRectangle-section2-button-title">Table of Contents</p>
-          <a href="Introductioncourse12.html" aria-current="page">
+          <a href="Introductioncourse12.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
@@ -113,7 +120,7 @@
             alt="" role="presentation"/>
             Blockchain Security Fundamentals
           </a>
-          <a href="QuantumComputingcourse12.html">
+          <a href="QuantumComputingcourse12.html" aria-current="page">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"

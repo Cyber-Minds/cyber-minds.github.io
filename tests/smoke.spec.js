@@ -579,6 +579,65 @@ test.describe('Shared quiz engine', () => {
   });
 });
 
+test.describe('Course 12', () => {
+  test('course pages load cleanly and activities do not count as quizzes', async ({
+    page,
+  }) => {
+    const pageErrors = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+
+    for (const path of [
+      '/HTML/Courses and Activities/Course 11/Introductioncourse11.html',
+      '/HTML/Courses and Activities/Course 12/Introductioncourse12.html',
+      '/HTML/Courses and Activities/Course 12/AISecuritycourse12.html',
+      '/HTML/Courses and Activities/Course 12/IoTSecuritycourse12.html',
+      '/HTML/Courses and Activities/Course 12/BlockchainSecuritycourse12.html',
+      '/HTML/Courses and Activities/Course 12/QuantumComputingcourse12.html',
+    ]) {
+      await page.goto(path);
+      await expect(page.locator('#site-header')).toBeVisible();
+    }
+
+    await page.goto(
+      '/HTML/Courses and Activities/Course 12/EmergingTechActivitycourse12.html'
+    );
+    for (const id of [
+      'q1-untrusted',
+      'q2-change-creds',
+      'q3-false',
+      'q4-custody',
+    ]) {
+      await page.locator(`#${id}`).check();
+    }
+    await page.locator('button.submit:not(.retry-submit)').click();
+    await expect(page.locator('#result')).toContainText('4/4');
+
+    const afterActivity = await page.evaluate(() => {
+      const raw = window.localStorage.getItem('cm_learning_progress_v1');
+      return raw ? JSON.parse(raw) : null;
+    });
+    expect(afterActivity.completedQuizzes).toEqual({});
+
+    await page.goto(
+      '/HTML/Courses and Activities/Course 12/EmergingTechQuizcourse12.html'
+    );
+    for (const id of ['q1-b', 'q2-b', 'q3-b', 'q4-b']) {
+      await page.locator(`#${id}`).check();
+    }
+    await page.locator('button.submit:not(.retry-submit)').click();
+    await expect(page.locator('#result')).toContainText('4/4');
+
+    const afterQuiz = await page.evaluate(() => {
+      const raw = window.localStorage.getItem('cm_learning_progress_v1');
+      return raw ? JSON.parse(raw) : null;
+    });
+    expect(afterQuiz.completedQuizzes).toHaveProperty(
+      'course-12-emerging-tech-quiz'
+    );
+    expect(pageErrors).toEqual([]);
+  });
+});
+
 test.describe('Legacy quiz progress', () => {
   test('legacy quiz submission updates local progress dashboard', async ({
     page,
