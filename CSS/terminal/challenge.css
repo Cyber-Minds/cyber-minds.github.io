@@ -176,6 +176,82 @@
   line-height: 1.5;
 }
 
+.challenge-hints {
+  border: 1px solid var(--bg2);
+  background: var(--bg1);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.hint-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.hint-header h3 {
+  font-size: 12px;
+  color: var(--fg1);
+}
+
+.hint-counter {
+  font-size: 11px;
+  color: var(--fg3);
+  white-space: nowrap;
+}
+
+.hint-policy {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--fg3);
+  margin-bottom: 8px;
+}
+
+.hint-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hint-list:focus-visible {
+  outline: 3px solid rgba(111, 219, 240, 0.95);
+  outline-offset: 2px;
+}
+
+.hint-item {
+  border-left: 2px solid var(--green, #6fdbf0);
+  padding: 2px 0 2px 8px;
+  margin-bottom: 8px;
+}
+
+.hint-item-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg3);
+  margin-bottom: 2px;
+}
+
+.hint-item-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg2);
+}
+
+.hint-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hint-btn[disabled] {
+  opacity: 0.55;
+  cursor: default;
+}
+
 .challenge-actions {
   display: flex;
   gap: 8px;
