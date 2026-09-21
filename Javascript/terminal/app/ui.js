@@ -580,6 +580,7 @@ function initEditor() {
 
 loadTheme();
 loadProgress();
+initHints();
 normalizeActiveChallenge();
 renderChallengeNav();
 setMobileView('terminal');

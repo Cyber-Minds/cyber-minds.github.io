@@ -81,6 +81,43 @@
               <h3>Checklist</h3>
               <ol id="challengeSteps"></ol>
             </div>
+            <section
+              class="challenge-hints"
+              id="challengeHints"
+              aria-labelledby="hintHeading"
+              hidden
+            >
+              <div class="hint-header">
+                <h3 id="hintHeading">Stuck?</h3>
+                <span class="hint-counter" id="hintCounter"></span>
+              </div>
+              <p class="hint-policy" id="hintPolicy"></p>
+              <ol
+                class="hint-list"
+                id="hintList"
+                tabindex="-1"
+                aria-live="polite"
+              ></ol>
+              <div class="hint-actions">
+                <button
+                  class="btn hint-btn"
+                  id="revealHintBtn"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="hintList"
+                >
+                  Reveal first hint
+                </button>
+                <button
+                  class="btn hint-btn-secondary"
+                  id="resetHintsBtn"
+                  type="button"
+                  hidden
+                >
+                  Reset hints
+                </button>
+              </div>
+            </section>
             <div class="challenge-actions">
               <button class="btn primary" id="loadStarterBtn">
                 Load Starter
@@ -179,4 +216,3 @@
     <script src="../../Javascript/analytics.js"></script>
   </body>
 </html>
-
