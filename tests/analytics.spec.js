@@ -55,7 +55,7 @@ test.describe('Analytics payload validation', () => {
     expect(captured[0].payload).not.toHaveProperty('password');
     expect(captured[0].payload).not.toHaveProperty('token');
     expect(captured[0].payload).toHaveProperty('quiz', 'quiz-1');
-    expect(captured[0].payload).toHaveProperty('score', 5);
+    expect(captured[0].payload).not.toHaveProperty('score');
     expect(captured[0].payload).toHaveProperty('total_questions', 10);
   });
 
@@ -76,7 +76,7 @@ test.describe('Analytics payload validation', () => {
       return events;
     });
     expect(captured[0].payload).toHaveProperty('quiz', 'quiz-1');
-    expect(captured[0].payload).toHaveProperty('score', 42);
+    expect(captured[0].payload).not.toHaveProperty('score');
     expect(captured[0].payload).toHaveProperty('total_questions', 50);
     expect(captured[0].payload).not.toHaveProperty('nested_obj');
     expect(captured[0].payload).not.toHaveProperty('array_val');
@@ -102,7 +102,6 @@ test.describe('Analytics payload validation', () => {
     });
     expect(captured[0].payload).toEqual({
       quiz: 'quiz-1',
-      score: 4,
       total_questions: 4,
     });
   });
@@ -239,6 +238,40 @@ test.describe('quiz_start event', () => {
     );
     expect(payload.quiz).toBe('course-6-quizlinuxcourse6');
     expect(payload.total_questions).toBe(4);
+  });
+});
+
+test.describe('quiz_complete privacy', () => {
+  test('emits one score-free completion event while saving score locally', async ({
+    page,
+  }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 3/AttacksQuizcourse3.html'
+    );
+    await page.locator('label[for="q1-VS"]').click();
+    await page.locator('label[for="q2-verify"]').click();
+    await page.locator('label[for="q3-true"]').click();
+    await page.locator('label[for="q4-tail"]').click();
+    await page.getByRole('button', { name: /submit quiz/i }).click();
+
+    const completion = await page.evaluate(() => {
+      const events = window.__capturedAnalyticsEvents.filter(
+        (event) => event.name === 'quiz_complete'
+      );
+      const progress = JSON.parse(
+        window.localStorage.getItem('cm_learning_progress_v1')
+      );
+      return { events, progress };
+    });
+
+    expect(completion.events).toHaveLength(1);
+    expect(completion.events[0].payload).toEqual({
+      quiz: 'course-3-attacksquizcourse3',
+      total_questions: 4,
+    });
+    expect(
+      completion.progress.completedQuizzes['course-3-attacksquizcourse3'].score
+    ).toBe(4);
   });
 });
 

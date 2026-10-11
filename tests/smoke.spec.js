@@ -16,7 +16,11 @@
  *   7. Completing a mock challenge updates the progress chip and shows a toast.
  */
 const { test, expect } = require('@playwright/test');
-const originAllowlist = require('../scripts/qa-allowlist.json');
+const fs = require('node:fs');
+const path = require('node:path');
+const originAllowlist = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../scripts/qa-allowlist.json'), 'utf8')
+);
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -519,6 +523,174 @@ test.describe('Learner progress dashboard', () => {
 // ─── Shared quiz engine ─────────────────────────────────────────────────────
 
 test.describe('Shared quiz engine', () => {
+  const migratedQuizCases = [
+    {
+      title: 'Course 3 Attacks',
+      path: '/HTML/Courses and Activities/Course 3/AttacksQuizcourse3.html',
+      quizId: 'course-3-attacksquizcourse3',
+      answers: ['VS', 'verify', 'true', 'tail'],
+    },
+    {
+      title: 'Course 4 Non-Technical Defense',
+      path: '/HTML/Courses and Activities/Course 4/NonTechnicalDefenseMeasureQUIZ.html',
+      quizId: 'course-4-nontechnicaldefensemeasurequiz',
+      answers: ['SW', 'ignore', 'false', 'none'],
+    },
+    {
+      title: 'Course 6 Linux',
+      path: '/HTML/Courses and Activities/Course 6/QuizLinuxcourse6.html',
+      quizId: 'course-6-quizlinuxcourse6',
+      answers: ['VS', 'ignore', 'a3', 'phishing'],
+    },
+    {
+      title: 'Course 7 Attacks',
+      path: '/HTML/Courses and Activities/Course 7/AttacksQuizcourse7.html',
+      quizId: 'course-7-attacksquizcourse7',
+      answers: ['VW', 'grammar', 'false', 'false'],
+    },
+    {
+      title: 'Course 8 Risks and Protecting',
+      path: '/HTML/Courses and Activities/Course 8/QUIZrisks&protectingcourse8.html',
+      quizId: 'course-8-quizrisks-protectingcourse8',
+      answers: ['1.2', '2.3', '3.3', '4.4', '5.1', '6.2', '7.2', '8.4', '9.2'],
+    },
+    {
+      title: 'Course 9 Pentesting',
+      path: '/HTML/Courses and Activities/Course 9/PentestingQuizcourse9.html',
+      quizId: 'course-9-pentestingquizcourse9',
+      answers: ['false', 'green', 'none', 'false'],
+    },
+    {
+      title: 'Course 10 Networking Quiz 1',
+      path: '/HTML/Courses and Activities/Course 10/NetworkingQuiz1course10.html',
+      quizId: 'course-10-networkingquiz1course10',
+      answers: ['VW', 'open', 'true', 'dive'],
+    },
+    {
+      title: 'Course 10 Networking Quiz 2',
+      path: '/HTML/Courses and Activities/Course 10/NetworkingQuiz2.html',
+      quizId: 'course-10-networkingquiz2',
+      answers: ['ES', 'open', 'true', 'phishing'],
+    },
+    {
+      title: 'Course 11 Cloud Quiz 1',
+      path: '/HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz1Course11.html',
+      quizId: 'course-11-cybersecuritycloudquiz1course11',
+      answers: ['ES', 'verify', 'dive', 'phishing'],
+    },
+    {
+      title: 'Course 11 Cloud Quiz 2',
+      path: '/HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html',
+      quizId: 'course-11-cybersecuritycloudquiz2course11',
+      answers: ['ES', 'verify', 'phishing', 'phishing'],
+    },
+  ];
+
+  for (const quizCase of migratedQuizCases) {
+    test(`${quizCase.title} migrated quiz scores and persists locally`, async ({
+      page,
+    }) => {
+      const pageErrors = [];
+      page.on('pageerror', (error) => pageErrors.push(error.message));
+      await page.goto(quizCase.path);
+
+      expect(await page.locator('body').getAttribute('data-quiz-id')).toBe(
+        quizCase.quizId
+      );
+      await expect(page.locator('.submit:not(#retryQuizBtn)')).toHaveCount(1);
+      await expect(page.locator('button[onclick*="submitQuiz"]')).toHaveCount(0);
+
+      for (const [index, value] of quizCase.answers.entries()) {
+        const input = page.locator(
+          `input[name="q${index + 1}"][value="${value}"]`
+        );
+        const associatedLabel = input.locator('xpath=following-sibling::label');
+        await associatedLabel.click();
+        if (index === quizCase.answers.length - 1) {
+          await page.getByRole('button', { name: 'Submit Quiz' }).click();
+        }
+        if (index === quizCase.answers.length - 1) {
+          await expect(page.locator('#result')).toHaveText(
+            `Your score is: ${quizCase.answers.length}/${quizCase.answers.length}`
+          );
+          await expect(associatedLabel.locator('.answer-detail')).toBeVisible();
+        }
+      }
+
+      const saved = await page.evaluate(() =>
+        JSON.parse(window.localStorage.getItem('cm_learning_progress_v1'))
+      );
+      expect(saved.completedQuizzes[quizCase.quizId]).toMatchObject({
+        score: quizCase.answers.length,
+        totalQuestions: quizCase.answers.length,
+      });
+      expect(pageErrors).toEqual([]);
+    });
+  }
+
+  test('Course 3 attacks quiz scores, explains, persists, retries, and supports keyboard use', async ({
+    page,
+  }) => {
+    const pageErrors = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+    await page.goto(
+      '/HTML/Courses and Activities/Course 3/AttacksQuizcourse3.html'
+    );
+
+    await page.locator('input[name="q1"]').first().focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#q1-ES')).toBeChecked();
+    await page.locator('label[for="q2-verify"]').click();
+    await page.locator('label[for="q3-false"]').click();
+    await page.locator('label[for="q4-tail"]').click();
+    await page.getByRole('button', { name: 'Submit Quiz' }).focus();
+    await page.keyboard.press('Enter');
+
+    await expect(page.locator('#result')).toHaveText('Your score is: 2/4');
+    await expect(page.locator('#result')).toHaveAttribute('aria-live', 'polite');
+    await expect(page.locator('#q1-VS-detail')).toBeVisible();
+    await expect(page.locator('#q3-false-detail')).toBeVisible();
+    await expect(page.locator('#q3-a2')).toHaveClass(/is-incorrect/);
+    await expect(page.locator('#q3-a1')).toHaveClass(/is-correct/);
+
+    let saved = await page.evaluate(() =>
+      JSON.parse(window.localStorage.getItem('cm_learning_progress_v1'))
+    );
+    expect(saved.completedQuizzes['course-3-attacksquizcourse3'].score).toBe(2);
+    await expect(page.getByRole('button', { name: /retry quiz/i })).toBeVisible();
+
+    await page.getByRole('button', { name: /retry quiz/i }).click();
+    await expect(page.locator('#result')).toHaveText('');
+    await expect(page.locator('#q1-VS-detail')).toBeHidden();
+    await expect(page.locator('#q1-ES')).not.toBeChecked();
+
+    await page.locator('label[for="q1-VS"]').click();
+    await page.locator('label[for="q2-verify"]').click();
+    await page.locator('label[for="q3-true"]').click();
+    await page.locator('label[for="q4-tail"]').click();
+    await page.getByRole('button', { name: /submit quiz/i }).click();
+    await expect(page.locator('#result')).toHaveText('Your score is: 4/4');
+    saved = await page.evaluate(() =>
+      JSON.parse(window.localStorage.getItem('cm_learning_progress_v1'))
+    );
+    expect(saved.completedQuizzes['course-3-attacksquizcourse3'].score).toBe(4);
+    expect(pageErrors).toEqual([]);
+  });
+
+  test('Course 4 accepts both valid answers for question 2', async ({ page }) => {
+    await page.goto(
+      '/HTML/Courses and Activities/Course 4/NonTechnicalDefenseMeasureQUIZ.html'
+    );
+    await page.locator('label[for="q1-SW"]').click();
+    await page.locator('label[for="q2-verify"]').click();
+    await page.locator('label[for="q3-false"]').click();
+    await page.locator('label[for="q4-none"]').click();
+    await page.getByRole('button', { name: 'Submit Quiz' }).click();
+
+    await expect(page.locator('#result')).toHaveText('Your score is: 4/4');
+    await expect(page.locator('#q2-verify-detail')).toBeVisible();
+  });
+
   test('migrated quiz shows explanations, score, and saves completion locally', async ({
     page,
   }) => {

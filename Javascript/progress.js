@@ -281,7 +281,6 @@
     if (typeof global.trackEvent === 'function') {
       global.trackEvent('quiz_complete', {
         quiz: quizId,
-        score: Number(payload.score) || 0,
         total_questions: Number(payload.totalQuestions) || 0,
       });
     }
@@ -299,6 +298,10 @@
     }
 
     var persistFromResult = function () {
+      if (global.document.body.dataset.quizEngineManaged === 'true') {
+        return;
+      }
+
       var text = String(resultElement.textContent || '').trim();
       var match = text.match(/Your score is:\s*(\d+)\s*\/\s*(\d+)/i);
       if (!match) {
