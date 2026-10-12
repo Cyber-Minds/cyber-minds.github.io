@@ -58,6 +58,12 @@ function loadChallenge(challengeId, updateUrl = true) {
     stepList.appendChild(li);
   });
 
+  // Hints are advisory and per-challenge; re-render so the panel reflects the
+  // reveal state of the challenge being opened, not the previous one.
+  if (typeof renderHints === 'function') {
+    renderHints();
+  }
+
   document.querySelectorAll('.challenge-link').forEach((button) => {
     button.classList.toggle(
       'active',

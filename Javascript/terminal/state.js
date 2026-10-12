@@ -29,6 +29,21 @@ let activeEditorFile = {
 let isInitialLoad = true;
 const PROGRESS_STORAGE_KEY = 'cm_ctf_progress_v1';
 const THEME_STORAGE_KEY = 'cm_terminal_theme_v1';
+const HINTS_STORAGE_KEY = 'cm_ctf_hints_v1';
+
+/**
+ * Learner-facing hint policy. Rendered verbatim in the challenge panel so the
+ * rules are visible before a learner reveals anything.
+ *
+ * Hints are advisory only: they are stored in this browser, are never sent to
+ * the backend or to analytics, and have no effect on validation, completion,
+ * scoring, or badges. The container checker and the server progression path
+ * remain the sole authority on whether a challenge is solved.
+ */
+const HINT_POLICY_TEXT =
+  'Hints are optional and stay in this browser. Revealing them does not '
+  + 'affect your score, badges, or completion — the checker is the only thing '
+  + 'that marks a challenge solved.';
 const DRAFT_STORAGE_PREFIX = 'cm_terminal_draft_v1';
 const MAX_WORKSPACE_FILE_TABS = 200;
 
@@ -442,6 +457,11 @@ const challengeCatalog = {
       'Create report.txt and write one line summarising the owner/group/permissions you observed.',
       'Click Check Solution to validate.',
     ],
+    hints: [
+      'Each of the three commands answers a different question: where you are, who you are, and what is here. Run them in that order before you write anything down.',
+      'In the output of ls -la, the leftmost column is the permission string and the next two name-like columns are the owner and the group.',
+      'The checker reads report.txt as prose, so your sentence has to actually name what you found. A generic line like "the directory exists" records no ownership information.',
+    ],
     firstCommand: 'pwd',
     checkScript: 'set -e; test -f report.txt; test -s report.txt; grep -Eqi "(owner|permission|user|group)" report.txt',
     starterLang: 'python',
@@ -495,6 +515,11 @@ const challengeCatalog = {
       'Note the PHP version from X-Powered-By and the app name from X-Application.',
       'Record the port, at least one standard header, the PHP version, and the portal name in recon-notes.txt.',
     ],
+    hints: [
+      'Two different tools are involved here. One enumerates what is listening locally; the other asks the service to describe itself. Do not skip the enumeration step.',
+      'curl -I returns headers only. Read every line: some are standard HTTP headers, and some are custom X- headers the application adds about itself.',
+      'Your notes need four separate facts, and the grader checks each one independently. Copy the version string and the application name exactly as the server reports them rather than paraphrasing.',
+    ],
     firstCommand: 'ss -tulpen',
     checkScript: [
       'set -e',
@@ -520,6 +545,11 @@ const challengeCatalog = {
       'Add a one-line incident summary describing the attack (e.g. brute-force, auth spike).',
       'Click Check Solution to validate.',
     ],
+    hints: [
+      'Only failed authentication lines matter. Filter first and count second — counting before filtering buries the signal in normal traffic.',
+      'The source address sits in a fixed column of each failed-auth line, which is why awk can pull it out. Piping through sort, uniq -c, then sort -rn turns those addresses into a ranked tally.',
+      'One address should stand out clearly from the rest of the tally. Write the ranked list to findings.txt and add a sentence naming the pattern, because the grader looks for the attack described in words as well as the numbers.',
+    ],
     firstCommand: 'grep "Failed" /workspace/sample.log | wc -l',
     setupScript: logHuntSetupScript,
     checkScript: logHuntCheckScript,
@@ -538,6 +568,11 @@ const challengeCatalog = {
       'Write a summary to priv-esc-report.txt including all three findings.',
       'Click Check Solution to validate.',
     ],
+    hints: [
+      'The two logs tell two halves of one story: one shows who got in, the other shows what they did once inside. Read both before drawing a conclusion.',
+      'In auth.log, find the point where an authentication attempt finally succeeds after earlier noise. The account on that line is the thread you follow into the second log.',
+      'Three distinct facts have to appear in your report: the account name, the clock time to HH:MM precision, and the command used to switch users. Take the timestamp from the escalation event itself, not from the earlier login.',
+    ],
     firstCommand: 'cat /workspace/auth.log',
     checkScript: 'python3 /workspace/check-priv-esc.py',
     starterLang: 'python',
@@ -554,6 +589,11 @@ const challengeCatalog = {
       'Write a chronological timeline to timeline.txt — one event per line, each starting with HH:MM:SS.',
       'Include at least 8 events covering both SSH and HTTP activity.',
       'Click Check Solution to validate.',
+    ],
+    hints: [
+      'The three sources do not share a timestamp style. Normalise every event to bare HH:MM:SS before you try to merge them, or the ordering will look right while the text does not match.',
+      'The grader checks the shape of the file strictly: at least eight lines, each beginning with HH:MM:SS, strictly ascending, and no timestamp repeated. Sort before writing, and collapse events that landed on the same second.',
+      'Coverage matters as much as ordering. The timeline has to show both SSH/login activity and HTTP request activity, so be careful not to filter one source out while tidying the output.',
     ],
     firstCommand: 'python3 hello.py',
     checkScript: [
@@ -582,6 +622,11 @@ const challengeCatalog = {
       'For each suspicious user-agent, extract its request timestamps and calculate the interval.',
       'List suspected beacon source IPs, their user-agent, and interval in beacon-report.txt.',
       'Click Check Solution to validate.',
+    ],
+    hints: [
+      'Beaconing shows up as regularity rather than volume. A client calling home on a fixed schedule looks very different from a person browsing, even when it makes fewer requests.',
+      'Group the log by user-agent before you look at timing. A small number of agents will repeat far more consistently than the rest, and those are the only candidates worth measuring.',
+      'For each candidate, subtract consecutive timestamps to get the gap between calls. Your report needs three things per beacon: the source IP, the user-agent string, and that gap expressed in seconds.',
     ],
     firstCommand: 'cat /workspace/access.log',
     setupScript: beaconSetupScript,
@@ -641,6 +686,11 @@ const challengeCatalog = {
       'Write phishing-findings.txt: name the impersonated domain and at least 3 indicators',
       'Run the checker: check',
     ],
+    hints: [
+      'The visible From line is the easiest part of an email to forge, because it is display text. Compare it against the envelope sender the receiving server actually recorded.',
+      'Authentication-Results is one header carrying several independent verdicts. Each mechanism reports its own pass or fail, so read all of them rather than stopping at the first.',
+      'Received headers stack newest-first, so walk them from the bottom upward and ask whether each hop belongs in the delivery path for the domain being impersonated. Your findings file needs the impersonated domain plus at least three separate indicators.',
+    ],
     firstCommand: 'cat /workspace/phishing.eml',
     setupScript: phishingSetupScript,
     checkScript: phishingCheckScript,
@@ -676,6 +726,11 @@ const challengeCatalog = {
       'Scope each Resource to the exact ARN from requirements.txt',
       'Validate your JSON is well-formed: python3 -c "import json,sys; json.load(open(\'/workspace/policy.json\')); print(\'JSON OK\')"',
       'Run the checker: check',
+    ],
+    hints: [
+      'Start from the requirements file rather than the existing policy. Write down what the job actually does, then grant exactly that — narrowing a wildcard by guesswork tends to leave permissions behind.',
+      'Wildcards fail the review in both positions, Action and Resource. A service-level wildcard is still a wildcard: it grants every present and future action in that service.',
+      'Bucket-level and object-level operations need different ARN shapes — listing a bucket targets the bucket itself, while reading an object targets a path inside it. requirements.txt gives both; copy them verbatim instead of retyping.',
     ],
     firstCommand: 'cat /workspace/policy.json',
     setupScript: iamSetupScript,

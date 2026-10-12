@@ -35,6 +35,12 @@
         '/HTML/Courses and Activities/Course 4/TechnicalDefenseQUIZ.html',
       type: 'quiz',
     },
+    'course-12-emergingtechactivitycourse12': {
+      id: 'course-12-emerging-tech-quiz',
+      title: 'Course 12 - Emerging Technologies Quiz',
+      href: '/HTML/Courses and Activities/Course 12/EmergingTechQuizcourse12.html',
+      type: 'quiz',
+    },
   };
 
   function getRecommendationKey(lastVisited) {

@@ -10,6 +10,7 @@
   const modules = [
     'app/core.js',
     'app/workspace.js',
+    'app/hints.js',
     'app/challenges.js',
     'app/runtime.js',
     'app/ui.js',
