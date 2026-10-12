@@ -126,13 +126,17 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Course 4 - Introduction</a
           >
-          <a href="NonTechnicalDefenseMeasure.html"
+          <a href="../Course 4/NonTechnicalDefenseMeasure.html"
             ><img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Non-Technical Measures</a
           >
           <a href="../Course 4/NonTechnicalDefenseMeasureQUIZ.html"
@@ -140,6 +144,8 @@
               src="../../../Images/ICON_QUIZ.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Non-Technical Defenses</a
           >
           <a href="../Course 4/AuthenticationVSAuthorizationcourse4.html">
@@ -147,6 +153,8 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Authenticate/Authorize</a
           >
           <a href="../Course 4/AutomatedToolscourse4.html"
@@ -154,6 +162,8 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Automation Tools</a
           >
           <a href="../Course 4/AutomationwithPythoncourse4.html">
@@ -161,7 +171,9 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
+              alt=""
               id="act-img"
+              role="presentation"
             />
             Automation with Python</a
           >
@@ -170,11 +182,10 @@
               src="../../../Images/ICON_QUIZ.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Technical Defense Quiz</a
           >
-          <!-- <a href="add here"> >add more here </a>
-          <a href="add activity here"> >add more here </a>
-          <a href="add game here">  >add more here </a> -->
         </div>
         <div class="Empty-section2">
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
@@ -189,46 +200,41 @@
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
         </div>
       </div>
-
-      <!-- <footer class="page-footer">
-        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
-      </footer> -->
     </section>
     <script src="../../../Javascript/footer.js"></script>
     <script src="../../../Javascript/analytics.js"></script>
-  </body>
-  <script src="../../../Javascript/course4editor.bundle.js"></script>
-  <script>
-    (function () {
-      if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
-        window.chatbase = (...arguments) => {
-          if (!window.chatbase.q) {
-            window.chatbase.q = [];
-          }
-          window.chatbase.q.push(arguments);
-        };
-        window.chatbase = new Proxy(window.chatbase, {
-          get(target, prop) {
-            if (prop === 'q') {
-              return target.q;
+    <script src="../../../Javascript/course4editor.bundle.js"></script>
+    <script>
+      (function () {
+        if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
+          window.chatbase = (...arguments) => {
+            if (!window.chatbase.q) {
+              window.chatbase.q = [];
             }
-            return (...args) => target(prop, ...args);
-          },
-        });
-      }
-      const onLoad = function () {
-        const script = document.createElement('script');
-        script.src = 'https://www.chatbase.co/embed.min.js';
-        script.id = '5zyd1xHaZEua96z-hkI37';
-        script.domain = 'www.chatbase.co';
-        document.body.appendChild(script);
-      };
-      if (document.readyState === 'complete') {
-        onLoad();
-      } else {
-        window.addEventListener('load', onLoad);
-      }
-    })();
-  </script>
+            window.chatbase.q.push(arguments);
+          };
+          window.chatbase = new Proxy(window.chatbase, {
+            get(target, prop) {
+              if (prop === 'q') {
+                return target.q;
+              }
+              return (...args) => target(prop, ...args);
+            },
+          });
+        }
+        const onLoad = function () {
+          const script = document.createElement('script');
+          script.src = 'https://www.chatbase.co/embed.min.js';
+          script.id = '5zyd1xHaZEua96z-hkI37';
+          script.domain = 'www.chatbase.co';
+          document.body.appendChild(script);
+        };
+        if (document.readyState === 'complete') {
+          onLoad();
+        } else {
+          window.addEventListener('load', onLoad);
+        }
+      })();
+    </script>
+  </body>
 </html>
-
