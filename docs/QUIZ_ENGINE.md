@@ -12,6 +12,9 @@ explanations, retry behaviour, and local progress tracking consistent.
   inside the label.
 - Keep a result container with `id="result"`.
 - Keep a submit button with class `submit`.
+- Keep native radio inputs keyboard reachable. The engine visually hides radio
+  controls without removing them from keyboard interaction and adds a visible
+  focus outline to the associated label.
 
 ## Example
 
@@ -51,3 +54,14 @@ explanations, retry behaviour, and local progress tracking consistent.
 - Stores only safe local quiz IDs and score totals in
   `localStorage['cm_learning_progress_v1']`.
 - Never sends selected answers or free-form learner input to analytics.
+
+## Migration inventory
+
+All scored legacy quizzes now use the shared engine: Course 3 Attacks, Course 4
+Non-Technical Defense, Course 6 Linux, Course 7 Attacks, Course 8 Risks and
+Protecting, Course 9 Pentesting, both Course 10 Networking quizzes, and both
+Course 11 Cloud quizzes. Their existing page paths remain unchanged.
+
+Course 5 Cryptography is currently a cipher-practice page with hints and
+revealed solutions, but no scored radio questions, submit control, or result
+container. It is therefore not configured as a scored shared-engine quiz.

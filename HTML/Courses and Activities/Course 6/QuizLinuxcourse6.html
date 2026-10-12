@@ -17,8 +17,8 @@
     <title>Course 6 - Linux Quiz</title>
   </head>
 
-  <body>
-    <header id="site-header"></header>
+<body>
+  <header id="site-header"></header>
 
     <div>
       <p class="page-title">Course 6 - Linux Quiz</p>
@@ -54,7 +54,7 @@
             <label for="q1-VW" id="q1-a3">
               x+e
               <div id="q1-VW-detail" class="answer-detail">
-                This is not a valid syntax.
+                This is not a thing :\
               </div>
             </label>
           </li>
@@ -114,8 +114,8 @@
         </div>
         <ul class="options">
           <li class="option">
-            <input type="radio" name="q3" value="a1" id="q3-radio-1" />
-            <label for="q3-radio-1" id="q3-a1">
+            <input type="radio" name="q3" value="a1" id="q3-a1-radio" />
+            <label for="q3-a1-radio" name="q3" id="q3-a1">
               Sudo is the superuser that gives permissions to all other users
               <div id="q3-a1-detail" class="answer-detail">
                 The superuser is known as a root user, this is unrelated to the
@@ -124,8 +124,8 @@
             </label>
           </li>
           <li class="option">
-            <input type="radio" name="q3" value="a2" id="q3-radio-2" />
-            <label for="q3-radio-2" id="q3-a2">
+            <input type="radio" name="q3" value="a2" id="q3-a2-radio" />
+            <label for="q3-a2-radio" name="q3" id="q3-a2">
               Sudo is a keyword that allows any user to have elevated
               permissions until they end their session on Linux
               <div id="q3-a2-detail" class="answer-detail">
@@ -136,16 +136,16 @@
             </label>
           </li>
           <li class="option">
-            <input type="radio" name="q3" value="true" id="q3-radio-3" />
-            <label for="q3-radio-3" id="q3-a3">
+            <input type="radio" name="q3" value="a3" id="q3-a3-radio" />
+            <label for="q3-a3-radio" name="q3" id="q3-a3">
               Sudo is a keyword that allows some users to have temporary
               elevated permissions
               <div id="q3-a3-detail" class="answer-detail">Correct!</div>
             </label>
           </li>
           <li class="option">
-            <input type="radio" name="q3" value="a4" id="q3-radio-4" />
-            <label for="q3-radio-4" id="q3-a4">
+            <input type="radio" name="q3" value="a4" id="q3-a4-radio" />
+            <label for="q3-a4-radio" name="q3" id="q3-a4">
               Sudo is the name of the Linux filesystem
               <div id="q3-a4-detail" class="answer-detail">
                 Sudo is unrelated to the filesystem.
@@ -190,13 +190,13 @@
             <label for="q4-none" name="q4" id="q4-a4">
               con
               <div id="q4-none-detail" class="answer-detail">
-                This is not a keyword.
+                This is not a keyword
               </div>
             </label>
           </li>
         </ul>
 
-        <button onclick="submitQuiz()" class="submit">Submit Quiz</button>
+        <button type="button" class="submit">Submit Quiz</button>
 
         <p id="result"></p>
 
@@ -222,7 +222,9 @@
           <p class="leftRectangle-section1-button-title">Go back?</p>
           <a href="../../course_Contents.html">Back to all Courses</a>
         </div>
-        <div class="Empty-section1"></div>
+        <div class="Empty-section1">
+          <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
+        </div>
 
         <div class="leftRectangle-section2">
           <p class="leftRectangle-section2-button-title">Table of Contents</p>
@@ -231,9 +233,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Course 6 - Introduction
           </a>
           <a href="../Course 6/SettingUpLinuxcourse6.html">
@@ -241,9 +241,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Setting Up Linux
           </a>
           <a href="../Course 6/BasicCommandscourse6.html">
@@ -251,9 +249,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Basics/Getting Help
           </a>
           <a href="../Course 6/Sudo+PrivilegeEscalationcourse6.html">
@@ -261,9 +257,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Sudo & Privilege Escalation
           </a>
           <a href="../Course 6/ExploreSudocourse6.html">
@@ -271,10 +265,8 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
-              alt=""
               class="act-img"
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Explore Sudo
           </a>
           <a href="../Course 6/TheFileSystemcourse6.html">
@@ -282,9 +274,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             The Filesystem
           </a>
           <a href="../Course 6/ExploreFileSystemcourse6.html">
@@ -292,10 +282,8 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
-              alt=""
               class="act-img"
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Explore the Filesystem
           </a>
           <a href="../Course 6/Permissionscourse6.html">
@@ -303,9 +291,7 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-              alt=""
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Permissions
           </a>
           <a href="../Course 6/ExplorePermissionscourse6.html">
@@ -313,109 +299,46 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
-              alt=""
               class="act-img"
-              role="presentation"
-            />
+             alt=""  role="presentation" />
             Explore Permissions
           </a>
           <a href="../Course 6/QuizLinuxcourse6.html">
-            <img
-              src="../../../Images/ICON_QUIZ.png"
-              width="40"
-              height="40"
-              alt=""
-              role="presentation"
-            />
+            <img src="../../../Images/ICON_QUIZ.png" width="40" height="40"  alt=""  role="presentation" />
             Linux Quiz
           </a>
+          <!-- <a href="add game here">  >add more here </a> -->
         </div>
-        <div class="Empty-section2"></div>
-        <div class="Empty-section3"></div>
+        <div class="Empty-section2">
+          <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
+        </div>
+
+        <div class="leftRectangle-section3">
+          <p class="leftRectangle-section3-button-title">Need Help?</p>
+          <a href="../../LiveHelp.html">Chat Box</a>
+        </div>
+
+        <div class="Empty-section3">
+          <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
+        </div>
       </div>
+
+      <!-- <footer class="page-footer">
+        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
+      </footer> -->
     </section>
-    <script>
-      function submitQuiz() {
-        var score = 0;
-
-        var q1Answer = document.querySelector('input[name="q1"]:checked');
-        if (q1Answer && q1Answer.value === 'VS') {
-          score++;
-        }
-        showAnswerDetail('q1-SW-detail');
-        showAnswerDetail('q1-ES-detail');
-        showAnswerDetail('q1-VW-detail');
-        showAnswerDetail('q1-VS-detail');
-
-        var q2Answer = document.querySelector('input[name="q2"]:checked');
-        if (q2Answer && q2Answer.value === 'ignore') {
-          score++;
-        }
-        showAnswerDetail('q2-open-detail');
-        showAnswerDetail('q2-grammar-detail');
-        showAnswerDetail('q2-verify-detail');
-        showAnswerDetail('q2-ignore-detail');
-
-        var q3Answer = document.querySelector('input[name="q3"]:checked');
-        if (q3Answer && q3Answer.value === 'true') {
-          score++;
-        }
-        showAnswerDetail('q3-a1-detail');
-        showAnswerDetail('q3-a2-detail');
-        showAnswerDetail('q3-a3-detail');
-        showAnswerDetail('q3-a4-detail');
-
-        var q4Answer = document.querySelector('input[name="q4"]:checked');
-        if (q4Answer && q4Answer.value === 'phishing') {
-          score++;
-        }
-        showAnswerDetail('q4-tail-detail');
-        showAnswerDetail('q4-dive-detail');
-        showAnswerDetail('q4-phishing-detail');
-        showAnswerDetail('q4-none-detail');
-
-        var resultElement = document.getElementById('result');
-        resultElement.innerHTML = 'Your score is: ' + score + '/4';
-      }
-
-      function showAnswerDetail(detailId) {
-        var detailElement = document.getElementById(detailId);
-        if (detailElement) {
-          detailElement.style.display = 'block';
-        }
-      }
-
-      var labels = document.querySelectorAll('label');
-      labels.forEach(function (label) {
-        label.addEventListener('click', function () {
-          labels.forEach(function (otherLabel) {
-            var radioLabel = label.closest('li.option');
-            var radioName = radioLabel
-              .querySelector('input[type="radio"]')
-              .getAttribute('name');
-            var otherRadioLabel = otherLabel.closest('li.option');
-            var otherRadioName = otherRadioLabel
-              .querySelector('input[type="radio"]')
-              .getAttribute('name');
-            if (otherRadioName === radioName) {
-              otherLabel.classList.remove('selected');
-            }
-          });
-          label.classList.add('selected');
-        });
-      });
-    </script>
-    <script src="../../../Javascript/header.js"></script>
-    <script src="../../../Javascript/footer.js"></script>
     <script src="../../../Javascript/popUp.js"></script>
-    <script>
+    <script src="../../../Javascript/footer.js"></script>
+<script src="../../../Javascript/header.js"></script>
+
+<script>
       (function () {
         if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
-          window.chatbase = (...arguments) => {
+          window.chatbase = (...args) => {
             if (!window.chatbase.q) {
               window.chatbase.q = [];
             }
-            window.chatbase.q.push(arguments);
+            window.chatbase.q.push(args);
           };
           window.chatbase = new Proxy(window.chatbase, {
             get(target, prop) {
@@ -441,5 +364,20 @@
       })();
     </script>
     <script src="../../../Javascript/analytics.js"></script>
+    <script src="../../../Javascript/progress.js"></script>
+    <script src="../../../Javascript/quiz-engine.js"></script>
+    <script>
+      window.CyberMindsQuizEngine.init({
+        quizId: 'course-6-quizlinuxcourse6',
+        allowRetry: true,
+        explanationMode: 'final',
+        questions: [
+          { name: 'q1', correctValue: 'VS' },
+          { name: 'q2', correctValue: 'ignore' },
+          { name: 'q3', correctValue: 'a3' },
+          { name: 'q4', correctValue: 'phishing' },
+        ],
+      });
+    </script>
   </body>
 </html>

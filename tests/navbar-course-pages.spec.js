@@ -120,7 +120,7 @@ test.describe('Shared course navbar', () => {
     for (const answer of ['q1-VW', 'q2-open', 'q3-true', 'q4-dive']) {
       await page.locator(`label[for="${answer}"]`).click();
     }
-    await page.locator('.submit').click();
+    await page.locator('button.submit:not(.retry-submit)').click();
     await expect(page.locator('#result')).toHaveText('Your score is: 4/4');
   });
 });

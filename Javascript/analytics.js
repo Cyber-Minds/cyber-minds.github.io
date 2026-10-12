@@ -31,7 +31,7 @@ var EVENT_SCHEMAS = {
   get_started_click: { source: 'string' },
   course_progress: { page_id: 'string', page_type: 'string' },
   quiz_start: { quiz: 'string', total_questions: 'number' },
-  quiz_complete: { quiz: 'string', score: 'number', total_questions: 'number' },
+  quiz_complete: { quiz: 'string', total_questions: 'number' },
   live_help_opened: {},
   challenge_start: { challenge: 'string' },
   challenge_complete: { challenge: 'string' },
