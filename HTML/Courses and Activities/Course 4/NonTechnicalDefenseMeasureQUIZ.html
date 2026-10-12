@@ -210,7 +210,7 @@
           </li>
         </ul>
 
-        <button onclick="submitQuiz()" class="submit">Submit Quiz</button>
+        <button type="button" class="submit">Submit Quiz</button>
 
         <p id="result"></p>
 
@@ -247,35 +247,35 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Course 4 - Introduction</a
+             alt=""  role="presentation" />Course 4 - Introduction</a
           >
           <a href="NonTechnicalDefenseMeasure.html"
             ><img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Non-Technical Measures</a
+             alt=""  role="presentation" />Non-Technical Measures</a
           >
           <a href="../Course 4/NonTechnicalDefenseMeasureQUIZ.html"
             ><img
               src="../../../Images/ICON_QUIZ.png"
               width="40"
               height="40"
-            />Non-Technical Defenses</a
+             alt=""  role="presentation" />Non-Technical Defenses</a
           >
           <a href="../Course 4/AuthenticationVSAuthorizationcourse4.html">
             <img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Authenticate/Authorize</a
+             alt=""  role="presentation" />Authenticate/Authorize</a
           >
           <a href="../Course 4/AutomatedToolscourse4.html"
             ><img
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
-            />Automation Tools</a
+             alt=""  role="presentation" />Automation Tools</a
           >
           <a href="../Course 4/AutomationwithPythoncourse4.html">
             <img
@@ -283,7 +283,7 @@
               width="40"
               height="40"
               id="act-img"
-            />
+             alt=""  role="presentation" />
             Automation with Python</a
           >
           <a href="../Course 4/TechnicalDefenseQUIZ.html"
@@ -291,7 +291,7 @@
               src="../../../Images/ICON_QUIZ.png"
               width="40"
               height="40"
-            />Technical Defense Quiz</a
+             alt=""  role="presentation" />Technical Defense Quiz</a
           >
           <!-- <a href="add here"> >add more here </a>
           <a href="add activity here"> >add more here </a>
@@ -315,86 +315,19 @@
         <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
       </footer> -->
     </section>
+    <script src="../../../Javascript/progress.js"></script>
+    <script src="../../../Javascript/quiz-engine.js"></script>
     <script>
-      function submitQuiz() {
-        var score = 0;
-
-        // Check answer for question 1
-        var q1Answer = document.querySelector('input[name="q1"]:checked');
-        if (q1Answer && q1Answer.value === 'SW') {
-          score++;
-        }
-        showAnswerDetail('q1-SW-detail');
-        showAnswerDetail('q1-ES-detail');
-        showAnswerDetail('q1-VW-detail');
-        showAnswerDetail('q1-VS-detail');
-
-        // Check answer for question 2
-        var q2Answer = document.querySelector('input[name="q2"]:checked');
-        if (
-          (q2Answer && q2Answer.value === 'verify') ||
-          (q2Answer && q2Answer.value === 'ignore')
-        ) {
-          score++;
-        }
-        showAnswerDetail('q2-open-detail');
-        showAnswerDetail('q2-grammar-detail');
-        showAnswerDetail('q2-verify-detail');
-        showAnswerDetail('q2-ignore-detail');
-
-        var q3Answer = document.querySelector('input[name="q3"]:checked');
-        if (q3Answer && q3Answer.value === 'false') {
-          score++;
-        }
-        showAnswerDetail('q3-true-detail');
-        showAnswerDetail('q3-false-detail');
-
-        var q4Answer = document.querySelector('input[name="q4"]:checked');
-        if (q4Answer && q4Answer.value === 'none') {
-          score++;
-        }
-        showAnswerDetail('q4-tail-detail');
-        showAnswerDetail('q4-dive-detail');
-        showAnswerDetail('q4-phishing-detail');
-        showAnswerDetail('q4-none-detail');
-
-        // Display the result
-        var resultElement = document.getElementById('result');
-        resultElement.innerHTML = 'Your score is: ' + score + '/4';
-      }
-
-      function showAnswerDetail(detailId) {
-        var labels = document.querySelectorAll('label');
-        var detailElement = document.getElementById(detailId);
-        if (detailElement) {
-          detailElement.style.display = 'block';
-        }
-        labels.forEach(function (label) {
-          label.style.width = '80%';
-        });
-      }
-
-      var labels = document.querySelectorAll('label');
-      labels.forEach(function (label) {
-        label.addEventListener('click', function () {
-          // Remove 'selected' class from all labels
-          labels.forEach(function (otherLabel) {
-            var radioLabel = label.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
-            var radioName = radioLabel
-              .querySelector('input[type="radio"]')
-              .getAttribute('name');
-            var otherRadioLabel = otherLabel.closest('li.option'); // Assuming the radio is wrapped in an <li> with class "option"
-            var otherRadioName = otherRadioLabel
-              .querySelector('input[type="radio"]')
-              .getAttribute('name');
-            if (otherRadioName === radioName) {
-              otherLabel.classList.remove('selected');
-            }
-          });
-
-          // Add 'selected' class to the clicked label
-          label.classList.add('selected');
-        });
+      window.CyberMindsQuizEngine.init({
+        quizId: 'course-4-nontechnicaldefensemeasurequiz',
+        allowRetry: true,
+        explanationMode: 'final',
+        questions: [
+          { name: 'q1', correctValue: 'SW' },
+          { name: 'q2', correctValues: ['verify', 'ignore'] },
+          { name: 'q3', correctValue: 'false' },
+          { name: 'q4', correctValue: 'none' },
+        ],
       });
     </script>
 <script src="../../../Javascript/footer.js"></script>
@@ -404,11 +337,11 @@
     <script>
       (function () {
         if (!window.chatbase || window.chatbase('getState') !== 'initialized') {
-          window.chatbase = (...arguments) => {
+          window.chatbase = (...args) => {
             if (!window.chatbase.q) {
               window.chatbase.q = [];
             }
-            window.chatbase.q.push(arguments);
+            window.chatbase.q.push(args);
           };
           window.chatbase = new Proxy(window.chatbase, {
             get(target, prop) {
@@ -436,4 +369,3 @@
     <script src="../../../Javascript/analytics.js"></script>
   </body>
 </html>
-

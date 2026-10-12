@@ -31,7 +31,7 @@ Dashboard owner: project lead (Ege)
 | `get_started_click` | User clicks Get Started | `source` (current page path) | Home-page conversion rate |
 | `course_progress` | Student visits a course or quiz page | `page_id` (stable content ID), `page_type` (course-page or quiz) | Where students are in the course funnel; which pages they reach or skip |
 | `quiz_start` | Quiz engine initialises on a quiz page | `quiz` (quiz ID), `total_questions` (count) | How many students open a quiz vs. complete it |
-| `quiz_complete` | Student submits a quiz | `quiz` (quiz ID), `score` (number), `total_questions` (count) | Quiz completion rate and score distribution by quiz |
+| `quiz_complete` | Student submits a quiz | `quiz` (quiz ID), `total_questions` (count) | Quiz completion rate by quiz; scores stay local on the learner's device |
 | `live_help_opened` | Student loads the Live Help page | _(no payload)_ | How often students seek help; correlate with challenge or quiz drop-off |
 | `challenge_start` | A CTF challenge loads in the terminal | `challenge` (challenge ID) | How many students attempt each challenge |
 | `challenge_complete` | A CTF challenge passes the checker | `challenge` (challenge ID) | Challenge completion rate per challenge |
@@ -93,7 +93,7 @@ Compare `challenge_start` vs `challenge_complete` counts for each `challenge` ID
 Check `live_help_opened` spikes against `course_progress` or `challenge_start` activity on the same day. A spike in Live Help after a specific course page suggests that content is confusing.
 
 **Quiz engagement**
-`quiz_start` vs `quiz_complete` by `quiz` ID reveals quizzes that students open but abandon. Average `score / total_questions` shows whether a quiz is too hard.
+`quiz_start` vs `quiz_complete` by `quiz` ID reveals quizzes that students open but abandon. Scores and selected answers are not sent to analytics.
 
 **Entry funnels**
 Filter by `ctf_entry_click` or `course_entry_click`, group by `source`, to see which pages are driving students into each section.
@@ -106,7 +106,6 @@ Run through these steps each week during team meetings:
 - [ ] Open the Umami dashboard and filter last 7 days
 - [ ] Check `course_progress` by `page_id` — identify pages with the lowest counts in each course
 - [ ] Compare `quiz_start` vs `quiz_complete` per `quiz` ID — note any quiz with >20% abandonment
-- [ ] Check `quiz_complete` score averages — flag any quiz where median score is below 50%
 
 ### CTF funnel
 - [ ] Compare `challenge_start` vs `challenge_complete` counts per `challenge` ID

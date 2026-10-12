@@ -76,6 +76,7 @@
     }
 
     global.document.body.dataset.quizId = config.quizId;
+    global.document.body.dataset.quizEngineManaged = 'true';
     submitButton.type = 'button';
     resultElement.setAttribute('aria-live', 'polite');
     var retryButton = ensureRetryButton(submitButton);
@@ -87,6 +88,29 @@
       global.document
         .querySelectorAll('input[name="' + question.name + '"]')
         .forEach(function (input) {
+          var label = global.document.querySelector('label[for="' + input.id + '"]');
+          input.style.display = 'block';
+          input.style.position = 'absolute';
+          input.style.width = '1px';
+          input.style.height = '1px';
+          input.style.padding = '0';
+          input.style.margin = '-1px';
+          input.style.overflow = 'hidden';
+          input.style.clip = 'rect(0, 0, 0, 0)';
+          input.style.whiteSpace = 'nowrap';
+          input.style.border = '0';
+
+          if (label) {
+            input.addEventListener('focus', function () {
+              label.style.outline = '3px solid #ffffff';
+              label.style.outlineOffset = '3px';
+            });
+            input.addEventListener('blur', function () {
+              label.style.outline = '';
+              label.style.outlineOffset = '';
+            });
+          }
+
           input.addEventListener('change', function () {
             toggleLabelSelection(input);
 
