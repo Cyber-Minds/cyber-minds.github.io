@@ -145,9 +145,9 @@
         <iframe
           width="560"
           height="315"
-          align-self:
-          center;
-          src="     https://www.youtube.com/embed/AQDCe585Lnc?t=77s"
+          title="Simply Explained YouTube video on public key cryptography"
+          style="display: block; margin: 0 auto;"
+          src="https://www.youtube.com/embed/AQDCe585Lnc?t=77s"
           frameborder="0"
           allowfullscreen
         ></iframe>
@@ -155,7 +155,7 @@
           *Video Credit: <i>Simply Explained</i> on Youtube
         </p>
 
-        <h3><span class="blue-word">Symmetric Encryption Algorithms:</span></h3>
+        <h3><span class="blue-word">Asymmetric Encryption Algorithms:</span></h3>
 
         <ul>
           <li>Rivest-Shamir-Adleman (RSA)</li>
@@ -178,11 +178,11 @@
         <h3><span class="blue-word">RSA Encoding Process:</span></h3>
 
         <dl>
-          <dt>1)Choose two large prime numbers, p and q:</dt>
+          <dt>1) Choose two large prime numbers, p and q:</dt>
           <dd>We are going to use two small ones, 5 and 7.</dd>
           <br />
           <dt>
-            2)The public key consists of two parts: integer n and integer e. The
+            2) The public key consists of two parts: integer n and integer e. The
             n value equals <span class="green-word">p times q</span>.
           </dt>
           <dd>n = p*q</dd>
@@ -197,7 +197,7 @@
           <dd>e = 5</dd>
           <br />
           <dt>
-            4)Now we must create our private key, d. The d value uses the
+            4) Now we must create our private key, d. The d value uses the
             previously generated values, <span class="green-word">(d*e)%Φ</span>
             must be equal to 1.
           </dt>
@@ -224,7 +224,7 @@
             is just a coincidence and it does not always happen.
           </dd>
           <br />
-          <dd>The cipher text for the word “HI” using our keys is 8 4</dd>
+          <dd>The ciphertext for the word “HI” using our keys is 8 4</dd>
           <br />
           <dt>
             6) We will decrypt the message. The equation for this is:
@@ -291,6 +291,8 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />
             Course 5 - Introduction
           </a>
@@ -299,6 +301,8 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />
             Public/Private Encryption
           </a>
@@ -307,7 +311,9 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
+              alt=""
               class="act-img"
+              role="presentation"
             />
             Casear Cipher/RSA Cipher</a
           >
@@ -316,7 +322,9 @@
               src="../../../Images/ICON_ACTIVITY.png"
               width="40"
               height="40"
+              alt=""
               class="act-img"
+              role="presentation"
             />
             Python Encryption
           </a>
@@ -325,6 +333,8 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />Hashing
           </a>
           <a href="../Course 5/CryptographicAttackscourse5.html">
@@ -332,18 +342,21 @@
               src="../../../Images/ICON_ARTICLE.png"
               width="40"
               height="40"
+              alt=""
+              role="presentation"
             />
             Cryptographic Attacks
           </a>
           <a href="../Course 5/Cryptographyquizcourse5.html">
-            <img src="../../../Images/ICON_QUIZ.png" width="40" height="40" />
+            <img
+              src="../../../Images/ICON_QUIZ.png"
+              width="40"
+              height="40"
+              alt=""
+              role="presentation"
+            />
             Cryptography Quiz
           </a>
-
-          <!-- <a href="add here">  >add more here </a>
-          <a href="add here"> >add more here </a>
-          <a href="add activity here"> >add more here </a>
-          <a href="add game here">  >add more here </a> -->
         </div>
         <div class="Empty-section2">
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
@@ -358,16 +371,10 @@
           <!-- Nothing should be in this section- it acts as a flex empty box to support the layout -->
         </div>
       </div>
-
-      <!-- <footer class="page-footer">
-        <p>&copy; 2025 CyberMinds, Inc. All rights reserved.</p>
-      </footer> -->
     </section>
-<script src="../../../Javascript/footer.js"></script>
-<script src="../../../Javascript/header.js"></script>
-<script src="../../../Javascript/popUp_Pages.js"></script>
+    <script src="../../../Javascript/header.js"></script>
     <script src="../../../Javascript/footer.js"></script>
+    <script src="../../../Javascript/popUp_Pages.js"></script>
     <script src="../../../Javascript/analytics.js"></script>
   </body>
 </html>
-
