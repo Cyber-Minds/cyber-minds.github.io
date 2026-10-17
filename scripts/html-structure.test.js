@@ -244,6 +244,39 @@ test('is not fooled by ">" inside a quoted attribute value', () => {
   assert.equal(result.status, 0, result.stderr);
 });
 
+test('rejects a </body> that closes the document early', () => {
+  // The real-world shape: content sits after a premature </body>, so the
+  // closing tag at the end of the file is the one left closing nothing.
+  const result = run({
+    'early.html': `<!doctype html>
+<html>
+  <head><title>T</title></head>
+  <body>
+    <header>nav</header>
+</body>
+
+    <div>lesson content the author believes is inside body</div>
+  </body>
+</html>`,
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /early\.html:9 \[stray-document-end-tag\]/);
+  assert.match(result.stderr, /<body> on line 4 was already closed/);
+});
+
+test('rejects a document end tag that never had an opening', () => {
+  const result = run({
+    'noopen.html': `<!doctype html>
+<html>
+  <body><p>x</p></body>
+  </head>
+</html>`,
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /\[stray-document-end-tag\]/);
+  assert.match(result.stderr, /<\/head> with no matching <head>/);
+});
+
 test('tolerates stray end tags without reparenting', () => {
   const result = run({
     'stray.html': `<!doctype html>

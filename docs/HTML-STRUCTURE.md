@@ -33,6 +33,7 @@ affect navigation or assistive-technology traversal once the page is live.
 |---|---|
 | `duplicate-document-root` | A second `<!DOCTYPE>`, `<html>`, `<head>`, or `<body>` |
 | `misplaced-document-tag` | One of those tags nested inside page content |
+| `stray-document-end-tag` | `</body>`, `</head>`, or `</html>` closing nothing |
 | `nested-anchor` | `<a>` opened while another `<a>` is still open |
 | `duplicate-script` | The same script `src` included more than once |
 
@@ -91,6 +92,11 @@ any of `div`, `section`, `table`, `ul`, `ol`, `h1`–`h6`, `header`, `footer`,
 ignored rather than reported. Browsers drop them without reparenting, and
 legacy lesson pages contain a fair number.
 
+A stray `</body>`, `</head>`, or `</html>` is *not* tolerated — see
+`stray-document-end-tag`. Those close the document rather than an element, so
+everything after one is markup the author believes is inside a region that has
+already ended.
+
 **Self-closing and void elements.** `<img>`, `<br>`, `<link>`, `<meta>`,
 `<input>`, and XHTML-style `<div />` are all handled without needing an end
 tag.
@@ -137,6 +143,13 @@ When CI reports a violation:
    - `misplaced-document-tag` — same cause, but the stray tag is the only one
      of its kind. Move its contents to the real `<head>`/`<body>` and delete
      the tag.
+   - `stray-document-end-tag` — the page closes `<body>`/`<head>`/`<html>`
+     more than once. The reported line is the *last* one; the repair site is
+     usually the **earlier** one, which closed the document before the lesson
+     content started. Delete the premature closing tag and keep the one at the
+     end of the file. Browsers ignore the early close and keep parsing, which
+     is why such a page still renders — removing it changes nothing visually
+     and makes the DOM match the source.
    - `nested-anchor` — decide which link should win. Either close the outer
      `<a>` before the inner one opens, or convert the inner element to a
      `<span>`/`<button>`. Nested anchors are invalid HTML and screen readers

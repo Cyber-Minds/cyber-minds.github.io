@@ -15,6 +15,7 @@
  * Rules enforced (ids are stable; exceptions reference them):
  *   duplicate-document-root   second <!DOCTYPE>, <html>, <head>, or <body>
  *   misplaced-document-tag    one of those tags nested inside page content
+ *   stray-document-end-tag    </body>, </head>, or </html> closing nothing
  *   nested-anchor             <a> opened while another <a> is still open
  *   duplicate-script          same script src included more than once
  *
@@ -299,9 +300,23 @@ function analyze(file, content) {
       const index = stack.map((entry) => entry.name).lastIndexOf(token.name);
       if (index !== -1) {
         stack.length = index;
+        continue;
       }
-      // A stray end tag with no matching open element is tolerated: legacy
-      // pages contain them and browsers ignore them without reparenting.
+      // A stray </div> or </span> is tolerated: legacy pages contain them and
+      // browsers drop them without reparenting. A stray </body>, </head>, or
+      // </html> is different -- it closes the document early, so markup after
+      // it is content the author believes is inside a region that has already
+      // ended.
+      if (DOCUMENT_TAGS.has(token.name)) {
+        const opened = seenDocumentTags.get(token.name);
+        add(
+          'stray-document-end-tag',
+          token.line,
+          opened !== undefined
+            ? `</${token.name}> with no matching open element; <${token.name}> on line ${opened} was already closed`
+            : `</${token.name}> with no matching <${token.name}>`
+        );
+      }
       continue;
     }
 
@@ -379,6 +394,7 @@ const EXCEPTIONS_FILE = path.join(__dirname, 'html-structure-exceptions.json');
 const VALID_RULES = new Set([
   'duplicate-document-root',
   'misplaced-document-tag',
+  'stray-document-end-tag',
   'nested-anchor',
   'duplicate-script',
 ]);
