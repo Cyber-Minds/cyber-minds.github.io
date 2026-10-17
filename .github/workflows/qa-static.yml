@@ -47,6 +47,11 @@ jobs:
           QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: npm run qa:static -- --changed-from "$QA_BASE"
 
+      - name: Check changed HTML structure
+        env:
+          QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: npm run qa:structure -- --changed-from "$QA_BASE"
+
       - name: Link and asset audit (changed files)
         env:
           QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}

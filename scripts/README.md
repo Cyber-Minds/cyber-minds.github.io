@@ -1,5 +1,35 @@
 # Link and asset audit
 
+## HTML structure check
+
+`scripts/structure-check.js` tokenizes repository HTML locally and rejects
+duplicate `<html>` roots, misplaced or repeated `<head>`/`<body>` tags,
+nested anchors, and repeated script `src` inclusions. It does not execute
+scripts or fetch URLs. It reports the first structural violation in each
+file with a repository-relative path and line number.
+
+```bash
+# Full local HTML corpus
+node scripts/structure-check.js
+
+# Only added or changed HTML files since a git ref
+node scripts/structure-check.js --changed-from origin/main
+```
+
+The check supports legacy documents that omit a doctype or optional document
+wrappers, case-insensitive HTML tag names, ordinary whitespace variation,
+root-relative GitHub Pages URLs, and markup-like text inside comments and
+script/style content. It checks malformed structure rather than requiring a
+particular formatting or URL style.
+
+Repair the reported tag or repeated script inclusion, then rerun the check;
+the first diagnostic in a file is reported first so fixes can be made in
+document order. Do not suppress a new violation with an exception. Existing
+exceptions are listed in `scripts/structure-allowlist.json` with an owner,
+reason, exact file/rule/script signature, and expected occurrence count.
+Stale exceptions fail the check. Add an exception only in a separate reviewed
+change when repair would disrupt required behavior, and cover it with a test.
+
 `scripts/link-audit.js` scans learner-facing HTML for local `href`, `src`,
 and form `action` references and flags ones that don't resolve to a real
 file in the repo. It never fetches external URLs — external links are
