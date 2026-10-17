@@ -1,0 +1,4 @@
+{
+  "exceptions": [],
+  "note": "Owned waivers for scripts/html-structure.js. Every entry needs file, rule, owner, and reason — the check fails on an incomplete entry rather than silently waiving. Valid rules: duplicate-document-root, misplaced-document-tag, nested-anchor, duplicate-script. A waiver suppresses that one rule for that one file. Prefer repairing the page; see docs/HTML-STRUCTURE.md for the repair workflow. This list is intentionally empty: every learner-facing page in the repository currently passes."
+}
