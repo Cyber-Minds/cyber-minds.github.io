@@ -41,7 +41,7 @@ Diagnostics are `file:line [rule] message`, and the message names the line of
 the *first* occurrence so both ends of the problem are visible:
 
 ```
-HTML/Courses and Activities/Course 1/CIAtriadcourse1.html:173 [duplicate-script] script "javascript/footer.js" already included on line 170
+HTML/Courses and Activities/Course 1/CIAtriadcourse1.html:173 [duplicate-script] script already included on line 170
 ```
 
 By default only the **first violation per file** is printed — one stray

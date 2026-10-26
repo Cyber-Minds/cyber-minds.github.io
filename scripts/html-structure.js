@@ -189,7 +189,7 @@ function tokenize(content) {
 
     // Skip raw-text bodies so their contents are never read as markup.
     if (RAW_TEXT_ELEMENTS.has(name) && !selfClosing) {
-      const closeRe = new RegExp(`</${name}\\s*>`, 'i');
+      const closeRe = new RegExp(`</${name}(?=[\\s/>])[^>]*>`, 'i');
       const match = closeRe.exec(content.slice(i));
       advance(match ? i + match.index : len);
     }
@@ -203,17 +203,14 @@ function tokenize(content) {
  * ------------------------------------------------------------------ */
 
 function getAttribute(attrs, attrName) {
-  const re = new RegExp(
-    `\\b${attrName}\\s*=\\s*("([^"]*)"|'([^']*)'|([^\\s"'>]+))`,
-    'i'
-  );
-  const match = re.exec(attrs || '');
-  if (!match) return null;
-
-  // Groups 2/3/4 are the double-quoted, single-quoted, and bare forms.
-  const candidates = [match[2], match[3], match[4]];
-  const value = candidates.find((group) => group !== undefined);
-  return value || '';
+  const re = /([^\s=/>]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+  let match;
+  while ((match = re.exec(attrs || '')) !== null) {
+    if (match[1].toLowerCase() === attrName.toLowerCase()) {
+      return match[2] ?? match[3] ?? match[4] ?? '';
+    }
+  }
+  return null;
 }
 
 /**
@@ -230,16 +227,16 @@ function canonicalScriptKey(file, src) {
   if (/^https?:\/\//i.test(clean) || clean.startsWith('//')) {
     try {
       const url = new URL(clean.startsWith('//') ? `https:${clean}` : clean);
-      return `${url.host}${url.pathname}`.toLowerCase();
+      return `${url.host}${url.pathname}`;
     } catch {
-      return clean.toLowerCase();
+      return clean;
     }
   }
 
   const resolved = clean.startsWith('/')
     ? path.resolve(repoRoot, `.${clean}`)
     : path.resolve(path.dirname(file), clean);
-  return path.relative(repoRoot, resolved).split(path.sep).join('/').toLowerCase();
+  return path.relative(repoRoot, resolved).split(path.sep).join('/');
 }
 
 /**
@@ -336,12 +333,15 @@ function analyze(file, content) {
         // <html> belongs at the root; <head>/<body> directly inside <html>.
         const allowedParents = name === 'html' ? [] : ['html'];
         const parent = stack.length ? stack[stack.length - 1].name : null;
-        const misplaced = parent !== null && !allowedParents.includes(parent);
+        const misplaced = (parent !== null && !allowedParents.includes(parent))
+          || (name === 'head' && seenDocumentTags.has('body'));
         if (misplaced) {
           add(
             'misplaced-document-tag',
             line,
-            `<${name}> nested inside <${parent}> content`
+            parent !== null && !allowedParents.includes(parent)
+              ? `<${name}> nested inside <${parent}> content`
+              : `<${name}> appears after the body has started`
           );
         }
       }
@@ -368,7 +368,7 @@ function analyze(file, content) {
             add(
               'duplicate-script',
               line,
-              `script "${key}" already included on line ${first}`
+              `script already included on line ${first}`
             );
           } else {
             seenScripts.set(key, line);

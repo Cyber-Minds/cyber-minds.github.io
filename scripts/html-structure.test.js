@@ -177,7 +177,7 @@ test('rejects a shared script included twice, across path spellings', () => {
   });
   assert.equal(result.status, 1);
   assert.match(result.stderr, /page\.html:5 \[duplicate-script\]/);
-  assert.match(result.stderr, /javascript\/footer\.js" already included on line 4/i);
+  assert.match(result.stderr, /script already included on line 4/i);
 });
 
 test('treats a cache-busted second copy as a duplicate', () => {
@@ -422,4 +422,56 @@ test('waives a violation when an owned exception covers it', () => {
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /1 waived/);
+});
+
+
+test('reads only actual src attributes and preserves the first value', () => {
+  for (const attributes of [
+    'data-src="other.js" src="app.js"',
+    'data-tip="src=other.js" SRC="app.js"',
+    'src="app.js" src="other.js"',
+  ]) {
+    const result = run({ 'lesson.html': `<script ${attributes}></script>\n<script src="app.js"></script>` });
+    assert.equal(result.status, 1, result.stderr);
+    assert.match(result.stderr, /lesson\.html:2 \[duplicate-script\]/);
+  }
+});
+
+test('keeps case-sensitive local and remote script paths distinct', () => {
+  const result = run({ 'lesson.html': `
+    <script src="A.js"></script><script src="a.js"></script>
+    <script src="https://example.com/A.js"></script>
+    <script src="https://example.com/a.js"></script>` });
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('duplicate script diagnostics omit credentials and private path values', () => {
+  const result = run({ 'lesson.html': `
+    <script src="https://user:secret@example.com/private-token.js?token=secret"></script>
+    <script src="https://user:secret@example.com/private-token.js?token=secret"></script>` });
+  assert.equal(result.status, 1);
+  assert.doesNotMatch(result.stderr, /user|secret|private-token/);
+});
+
+test('accepts literal document tags in text and rejects buried first wrappers', () => {
+  const valid = run({ 'lesson.html': '<html><head><title>Literal <body> text</title></head><body><textarea><a><a></textarea></body></html>' });
+  assert.equal(valid.status, 0, valid.stderr);
+  for (const tag of ['head', 'body']) {
+    const invalid = run({ 'lesson.html': `<html><div>\n<${tag}>bad</${tag}></div></html>` });
+    assert.equal(invalid.status, 1);
+    assert.match(invalid.stderr, /lesson\.html:2 \[misplaced-document-tag\]/);
+  }
+});
+
+
+test('rejects a first head placed after the body', () => {
+  const result = run({ 'lesson.html': '<html><body>lesson</body>\n<head><title>bad</title></head></html>' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /lesson\.html:2 \[misplaced-document-tag\]/);
+});
+
+test('resumes parsing after raw-text closing tags with attributes', () => {
+  const result = run({ 'lesson.html': '<html><body><script>const x = 1;</script data-x>\n<a><a>nested</a></a></body></html>' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /lesson\.html:2 \[nested-anchor\]/);
 });
