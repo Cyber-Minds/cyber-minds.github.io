@@ -10,3 +10,4 @@ test-results/
 *.tfstate.*
 *.tfvars
 reports/content-freshness.*
+reports/link-audit.*
