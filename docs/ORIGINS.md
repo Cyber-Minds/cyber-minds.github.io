@@ -41,10 +41,25 @@ This document is the **source of truth** for all approved external origins used 
 
 **Data Classification:** Public UI library code only. Used by terminal frontend to display editor and terminal output.
 
-**Security Note:** Only the following packages are approved:
-- `@xterm/xterm@5.x` CSS and JS
-- `@xterm/addon-fit@0.x` JS
-- `monaco-editor@0.x` loader.js only
+**Security Note:** Only the following exact versions are approved. These are
+pinned with Subresource Integrity and enforced on every CI run by
+`scripts/check-terminal-assets.js`; the machine-readable inventory is
+`scripts/terminal-assets.json`.
+
+- `@xterm/xterm@5.5.0` — `css/xterm.min.css`, `lib/xterm.min.js`
+- `@xterm/addon-fit@0.10.0` — `lib/addon-fit.min.js`
+- `monaco-editor@0.45.0` — `min/vs/loader.js`, plus the `min/vs` AMD base path
+  configured in `Javascript/terminal/app/ui.js`
+
+A version change requires updating the inventory and both declaration sites,
+and is reviewed as a dependency bump. See **docs/TERMINAL-ASSETS.md** for the
+integrity strategy, the update procedure, and rollback.
+
+Monaco's loader fetches further modules at runtime via AMD; those requests are
+not SRI-covered (the loader emits no integrity attribute). The compensating
+control is the pinned base path, which CI compares against the reviewed
+version. Rationale and alternatives considered are recorded in
+docs/TERMINAL-ASSETS.md.
 
 ---
 

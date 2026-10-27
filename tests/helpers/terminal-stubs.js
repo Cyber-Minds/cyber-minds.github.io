@@ -89,20 +89,58 @@ window.require = function require(modules, callback) {
 window.require.config = function config() {};
 `;
 
+// The terminal page pins Subresource Integrity hashes for its jsDelivr
+// assets. These tests deliberately replace those payloads with stubs, so the
+// real hashes cannot match by construction and the browser would block every
+// stub instead of running it.
+//
+// Stripping the attribute here does not weaken production integrity, and it
+// cannot hide a regression that removes SRI from the page:
+//   - scripts/check-terminal-assets.js asserts the page carries each reviewed
+//     hash, and fails if one is missing or altered;
+//   - scripts/verify-asset-integrity.js confirms those hashes still match what
+//     the CDN serves;
+//   - tests/terminal-assets.spec.js asserts the HTML as actually served still
+//     carries them, reading the response before this rewrite applies.
+const INTEGRITY_ATTR_RE = /\s+integrity="[^"]*"/g;
+
 /**
  * Install the CDN route stubs on a page. Call from `test.beforeEach`.
+ *
+ * `crossorigin="anonymous"` puts the subresource requests in CORS mode, so the
+ * stub responses carry an allow-origin header; without it the browser rejects
+ * them before the body is ever considered.
+ *
  * @param {import('@playwright/test').Page} page
  */
 async function stubTerminalCdn(page) {
+  // Serve the terminal page with its integrity attributes removed so the
+  // stubs below are allowed to execute.
+  await page.route('**/terminal/index.html*', async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(INTEGRITY_ATTR_RE, '');
+    await route.fulfill({ response, body });
+  });
+
+  const stubHeaders = { 'access-control-allow-origin': '*' };
+
   await page.route('https://cdn.jsdelivr.net/**', async (route) => {
     const url = route.request().url();
 
     if (url.includes('/@xterm/xterm@') && url.endsWith('/css/xterm.min.css')) {
-      await route.fulfill({ body: '', contentType: 'text/css' });
+      await route.fulfill({
+        body: '',
+        contentType: 'text/css',
+        headers: stubHeaders,
+      });
       return;
     }
     if (url.includes('/@xterm/xterm@') && url.endsWith('/lib/xterm.min.js')) {
-      await route.fulfill({ body: XTERM_STUB, contentType: 'text/javascript' });
+      await route.fulfill({
+        body: XTERM_STUB,
+        contentType: 'text/javascript',
+        headers: stubHeaders,
+      });
       return;
     }
     if (
@@ -112,6 +150,7 @@ async function stubTerminalCdn(page) {
       await route.fulfill({
         body: FIT_ADDON_STUB,
         contentType: 'text/javascript',
+        headers: stubHeaders,
       });
       return;
     }
@@ -119,6 +158,7 @@ async function stubTerminalCdn(page) {
       await route.fulfill({
         body: MONACO_LOADER_STUB,
         contentType: 'text/javascript',
+        headers: stubHeaders,
       });
       return;
     }

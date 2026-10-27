@@ -1,0 +1,84 @@
+{
+  "$comment": "Approved third-party assets for the public terminal page. Source of truth for scripts/check-terminal-assets.js. Origin approval lives in docs/ORIGINS.md; this file pins exact versions and integrity. See docs/TERMINAL-ASSETS.md for the update and rollback procedure.",
+  "reviewed": "2026-10-26",
+  "owner": "Frontend supply-chain (CyberMinds frontend maintainers)",
+  "page": "HTML/terminal/index.html",
+  "approvedOrigins": [
+    "https://cdn.jsdelivr.net",
+    "https://fonts.googleapis.com"
+  ],
+  "assets": [
+    {
+      "id": "xterm-css",
+      "type": "style",
+      "package": "@xterm/xterm",
+      "version": "5.5.0",
+      "url": "https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/css/xterm.min.css",
+      "declaredIn": "html",
+      "integrity": "sha384-tStR1zLfWgsiXCF3IgfB3lBa8KmBe/lG287CL9WCeKgQYcp1bjb4/+mwN6oti4Co",
+      "crossorigin": "anonymous",
+      "sri": "required",
+      "purpose": "Base stylesheet for the xterm.js terminal viewport."
+    },
+    {
+      "id": "xterm-js",
+      "type": "script",
+      "package": "@xterm/xterm",
+      "version": "5.5.0",
+      "url": "https://cdn.jsdelivr.net/npm/@xterm/xterm@5.5.0/lib/xterm.min.js",
+      "declaredIn": "html",
+      "integrity": "sha384-J4qzUjBl1FxyLsl/kQPQIOeINsmp17OHYXDOMpMxlKX53ZfYsL+aWHpgArvOuof9",
+      "crossorigin": "anonymous",
+      "sri": "required",
+      "purpose": "Terminal emulator rendering backend output."
+    },
+    {
+      "id": "xterm-addon-fit",
+      "type": "script",
+      "package": "@xterm/addon-fit",
+      "version": "0.10.0",
+      "url": "https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.min.js",
+      "declaredIn": "html",
+      "integrity": "sha384-XGqKrV8Jrukp1NITJbOEHwg01tNkuXr6uB6YEj69ebpYU3v7FvoGgEg23C1Gcehk",
+      "crossorigin": "anonymous",
+      "sri": "required",
+      "purpose": "Resizes the terminal viewport to its container."
+    },
+    {
+      "id": "monaco-loader",
+      "type": "script",
+      "package": "monaco-editor",
+      "version": "0.45.0",
+      "url": "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js",
+      "declaredIn": "html",
+      "integrity": "sha384-SF/kPhqG3NMxqsYAbQqHkdF53WQx8yTkY0Ys+M+ayeC20QNujPyyxIuUEdEf0eG/",
+      "crossorigin": "anonymous",
+      "sri": "required",
+      "purpose": "AMD loader that bootstraps the Monaco editor.",
+      "residualRisk": "loader.js fetches further Monaco modules (editor.main.js, nls, workers) at runtime via AMD. Those requests carry no integrity attribute because the AMD loader does not emit one, so SRI covers the entry point only. The compensating control is the pinned base path in monacoBasePath below, checked against this version on every CI run."
+    },
+    {
+      "id": "monaco-base-path",
+      "type": "runtime-base-path",
+      "package": "monaco-editor",
+      "version": "0.45.0",
+      "url": "https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs",
+      "declaredIn": "Javascript/terminal/app/ui.js",
+      "sri": "not-applicable",
+      "sriReason": "Not a subresource declared in markup. It is the require.config({paths:{vs}}) base the AMD loader resolves modules against, so there is no element to carry an integrity attribute.",
+      "purpose": "Base URL Monaco resolves its lazily loaded modules against. Must stay on the same version as monaco-loader."
+    },
+    {
+      "id": "google-fonts-css",
+      "type": "style",
+      "package": "google-fonts",
+      "version": "unversioned",
+      "url": "https://fonts.googleapis.com/css2?family=MuseoModerno:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+      "declaredIn": "html",
+      "sri": "not-applicable",
+      "sriReason": "The response body varies by User-Agent (Google serves different @font-face rules per browser), so no single hash is valid for all visitors. Verified 2026-10-26: identical URL returned different bodies for a modern Chrome UA and a legacy MSIE UA. Pinning a hash would break the page for whichever browsers did not match.",
+      "purpose": "Web font declarations for the terminal UI chrome.",
+      "residualRisk": "Font CSS is not integrity-checked. Impact is limited to typography: fonts.gstatic.com is font-src only, and a compromised stylesheet cannot execute script under the page CSP."
+    }
+  ]
+}

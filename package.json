@@ -1,8 +1,10 @@
 {
   "scripts": {
     "qa:static": "node scripts/qa-static.js --changed-from main",
+    "qa:assets": "node scripts/check-terminal-assets.js",
+    "qa:assets:verify": "node scripts/verify-asset-integrity.js",
     "qa:structure": "node scripts/html-structure.js",
-    "test:qa": "node --test scripts/qa-static.test.js scripts/link-audit.test.js scripts/probe-health.test.js scripts/content-freshness.test.js scripts/html-structure.test.js",
+    "test:qa": "node --test scripts/qa-static.test.js scripts/link-audit.test.js scripts/probe-health.test.js scripts/content-freshness.test.js scripts/html-structure.test.js scripts/check-terminal-assets.test.js",
     "lint:frontend": "eslint --max-warnings=0 \"Javascript/*.js\" \"Javascript/terminal/**/*.js\" \"Javascript/*.mjs\"",
     "format": "npx prettier \"**/*.{html,css}\" --write",
     "format:check": "npx prettier \"**/*.{html,css}\" --check",
