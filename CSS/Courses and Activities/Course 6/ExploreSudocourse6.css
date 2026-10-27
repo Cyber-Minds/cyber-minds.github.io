@@ -329,3 +329,45 @@ a {
 .act-img {
   rotate: -1deg;
 }
+
+/* Stack the two-column lesson layout on narrow viewports.
+   Mirrors the breakpoint already used by Course 11/12 (main11.css), which is
+   the established pattern for these pages. Without it the sidebar is laid out
+   past the right edge of the viewport and is unreachable on a phone. */
+@media (max-width: 980px) {
+  section {
+    flex-direction: column;
+    /* The base rule sets flex-wrap: wrap. Combined with a column direction
+       that wraps overflowing items into a SECOND COLUMN off the right edge
+       instead of stacking them, so wrapping has to be switched off here. */
+    flex-wrap: nowrap;
+    width: 92%;
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+
+  .left-side_rectangle,
+  .right-side_rectangle {
+    min-width: 0;
+    width: 100%;
+    margin: 1em 0;
+  }
+
+  .right-side_rectangle-buttons {
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  /* The base rule pins this to the right with margin-left:auto and keeps the
+     label on one line, which pushes it past the viewport edge once the column
+     is only ~320px wide. */
+  .right-side_rectangle-buttons .next_course {
+    margin-left: 0;
+  }
+
+  .next_course {
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+  }
+}
