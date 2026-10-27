@@ -1,0 +1,57 @@
+# Weekly verification that the pinned terminal asset hashes still match what
+# the CDN serves, plus a real-browser load with SRI enforced.
+#
+# Deliberately NOT part of the pull-request gate: these steps need the network,
+# and a CDN hiccup must not fail an unrelated PR. The deterministic, offline
+# half runs on every PR in qa-static.yml.
+
+name: Terminal Asset Integrity
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Pinned Asset Hashes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Offline inventory check
+        run: node scripts/check-terminal-assets.js
+
+      - name: Verify hashes against the live CDN
+        run: node scripts/verify-asset-integrity.js
+
+      - name: Install Playwright Chromium browser
+        run: npx playwright install chromium
+
+      - name: Load the terminal against the real CDN with SRI enforced
+        env:
+          TERMINAL_LIVE_CDN: '1'
+        run: npx playwright test tests/terminal-assets.spec.js
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-integrity-report
+          path: playwright-report/
+          retention-days: 7

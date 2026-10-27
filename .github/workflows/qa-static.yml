@@ -47,6 +47,9 @@ jobs:
           QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: npm run qa:static -- --changed-from "$QA_BASE"
 
+      - name: Terminal third-party asset check
+        run: node scripts/check-terminal-assets.js
+
       - name: Structural HTML check (changed files)
         env:
           QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
