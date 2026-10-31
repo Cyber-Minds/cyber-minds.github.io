@@ -1,5 +1,19 @@
 # Runbook: Terminal Backend Outage
 
+> **Current state (2026-10-31): the hosted backend is offline and unfunded, and
+> this runbook is dormant.** The terminal page runs a browser simulation, and
+> all 8 CTF challenges are completable without a backend — verified on every
+> commit by `tests/ctf-browser-restore.spec.js`. There is no active incident
+> and nothing below needs to be executed.
+>
+> Hosting requirements, cost, the sandbox hardening required before the backend
+> is re-exposed, and the funding plan are in **`docs/TERMINAL-HOSTING.md`**.
+> This runbook applies again once a backend is restored.
+>
+> The probe workflow will report failures while no backend is deployed. Either
+> leave `TERMINAL_HEALTH_URL` unset — the probe exits 2 (misconfigured) rather
+> than paging — or disable the `Health Probe` workflow until restoration.
+
 - **Owner:** Cyber-Minds backend on-call
 - **Alert threshold:** 2 consecutive probe failures (both returning `"status":"down"`)
 - **Probe cadence:** Every 15 minutes via `health-probe.yml`
