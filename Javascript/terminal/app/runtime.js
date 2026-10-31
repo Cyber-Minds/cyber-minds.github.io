@@ -170,18 +170,17 @@ async function initTerminal() {
         },
       };
 
-      updateStatus('connected', 'Connected (mock)');
+      updateStatus('connected', 'Ready (browser)');
       if (loadingCaption) {
-        loadingCaption.textContent = 'Mock session ready';
+        loadingCaption.textContent = 'Browser workspace ready';
       }
 
       terminal.clear();
-      mockWriteLine('\x1b[32mCyberMinds terminal mock mode enabled\x1b[0m');
-      mockWriteLine('Backend requests are disabled for this session.');
+      mockWriteLine('\x1b[32mCyberMinds browser workspace ready\x1b[0m');
+      mockWriteLine('Commands run in this browser; no remote shell is connected.');
       mockPrompt();
       hasReceivedTerminalOutput = true;
       loadingElement.classList.add('hidden');
-      showToast('Mock terminal is active');
 
       terminal.onData((data) => {
         handleMockTerminalInput(data);

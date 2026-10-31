@@ -1,4 +1,4 @@
-﻿// @ts-check
+// @ts-check
 /**
  * CTF catalog <-> terminal challenge registry consistency tests.
  *
@@ -72,7 +72,7 @@ function attachErrorCollectors(page) {
 }
 
 async function waitForMockReady(page) {
-  await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+  await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
     timeout: 10_000,
   });
 }

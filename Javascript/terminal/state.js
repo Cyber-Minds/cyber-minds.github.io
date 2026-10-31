@@ -73,7 +73,9 @@ function getWsOrigin(origin) {
   return parsed.origin;
 }
 
-const isMockTerminal = query.get('mockTerminal') === '1';
+// Public lessons run locally in the browser; opt into the legacy hosted PTY
+// only when explicitly requested with ?realTerminal=1.
+const isMockTerminal = query.get('realTerminal') !== '1';
 const codeSamples = {
   python: `# Python starter\nprint("CyberMinds terminal ready")\n`,
   javascript: `// JavaScript starter\nconsole.log("CyberMinds terminal ready");\n`,

@@ -69,7 +69,7 @@ const GRADED_OUTPUT_FILES = [
 
 async function openChallenge(page, challengeId) {
   await page.goto(terminalMockUrl(challengeId));
-  await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+  await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
     timeout: 10_000,
   });
   await page.waitForFunction(
@@ -258,7 +258,7 @@ test.describe('hint disclosure behaviour', () => {
     await expect(page.locator('#hintList .hint-item')).toHaveCount(2);
 
     await page.reload();
-    await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+    await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
       timeout: 10_000,
     });
     await expect(page.locator('#hintList .hint-item')).toHaveCount(2);
@@ -271,7 +271,7 @@ test.describe('hint disclosure behaviour', () => {
     await expect(page.locator('#resetHintsBtn')).toBeHidden();
 
     await page.reload();
-    await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+    await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
       timeout: 10_000,
     });
     await expect(page.locator('#hintList .hint-item')).toHaveCount(0);
@@ -296,7 +296,7 @@ test.describe('hint disclosure behaviour', () => {
       localStorage.setItem('cm_ctf_hints_v1', 'not-json{')
     );
     await page.reload();
-    await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+    await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
       timeout: 10_000,
     });
 

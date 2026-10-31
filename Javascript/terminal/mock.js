@@ -93,9 +93,101 @@ function mockPrompt() {
   mockWrite(`cyberminds@mock:${mockState.cwd}$ `);
 }
 
+// Keep the shell deliberately small and data-only: no browser command can run
+// arbitrary host commands, open sockets, or access files outside this virtual
+// workspace.
+function splitMockArgs(input) {
+  return (input.match(/(?:[^\s"']+|"[^"]*"|'[^']*')+/g) || [])
+    .map((arg) => arg.replace(/^(?:"([\s\S]*)"|'([\s\S]*)')$/, '$1$2'));
+}
+
+function runMockPipeline(source) {
+  let command = source.trim();
+  const redirect = command.match(/\s(>>?)\s*([^\s]+)\s*$/);
+  if (redirect) command = command.slice(0, redirect.index).trim();
+  const stages = command.split(/\s*\|\s*/);
+  if (stages.length < 2) return null;
+
+  let output = '';
+  for (const stage of stages) {
+    const [name, ...args] = splitMockArgs(stage);
+    if (name === 'cat') {
+      output = getMockFile(args[0]) || '';
+    } else if (name === 'grep') {
+      const flags = args.filter((arg) => arg.startsWith('-')).join('');
+      const operands = args.filter((arg) => !arg.startsWith('-'));
+      const pattern = operands[0] || '';
+      const file = operands[1];
+      const input = file ? getMockFile(file) || '' : output;
+      let expression;
+      try {
+        expression = new RegExp(pattern, flags.includes('i') ? 'i' : '');
+      } catch {
+        mockWriteLine(`grep: invalid pattern: ${pattern}`);
+        return '';
+      }
+      const matches = input.split(/\r?\n/).filter((line) => expression.test(line));
+      output = flags.includes('o')
+        ? matches.flatMap((line) => line.match(expression) || []).join('\n')
+        : matches.join('\n');
+    } else if (name === 'awk') {
+      const script = args[0] || '';
+      const fieldMatch = script.match(/\$(\d+|NF)/);
+      if (!fieldMatch) {
+        mockWriteLine('awk: browser simulation supports field-print expressions');
+        return '';
+      }
+      const field = fieldMatch[1];
+      output = output.split(/\r?\n/).filter(Boolean).map((line) => {
+        const columns = line.trim().split(/\s+/);
+        return columns[field === 'NF' ? columns.length - 1 : Number(field) - 1] || '';
+      }).join('\n');
+    } else if (name === 'sort') {
+      const lines = output.split(/\r?\n/).filter(Boolean);
+      output = args.includes('-n') || args.includes('-rn')
+        ? lines.sort((a, b) => (parseFloat(a) || 0) - (parseFloat(b) || 0))
+          .join('\n')
+        : lines.sort((a, b) => a.localeCompare(b)).join('\n');
+      if (args.includes('-r') || args.includes('-rn')) {
+        output = output.split('\n').reverse().join('\n');
+      }
+    } else if (name === 'uniq') {
+      const lines = output.split(/\r?\n/).filter(Boolean);
+      const counts = [];
+      lines.forEach((line) => {
+        const last = counts[counts.length - 1];
+        if (last && last.line === line) last.count += 1;
+        else counts.push({ line, count: 1 });
+      });
+      output = args.includes('-c')
+        ? counts.map(({ line, count }) => `${String(count).padStart(7)} ${line}`).join('\n')
+        : counts.map(({ line }) => line).join('\n');
+    } else if (name === 'wc' && args.includes('-l')) {
+      output = String(output.split(/\r?\n/).filter(Boolean).length);
+    } else {
+      mockWriteLine(`bash: ${name || stage}: unsupported in browser simulation`);
+      return '';
+    }
+  }
+
+  if (redirect) {
+    const target = normalizeMockPath(redirect[2]);
+    const previous = getMockFile(target) || '';
+    setMockFile(target, `${redirect[1] === '>>' ? previous : ''}${output}\n`);
+    return '';
+  }
+  return output;
+}
+
 function runMockCommand(command) {
   const trimmed = command.trim();
   if (!trimmed) {
+    return;
+  }
+
+  const pipelineOutput = runMockPipeline(trimmed);
+  if (pipelineOutput !== null) {
+    if (pipelineOutput) mockWrite(`${pipelineOutput.replace(/\n/g, '\r\n')}\r\n`);
     return;
   }
 
@@ -105,8 +197,8 @@ function runMockCommand(command) {
   }
 
   if (trimmed === 'help') {
-    mockWriteLine('Mock commands: pwd, whoami, ls, cat <file>, touch <file>');
-    mockWriteLine('Also supports: echo "text" > file, echo "text" >> file');
+    mockWriteLine('Browser shell: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, clear');
+    mockWriteLine('Files and network targets are simulated; arbitrary commands are unavailable.');
     return;
   }
 
@@ -200,6 +292,7 @@ function runMockCommand(command) {
   }
 
   if (trimmed.startsWith('mkdir ')) {
+    mockWriteLine('mkdir: directories are not needed in the challenge workspace');
     return;
   }
 
@@ -211,10 +304,12 @@ function runMockCommand(command) {
     return;
   }
 
-  if (trimmed.startsWith('curl -I ')) {
+  if (trimmed.startsWith('curl -I ') || trimmed.startsWith('curl -sSI ')) {
     mockWriteLine('HTTP/1.1 200 OK');
     mockWriteLine('server: nginx/1.24.0');
     mockWriteLine('content-type: text/html; charset=utf-8');
+    mockWriteLine('x-powered-by: PHP/7.4.3');
+    mockWriteLine('x-application: InternalPortal/2.1');
     return;
   }
 

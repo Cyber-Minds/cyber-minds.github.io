@@ -11,7 +11,7 @@
  *   2. Home → Course Catalog navigation.
  *   3. CTF Catalog loads challenge cards and links to the terminal.
  *   4. CTF Catalog → Terminal page navigation.
- *   5. Mock terminal initialises without any backend connection.
+ *   5. Browser terminal initialises without any backend connection.
  *   6. Challenge panel populates once the editor (Monaco CDN) has loaded.
  *   7. Completing a mock challenge updates the progress chip and shows a toast.
  */
@@ -25,7 +25,7 @@ const originAllowlist = JSON.parse(
 // ─── helpers ────────────────────────────────────────────────────────────────
 
 const TERMINAL_MOCK_URL =
-  '/HTML/terminal/index.html?challenge=linux-basics&mockTerminal=1';
+  '/HTML/terminal/index.html?challenge=linux-basics';
 
 const { stubTerminalCdn } = require('./helpers/terminal-stubs');
 
@@ -33,9 +33,9 @@ test.beforeEach(async ({ page }) => {
   await stubTerminalCdn(page);
 });
 
-/** Wait for the mock session to report "Connected (mock)" in the status bar. */
+/** Wait for the browser simulation to report "Ready (browser)" in the status bar. */
 async function waitForMockReady(page) {
-  await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+  await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
     timeout: 10_000,
   });
 }
@@ -720,10 +720,53 @@ test.describe('Legacy quiz progress', () => {
 // ─── Mock terminal ───────────────────────────────────────────────────────────
 
 test.describe('Mock terminal', () => {
+  test('default production path runs Web Recon locally with no backend', async ({
+    page,
+  }) => {
+    const requests = [];
+    page.on('request', (request) => requests.push(request.url()));
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+
+    await page.evaluate(() => {
+      // Exercise the same local command engine used by terminal keystrokes.
+      window.runMockCommand('ss -tulpen');
+      window.runMockCommand('curl -I http://localhost:9090');
+      window.runMockCommand(
+        'echo "port 9090 server nginx PHP/7.4.3 InternalPortal content-type" > recon-notes.txt'
+      );
+    });
+    await expect(page.locator('#terminal')).toContainText('0.0.0.0:9090');
+    await expect(page.locator('#terminal')).toContainText('x-powered-by: PHP/7.4.3');
+    await page.locator('#checkSolutionBtn').click();
+    await expect(page.locator('#progressChip')).toContainText('1/');
+    expect(requests.some((url) => /terminal\.egeuysal\.com|cloudapp\.azure\.com/.test(url))).toBe(false);
+  });
+
+  test('browser shell pipelines real challenge fixtures into a graded report', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/terminal/index.html?challenge=log-hunt');
+    await waitForMockReady(page);
+    await page.evaluate(() => {
+      window.runMockCommand(
+        "grep 'Failed' /workspace/sample.log | awk '{print $11}' | sort | uniq -c | sort -rn > findings.txt"
+      );
+      window.runMockCommand(
+        'echo "Summary: brute-force auth spike from 192.168.1.45" >> findings.txt'
+      );
+    });
+    const findings = await page.evaluate(() => window.getMockFile('findings.txt'));
+    expect(findings).toMatch(/12\s+192\.168\.1\.45/);
+    expect(findings).toMatch(/brute-force auth spike/i);
+    await page.locator('#checkSolutionBtn').click();
+    await expect(page.locator('#progressChip')).toContainText('1/');
+  });
+
   test('initialises without backend connection', async ({ page }) => {
     await page.goto(TERMINAL_MOCK_URL);
 
-    // Status bar must flip to "Connected (mock)" — this confirms that
+    // Status bar must flip to "Ready (browser)" — this confirms that
     // isMockTerminal=true was detected and the fake ws object is in place.
     await waitForMockReady(page);
 

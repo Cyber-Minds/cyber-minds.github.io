@@ -167,13 +167,13 @@ async function stubTerminalCdn(page) {
 }
 
 /**
- * URL for a challenge in the offline mock terminal.
+ * URL for a challenge in the default browser terminal simulation.
  * @param {string} challengeId
  */
 function terminalMockUrl(challengeId) {
   return `/HTML/terminal/index.html?challenge=${encodeURIComponent(
     challengeId
-  )}&mockTerminal=1`;
+  )}`;
 }
 
 module.exports = {
