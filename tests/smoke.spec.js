@@ -744,6 +744,15 @@ test.describe('Mock terminal', () => {
     expect(requests.some((url) => /terminal\.egeuysal\.com|cloudapp\.azure\.com/.test(url))).toBe(false);
   });
 
+  test('curl provides help and supports the Web Recon endpoint', async ({ page }) => {
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    await page.evaluate(() => handleMockTerminalInput('curl --help\r'));
+    await expect(page.locator('#terminal')).toContainText('Usage: curl [options...] <url>');
+    await page.evaluate(() => handleMockTerminalInput('curl -I http://localhost:9090\r'));
+    await expect(page.locator('#terminal')).toContainText('x-powered-by: PHP/7.4.3');
+  });
+
   test('Run Code does not print canned output for a missing runtime', async ({
     page,
   }) => {

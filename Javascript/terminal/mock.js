@@ -193,6 +193,166 @@ function splitMockArgs(input) {
     .map((arg) => arg.replace(/^(?:"([\s\S]*)"|'([\s\S]*)')$/, '$1$2'));
 }
 
+function getCurlOptions(args) {
+  const options = {
+    head: false,
+    includeHeaders: false,
+    output: null,
+    silent: false,
+  };
+  const positionals = [];
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    if (arg === '-I' || arg === '--head') options.head = true;
+    else if (arg === '-L' || arg === '--location') continue;
+    else if (arg === '-i' || arg === '--include') options.includeHeaders = true;
+    else if (arg === '-s' || arg === '--silent') options.silent = true;
+    else if (arg === '-o' || arg === '--output') {
+      options.output = args[index + 1] || null;
+      index += 1;
+    } else if (arg.startsWith('-') && /^-[a-zA-Z]+$/.test(arg)) {
+      if (arg.includes('I')) options.head = true;
+      if (arg.includes('i')) options.includeHeaders = true;
+      if (arg.includes('s')) options.silent = true;
+      if ([...arg.slice(1)].some((flag) => !'IisSL'.includes(flag))) {
+        options.error = `curl: unknown option ${arg}`;
+      }
+    } else if (arg.startsWith('-')) {
+      options.error = `curl: unknown option ${arg}`;
+    } else {
+      positionals.push(arg);
+    }
+  }
+  options.url = positionals[0] || '';
+  return options;
+}
+
+function getCurlHelp() {
+  return [
+    'Usage: curl [options...] <url>',
+    ' -I, --head       Fetch headers only',
+    ' -i, --include    Include response headers in output',
+    ' -L, --location   Follow redirects',
+    ' -o, --output FILE  Save response body to a workspace file',
+    ' -s, --silent     Suppress error details',
+    ' -h, --help       Display this help',
+    'Supports HTTP and HTTPS URLs allowed by the browser.',
+  ].join('\n');
+}
+
+function formatCurlHeaders(response) {
+  const lines = [`HTTP/2 ${response.status} ${response.statusText}`];
+  response.headers.forEach((value, key) => lines.push(`${key}: ${value}`));
+  return lines.join('\n');
+}
+
+function runLessonServiceCurl(url, options) {
+  if (url.hostname !== 'localhost' || url.port !== '9090') return false;
+  const headers = [
+    'HTTP/1.1 200 OK',
+    'server: nginx/1.24.0',
+    'content-type: text/html; charset=utf-8',
+    'x-powered-by: PHP/7.4.3',
+    'x-application: InternalPortal/2.1',
+  ].join('\n');
+  const body = '<!doctype html><title>Internal Portal</title>\n<h1>InternalPortal - Employee Dashboard</h1>';
+  const output = [options.includeHeaders || options.head ? headers : '', options.head ? '' : body]
+    .filter(Boolean)
+    .join('\n');
+  if (options.output) {
+    setMockFile(options.output, options.head ? '' : body);
+    syncWorkspaceFiles();
+    if (!options.silent) mockWriteLine(`Saved ${options.head ? 0 : body.length} characters to ${options.output}`);
+  } else if (output) {
+    mockWrite(`${output.replace(/\n/g, '\r\n')}\r\n`);
+  }
+  return true;
+}
+
+async function readCurlBody(response) {
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  const chunks = [];
+  let byteCount = 0;
+  const maxBytes = 128 * 1024;
+  while (byteCount < maxBytes) {
+    // Stream reads are ordered; each chunk is required before the next read.
+    // eslint-disable-next-line no-await-in-loop
+    const { done, value } = await reader.read();
+    if (done) break;
+    const chunk = value.subarray(0, maxBytes - byteCount);
+    chunks.push(decoder.decode(chunk, { stream: true }));
+    byteCount += chunk.byteLength;
+    if (chunk.byteLength < value.byteLength) {
+      // eslint-disable-next-line no-await-in-loop
+      await reader.cancel();
+      chunks.push('\n[curl: output truncated at 128 KiB]\n');
+      break;
+    }
+  }
+  chunks.push(decoder.decode());
+  return chunks.join('');
+}
+
+async function runCurl(args) {
+  if (args.includes('--help') || args.includes('-h')) {
+    mockWrite(`${getCurlHelp().replace(/\n/g, '\r\n')}\r\n`);
+    return;
+  }
+  const options = getCurlOptions(args);
+  if (options.error) {
+    mockWriteLine(options.error);
+    return;
+  }
+  if (!options.url) {
+    mockWriteLine('curl: no URL specified');
+    return;
+  }
+
+  const rawUrl = /^[a-z][a-z\d+.-]*:/i.test(options.url)
+    ? options.url
+    : `https://${options.url}`;
+  let url;
+  try {
+    url = new URL(rawUrl);
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
+      throw new Error('unsupported URL');
+    }
+  } catch {
+    mockWriteLine(`curl: (3) URL rejected: ${options.url}`);
+    return;
+  }
+
+  if (runLessonServiceCurl(url, options)) return;
+
+  try {
+    const response = await fetch(url, {
+      method: options.head ? 'HEAD' : 'GET',
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer',
+      redirect: 'follow',
+    });
+    const headers = formatCurlHeaders(response);
+    const body = options.head ? '' : await readCurlBody(response);
+    const output = [options.includeHeaders || options.head ? headers : '', body]
+      .filter(Boolean)
+      .join('\n');
+    if (options.output) {
+      setMockFile(options.output, body);
+      syncWorkspaceFiles();
+      if (!options.silent) mockWriteLine(`Saved ${body.length} characters to ${options.output}`);
+      return;
+    }
+    if (output) mockWrite(`${output.replace(/\n/g, '\r\n')}\r\n`);
+    if (!response.ok && !options.silent) {
+      mockWriteLine(`curl: (22) The requested URL returned error: ${response.status}`);
+    }
+  } catch (error) {
+    mockWriteLine(`curl: (6) Could not retrieve ${url.host}: ${error.message}`);
+  }
+}
+
 function runMockPipeline(source) {
   let command = source.trim();
   const redirect = command.match(/\s(>>?)\s*([^\s]+)\s*$/);
@@ -415,25 +575,7 @@ async function runMockCommand(command) {
   }
 
   if (commandName === 'curl') {
-    const url = commandArgs.find((arg) => /^https?:\/\//i.test(arg));
-    if (!url) {
-      mockWriteLine('curl: try "curl --help" for more information');
-      return;
-    }
-    if (!/^https?:\/\/localhost:9090(?:\/|$)/i.test(url)) {
-      mockWriteLine('curl: this lesson only provides the local service at localhost:9090');
-      return;
-    }
-    if (commandArgs.includes('-I') || commandArgs.includes('-sSI')) {
-      mockWriteLine('HTTP/1.1 200 OK');
-      mockWriteLine('server: nginx/1.24.0');
-      mockWriteLine('content-type: text/html; charset=utf-8');
-      mockWriteLine('x-powered-by: PHP/7.4.3');
-      mockWriteLine('x-application: InternalPortal/2.1');
-    } else {
-      mockWriteLine('<!doctype html><title>Internal Portal</title>');
-      mockWriteLine('<h1>InternalPortal - Employee Dashboard</h1>');
-    }
+    await runCurl(commandArgs);
     return;
   }
 
