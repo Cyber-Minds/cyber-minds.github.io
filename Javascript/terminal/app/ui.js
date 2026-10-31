@@ -368,18 +368,8 @@ function attachUiHandlers() {
       }
 
       mockWriteLine(`$ ${runLabel}`);
-      if (detectedLang === 'python') {
-        mockWriteLine('CyberMinds terminal ready');
-        mockWriteLine('[mock] Python execution simulated');
-      } else if (detectedLang === 'javascript') {
-        mockWriteLine('CyberMinds terminal ready');
-        mockWriteLine('[mock] JavaScript execution simulated');
-      } else if (detectedLang === 'java') {
-        mockWriteLine('[mock] javac Hello.java && java Hello');
-        mockWriteLine('CyberMinds terminal ready');
-      } else if (detectedLang === 'go') {
-        mockWriteLine('CyberMinds terminal ready');
-        mockWriteLine('[mock] Go execution simulated');
+      if (['python', 'javascript', 'java', 'go'].includes(detectedLang)) {
+        runMockCommand(runLabel);
       } else {
         mockWriteLine(
           `Saved ${filename}. No run command configured for this file type.`

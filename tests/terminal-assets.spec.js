@@ -136,7 +136,7 @@ test.describe('terminal asset integrity (live CDN)', () => {
 
     // A failed integrity check blocks the script, so these only resolve if
     // every pinned hash is correct.
-    await expect(page.locator('#statusText')).toHaveText('Connected (mock)', {
+    await expect(page.locator('#statusText')).toHaveText('Ready', {
       timeout: 30_000,
     });
     await page.waitForFunction(() => typeof window.Terminal === 'function', null, {

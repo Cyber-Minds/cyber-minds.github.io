@@ -72,7 +72,7 @@ function attachErrorCollectors(page) {
 }
 
 async function waitForMockReady(page) {
-  await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
+  await expect(page.locator('#statusText')).toHaveText('Ready', {
     timeout: 10_000,
   });
 }

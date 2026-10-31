@@ -170,14 +170,13 @@ async function initTerminal() {
         },
       };
 
-      updateStatus('connected', 'Ready (browser)');
+      updateStatus('connected', 'Ready');
       if (loadingCaption) {
         loadingCaption.textContent = 'Browser workspace ready';
       }
 
       terminal.clear();
       mockWriteLine('\x1b[32mCyberMinds browser workspace ready\x1b[0m');
-      mockWriteLine('Commands run in this browser; no remote shell is connected.');
       mockPrompt();
       hasReceivedTerminalOutput = true;
       loadingElement.classList.add('hidden');

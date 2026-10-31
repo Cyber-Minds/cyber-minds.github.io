@@ -90,7 +90,7 @@ function mockWriteLine(text) {
 }
 
 function mockPrompt() {
-  mockWrite(`cyberminds@mock:${mockState.cwd}$ `);
+  mockWrite(`cyberminds@workspace:${mockState.cwd}$ `);
 }
 
 // Keep the shell deliberately small and data-only: no browser command can run
@@ -165,7 +165,7 @@ function runMockPipeline(source) {
     } else if (name === 'wc' && args.includes('-l')) {
       output = String(output.split(/\r?\n/).filter(Boolean).length);
     } else {
-      mockWriteLine(`bash: ${name || stage}: unsupported in browser simulation`);
+      mockWriteLine(`bash: ${name || stage}: command not found`);
       return '';
     }
   }
@@ -197,8 +197,7 @@ function runMockCommand(command) {
   }
 
   if (trimmed === 'help') {
-    mockWriteLine('Browser shell: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, clear');
-    mockWriteLine('Files and network targets are simulated; arbitrary commands are unavailable.');
+    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, clear');
     return;
   }
 
@@ -313,7 +312,7 @@ function runMockCommand(command) {
     return;
   }
 
-  mockWriteLine(`bash: ${trimmed}: command not found`);
+  mockWriteLine(`bash: ${splitMockArgs(trimmed)[0] || trimmed}: command not found`);
 }
 
 function handleMockTerminalInput(data) {

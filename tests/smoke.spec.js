@@ -33,9 +33,9 @@ test.beforeEach(async ({ page }) => {
   await stubTerminalCdn(page);
 });
 
-/** Wait for the browser simulation to report "Ready (browser)" in the status bar. */
+/** Wait for the terminal to report "Ready" in the status bar. */
 async function waitForMockReady(page) {
-  await expect(page.locator('#statusText')).toHaveText('Ready (browser)', {
+  await expect(page.locator('#statusText')).toHaveText('Ready', {
     timeout: 10_000,
   });
 }
@@ -738,9 +738,21 @@ test.describe('Mock terminal', () => {
     });
     await expect(page.locator('#terminal')).toContainText('0.0.0.0:9090');
     await expect(page.locator('#terminal')).toContainText('x-powered-by: PHP/7.4.3');
+    await expect(page.locator('#terminal')).not.toContainText(/mock|simulated|no remote shell/i);
     await page.locator('#checkSolutionBtn').click();
     await expect(page.locator('#progressChip')).toContainText('1/');
     expect(requests.some((url) => /terminal\.egeuysal\.com|cloudapp\.azure\.com/.test(url))).toBe(false);
+  });
+
+  test('Run Code does not print canned output for a missing runtime', async ({
+    page,
+  }) => {
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    await page.locator('#runBtn').click();
+    await expect(page.locator('#terminal')).toContainText('node: command not found');
+    await expect(page.locator('#terminal')).not.toContainText('CyberMinds terminal ready');
+    await expect(page.locator('#terminal')).not.toContainText(/\[mock\]|simulated/i);
   });
 
   test('browser shell pipelines real challenge fixtures into a graded report', async ({
@@ -766,8 +778,7 @@ test.describe('Mock terminal', () => {
   test('initialises without backend connection', async ({ page }) => {
     await page.goto(TERMINAL_MOCK_URL);
 
-    // Status bar must flip to "Ready (browser)" — this confirms that
-    // isMockTerminal=true was detected and the fake ws object is in place.
+    // Status bar must show the local workspace is ready.
     await waitForMockReady(page);
 
     // Loading skeleton must be hidden once mock init completes.
