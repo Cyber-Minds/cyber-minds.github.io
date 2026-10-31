@@ -333,7 +333,7 @@ function attachUiHandlers() {
       switchLanguage(tab.dataset.lang);
     });
 
-  document.getElementById('runBtn').addEventListener('click', () => {
+  document.getElementById('runBtn').addEventListener('click', async () => {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
       showToast('Terminal not connected');
       return;
@@ -369,7 +369,7 @@ function attachUiHandlers() {
 
       mockWriteLine(`$ ${runLabel}`);
       if (['python', 'javascript', 'java', 'go'].includes(detectedLang)) {
-        runMockCommand(runLabel);
+        await runMockCommand(runLabel);
       } else {
         mockWriteLine(
           `Saved ${filename}. No run command configured for this file type.`

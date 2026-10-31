@@ -755,6 +755,24 @@ test.describe('Mock terminal', () => {
     await expect(page.locator('#terminal')).not.toContainText(/\[mock\]|simulated/i);
   });
 
+  test('Python Run Code executes against the workspace files', async ({ page }) => {
+    test.setTimeout(90_000);
+    await page.goto('/HTML/terminal/index.html?challenge=log-hunt');
+    await waitForMockReady(page);
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(
+        `with open('/workspace/sample.log') as log:
+    print('LOG_LINES', sum(1 for line in log if 'Failed' in line))`
+      );
+    });
+    await page.locator('#runBtn').click();
+    await expect(page.locator('#terminal')).toContainText('LOG_LINES 21', {
+      timeout: 75_000,
+    });
+    await page.evaluate(() => handleMockTerminalInput('python3 hello.py\r'));
+    await expect(page.locator('#terminal')).toContainText('LOG_LINES 21');
+  });
+
   test('browser shell pipelines real challenge fixtures into a graded report', async ({
     page,
   }) => {

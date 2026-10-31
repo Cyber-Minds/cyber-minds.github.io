@@ -15,15 +15,16 @@ Entry point:
 The public terminal runs without a backend. Lessons may use the virtual
 `/workspace` files, `pwd`, `whoami`, `ls`, `cat`, `touch`, `echo` redirection,
 `grep`, field-printing `awk`, `sort`, `uniq`, `wc -l`, `ss -tulpen`, and `curl`
-against the simulated local web service. The service returns fixed synthetic
-headers and does not make network requests. Unsupported shell commands print
-an explicit message instead of being passed to the host.
+against the lesson's local web service. Python runs in a WebAssembly worker
+with a virtual `/workspace`; the worker has no DOM or network access.
+Unsupported shell commands print an explicit message instead of being passed
+to the host.
 
 New courses should declare their required commands, fixture files, and
 checker behavior before they are added. A course needing arbitrary package
-installation, real internet access, system services, or a command outside the
-supported list needs a separate runtime decision; this simulation does not
-provide a general Linux or npm environment.
+installation, real internet access, system services, npm, or a command outside
+the supported list needs a separate runtime decision; this workspace does not
+provide a general Linux environment.
 
 ## Local Draft Recovery
 

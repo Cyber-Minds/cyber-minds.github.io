@@ -10,6 +10,11 @@ const mockState = {
   inputBuffer: '',
   files: {},
 };
+let pythonWorker;
+let pythonRequestId = 0;
+const pendingPythonRuns = new Map();
+let commandRunning = false;
+let queuedTerminalInput = '';
 
 function normalizeMockPath(path) {
   const value = String(path || '')
@@ -91,6 +96,93 @@ function mockWriteLine(text) {
 
 function mockPrompt() {
   mockWrite(`cyberminds@workspace:${mockState.cwd}$ `);
+}
+
+function getPythonWorker() {
+  if (pythonWorker) return pythonWorker;
+  pythonWorker = new Worker(
+    new URL('../../Javascript/terminal/python-worker.js', window.location.href),
+    { type: 'module' }
+  );
+  pythonWorker.onmessage = ({ data }) => {
+    const pending = pendingPythonRuns.get(data.id);
+    if (!pending) return;
+    if (data.ready) {
+      window.clearTimeout(pending.timeout);
+      pending.timeout = window.setTimeout(() => {
+        pendingPythonRuns.delete(data.id);
+        pythonWorker?.terminate();
+        pythonWorker = null;
+        pending.reject(new Error('Python program exceeded the 15 second time limit'));
+      }, 15000);
+      return;
+    }
+    window.clearTimeout(pending.timeout);
+    pendingPythonRuns.delete(data.id);
+    if (data.files) {
+      Object.entries(data.files).forEach(([path, content]) => setMockFile(path, content));
+    }
+    if (data.error) pending.reject(new Error(data.error));
+    else pending.resolve(data.output || '');
+    syncWorkspaceFiles();
+  };
+  pythonWorker.onerror = (event) => {
+    pendingPythonRuns.forEach((pending) => {
+      window.clearTimeout(pending.timeout);
+      pending.reject(new Error(event.message || 'Python runtime failed'));
+    });
+    pendingPythonRuns.clear();
+    pythonWorker.terminate();
+    pythonWorker = null;
+  };
+  return pythonWorker;
+}
+
+function runPython(code) {
+  const id = ++pythonRequestId;
+  return new Promise((resolve, reject) => {
+    const timeout = window.setTimeout(() => {
+      pendingPythonRuns.delete(id);
+      pythonWorker?.terminate();
+      pythonWorker = null;
+      reject(new Error('Python runtime took too long to start'));
+    }, 90000);
+    pendingPythonRuns.set(id, { resolve, reject, timeout });
+    try {
+      getPythonWorker().postMessage({ id, code, files: mockState.files });
+    } catch (error) {
+      window.clearTimeout(timeout);
+      pendingPythonRuns.delete(id);
+      reject(error);
+    }
+  });
+}
+
+async function runPythonCommand(args) {
+  let code = '';
+  if (args[0] === '-c' && args[1]) {
+    code = args.slice(1).join(' ');
+  } else {
+    const filePath = args.find((arg) => arg.endsWith('.py'));
+    if (filePath && hasMockFile(filePath)) {
+      code = getMockFile(filePath);
+    } else if (filePath) {
+      mockWriteLine(`python3: can't open file '${filePath}': No such file or directory`);
+      return;
+    }
+  }
+
+  if (!code) {
+    mockWriteLine('usage: python3 <file.py> | python3 -c <code>');
+    return;
+  }
+
+  try {
+    const output = await runPython(code);
+    if (output) mockWrite(output.replace(/\n/g, '\r\n'));
+  } catch (error) {
+    mockWriteLine(`Python error: ${error.message}`);
+  }
 }
 
 // Keep the shell deliberately small and data-only: no browser command can run
@@ -179,7 +271,7 @@ function runMockPipeline(source) {
   return output;
 }
 
-function runMockCommand(command) {
+async function runMockCommand(command) {
   const trimmed = command.trim();
   if (!trimmed) {
     return;
@@ -197,7 +289,13 @@ function runMockCommand(command) {
   }
 
   if (trimmed === 'help') {
-    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, clear');
+    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, python3, clear');
+    return;
+  }
+
+  const [commandName, ...commandArgs] = splitMockArgs(trimmed);
+  if (commandName === 'python3' || commandName === 'python') {
+    await runPythonCommand(commandArgs);
     return;
   }
 
@@ -269,6 +367,19 @@ function runMockCommand(command) {
     return;
   }
 
+  const grepMatch = trimmed.match(/^grep\s+(.+?)\s+(.+)$/);
+  if (grepMatch) {
+    const args = splitMockArgs(grepMatch[1]);
+    const pattern = args.filter((arg) => !arg.startsWith('-')).pop() || '';
+    const flags = args.filter((arg) => arg.startsWith('-')).join('');
+    const expression = new RegExp(pattern, flags.includes('i') ? 'i' : '');
+    const content = getMockFile(grepMatch[2]) || '';
+    content.split(/\r?\n/)
+      .filter((line) => expression.test(line))
+      .forEach((line) => mockWriteLine(line));
+    return;
+  }
+
   const echoRedirectMatch = trimmed.match(
     /^echo\s+(.+?)\s*(>>?)\s*(.+)$/
   );
@@ -303,27 +414,61 @@ function runMockCommand(command) {
     return;
   }
 
-  if (trimmed.startsWith('curl -I ') || trimmed.startsWith('curl -sSI ')) {
-    mockWriteLine('HTTP/1.1 200 OK');
-    mockWriteLine('server: nginx/1.24.0');
-    mockWriteLine('content-type: text/html; charset=utf-8');
-    mockWriteLine('x-powered-by: PHP/7.4.3');
-    mockWriteLine('x-application: InternalPortal/2.1');
+  if (commandName === 'curl') {
+    const url = commandArgs.find((arg) => /^https?:\/\//i.test(arg));
+    if (!url) {
+      mockWriteLine('curl: try "curl --help" for more information');
+      return;
+    }
+    if (!/^https?:\/\/localhost:9090(?:\/|$)/i.test(url)) {
+      mockWriteLine('curl: this lesson only provides the local service at localhost:9090');
+      return;
+    }
+    if (commandArgs.includes('-I') || commandArgs.includes('-sSI')) {
+      mockWriteLine('HTTP/1.1 200 OK');
+      mockWriteLine('server: nginx/1.24.0');
+      mockWriteLine('content-type: text/html; charset=utf-8');
+      mockWriteLine('x-powered-by: PHP/7.4.3');
+      mockWriteLine('x-application: InternalPortal/2.1');
+    } else {
+      mockWriteLine('<!doctype html><title>Internal Portal</title>');
+      mockWriteLine('<h1>InternalPortal - Employee Dashboard</h1>');
+    }
     return;
   }
 
   mockWriteLine(`bash: ${splitMockArgs(trimmed)[0] || trimmed}: command not found`);
 }
 
+function finishMockCommand() {
+  syncWorkspaceFiles();
+  mockPrompt();
+  commandRunning = false;
+  if (queuedTerminalInput) {
+    const queued = queuedTerminalInput;
+    queuedTerminalInput = '';
+    handleMockTerminalInput(queued);
+  }
+}
+
 function handleMockTerminalInput(data) {
-  for (const ch of data) {
+  if (commandRunning) {
+    queuedTerminalInput += data;
+    return;
+  }
+
+  for (let index = 0; index < data.length; index += 1) {
+    const ch = data[index];
     if (ch === '\r') {
       mockWrite('\r\n');
-      runMockCommand(mockState.inputBuffer);
+      const command = mockState.inputBuffer;
       mockState.inputBuffer = '';
-      syncWorkspaceFiles();
-      mockPrompt();
-      continue;
+      commandRunning = true;
+      queuedTerminalInput += data.slice(index + 1);
+      Promise.resolve(runMockCommand(command))
+        .catch((error) => mockWriteLine(`Command error: ${error.message}`))
+        .finally(finishMockCommand);
+      return;
     }
 
     if (ch === '\u0003') {
