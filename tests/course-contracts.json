@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "courseId": "course-1",
+      "name": "Course 1 - Introduction",
+      "lessons": [
+        { "id": "intro-1", "path": "HTML/Courses and Activities/Course 1/Introductioncourse1.html" },
+        { "id": "statistics-1", "path": "HTML/Courses and Activities/Course 1/StatisticsofCybersecurityreadingcourse1.html" },
+        { "id": "jobs-1", "path": "HTML/Courses and Activities/Course 1/CybersecurityJobscourse1.html" },
+        { "id": "ciatriad-1", "path": "HTML/Courses and Activities/Course 1/CIAtriadcourse1.html" }
+      ]
+    },
+    {
+      "courseId": "course-2",
+      "name": "Course 2 - Introduction",
+      "lessons": [
+        { "id": "intro-2", "path": "HTML/Courses and Activities/Course 2/Introductioncourse2.html" },
+        { "id": "individ-2", "path": "HTML/Courses and Activities/Course 2/CybersecurityforIndividualscourse2.html" },
+        { "id": "company-2", "path": "HTML/Courses and Activities/Course 2/CybersecurityforCompanycourse2.html" },
+        { "id": "policies-2", "path": "HTML/Courses and Activities/Course 2/MandatoryPolicies.html" }
+      ]
+    }
+  ],
+  "knownExceptions": []
+}
