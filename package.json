@@ -3,8 +3,9 @@
     "qa:static": "node scripts/qa-static.js --changed-from main",
     "qa:assets": "node scripts/check-terminal-assets.js",
     "qa:assets:verify": "node scripts/verify-asset-integrity.js",
-    "qa:structure": "node scripts/html-structure.js",
+    "qa:structure": "node scripts/html-structure.js && node scripts/structure-check.js",
     "test:qa": "node --test scripts/qa-static.test.js scripts/link-audit.test.js scripts/probe-health.test.js scripts/content-freshness.test.js scripts/html-structure.test.js scripts/check-terminal-assets.test.js scripts/course-navigation-contract.test.js scripts/image-budget-audit.test.js scripts/structure-check.test.js"
+>>>>>>> 16b40ed (Add versioned course navigation contract checks)
     "lint:frontend": "eslint --max-warnings=0 \"Javascript/*.js\" \"Javascript/terminal/**/*.js\" \"Javascript/*.mjs\"",
     "format": "npx prettier \"**/*.{html,css}\" --write",
     "format:check": "npx prettier \"**/*.{html,css}\" --check",
@@ -18,6 +19,7 @@
     "qa:links:baseline": "node scripts/link-audit.js --write-baseline",
     "qa:image-budget": "node scripts/image-budget-audit.js",
     "qa:course-navigation": "node scripts/course-navigation-contract.js"
+>>>>>>> 16b40ed (Add versioned course navigation contract checks)
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.2.1",
