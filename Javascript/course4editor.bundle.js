@@ -5790,6 +5790,7 @@
    class PointDecoration extends Decoration {
        constructor(spec, startSide, endSide, block, widget, isReplace) {
            super(startSide, endSide, widget, spec);
+           this.pointWidget = widget;
            this.block = block;
            this.isReplace = isReplace;
            this.mapMode = !block ? MapMode.TrackDel : startSide <= 0 ? MapMode.TrackBefore : MapMode.TrackAfter;
@@ -5800,11 +5801,11 @@
                : this.startSide <= 0 ? BlockType.WidgetBefore : BlockType.WidgetAfter;
        }
        get heightRelevant() {
-           return this.block || !!this.widget && (this.widget.estimatedHeight >= 5 || this.widget.lineBreaks > 0);
+           return this.block || !!this.pointWidget && (this.pointWidget.estimatedHeight >= 5 || this.pointWidget.lineBreaks > 0);
        }
        eq(other) {
            return other instanceof PointDecoration &&
-               widgetsEq(this.widget, other.widget) &&
+               widgetsEq(this.pointWidget, other.pointWidget) &&
                this.block == other.block &&
                this.startSide == other.startSide && this.endSide == other.endSide;
        }
