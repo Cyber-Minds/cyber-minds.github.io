@@ -1,7 +1,14 @@
 {
   "scripts": {
     "qa:static": "node scripts/qa-static.js --changed-from main",
+<<<<<<< Updated upstream
     "test:qa": "node --test scripts/qa-static.test.js scripts/link-audit.test.js scripts/probe-health.test.js scripts/content-freshness.test.js scripts/structure-check.test.js",
+=======
+    "qa:assets": "node scripts/check-terminal-assets.js",
+    "qa:assets:verify": "node scripts/verify-asset-integrity.js",
+    "qa:structure": "node scripts/html-structure.js",
+    "test:qa": "node --test scripts/qa-static.test.js scripts/link-audit.test.js scripts/probe-health.test.js scripts/content-freshness.test.js scripts/html-structure.test.js scripts/check-terminal-assets.test.js scripts/course-navigation-contract.test.js",
+>>>>>>> Stashed changes
     "lint:frontend": "eslint --max-warnings=0 \"Javascript/*.js\" \"Javascript/terminal/**/*.js\" \"Javascript/*.mjs\"",
     "format": "npx prettier \"**/*.{html,css}\" --write",
     "format:check": "npx prettier \"**/*.{html,css}\" --check",
@@ -9,8 +16,13 @@
     "test:smoke:headed": "playwright test --headed",
     "test:smoke:ui": "playwright test --ui",
     "qa:links": "node scripts/link-audit.js",
+<<<<<<< Updated upstream
     "qa:structure": "node scripts/structure-check.js",
     "qa:links:baseline": "node scripts/link-audit.js --write-baseline"
+=======
+    "qa:links:baseline": "node scripts/link-audit.js --write-baseline",
+    "qa:course-navigation": "node scripts/course-navigation-contract.js"
+>>>>>>> Stashed changes
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.2.1",

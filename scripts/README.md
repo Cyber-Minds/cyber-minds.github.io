@@ -90,6 +90,26 @@ On pull requests, the audit compares against the base branch's baseline and
 fails if the change adds a baseline entry. Baseline growth requires a separate
 reviewed change; it cannot silently suppress a new broken reference.
 
+## Published course navigation contract
+
+`scripts/course-navigation-contract.json` is the versioned source of truth for
+the published lesson IDs and order in each course. The checker verifies the
+catalog cards, every lesson page's table of contents, previous/next links, and
+next-course handoffs against that order. It also fails if a course directory
+contains an uncontracted lesson page or is missing a contracted one.
+
+Run the check locally with:
+
+```bash
+npm run qa:course-navigation
+```
+
+The check reads only repository files and runs in static QA CI. A finding
+includes the owning page and line. If a mismatch must remain intentionally,
+add an exception to the contract with the exact course, navigation surface,
+file, expected and actual values, an owner, and a reason. Exceptions are
+exact-match only and fail when they become stale.
+
 ## Marking an intentional non-repo reference: `data-qa-ignore-link`
 
 Some references are correct even though they don't point at a file in the
