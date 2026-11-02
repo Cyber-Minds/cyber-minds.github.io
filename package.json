@@ -13,7 +13,8 @@
     "test:smoke:headed": "playwright test --headed",
     "test:smoke:ui": "playwright test --ui",
     "qa:links": "node scripts/link-audit.js",
-    "qa:links:baseline": "node scripts/link-audit.js --write-baseline"
+    "qa:links:baseline": "node scripts/link-audit.js --write-baseline",
+    "qa:contracts": "node scripts/course-contract-audit.js"
   },
   "dependencies": {
     "@codemirror/lang-python": "^6.2.1",
