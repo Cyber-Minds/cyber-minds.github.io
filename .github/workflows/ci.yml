@@ -74,3 +74,45 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  cross-browser-smoke:
+    # Compact learner path (course page → quiz → terminal) in the non-Chromium
+    # engines. Chromium already runs this spec as part of the full suite in
+    # `smoke-tests`, so it is not repeated here. See docs/CROSS-BROWSER-SMOKE.md.
+    name: Cross-browser Smoke (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Resolve Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright ${{ matrix.browser }} browser
+        id: browser-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ matrix.browser }}
+      - name: Install Playwright ${{ matrix.browser }} with system dependencies
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Install ${{ matrix.browser }} system dependencies (browser cached)
+        if: steps.browser-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps ${{ matrix.browser }}
+      # No report upload: failures are reported in the job log and as
+      # annotations naming the browser, route, and step, and test artifacts
+      # stay on the runner.
+      - name: Run cross-browser smoke path
+        run: npx playwright test tests/cross-browser-smoke.spec.js --project=${{ matrix.browser }}
