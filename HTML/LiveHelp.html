@@ -12,16 +12,17 @@
       href="https://fonts.googleapis.com/css2?family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap"
       rel="stylesheet"
     />
-    <script src="https://kit.fontawesome.com/5964d931e5.js" crossorigin="anonymous"></script>
+    <script
+      src="https://kit.fontawesome.com/5964d931e5.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <body>
     <div class="Parent-container">
-
       <header id="site-header"></header>
 
       <main class="livehelp-main">
-
         <!-- ── PAGE HEADER ── -->
         <div class="livehelp-hero">
           <h1 class="livehelp-title">Live Help</h1>
@@ -40,9 +41,18 @@
             <strong>Before you chat — a quick safety note:</strong>
             <ul class="safety-list">
               <li>Never share passwords, API keys, or private credentials.</li>
-              <li>Do not paste real log files containing hostnames, IPs, or tokens from live systems.</li>
-              <li>Do not share personal account details or private system configurations.</li>
-              <li>This chat is powered by a third-party service (Chatbase) and is not end-to-end encrypted.</li>
+              <li>
+                Do not paste real log files containing hostnames, IPs, or tokens
+                from live systems.
+              </li>
+              <li>
+                Do not share personal account details or private system
+                configurations.
+              </li>
+              <li>
+                This chat is powered by a third-party service (Chatbase) and is
+                not end-to-end encrypted.
+              </li>
             </ul>
           </div>
         </div>
@@ -53,22 +63,46 @@
             <i class="fa-solid"></i> Not sure what to ask? Try one of these:
           </p>
           <div class="prompts-grid">
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               What is the difference between HTTP and HTTPS?
             </button>
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               How do I read file permissions with ls -la?
             </button>
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               What is a brute-force attack and how do I defend against it?
             </button>
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               Explain what SQL injection is in simple terms.
             </button>
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               What does grep do and how do I use it?
             </button>
-            <button class="prompt-chip" type="button" onclick="injectPrompt(this)">
+            <button
+              class="prompt-chip"
+              type="button"
+              onclick="injectPrompt(this)"
+            >
               What is the difference between authentication and authorization?
             </button>
           </div>
@@ -83,7 +117,12 @@
               width="100%"
               title="CyberMinds AI chat assistant"
               allow="clipboard-write"
-              style="height: 90vh; min-height: 700px; border: none; border-radius: 12px;"
+              style="
+                height: 90vh;
+                min-height: 700px;
+                border: none;
+                border-radius: 12px;
+              "
               onload="handleIframeLoad()"
               onerror="handleIframeError()"
             ></iframe>
@@ -95,13 +134,15 @@
               </div>
               <h2 class="fallback-title">Chat unavailable right now</h2>
               <p class="fallback-desc">
-                The live assistant couldn't load — this sometimes happens when
-                a browser extension blocks third-party iframes, or when the
+                The live assistant couldn't load — this sometimes happens when a
+                browser extension blocks third-party iframes, or when the
                 service is temporarily down.
               </p>
 
               <div class="fallback-tips">
-                <p class="fallback-tips-label">In the meantime, here are some resources:</p>
+                <p class="fallback-tips-label">
+                  In the meantime, here are some resources:
+                </p>
                 <div class="fallback-links">
                   <a href="course_Contents.html" class="fallback-link">
                     <i class="fa-solid fa-book-open"></i>
@@ -119,38 +160,69 @@
               </div>
 
               <div class="fallback-quick-answers">
-                <p class="fallback-tips-label">Quick answers to common beginner questions:</p>
+                <p class="fallback-tips-label">
+                  Quick answers to common beginner questions:
+                </p>
                 <div class="faq-list">
                   <details class="faq-item">
                     <summary>What is a firewall?</summary>
-                    <p>A firewall is a network security system that monitors and controls incoming and outgoing traffic based on predefined rules. It acts as a barrier between a trusted internal network and untrusted external networks.</p>
+                    <p>
+                      A firewall is a network security system that monitors and
+                      controls incoming and outgoing traffic based on predefined
+                      rules. It acts as a barrier between a trusted internal
+                      network and untrusted external networks.
+                    </p>
                   </details>
                   <details class="faq-item">
                     <summary>What does pwd do in Linux?</summary>
-                    <p><code>pwd</code> stands for "print working directory". It shows you the full path of the directory you are currently in — useful for orienting yourself in the terminal.</p>
+                    <p>
+                      <code>pwd</code> stands for "print working directory". It
+                      shows you the full path of the directory you are currently
+                      in — useful for orienting yourself in the terminal.
+                    </p>
                   </details>
                   <details class="faq-item">
                     <summary>What is phishing?</summary>
-                    <p>Phishing is a social engineering attack where an attacker impersonates a trusted entity (like a bank or a service) to trick users into revealing credentials or clicking malicious links.</p>
+                    <p>
+                      Phishing is a social engineering attack where an attacker
+                      impersonates a trusted entity (like a bank or a service)
+                      to trick users into revealing credentials or clicking
+                      malicious links.
+                    </p>
                   </details>
                   <details class="faq-item">
-                    <summary>What is the difference between encryption and hashing?</summary>
-                    <p>Encryption is reversible — a key can decrypt the data. Hashing is one-way — you cannot retrieve the original input from a hash. Passwords are typically stored as hashes, not encrypted.</p>
+                    <summary>
+                      What is the difference between encryption and hashing?
+                    </summary>
+                    <p>
+                      Encryption is reversible — a key can decrypt the data.
+                      Hashing is one-way — you cannot retrieve the original
+                      input from a hash. Passwords are typically stored as
+                      hashes, not encrypted.
+                    </p>
                   </details>
                   <details class="faq-item">
                     <summary>What is a CTF (Capture The Flag)?</summary>
-                    <p>A CTF is a cybersecurity competition where participants solve security challenges to find hidden "flags". They are used for learning and practicing offensive and defensive security skills in a safe, legal environment.</p>
+                    <p>
+                      A CTF is a cybersecurity competition where participants
+                      solve security challenges to find hidden "flags". They are
+                      used for learning and practicing offensive and defensive
+                      security skills in a safe, legal environment.
+                    </p>
                   </details>
                 </div>
               </div>
 
-              <button class="fallback-retry-btn" type="button" onclick="retryIframe()">
+              <button
+                class="fallback-retry-btn"
+                type="button"
+                onclick="retryIframe()"
+              >
                 <i class="fa-solid fa-rotate-right"></i> Try Again
               </button>
             </div>
           </div>
         </div>
-
       </main>
 
       <footer id="footer">
@@ -210,15 +282,18 @@
       function injectPrompt(btn) {
         const text = btn.textContent.trim();
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(() => {
-            btn.classList.add('prompt-chip--copied');
-            const original = btn.textContent;
-            btn.textContent = '✓ Copied — paste into chat';
-            setTimeout(() => {
-              btn.textContent = original;
-              btn.classList.remove('prompt-chip--copied');
-            }, 2000);
-          }).catch(() => {});
+          navigator.clipboard
+            .writeText(text)
+            .then(() => {
+              btn.classList.add('prompt-chip--copied');
+              const original = btn.textContent;
+              btn.textContent = '✓ Copied — paste into chat';
+              setTimeout(() => {
+                btn.textContent = original;
+                btn.classList.remove('prompt-chip--copied');
+              }, 2000);
+            })
+            .catch(() => {});
         }
       }
     </script>

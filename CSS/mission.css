@@ -1,6 +1,10 @@
 :root {
   --page-bg: #040b14;
-  --panel-bg: linear-gradient(180deg, rgba(16, 33, 52, 0.95), rgba(10, 22, 36, 0.98));
+  --panel-bg: linear-gradient(
+    180deg,
+    rgba(16, 33, 52, 0.95),
+    rgba(10, 22, 36, 0.98)
+  );
   --panel-border: rgba(83, 151, 220, 0.26);
   --text-main: #f5fbff;
   --text-muted: #bfd4e6;
