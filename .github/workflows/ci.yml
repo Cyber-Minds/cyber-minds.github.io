@@ -45,6 +45,8 @@ jobs:
           cache: 'npm'
       - name: Install frontend dependencies
         run: npm ci
+      - name: Check formatting
+        run: npm run format:check
       - name: Run ESLint (Airbnb base)
         run: npm run lint:frontend
       - name: Check HTML files are non-empty
