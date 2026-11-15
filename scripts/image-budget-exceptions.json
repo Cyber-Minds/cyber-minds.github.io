@@ -1,0 +1,56 @@
+{
+  "budgets": {
+    "maxImageBytes": 204800,
+    "maxPageTotalBytes": 3000000
+  },
+  "exceptions": {
+    "Images/aarohi_gandhi.jpeg": {
+      "reason": "Team leadership profile photo on ourTeam page.",
+      "allowedBytes": 1000000
+    },
+    "Images/shaurya_sahdev.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 600000
+    },
+    "Images/sidhaanth_kapoor.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/ethan_bar-niv.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/ege_uysal.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/aditya_mahapatra.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/ashwin_raj.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/advay_midha.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/tavish_khandelwal.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/dhruv_mutatkar.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/arron_randhawa.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    },
+    "Images/rohan_rijhwani.jpeg": {
+      "reason": "Team member profile photo on ourTeam page.",
+      "allowedBytes": 300000
+    }
+  }
+}
