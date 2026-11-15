@@ -36,8 +36,11 @@ module.exports = defineConfig({
   fullyParallel: false,
   workers: 1,
 
+  /* In CI, the `github` reporter adds failure annotations that name the
+   * project (browser), spec, and test, alongside the full list output. */
   reporter: [
     ['list'],
+    ...(process.env.CI ? [['github']] : []),
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
 
@@ -50,9 +53,21 @@ module.exports = defineConfig({
   },
 
   projects: [
-    /* Smoke suite runs in Chromium only — fast and sufficient for catching
+    /* The full suite runs in Chromium — fast and sufficient for catching
      * student-journey regressions before they reach production. */
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    /* Firefox and WebKit run only the compact cross-browser learner path
+     * (course page → quiz → terminal). See docs/CROSS-BROWSER-SMOKE.md. */
+    {
+      name: 'firefox',
+      testMatch: '**/cross-browser-smoke.spec.js',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      testMatch: '**/cross-browser-smoke.spec.js',
+      use: { ...devices['Desktop Safari'] },
+    },
   ],
 
   webServer: externalServerUrl

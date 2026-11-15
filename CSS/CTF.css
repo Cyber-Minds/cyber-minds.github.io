@@ -167,12 +167,14 @@ footer {
   border-radius: 1rem;
   overflow: hidden;
   text-decoration: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .course-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 0 1.5rem rgba(0,0,0,0.6);
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.6);
 }
 
 .course-card:focus-visible,

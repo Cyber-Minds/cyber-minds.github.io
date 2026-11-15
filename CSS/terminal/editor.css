@@ -69,7 +69,7 @@
   font-family: 'Space Grotesk', sans-serif;
   animation: slideDown 0.25s ease;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 @keyframes slideDown {
@@ -102,7 +102,9 @@
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 .draft-recovery-discard:hover {
   background: var(--bg2, #213448);
@@ -119,7 +121,9 @@
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 .draft-recovery-browse:hover {
   background: var(--bg2, #213448);
@@ -140,7 +144,6 @@
 .draft-recovery-dismiss:hover {
   background: var(--bg2, #213448);
 }
-
 
 .draft-browse-overlay {
   position: fixed;
@@ -167,8 +170,14 @@
 }
 
 @keyframes draftModalIn {
-  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .draft-browse-head {
@@ -197,7 +206,9 @@
   color: var(--fg3, #9db8d9);
   font-size: 13px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .draft-browse-close:hover {
   background: var(--bg2, #213448);
@@ -256,7 +267,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 .draft-browse-list::-webkit-scrollbar {
   width: 8px;

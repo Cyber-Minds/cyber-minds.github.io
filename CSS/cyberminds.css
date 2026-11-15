@@ -68,7 +68,9 @@ header {
   height: 2px;
   background: #fff;
   border-radius: 999px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
   transform-origin: center;
 }
 
@@ -807,7 +809,11 @@ a {
   display: block;
   text-align: center;
   position: relative;
-  background: linear-gradient(180deg, rgba(10, 24, 36, 0.45) 0%, rgba(0, 0, 0, 0.82) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(10, 24, 36, 0.45) 0%,
+    rgba(0, 0, 0, 0.82) 100%
+  );
   animation: rotateBoxShadow 4s infinite linear;
 }
 
@@ -1017,7 +1023,9 @@ a {
 .Feedback6:hover {
   border-color: rgba(133, 201, 255, 0.45);
   transform: translateY(-2px);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .FeedbackTitle {

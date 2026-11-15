@@ -4,3 +4,19 @@ dist
 build
 coverage
 course4editor.bundle.js
+# Existing malformed HTML that Prettier cannot parse without DOM changes.
+HTML/Courses and Activities/Course 10/Addresses&Packetscourse10.html
+HTML/Courses and Activities/Course 10/Introductioncourse10.html
+HTML/Courses and Activities/Course 10/NetworkingBasicscourse10.html
+HTML/Courses and Activities/Course 10/NetworkingQuiz1course10.html
+HTML/Courses and Activities/Course 10/NetworkSecurityMethodscourse10.html
+HTML/Courses and Activities/Course 10/NetworkTopologiescourse10.html
+HTML/Courses and Activities/Course 10/OSI&TCPcourse10.html
+HTML/Courses and Activities/Course 10/Protocols&Portscourse10.html
+HTML/Courses and Activities/Course 10/NetworkingQuiz2.html
+HTML/Courses and Activities/Course 11/CybersecurityCloudQuiz2Course11.html
+HTML/Courses and Activities/Course 7/Introductioncourse7.html
+HTML/Courses and Activities/Course 8/Introductioncourse8.html
+HTML/Courses and Activities/Course 9/Hackers&Boxescourse9.html
+HTML/Courses and Activities/Course 9/PentestingConceptscourse9.html
+HTML/Courses and Activities/Course 9/Reconnaissancecourse9.html

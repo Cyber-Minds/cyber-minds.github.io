@@ -42,6 +42,9 @@ jobs:
       - name: Test QA script
         run: npm run test:qa
 
+      - name: Check published course navigation
+        run: npm run qa:course-navigation
+
       - name: Check changed HTML
         env:
           QA_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}

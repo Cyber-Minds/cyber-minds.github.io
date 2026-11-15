@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "course-1",
+      "lessonIds": [
+        "Introductioncourse1.html",
+        "StatisticsofCybersecurityreadingcourse1.html",
+        "CybersecurityJobscourse1.html",
+        "CIAtriadcourse1.html"
+      ]
+    },
+    {
+      "id": "course-2",
+      "lessonIds": [
+        "Introductioncourse2.html",
+        "CybersecurityforIndividualscourse2.html",
+        "CybersecurityforCompanycourse2.html",
+        "MandatoryPolicies.html"
+      ]
+    },
+    {
+      "id": "course-3",
+      "lessonIds": [
+        "Introductioncourse3.html",
+        "ThreatActorscourse3.html",
+        "SocialEngineeringcourse3.html",
+        "TAandSEquizcourse3.html",
+        "PhishingAttacks.course3.html",
+        "NonTechAttacksReadingcourse3.html",
+        "AttacksQuizcourse3.html",
+        "TechAttacksReadingcourse3.html",
+        "SQLInjectionActivitycourse3.html",
+        "Game_Course3.html"
+      ]
+    },
+    {
+      "id": "course-4",
+      "lessonIds": [
+        "Introductioncourse4.html",
+        "NonTechnicalDefenseMeasure.html",
+        "NonTechnicalDefenseMeasureQUIZ.html",
+        "AuthenticationVSAuthorizationcourse4.html",
+        "AutomatedToolscourse4.html",
+        "AutomationwithPythoncourse4.html",
+        "TechnicalDefenseQUIZ.html"
+      ]
+    },
+    {
+      "id": "course-5",
+      "lessonIds": [
+        "Introductioncourse5.html",
+        "PrivateandPubliccourse5.html",
+        "CasearCipherandRSACiphercourse5.html",
+        "EncryptionProgrammingProblemscourse5.html",
+        "Hashingcourse5.html",
+        "CryptographicAttackscourse5.html",
+        "Cryptographyquizcourse5.html"
+      ]
+    },
+    {
+      "id": "course-6",
+      "lessonIds": [
+        "Introductioncourse6.html",
+        "SettingUpLinuxcourse6.html",
+        "BasicCommandscourse6.html",
+        "Sudo+PrivilegeEscalationcourse6.html",
+        "ExploreSudocourse6.html",
+        "TheFileSystemcourse6.html",
+        "ExploreFileSystemcourse6.html",
+        "Permissionscourse6.html",
+        "ExplorePermissionscourse6.html",
+        "QuizLinuxcourse6.html"
+      ]
+    },
+    {
+      "id": "course-7",
+      "lessonIds": [
+        "Introductioncourse7.html",
+        "PersistentThreatscourse7.html",
+        "Spoofingcourse7.html",
+        "InterceptionAttackscourse7.html",
+        "AttacksQuizcourse7.html"
+      ]
+    },
+    {
+      "id": "course-8",
+      "lessonIds": [
+        "Introductioncourse8.html",
+        "IdentifyingRiskscourse8.html",
+        "ProtectingRiskscourse8.html",
+        "EvaluatingMeasurescourse8.html",
+        "ImproveCybersecuritycourse8.html",
+        "QUIZrisks&protectingcourse8.html",
+        "PublicWIFIcourse8.html"
+      ]
+    },
+    {
+      "id": "course-9",
+      "lessonIds": [
+        "Introductioncourse9.html",
+        "Hackers&Boxescourse9.html",
+        "Reconnaissancecourse9.html",
+        "ResourcesPentestingcourse9.html",
+        "PentestingConceptscourse9.html",
+        "PentestingQuizcourse9.html"
+      ]
+    },
+    {
+      "id": "course-10",
+      "lessonIds": [
+        "Introductioncourse10.html",
+        "NetworkingBasicscourse10.html",
+        "Protocols&Portscourse10.html",
+        "Addresses&Packetscourse10.html",
+        "NetworkingQuiz1course10.html",
+        "OSI&TCPcourse10.html",
+        "NetworkTopologiescourse10.html",
+        "NetworkSecurityMethodscourse10.html",
+        "NetworkingQuiz2.html"
+      ]
+    },
+    {
+      "id": "course-11",
+      "lessonIds": [
+        "Introductioncourse11.html",
+        "SharedResponsibilityModel11.html",
+        "CloudIdentityandAccessManagement11.html",
+        "CommonCloudThreats11.html",
+        "CybersecurityCloudQuiz1Course11.html",
+        "NetworkSecurityintheCloud.html",
+        "CloudEncryptionandDataProtection11.html",
+        "CloudIncidentResponse11.html",
+        "CybersecurityCloudQuiz2Course11.html"
+      ]
+    },
+    {
+      "id": "course-12",
+      "lessonIds": [
+        "Introductioncourse12.html",
+        "AISecuritycourse12.html",
+        "IoTSecuritycourse12.html",
+        "BlockchainSecuritycourse12.html",
+        "QuantumComputingcourse12.html",
+        "EmergingTechActivitycourse12.html",
+        "EmergingTechQuizcourse12.html"
+      ]
+    }
+  ],
+  "exceptions": []
+}

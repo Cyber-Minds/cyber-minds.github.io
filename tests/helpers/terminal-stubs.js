@@ -125,45 +125,39 @@ async function stubTerminalCdn(page) {
   const stubHeaders = { 'access-control-allow-origin': '*' };
 
   await page.route('https://cdn.jsdelivr.net/**', async (route) => {
-    const url = route.request().url();
-
-    if (url.includes('/@xterm/xterm@') && url.endsWith('/css/xterm.min.css')) {
+    const stub = findCdnStub(route.request().url());
+    if (stub) {
       await route.fulfill({
-        body: '',
-        contentType: 'text/css',
-        headers: stubHeaders,
-      });
-      return;
-    }
-    if (url.includes('/@xterm/xterm@') && url.endsWith('/lib/xterm.min.js')) {
-      await route.fulfill({
-        body: XTERM_STUB,
-        contentType: 'text/javascript',
-        headers: stubHeaders,
-      });
-      return;
-    }
-    if (
-      url.includes('/@xterm/addon-fit@') &&
-      url.endsWith('/lib/addon-fit.min.js')
-    ) {
-      await route.fulfill({
-        body: FIT_ADDON_STUB,
-        contentType: 'text/javascript',
-        headers: stubHeaders,
-      });
-      return;
-    }
-    if (url.includes('/monaco-editor@') && url.endsWith('/min/vs/loader.js')) {
-      await route.fulfill({
-        body: MONACO_LOADER_STUB,
-        contentType: 'text/javascript',
+        body: stub.body,
+        contentType: stub.contentType,
         headers: stubHeaders,
       });
       return;
     }
     await route.continue();
   });
+}
+
+/** jsDelivr assets the terminal loads, and the stub served for each. */
+const CDN_STUBS = [
+  { pkg: '/@xterm/xterm@', file: '/css/xterm.min.css', body: '', contentType: 'text/css' },
+  { pkg: '/@xterm/xterm@', file: '/lib/xterm.min.js', body: XTERM_STUB, contentType: 'text/javascript' },
+  { pkg: '/@xterm/addon-fit@', file: '/lib/addon-fit.min.js', body: FIT_ADDON_STUB, contentType: 'text/javascript' },
+  { pkg: '/monaco-editor@', file: '/min/vs/loader.js', body: MONACO_LOADER_STUB, contentType: 'text/javascript' },
+];
+
+/** @param {string} url */
+function findCdnStub(url) {
+  return CDN_STUBS.find((stub) => url.includes(stub.pkg) && url.endsWith(stub.file));
+}
+
+/**
+ * True when `stubTerminalCdn` answers this URL locally, so the request never
+ * leaves the machine.
+ * @param {string} url
+ */
+function isStubbedCdnUrl(url) {
+  return url.startsWith('https://cdn.jsdelivr.net/') && Boolean(findCdnStub(url));
 }
 
 /**
@@ -181,5 +175,6 @@ module.exports = {
   FIT_ADDON_STUB,
   MONACO_LOADER_STUB,
   stubTerminalCdn,
+  isStubbedCdnUrl,
   terminalMockUrl,
 };
