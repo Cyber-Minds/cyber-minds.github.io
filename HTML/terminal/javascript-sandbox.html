@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; worker-src blob:; connect-src 'none'"
+    />
+    <title>JavaScript runtime</title>
+  </head>
+  <body>
+    <script>
+      function workerProgram() {
+        Object.defineProperties(globalThis, {
+          Worker: { value: undefined, configurable: false, writable: false },
+          SharedWorker: {
+            value: undefined,
+            configurable: false,
+            writable: false,
+          },
+        });
+        const send = globalThis.postMessage.bind(globalThis);
+        globalThis.onmessage = async ({ data: code }) => {
+          let output = '';
+          const log = (...values) => {
+            if (output.length < 16384) {
+              output += `${values.map(String).join(' ')}\n`.slice(
+                0,
+                16384 - output.length
+              );
+            }
+          };
+          try {
+            const AsyncFunction = Object.getPrototypeOf(
+              async () => {}
+            ).constructor;
+            await new AsyncFunction('console', code)({
+              log,
+              info: log,
+              warn: log,
+              error: log,
+            });
+            send({ output });
+          } catch (error) {
+            send({ output, error: String(error).slice(0, 1024) });
+          }
+        };
+      }
+
+      if (window.origin === 'null' && window.parent !== window) {
+        window.addEventListener('message', function receiveCode(event) {
+          if (event.source !== window.parent || typeof event.data !== 'string')
+            return;
+          window.removeEventListener('message', receiveCode);
+          const reply = (result) => {
+            window.parent.postMessage(
+              { ...result, type: 'javascript-result' },
+              event.origin
+            );
+          };
+          const url = URL.createObjectURL(
+            new Blob([`(${workerProgram.toString()})()`], {
+              type: 'text/javascript',
+            })
+          );
+          const worker = new Worker(url);
+          function finish(result) {
+            clearTimeout(timeout);
+            worker.terminate();
+            URL.revokeObjectURL(url);
+            reply(result);
+          }
+          const timeout = setTimeout(() => {
+            finish({ error: 'JavaScript exceeded the 5 second time limit' });
+          }, 5000);
+          worker.onmessage = ({ data }) => {
+            const output =
+              typeof data?.output === 'string'
+                ? data.output.slice(0, 16384)
+                : '';
+            const error =
+              typeof data?.error === 'string' ? data.error.slice(0, 1024) : '';
+            finish({ output, error });
+          };
+          worker.onerror = () =>
+            finish({ error: 'JavaScript runtime could not start' });
+          worker.postMessage(event.data);
+        });
+        window.parent.postMessage({ type: 'javascript-ready' }, '*');
+      }
+    </script>
+  </body>
+</html>

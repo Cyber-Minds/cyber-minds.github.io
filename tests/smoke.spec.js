@@ -753,15 +753,95 @@ test.describe('Mock terminal', () => {
     await expect(page.locator('#terminal')).toContainText('x-powered-by: PHP/7.4.3');
   });
 
-  test('Run Code does not print canned output for a missing runtime', async ({
+  test('curl reads cross-origin pages only when the site allows CORS', async ({
     page,
   }) => {
+    await page.route('https://cors-enabled.test/**', (route) =>
+      route.fulfill({
+        status: 200,
+        headers: {
+          'access-control-allow-origin': '*',
+          'content-type': 'text/plain',
+        },
+        body: 'public page body',
+      })
+    );
+    await page.addInitScript(() => {
+      const browserFetch = window.fetch.bind(window);
+      window.fetch = (input, ...options) => {
+        if (new URL(input).hostname === 'cors-blocked.test') {
+          return Promise.reject(new TypeError('Failed to fetch'));
+        }
+        return browserFetch(input, ...options);
+      };
+    });
+    await page.route('https://cors-blocked.test/**', (route) =>
+      route.abort()
+    );
     await page.goto('/HTML/terminal/index.html?challenge=web-recon');
     await waitForMockReady(page);
+
+    await page.evaluate(() => handleMockTerminalInput('curl cors-enabled.test\r'));
+    await expect(page.locator('#terminal')).toContainText('public page body');
+    await page.evaluate(() => handleMockTerminalInput('curl cors-blocked.test\r'));
+    await expect(page.locator('#terminal')).toContainText(
+      'whether the site allows cross-origin reads from http://127.0.0.1:3939'
+    );
+  });
+
+  test('node runs workspace JavaScript from the shell and editor', async ({ page }) => {
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    const terminalOutput = page.locator('#terminal');
+    await page.evaluate(() => handleMockTerminalInput('node hello.js\r'));
+    await expect(terminalOutput).toContainText('CyberMinds terminal ready');
+
+    await page.getByRole('tab', { name: 'hello.js', exact: true }).click();
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue('console.log("Result", 6 * 7);');
+    });
     await page.locator('#runBtn').click();
-    await expect(page.locator('#terminal')).toContainText('node: command not found');
-    await expect(page.locator('#terminal')).not.toContainText('CyberMinds terminal ready');
-    await expect(page.locator('#terminal')).not.toContainText(/\[mock\]|simulated/i);
+    await expect(terminalOutput).toContainText(
+      'cyberminds@workspace:/workspace$ node hello.js'
+    );
+    await expect(terminalOutput).not.toContainText('$ $ node hello.js');
+    await expect(terminalOutput).toContainText('Result 42');
+  });
+
+  test('node isolates workspace JavaScript and stops a stuck script', async ({ page }) => {
+    let networkRequests = 0;
+    await page.route('https://sandbox-check.test/**', async (route) => {
+      networkRequests += 1;
+      await route.abort();
+    });
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    await page.getByRole('tab', { name: 'hello.js', exact: true }).click();
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue(`
+        console.log('DOM and storage', typeof document, typeof localStorage);
+        try { indexedDB.open('sandbox-check'); } catch (error) {
+          console.log('IndexedDB', error.name);
+        }
+        try { await fetch('https://sandbox-check.test/'); } catch (error) {
+          console.log('Request blocked', error.name);
+        }
+      `);
+    });
+    const terminalOutput = page.locator('#terminal');
+    await page.locator('#runBtn').click();
+    await expect(terminalOutput).toContainText('DOM and storage undefined undefined');
+    await expect(terminalOutput).toContainText('IndexedDB SecurityError');
+    await expect(terminalOutput).toContainText('Request blocked TypeError');
+    expect(networkRequests).toBe(0);
+
+    await page.evaluate(() => {
+      window.__cybermindsMonacoEditor.setValue('while (true) {}');
+    });
+    await page.locator('#runBtn').click();
+    await expect(terminalOutput).toContainText('JavaScript exceeded the 5 second time limit');
+    await page.evaluate(() => handleMockTerminalInput('whoami\r'));
+    await expect(terminalOutput).toContainText(/whoami\s+cyberminds/);
   });
 
   test('Python Run Code executes against the workspace files', async ({ page }) => {

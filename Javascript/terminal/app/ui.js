@@ -396,7 +396,7 @@ function attachUiHandlers() {
         }
       }
 
-      mockWriteLine(`$ ${runLabel}`);
+      mockWriteLine(runLabel);
       if (['python', 'javascript', 'java', 'go'].includes(detectedLang)) {
         await runMockCommand(runLabel);
       } else {

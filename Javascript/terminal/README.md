@@ -17,6 +17,11 @@ The public terminal runs without a backend. Lessons may use the virtual
 `grep`, field-printing `awk`, `sort`, `uniq`, `wc -l`, `ss -tulpen`, and `curl`
 against the lesson's local web service. Python runs in a WebAssembly worker
 with a virtual `/workspace`; the worker has no DOM or network access.
+`node <file.js>` runs a workspace script with console output in an isolated
+worker. The editor's Run button saves the current file to the workspace before
+launching it. The JavaScript runner supports standard JavaScript with a five
+second time limit. `curl` can read public sites only when they allow browser
+cross-origin access.
 Unsupported shell commands print an explicit message instead of being passed
 to the host.
 

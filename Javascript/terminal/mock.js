@@ -185,6 +185,60 @@ async function runPythonCommand(args) {
   }
 }
 
+function runJavaScript(code) {
+  return new Promise((resolve, reject) => {
+    const frame = document.createElement('iframe');
+    frame.hidden = true;
+    frame.sandbox.add('allow-scripts');
+    frame.src = new URL('javascript-sandbox.html', window.location.href);
+
+    function cleanup() {
+      window.clearTimeout(timeout);
+      window.removeEventListener('message', receiveResult);
+      frame.remove();
+    }
+
+    function receiveResult(event) {
+      if (event.source !== frame.contentWindow || event.origin !== 'null') return;
+      if (event.data?.type === 'javascript-ready') {
+        frame.contentWindow.postMessage(code, '*');
+      } else if (event.data?.type === 'javascript-result') {
+        cleanup();
+        resolve(event.data);
+      }
+    }
+
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error('JavaScript runtime timed out'));
+    }, 7000);
+    window.addEventListener('message', receiveResult);
+    document.body.append(frame);
+  });
+}
+
+async function runNodeCommand(args) {
+  const [filePath] = args;
+  if (args.length !== 1 || !filePath.endsWith('.js')) {
+    mockWriteLine('usage: node <workspace file.js>');
+    return;
+  }
+  if (!hasMockFile(filePath)) {
+    mockWriteLine(`node: can't open file '${filePath}': No such file or directory`);
+    return;
+  }
+
+  try {
+    const { output, error } = await runJavaScript(getMockFile(filePath));
+    // eslint-disable-next-line no-control-regex
+    const controlCharacters = /[\x00-\x08\x0b-\x1f\x7f-\x9f]/g;
+    if (output) mockWrite(output.replace(controlCharacters, '').replace(/\n/g, '\r\n'));
+    if (error) mockWriteLine(`JavaScript error: ${error.replace(controlCharacters, '')}`);
+  } catch (error) {
+    mockWriteLine(`JavaScript error: ${error.message}`);
+  }
+}
+
 // Keep the shell deliberately small and data-only: no browser command can run
 // arbitrary host commands, open sockets, or access files outside this virtual
 // workspace.
@@ -349,7 +403,10 @@ async function runCurl(args) {
       mockWriteLine(`curl: (22) The requested URL returned error: ${response.status}`);
     }
   } catch (error) {
-    mockWriteLine(`curl: (6) Could not retrieve ${url.host}: ${error.message}`);
+    // shortcut: browser fetch requires target-site CORS; use a controlled proxy only if courses need blocked hosts.
+    mockWriteLine(
+      `curl: (6) Could not retrieve ${url.host}: request failed; check network access and whether the site allows cross-origin reads from ${window.location.origin}.`
+    );
   }
 }
 
@@ -449,13 +506,17 @@ async function runMockCommand(command) {
   }
 
   if (trimmed === 'help') {
-    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, python3, clear');
+    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, python3, node, clear');
     return;
   }
 
   const [commandName, ...commandArgs] = splitMockArgs(trimmed);
   if (commandName === 'python3' || commandName === 'python') {
     await runPythonCommand(commandArgs);
+    return;
+  }
+  if (commandName === 'node') {
+    await runNodeCommand(commandArgs);
     return;
   }
 
