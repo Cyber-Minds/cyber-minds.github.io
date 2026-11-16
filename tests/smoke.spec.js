@@ -758,7 +758,8 @@ test.describe('Mock terminal', () => {
   }) => {
     await page.route('https://egeuysal.com/api/terminal-curl*', (route) => {
       const { url: target } = JSON.parse(route.request().postData());
-      if (new URL(target).hostname === 'cors-enabled.test') {
+      const targetUrl = new URL(target);
+      if (targetUrl.hostname === 'cors-enabled.test' && !targetUrl.port) {
         return route.fulfill({
           status: 200,
           headers: {
@@ -768,6 +769,16 @@ test.describe('Mock terminal', () => {
           body: 'public page body',
         });
       }
+      if (targetUrl.hostname === 'cors-enabled.test' && targetUrl.port === '8443') {
+        return route.fulfill({
+          status: 200,
+          headers: {
+            'access-control-allow-origin': 'http://127.0.0.1:3939',
+            'content-type': 'text/plain',
+          },
+          body: 'custom port response',
+        });
+      }
       return route.abort();
     });
     await page.goto('/HTML/terminal/index.html?challenge=web-recon');
@@ -775,6 +786,8 @@ test.describe('Mock terminal', () => {
 
     await page.evaluate(() => handleMockTerminalInput('curl cors-enabled.test\r'));
     await expect(page.locator('#terminal')).toContainText('public page body');
+    await page.evaluate(() => handleMockTerminalInput('curl cors-enabled.test:8443\r'));
+    await expect(page.locator('#terminal')).toContainText('custom port response');
     await page.evaluate(() => handleMockTerminalInput('curl cors-blocked.test\r'));
     await expect(page.locator('#terminal')).toContainText(
       'terminal proxy unavailable; try again later'

@@ -365,7 +365,7 @@ async function runCurl(args) {
     return;
   }
 
-  const rawUrl = /^[a-z][a-z\d+.-]*:/i.test(options.url)
+  const rawUrl = /^[a-z][a-z\d+.-]*:\/\//i.test(options.url)
     ? options.url
     : `https://${options.url}`;
   let url;
