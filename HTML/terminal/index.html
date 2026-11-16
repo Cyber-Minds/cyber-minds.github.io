@@ -29,14 +29,20 @@
             />
             <span class="logo-text">CyberMinds Terminal</span>
           </div>
-          <div class="status-indicator">
+          <div class="status-indicator" aria-hidden="true">
             <div class="status-dot" id="statusDot"></div>
             <span id="statusText">Initializing...</span>
           </div>
         </div>
         <div class="header-right">
           <div class="header-tools">
-            <button class="header-tool-btn" id="themeToggleBtn" type="button">
+            <button
+              class="header-tool-btn"
+              id="themeToggleBtn"
+              type="button"
+              aria-label="Toggle color theme"
+              aria-pressed="false"
+            >
               Theme
             </button>
           </div>
@@ -44,43 +50,75 @@
           <a class="header-link" href="../CTF.html">CTF</a>
         </div>
       </header>
-      <div class="mobile-view-switcher" id="mobileViewSwitcher">
-        <button class="mobile-switch-btn" id="mobileChallengeBtn" type="button">
+      <nav
+        class="mobile-view-switcher"
+        id="mobileViewSwitcher"
+        aria-label="Workspace views"
+      >
+        <button
+          class="mobile-switch-btn"
+          id="mobileChallengeBtn"
+          type="button"
+          aria-pressed="false"
+        >
           Challenge
         </button>
-        <button class="mobile-switch-btn" id="mobileEditorBtn" type="button">
+        <button
+          class="mobile-switch-btn"
+          id="mobileEditorBtn"
+          type="button"
+          aria-pressed="false"
+        >
           Editor
         </button>
-        <button class="mobile-switch-btn" id="mobileTerminalBtn" type="button">
+        <button
+          class="mobile-switch-btn"
+          id="mobileTerminalBtn"
+          type="button"
+          aria-pressed="false"
+        >
           Terminal
         </button>
-      </div>
+      </nav>
 
-      <div class="main-content">
-        <aside class="panel challenge-panel">
+      <main class="main-content" aria-label="CTF terminal workspace">
+        <h1 class="sr-only">CTF terminal workspace</h1>
+        <aside
+          class="panel challenge-panel"
+          aria-labelledby="challengePanelHeading"
+        >
           <div class="panel-header">
-            <div class="panel-title">Challenge</div>
+            <h2 class="panel-title" id="challengePanelHeading">Challenge</h2>
             <div class="panel-subtitle" id="challengeDifficulty"></div>
           </div>
           <div class="challenge-content">
             <div class="challenge-progress" id="challengeProgress">
               <div class="progress-chip" id="progressChip">0/0 complete</div>
-              <div class="progress-timeline" id="progressTimeline"></div>
+              <div
+                class="progress-timeline"
+                id="progressTimeline"
+                aria-hidden="true"
+              ></div>
             </div>
-            <div class="challenge-nav" id="challengeNav"></div>
+            <nav
+              class="challenge-nav"
+              id="challengeNav"
+              aria-label="Challenges"
+            ></nav>
             <div>
-              <h2
+              <h3
                 id="challengeTitle"
                 style="font-size: 18px; margin-bottom: 6px"
-              ></h2>
+                tabindex="-1"
+              ></h3>
               <p id="challengeDescription" class="challenge-description"></p>
             </div>
             <div class="challenge-objective">
-              <h3>Objective</h3>
+              <h4>Objective</h4>
               <p id="challengeObjective"></p>
             </div>
             <div class="challenge-steps">
-              <h3>Checklist</h3>
+              <h4>Checklist</h4>
               <ol id="challengeSteps"></ol>
             </div>
             <section
@@ -90,7 +128,7 @@
               hidden
             >
               <div class="hint-header">
-                <h3 id="hintHeading">Stuck?</h3>
+                <h4 id="hintHeading">Stuck?</h4>
                 <span class="hint-counter" id="hintCounter"></span>
               </div>
               <p class="hint-policy" id="hintPolicy"></p>
@@ -121,13 +159,15 @@
               </div>
             </section>
             <div class="challenge-actions">
-              <button class="btn primary" id="loadStarterBtn">
+              <button class="btn primary" id="loadStarterBtn" type="button">
                 Load Starter
               </button>
-              <button class="btn" id="copyCommandBtn">
+              <button class="btn" id="copyCommandBtn" type="button">
                 Copy First Command
               </button>
-              <button class="btn" id="checkSolutionBtn">Check Solution</button>
+              <button class="btn" id="checkSolutionBtn" type="button">
+                Check Solution
+              </button>
             </div>
           </div>
         </aside>
@@ -137,31 +177,31 @@
           aria-hidden="true"
         ></div>
 
-        <section class="panel editor-panel" id="editorPanel">
+        <section
+          class="panel editor-panel"
+          id="editorPanel"
+          aria-labelledby="editorPanelHeading"
+          aria-describedby="selectedLanguage"
+        >
           <div class="panel-header">
-            <div class="panel-title">Editor</div>
+            <h2 class="panel-title" id="editorPanelHeading" tabindex="-1">
+              Editor
+            </h2>
             <div class="panel-subtitle" id="selectedLanguage">python</div>
           </div>
-          <div class="file-tabs" id="fileTabs">
-            <div
-              class="file-tab active"
-              data-kind="template"
-              data-lang="python"
-            >
-              hello.py
-            </div>
-            <div class="file-tab" data-kind="template" data-lang="javascript">
-              hello.js
-            </div>
-            <div class="file-tab" data-kind="template" data-lang="java">
-              Hello.java
-            </div>
-            <div class="file-tab" data-kind="template" data-lang="go">
-              hello.go
-            </div>
-          </div>
+          <div
+            class="file-tabs"
+            id="fileTabs"
+            role="tablist"
+            aria-label="Workspace files"
+          ></div>
           <div class="editor-container">
-            <div id="editor"></div>
+            <div
+              id="editor"
+              role="tabpanel"
+              tabindex="0"
+              aria-label="Code editor"
+            ></div>
           </div>
         </section>
         <div
@@ -170,12 +210,20 @@
           aria-hidden="true"
         ></div>
 
-        <section class="panel terminal-panel" id="terminalPanel">
+        <section
+          class="panel terminal-panel"
+          id="terminalPanel"
+          aria-labelledby="terminalPanelHeading"
+        >
           <div class="panel-header">
-            <div class="panel-title">Terminal</div>
+            <h2 class="panel-title" id="terminalPanelHeading">Terminal</h2>
             <div class="terminal-actions">
-              <button class="btn" id="clearBtn">Clear</button>
-              <button class="btn primary" id="runBtn">Run</button>
+              <button class="btn" id="clearBtn" type="button">
+                Clear terminal
+              </button>
+              <button class="btn primary" id="runBtn" type="button">
+                Run code
+              </button>
             </div>
           </div>
           <div class="terminal-wrapper">
@@ -189,22 +237,54 @@
                 Preparing terminal workspace...
               </div>
             </div>
-            <div id="terminal" style="display: none"></div>
+            <div
+              id="terminal"
+              role="region"
+              aria-label="Terminal input and output"
+              style="display: none"
+            ></div>
           </div>
         </section>
-      </div>
+      </main>
     </div>
-    <div class="toast" id="toast"></div>
+    <div
+      class="sr-only"
+      id="connectionAnnouncement"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <div
+      class="sr-only"
+      id="challengeAnnouncement"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <div
+      class="sr-only"
+      id="validationAnnouncement"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <div class="command-palette-overlay" id="commandPaletteOverlay" hidden>
-      <div class="command-palette" role="dialog" aria-modal="true">
+      <div
+        class="command-palette"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="commandPaletteHeading"
+      >
         <div class="command-palette-head">
-          <span>Command Palette</span>
+          <span id="commandPaletteHeading">Command Palette</span>
           <span class="command-palette-hint">Esc to close</span>
         </div>
         <input
           class="command-palette-input"
           id="commandPaletteInput"
           type="text"
+          aria-label="Search command palette actions"
           placeholder="Search actions (run, check, clear, theme...)"
         />
         <div class="command-palette-list" id="commandPaletteList"></div>

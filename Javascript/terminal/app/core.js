@@ -46,6 +46,20 @@ function showToast(message) {
   }, 1800);
 }
 
+function announceStatus(id, message) {
+  const region = document.getElementById(id);
+  if (!region) {
+    return;
+  }
+
+  region.textContent = '';
+  window.requestAnimationFrame(() => {
+    if (region.isConnected) {
+      region.textContent = message;
+    }
+  });
+}
+
 function renderProgressTimeline() {
   const chip = document.getElementById('progressChip');
   const timeline = document.getElementById('progressTimeline');
@@ -276,6 +290,10 @@ function applyTheme(theme) {
   if (themeButton) {
     themeButton.textContent =
       currentTheme === 'light' ? 'Dark Theme' : 'Light Theme';
+    themeButton.setAttribute(
+      'aria-pressed',
+      String(currentTheme === 'light')
+    );
   }
   syncEditorTheme();
   syncTerminalTheme();
@@ -456,14 +474,13 @@ function setMobileView(view) {
     'mobile-view-terminal'
   );
   document.body.classList.add(`mobile-view-${activeMobileView}`);
-  document
-    .querySelectorAll('.mobile-switch-btn')
-    .forEach((button) =>
-      button.classList.toggle(
-        'active',
-        button.id === `mobile${activeMobileView[0].toUpperCase()}${activeMobileView.slice(1)}Btn`
-      )
-    );
+  document.querySelectorAll('.mobile-switch-btn').forEach((button) => {
+    const isActive =
+      button.id ===
+      `mobile${activeMobileView[0].toUpperCase()}${activeMobileView.slice(1)}Btn`;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
 }
 
 function updateStatus(status, text) {
@@ -471,6 +488,7 @@ function updateStatus(status, text) {
   const statusText = document.getElementById('statusText');
   statusDot.className = `status-dot ${status}`;
   statusText.textContent = text;
+  announceStatus('connectionAnnouncement', `Terminal status: ${text}.`);
 }
 
 function refreshLanguageBadge() {
@@ -520,35 +538,58 @@ function shellQuote(value) {
  */
 function renderFileTabs() {
   const fileTabs = document.getElementById('fileTabs');
+  const restoreFocus = fileTabs.contains(document.activeElement);
   fileTabs.innerHTML = '';
 
   ['python', 'javascript', 'java', 'go'].forEach((lang) => {
-    const tab = document.createElement('div');
+    const tab = document.createElement('button');
+    tab.type = 'button';
     tab.className = 'file-tab';
+    tab.setAttribute('role', 'tab');
     tab.dataset.kind = 'template';
     tab.dataset.lang = lang;
     tab.textContent = templateFilenames[lang];
     tab.title = templateFilenames[lang];
+    tab.id = `fileTab-template-${lang}`;
+    tab.setAttribute('aria-controls', 'editor');
     const isActive =
       activeEditorFile.kind === 'template' &&
       activeEditorFile.lang === lang;
     tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+    tab.tabIndex = isActive ? 0 : -1;
     fileTabs.appendChild(tab);
   });
 
-  workspaceFiles.forEach((entry) => {
-    const tab = document.createElement('div');
+  workspaceFiles.forEach((entry, index) => {
+    const tab = document.createElement('button');
+    tab.type = 'button';
     tab.className = 'file-tab';
+    tab.setAttribute('role', 'tab');
     tab.dataset.kind = 'workspace';
     tab.dataset.path = entry.path;
     tab.textContent = getFilename(entry.path);
     tab.title = entry.path;
+    tab.setAttribute('aria-label', entry.path);
+    tab.id = `fileTab-workspace-${index}`;
+    tab.setAttribute('aria-controls', 'editor');
     const isActive =
       activeEditorFile.kind === 'workspace' &&
       activeEditorFile.path === entry.path;
     tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+    tab.tabIndex = isActive ? 0 : -1;
     fileTabs.appendChild(tab);
   });
+
+  const selectedTab = fileTabs.querySelector('[aria-selected="true"]');
+  const editorPanel = document.getElementById('editor');
+  if (selectedTab && editorPanel) {
+    editorPanel.setAttribute('aria-labelledby', selectedTab.id);
+    if (restoreFocus) {
+      selectedTab.focus();
+    }
+  }
 }
 
 function switchLanguage(lang, options = {}) {

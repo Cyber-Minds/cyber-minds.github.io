@@ -13,6 +13,7 @@ function queueAnalyticsEvent(eventName, payload) {
 
 function loadChallenge(challengeId, updateUrl = true) {
   let resolvedChallengeId = challengeId;
+  const previousChallengeId = activeChallengeId;
 
   if (
     completedChallenges[resolvedChallengeId] &&
@@ -70,6 +71,15 @@ function loadChallenge(challengeId, updateUrl = true) {
       button.dataset.challenge === resolvedChallengeId
     );
   });
+  document.querySelectorAll('.challenge-nav-item').forEach((button) => {
+    const isActive = button.dataset.challenge === resolvedChallengeId;
+    button.classList.toggle('active', isActive);
+    if (isActive) {
+      button.setAttribute('aria-current', 'step');
+    } else {
+      button.removeAttribute('aria-current');
+    }
+  });
 
   if (updateUrl) {
     const nextUrl = new URL(window.location.href);
@@ -80,7 +90,20 @@ function loadChallenge(challengeId, updateUrl = true) {
   renderProgressTimeline();
 
   if (window.innerWidth <= 980) {
+    const focusWillBeHidden = document
+      .querySelector('.challenge-panel')
+      .contains(document.activeElement);
     setMobileView('editor');
+    if (focusWillBeHidden) {
+      document.getElementById('editorPanelHeading').focus();
+    }
+  }
+
+  if (previousChallengeId !== resolvedChallengeId) {
+    announceStatus(
+      'challengeAnnouncement',
+      `Challenge changed to ${challenge.title}.`
+    );
   }
 
   // Track challenge start in analytics (queue if analytics loads later)
@@ -167,7 +190,13 @@ function renderChallengeNav() {
       // Add the task button inside the existing details element
       const parentDetails = container.lastChild;
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = `challenge-nav-item sub-task ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+      btn.dataset.challenge = id;
+      btn.setAttribute('aria-label', `${challenge.title}${isCompleted ? ', completed' : ''}`);
+      if (isActive) {
+        btn.setAttribute('aria-current', 'step');
+      }
       btn.innerHTML = `
         <span class="status-dot"></span>
         <span class="title">${challenge.title}</span>
@@ -186,7 +215,13 @@ function renderChallengeNav() {
     } else {
       // Standard rendering for standalone challenges
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = `challenge-nav-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+      btn.dataset.challenge = id;
+      btn.setAttribute('aria-label', `${challenge.title}${isCompleted ? ', completed' : ''}`);
+      if (isActive) {
+        btn.setAttribute('aria-current', 'step');
+      }
       btn.innerHTML = `
         <span class="status-dot"></span>
         <span class="title">${challenge.title}</span>
@@ -254,10 +289,18 @@ function checkChallengeSolution() {
   const challenge = challengeCatalog[activeChallengeId];
   if (!challenge || !ws || ws.readyState !== WebSocket.OPEN) {
     showToast('Terminal not connected');
+    announceStatus(
+      'validationAnnouncement',
+      'Terminal is not connected. Reconnect before checking your solution.'
+    );
     return;
   }
   if (!challenge.checkScript) {
     showToast('No checker configured for this challenge');
+    announceStatus(
+      'validationAnnouncement',
+      'No checker is configured for this challenge.'
+    );
     return;
   }
 
@@ -376,6 +419,10 @@ function checkChallengeSolution() {
 
     mockWriteLine(`--- Checking ${challenge.title} ---`);
     if (passed) {
+      announceStatus(
+        'validationAnnouncement',
+        `Checker result: passed for ${challenge.title}.`
+      );
       completedChallenges[activeChallengeId] = {
         passed: true,
         passedAt: new Date().toISOString(),
@@ -399,6 +446,10 @@ function checkChallengeSolution() {
     }
 
     mockWriteLine('FAIL: challenge checks did not pass yet.');
+    announceStatus(
+      'validationAnnouncement',
+      `Checker result: not passed for ${challenge.title}.`
+    );
     return;
   }
 
@@ -461,6 +512,10 @@ function handleCheckOutput(chunk) {
   const challengeId = pendingCheck.challengeId;
   pendingCheck.finished = true;
   pendingCheck = null;
+  announceStatus(
+    'validationAnnouncement',
+    `Checker result: ${passed ? 'passed' : 'not passed'} for ${challengeCatalog[challengeId].title}.`
+  );
 
   if (passed) {
     completedChallenges[challengeId] = {
