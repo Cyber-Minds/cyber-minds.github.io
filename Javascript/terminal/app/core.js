@@ -290,6 +290,10 @@ function applyTheme(theme) {
   if (themeButton) {
     themeButton.textContent =
       currentTheme === 'light' ? 'Dark Theme' : 'Light Theme';
+    themeButton.setAttribute(
+      'aria-pressed',
+      String(currentTheme === 'light')
+    );
   }
   syncEditorTheme();
   syncTerminalTheme();

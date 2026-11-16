@@ -173,6 +173,7 @@ test('checking a challenge from the keyboard preserves navigation focus', async 
   await expect(challenge).toBeFocused();
 });
 
+
 test('keyboard challenge selection and validation preserve focus and announce status', async ({
   page,
 }) => {
