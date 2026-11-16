@@ -24,22 +24,57 @@
           let output = '';
           const log = (...values) => {
             if (output.length < 16384) {
-              output += `${values.map(String).join(' ')}\n`.slice(
-                0,
-                16384 - output.length
-              );
+              output += `${values
+                .map((value) =>
+                  value && typeof value === 'object'
+                    ? JSON.stringify(value)
+                    : String(value)
+                )
+                .join(' ')}\n`.slice(0, 16384 - output.length);
             }
           };
           try {
             const AsyncFunction = Object.getPrototypeOf(
               async () => {}
             ).constructor;
-            await new AsyncFunction('console', code)({
-              log,
-              info: log,
-              warn: log,
-              error: log,
-            });
+            const require = (moduleName) => {
+              if (moduleName !== 'http') {
+                throw new Error(`Cannot find module '${moduleName}'`);
+              }
+              return {
+                get(url, callback) {
+                  const target = new URL(url);
+                  if (
+                    target.protocol !== 'http:' ||
+                    target.hostname !== 'localhost' ||
+                    target.port !== '9090'
+                  ) {
+                    throw new Error(
+                      'Node HTTP is limited to the lesson service'
+                    );
+                  }
+                  const response = {
+                    statusCode: 200,
+                    headers: {
+                      server: 'nginx/1.24.0',
+                      'content-type': 'text/html; charset=utf-8',
+                      'x-powered-by': 'PHP/7.4.3',
+                      'x-application': 'InternalPortal/2.1',
+                    },
+                  };
+                  queueMicrotask(() => callback(response));
+                  return {
+                    on() {
+                      return this;
+                    },
+                  };
+                },
+              };
+            };
+            await new AsyncFunction('console', 'require', code)(
+              { log, info: log, warn: log, error: log },
+              require
+            );
             send({ output });
           } catch (error) {
             send({ output, error: String(error).slice(0, 1024) });
