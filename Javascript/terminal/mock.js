@@ -230,7 +230,9 @@ async function runNodeCommand(args) {
   }
 
   try {
-    const { output, error } = await runJavaScript(getMockFile(filePath));
+    const editorCode = window.getMockNodeCode?.(filePath);
+    const code = typeof editorCode === 'string' ? editorCode : getMockFile(filePath);
+    const { output, error } = await runJavaScript(code);
     // eslint-disable-next-line no-control-regex
     const controlCharacters = /[\x00-\x08\x0b-\x1f\x7f-\x9f]/g;
     if (output) mockWrite(output.replace(controlCharacters, '').replace(/\n/g, '\r\n'));

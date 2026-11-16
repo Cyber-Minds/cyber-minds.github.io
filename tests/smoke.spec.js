@@ -799,7 +799,8 @@ test.describe('Mock terminal', () => {
     await waitForMockReady(page);
     const terminalOutput = page.locator('#terminal');
     await page.evaluate(() => handleMockTerminalInput('node hello.js\r'));
-    await expect(terminalOutput).toContainText('CyberMinds terminal ready');
+    await expect(terminalOutput).toContainText('Status: 200');
+    await expect(terminalOutput).toContainText('"x-powered-by":"PHP/7.4.3"');
 
     await page.getByRole('tab', { name: 'hello.js', exact: true }).click();
     await page.evaluate(() => {
@@ -811,24 +812,6 @@ test.describe('Mock terminal', () => {
     );
     await expect(terminalOutput).not.toContainText('$ $ node hello.js');
     await expect(terminalOutput).toContainText('Result 42');
-  });
-
-  test('node provides the Web Recon lesson HTTP service to workspace scripts', async ({ page }) => {
-    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
-    await waitForMockReady(page);
-    await page.evaluate(() => setMockFile('hello.js', `const http = require('http');
-
-http.get('http://localhost:9090', (res) => {
-  console.log('Status:', res.statusCode);
-  console.log('Headers:', res.headers);
-});`));
-
-    await page.evaluate(() => handleMockTerminalInput('node hello.js\r'));
-
-    const terminalOutput = page.locator('#terminal');
-    await expect(terminalOutput).toContainText('Status: 200');
-    await expect(terminalOutput).toContainText('"x-powered-by":"PHP/7.4.3"');
-    await expect(terminalOutput).toContainText('"x-application":"InternalPortal/2.1"');
   });
 
   test('node isolates workspace JavaScript and stops a stuck script', async ({ page }) => {

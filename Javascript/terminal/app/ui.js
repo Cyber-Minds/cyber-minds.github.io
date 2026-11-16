@@ -571,6 +571,15 @@ function initEditor() {
       padding: { top: 12, bottom: 12 },
     });
 
+    window.getMockNodeCode = (filePath) => {
+      const editorPath =
+        activeEditorFile.kind === 'workspace'
+          ? activeEditorFile.path
+          : templateFilenames[activeEditorFile.lang];
+      const requestedPath = String(filePath).replace(/^\/workspace\/?/, '');
+      return editorPath === requestedPath ? editor.getValue() : null;
+    };
+
     editor.onDidChangeModelContent(() => {
       queueDraftSave();
     });
