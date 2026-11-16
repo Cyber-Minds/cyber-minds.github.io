@@ -1,81 +1,134 @@
-const fs = require('fs');
-const path = require('path');
+'use strict';
 
-// Configuration and path resolution
-const rootDir = path.join(__dirname, '..');
-const exceptionsPath = path.join(__dirname, 'image-budget-exceptions.json');
-const config = JSON.parse(fs.readFileSync(exceptionsPath, 'utf8'));
+const fs = require('node:fs');
+const path = require('node:path');
 
-const MAX_IMAGE_BYTES = config.budgets.maxImageBytes;
-const MAX_PAGE_TOTAL_BYTES = config.budgets.maxPageTotalBytes;
-const exceptions = config.exceptions || {};
+const COURSE_PAGES = path.join('HTML', 'Courses and Activities');
+const IMG_RE = /<img\b([^<>]*?)\s*\/?>/gi;
+const SRC_RE = /(?:^|\s)src\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'`=<>]+))/i;
+// shortcut: course pages currently use `src`; add `srcset` candidates when the corpus adopts responsive images.
 
-let hasErrors = false;
-
-// Find HTML files recursively or in HTML/ directory
-function getHtmlFiles(dir) {
-  let results = [];
-  const list = fs.readdirSync(dir);
-  list.forEach(file => {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getHtmlFiles(filePath));
-    } else if (file.endsWith('.html')) {
-      results.push(filePath);
-    }
-  });
-  return results;
+function listHtmlFiles(directory, files = []) {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const fullPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) listHtmlFiles(fullPath, files);
+    else if (entry.isFile() && entry.name.endsWith('.html')) files.push(fullPath);
+  }
+  return files;
 }
 
-const htmlDir = path.join(rootDir, 'HTML');
-const htmlFiles = fs.existsSync(htmlDir) ? getHtmlFiles(htmlDir) : [];
+function resolveImagePath(root, page, source) {
+  const value = source.trim().split(/[?#]/, 1)[0];
+  if (!value || /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(value) || value.includes('{{')) {
+    return null;
+  }
 
-console.log(`Auditing image budgets across ${htmlFiles.length} HTML files...\n`);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return { error: `invalid encoded image path: ${value}` };
+  }
 
-htmlFiles.forEach(htmlFile => {
-  const content = fs.readFileSync(htmlFile, 'utf8');
-  // Simple regex to find src attributes in img tags
-  const imgRegex = /<img[^>]+src="([^">]+)"/g;
+  const rootPath = path.resolve(root);
+  const localPath = decoded.startsWith('/')
+    ? path.resolve(rootPath, `.${decoded}`)
+    : path.resolve(path.dirname(page), decoded);
+  if (!localPath.startsWith(`${rootPath}${path.sep}`)) {
+    return { error: `image path escapes the repository: ${value}` };
+  }
+
+  if (!fs.existsSync(localPath)) {
+    return { error: `image file does not exist: ${value}` };
+  }
+
+  const realRoot = fs.realpathSync(rootPath);
+  const realPath = fs.realpathSync(localPath);
+  if (!realPath.startsWith(`${realRoot}${path.sep}`)) {
+    return { error: `image symlink escapes the repository: ${value}` };
+  }
+  if (!fs.statSync(realPath).isFile()) {
+    return { error: `image path is not a file: ${value}` };
+  }
+  return realPath;
+}
+
+function imageSources(content) {
+  const activeContent = content.replace(/<!--[^]*?-->/g, '');
+  const sources = [];
+  IMG_RE.lastIndex = 0;
   let match;
-  let pageTotalBytes = 0;
-  const pageImages = [];
+  while ((match = IMG_RE.exec(activeContent)) !== null) {
+    const src = SRC_RE.exec(match[1]);
+    if (src) sources.push(src[1] ?? src[2] ?? src[3]);
+  }
+  return sources;
+}
 
-  while ((match = imgRegex.exec(content)) !== null) {
-    const imgSrc = match[1];
-    // Resolve relative path from HTML file to Images folder
-    const resolvedImagePath = path.resolve(path.dirname(htmlFile), imgSrc);
-    
-    if (fs.existsSync(resolvedImagePath)) {
-      const stats = fs.statSync(resolvedImagePath);
-      const byteSize = stats.size;
-      const relativeRepoPath = path.relative(rootDir, resolvedImagePath).replace(/\\/g, '/');
+function auditImageBudgets(root, config) {
+  const errors = [];
+  const notices = [];
+  const realRoot = fs.realpathSync(path.resolve(root));
+  const courseDir = path.join(realRoot, COURSE_PAGES);
+  if (!fs.existsSync(courseDir)) {
+    return { errors: [`Course page directory does not exist: ${COURSE_PAGES}`], notices };
+  }
 
-      pageTotalBytes += byteSize;
-      pageImages.push({ path: relativeRepoPath, size: byteSize });
+  const pages = listHtmlFiles(courseDir);
+  for (const page of pages) {
+    const pageAssets = new Set();
+    for (const source of imageSources(fs.readFileSync(page, 'utf8'))) {
+      const result = resolveImagePath(realRoot, page, source);
+      if (result === null) continue;
+      if (typeof result === 'object') {
+        errors.push(`${path.relative(root, page)}: ${result.error}`);
+        continue;
+      }
+      pageAssets.add(result);
+    }
 
-      // Check per-image budget
-      if (byteSize > MAX_IMAGE_BYTES) {
-        if (exceptions[relativeRepoPath]) {
-          console.log(`[INFO] Image exceeds standard budget but has an exception: ${relativeRepoPath} (${byteSize} bytes). Reason: ${exceptions[relativeRepoPath].reason}`);
-        } else {
-          console.error(`[ERROR] Image exceeds budget (${MAX_IMAGE_BYTES} bytes): ${relativeRepoPath} is ${byteSize} bytes (Owning Page: ${path.relative(rootDir, htmlFile)})`);
-          hasErrors = true;
-        }
+    let pageBytes = 0;
+    for (const asset of pageAssets) {
+      const relativeAsset = path.relative(realRoot, asset).split(path.sep).join('/');
+      const byteSize = fs.statSync(asset).size;
+      const exception = config.exceptions[relativeAsset];
+      const byteLimit = exception?.allowedBytes ?? config.budgets.maxImageBytes;
+      pageBytes += byteSize;
+      if (byteSize > byteLimit) {
+        errors.push(
+          `${relativeAsset}: ${byteSize} bytes exceeds its ${byteLimit}-byte image budget (${path.relative(realRoot, page)})`
+        );
+      } else if (exception && byteSize > config.budgets.maxImageBytes) {
+        notices.push(
+          `${relativeAsset}: ${byteSize}/${byteLimit} bytes; ${exception.reason}`
+        );
       }
     }
+
+    if (pageBytes > config.budgets.maxPageTotalBytes) {
+      errors.push(
+        `${path.relative(realRoot, page)}: unique image assets total ${pageBytes} bytes, over the ${config.budgets.maxPageTotalBytes}-byte page budget`
+      );
+    }
   }
 
-  // Check per-page total budget
-  if (pageTotalBytes > MAX_PAGE_TOTAL_BYTES) {
-    console.error(`[ERROR] Page total image weight exceeds budget (${MAX_PAGE_TOTAL_BYTES} bytes): ${path.relative(rootDir, htmlFile)} has ${pageTotalBytes} bytes total.`);
-    hasErrors = true;
-  }
-});
-
-if (hasErrors) {
-  console.error('\n❌ Image budget audit failed: Some assets or pages exceed defined size limits.');
-  process.exit(1);
-} else {
-  console.log('\n✅ Image budget audit passed successfully!');
+  return { errors, notices, pageCount: pages.length };
 }
+
+if (require.main === module) {
+  const root = path.resolve(__dirname, '..');
+  const config = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'image-budget-exceptions.json'), 'utf8')
+  );
+  const result = auditImageBudgets(root, config);
+  console.log(`Auditing image budgets across ${result.pageCount || 0} course pages...`);
+  result.notices.forEach((notice) => console.log(`[EXCEPTION] ${notice}`));
+  if (result.errors.length) {
+    console.error(`Image budget audit failed (${result.errors.length} issue(s)):\n${result.errors.join('\n')}`);
+    process.exitCode = 1;
+  } else {
+    console.log('Image budget audit passed.');
+  }
+}
+
+module.exports = { auditImageBudgets };
