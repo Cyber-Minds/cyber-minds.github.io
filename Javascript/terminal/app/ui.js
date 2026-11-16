@@ -91,7 +91,7 @@ function showDraftRecoveryBanner() {
         : ''
     }
     <button class="draft-recovery-discard" id="draftDiscardBtn" type="button">Discard</button>
-    <button class="draft-recovery-dismiss" id="draftDismissBtn" type="button">&#10005;</button>
+    <button class="draft-recovery-dismiss" id="draftDismissBtn" type="button" aria-label="Dismiss draft recovery message">&#10005;</button>
   `;
 
   const editorPanel = document.getElementById('editorPanel');
@@ -189,13 +189,14 @@ function browseSavedDrafts() {
   modal.className = 'draft-browse-modal';
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'draftBrowseHeading');
 
   const challengeTitle = challengeCatalog[activeChallengeId]?.title || activeChallengeId;
 
   modal.innerHTML = `
     <div class="draft-browse-head">
-      <span>Saved Drafts — ${challengeTitle}</span>
-      <button class="draft-browse-close" id="draftBrowseCloseBtn" type="button">&#10005;</button>
+      <span id="draftBrowseHeading">Saved Drafts — ${challengeTitle}</span>
+      <button class="draft-browse-close" id="draftBrowseCloseBtn" type="button" aria-label="Close saved drafts">&#10005;</button>
     </div>
     <div class="draft-browse-subhead">Saved drafts stay in this browser only.</div>
     <div class="draft-browse-list" id="draftBrowseList"></div>
@@ -320,7 +321,7 @@ function attachUiHandlers() {
   document
     .getElementById('fileTabs')
     .addEventListener('click', (event) => {
-      const tab = event.target.closest('.file-tab');
+      const tab = event.target.closest('button.file-tab');
       if (!tab) {
         return;
       }
@@ -332,6 +333,34 @@ function attachUiHandlers() {
 
       switchLanguage(tab.dataset.lang);
     });
+
+  document.getElementById('fileTabs').addEventListener('keydown', (event) => {
+    const tab = event.target.closest('[role="tab"]');
+    if (!tab) {
+      return;
+    }
+
+    const tabs = Array.from(
+      document.querySelectorAll('#fileTabs [role="tab"]')
+    );
+    const index = tabs.indexOf(tab);
+    let nextIndex = index;
+    if (event.key === 'ArrowRight') {
+      nextIndex = (index + 1) % tabs.length;
+    } else if (event.key === 'ArrowLeft') {
+      nextIndex = (index - 1 + tabs.length) % tabs.length;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = tabs.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    tabs[nextIndex].focus();
+    tabs[nextIndex].click();
+  });
 
   document.getElementById('runBtn').addEventListener('click', async () => {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
@@ -536,6 +565,8 @@ function initEditor() {
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
       automaticLayout: true,
+      ariaLabel: 'Code editor',
+      accessibilitySupport: 'on',
       fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
       padding: { top: 12, bottom: 12 },
     });
@@ -579,14 +610,33 @@ initPanelResizers();
 initEditor();
 initTerminal();
 
+let lastFocusedElement = document.activeElement;
+document.addEventListener('focusin', (event) => {
+  lastFocusedElement = event.target;
+});
+
 window.addEventListener('resize', () => {
+  const focusedElement =
+    document.activeElement === document.body
+      ? lastFocusedElement
+      : document.activeElement;
   if (window.innerWidth > 980) {
     document.body.classList.remove(
       'mobile-view-challenge',
       'mobile-view-editor',
       'mobile-view-terminal'
     );
+    if (focusedElement?.closest('#mobileViewSwitcher')) {
+      document.getElementById(`${activeMobileView}PanelHeading`)?.focus();
+    }
     return;
   }
+  const focusedPanel = focusedElement?.closest('.panel');
   setMobileView(activeMobileView);
+  if (
+    focusedPanel &&
+    !focusedPanel.classList.contains(`${activeMobileView}-panel`)
+  ) {
+    document.getElementById(`${activeMobileView}PanelHeading`)?.focus();
+  }
 });

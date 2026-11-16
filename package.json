@@ -13,6 +13,7 @@
     "test:responsive": "playwright test --project=chromium tests/responsive-course-pages.spec.js",
     "test:smoke:headed": "playwright test --project=chromium --headed",
     "test:smoke:ui": "playwright test --project=chromium --ui",
+    "test:terminal-accessibility": "playwright test --project=chromium tests/terminal-accessibility.spec.js",
     "qa:links": "node scripts/link-audit.js",
     "qa:links:baseline": "node scripts/link-audit.js --write-baseline",
     "qa:course-navigation": "node scripts/course-navigation-contract.js"

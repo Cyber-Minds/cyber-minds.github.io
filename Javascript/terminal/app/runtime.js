@@ -149,6 +149,7 @@ async function initTerminal() {
       cursorBlink: true,
       fontSize: 12,
       fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+      screenReaderMode: true,
       theme: getTerminalTheme(),
     });
 
