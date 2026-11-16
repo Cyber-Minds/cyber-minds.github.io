@@ -1,0 +1,20 @@
+{
+  "budgets": {
+    "maxImageBytes": 300000,
+    "maxPageTotalBytes": 3000000
+  },
+  "exceptions": {
+    "Images/SharedResponsibilityModel.png": {
+      "reason": "Course 11 instructional diagram retained at its current size; optimize without losing label legibility before raising this ceiling.",
+      "allowedBytes": 749937
+    },
+    "Images/Authorization&Authentication.jpg": {
+      "reason": "Course 4 instructional image retained at its current size; optimize before raising this ceiling.",
+      "allowedBytes": 415244
+    },
+    "Images/hashingforCybersecurity.jpg": {
+      "reason": "Course 5 instructional image retained at its current size; optimize before raising this ceiling.",
+      "allowedBytes": 440449
+    }
+  }
+}
