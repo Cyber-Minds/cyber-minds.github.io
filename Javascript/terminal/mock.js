@@ -403,7 +403,7 @@ async function runCurl(args) {
       mockWriteLine(`curl: (22) The requested URL returned error: ${response.status}`);
     }
   } catch (error) {
-    // shortcut: browser fetch requires target-site CORS; use a controlled proxy only if courses need blocked hosts.
+    // shortcut: CORS blocks browser fetch; add a proxy if courses need blocked hosts.
     mockWriteLine(
       `curl: (6) Could not retrieve ${url.host}: request failed; check network access and whether the site allows cross-origin reads from ${window.location.origin}.`
     );
