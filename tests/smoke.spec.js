@@ -753,31 +753,23 @@ test.describe('Mock terminal', () => {
     await expect(page.locator('#terminal')).toContainText('x-powered-by: PHP/7.4.3');
   });
 
-  test('curl reads cross-origin pages only when the site allows CORS', async ({
+  test('curl reads public pages through the terminal proxy', async ({
     page,
   }) => {
-    await page.route('https://cors-enabled.test/**', (route) =>
-      route.fulfill({
-        status: 200,
-        headers: {
-          'access-control-allow-origin': '*',
-          'content-type': 'text/plain',
-        },
-        body: 'public page body',
-      })
-    );
-    await page.addInitScript(() => {
-      const browserFetch = window.fetch.bind(window);
-      window.fetch = (input, ...options) => {
-        if (new URL(input).hostname === 'cors-blocked.test') {
-          return Promise.reject(new TypeError('Failed to fetch'));
-        }
-        return browserFetch(input, ...options);
-      };
+    await page.route('https://egeuysal.com/api/terminal-curl*', (route) => {
+      const { url: target } = JSON.parse(route.request().postData());
+      if (new URL(target).hostname === 'cors-enabled.test') {
+        return route.fulfill({
+          status: 200,
+          headers: {
+            'access-control-allow-origin': 'http://127.0.0.1:3939',
+            'content-type': 'text/plain',
+          },
+          body: 'public page body',
+        });
+      }
+      return route.abort();
     });
-    await page.route('https://cors-blocked.test/**', (route) =>
-      route.abort()
-    );
     await page.goto('/HTML/terminal/index.html?challenge=web-recon');
     await waitForMockReady(page);
 
@@ -785,7 +777,7 @@ test.describe('Mock terminal', () => {
     await expect(page.locator('#terminal')).toContainText('public page body');
     await page.evaluate(() => handleMockTerminalInput('curl cors-blocked.test\r'));
     await expect(page.locator('#terminal')).toContainText(
-      'whether the site allows cross-origin reads from http://127.0.0.1:3939'
+      'terminal proxy unavailable; try again later'
     );
   });
 

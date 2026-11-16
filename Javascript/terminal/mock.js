@@ -10,6 +10,7 @@ const mockState = {
   inputBuffer: '',
   files: {},
 };
+const CURL_PROXY_URL = 'https://egeuysal.com/api/terminal-curl';
 let pythonWorker;
 let pythonRequestId = 0;
 const pendingPythonRuns = new Map();
@@ -290,7 +291,7 @@ function getCurlHelp() {
     ' -o, --output FILE  Save response body to a workspace file',
     ' -s, --silent     Suppress error details',
     ' -h, --help       Display this help',
-    'Supports HTTP and HTTPS URLs allowed by the browser.',
+    'Supports public HTTP and HTTPS sites via the terminal proxy.',
   ].join('\n');
 }
 
@@ -381,14 +382,21 @@ async function runCurl(args) {
   if (runLessonServiceCurl(url, options)) return;
 
   try {
-    const response = await fetch(url, {
-      method: options.head ? 'HEAD' : 'GET',
+    const response = await fetch(CURL_PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ url: url.href, method: options.head ? 'HEAD' : 'GET' }),
       credentials: 'omit',
       referrerPolicy: 'no-referrer',
-      redirect: 'follow',
     });
     const headers = formatCurlHeaders(response);
-    const body = options.head ? '' : await readCurlBody(response);
+    let body = options.head ? '' : await readCurlBody(response);
+    if (
+      response.headers.get('x-terminal-output-truncated') === 'true' &&
+      !body.includes('[curl: output truncated at 128 KiB]')
+    ) {
+      body += '\n[curl: output truncated at 128 KiB]\n';
+    }
     const output = [options.includeHeaders || options.head ? headers : '', body]
       .filter(Boolean)
       .join('\n');
@@ -402,10 +410,9 @@ async function runCurl(args) {
     if (!response.ok && !options.silent) {
       mockWriteLine(`curl: (22) The requested URL returned error: ${response.status}`);
     }
-  } catch (error) {
-    // shortcut: CORS blocks browser fetch; add a proxy if courses need blocked hosts.
+  } catch {
     mockWriteLine(
-      `curl: (6) Could not retrieve ${url.host}: request failed; check network access and whether the site allows cross-origin reads from ${window.location.origin}.`
+      `curl: (6) Could not retrieve ${url.host}: terminal proxy unavailable; try again later.`
     );
   }
 }

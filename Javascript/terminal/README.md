@@ -20,8 +20,9 @@ with a virtual `/workspace`; the worker has no DOM or network access.
 `node <file.js>` runs a workspace script with console output in an isolated
 worker. The editor's Run button saves the current file to the workspace before
 launching it. The JavaScript runner supports standard JavaScript with a five
-second time limit. `curl` can read public sites only when they allow browser
-cross-origin access.
+second time limit. `curl` reads public HTTP(S) sites through the terminal
+proxy, including sites that do not allow browser cross-origin requests. It
+supports GET and HEAD and caps output at 128 KiB.
 Unsupported shell commands print an explicit message instead of being passed
 to the host.
 
