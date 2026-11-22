@@ -154,6 +154,18 @@ there.
 | `smoke.spec.js` | The learning flow end to end |
 | `navbar-course-pages.spec.js` | Shared navbar correctness across many course pages |
 | `responsive-course-pages.spec.js` | Layout geometry per page shape, per viewport |
+| `keyboard-learning-flows.spec.js` | Keyboard-only quiz and activity completion, including validation and visible focus |
+
+Run the keyboard-only learner flows with:
+
+```bash
+npm run test:keyboard-learning
+```
+
+The keyboard suite exercises the Course 3 Attacks Quiz at 320px and the
+Course 12 Emerging Tech Scenario Activity at 1440px. It checks tab order,
+named radio controls, arrow/Space selection, Enter submission, announced
+validation and completion feedback, focus recovery, and retry behavior.
 
 `navbar-course-pages.spec.js` checks more *pages* at 320px; this checks more
 *widths* and more layout properties on a representative few. They overlap on

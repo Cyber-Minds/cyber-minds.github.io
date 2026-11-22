@@ -11,6 +11,7 @@
     "test:smoke": "playwright test --project=chromium",
     "test:cross-browser": "playwright test tests/cross-browser-smoke.spec.js",
     "test:responsive": "playwright test --project=chromium tests/responsive-course-pages.spec.js",
+    "test:keyboard-learning": "playwright test --project=chromium tests/keyboard-learning-flows.spec.js",
     "test:smoke:headed": "playwright test --project=chromium --headed",
     "test:smoke:ui": "playwright test --project=chromium --ui",
     "test:terminal-accessibility": "playwright test --project=chromium tests/terminal-accessibility.spec.js",
