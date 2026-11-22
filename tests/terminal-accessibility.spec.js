@@ -100,7 +100,10 @@ test('terminal panels, editor tabs, and controls expose named semantics', async 
   await expect(page.getByRole('button', { name: 'Clear terminal' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Run code' })).toBeVisible();
   expect(await page.evaluate(() => terminal.options.screenReaderMode)).toBe(true);
-  await expect(page.getByRole('button', { name: 'Light Theme' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Toggle color theme' })).toHaveAttribute(
+    'aria-pressed',
+    'false'
+  );
 
   const themeToggle = page.locator('#themeToggleBtn');
   await themeToggle.focus();
@@ -172,8 +175,6 @@ test('checking a challenge from the keyboard preserves navigation focus', async 
   await expect(page.locator('#challengeTitle')).toHaveText('Web Recon Starter');
   await expect(challenge).toBeFocused();
 });
-
-
 test('keyboard challenge selection and validation preserve focus and announce status', async ({
   page,
 }) => {
