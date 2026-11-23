@@ -286,6 +286,18 @@ Courses 10 and 12 currently pass everywhere.
 | `navbar-course-pages.spec.js` | Shared navbar behaviour (menu, focus, Escape) across course pages at 320px |
 | `responsive-course-pages.spec.js` | Full layout and focus assertions on six canary pages, per viewport |
 | `responsive-course-sweep.spec.js` | Layout geometry on every published lesson, per viewport, against the known-issues list |
+| `keyboard-learning-flows.spec.js` | Keyboard-only quiz and activity completion, including validation and visible focus |
+
+Run the keyboard-only learner flows with:
+
+```bash
+npm run test:keyboard-learning
+```
+
+The keyboard suite exercises the Course 3 Attacks Quiz at 320px and the
+Course 12 Emerging Tech Scenario Activity at 1440px. It checks tab order,
+named radio controls, arrow/Space selection, Enter submission, announced
+validation and completion feedback, focus recovery, and retry behavior.
 
 The probes the two responsive suites share live in
 `tests/helpers/layout-probes.js`.

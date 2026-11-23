@@ -79,6 +79,8 @@
     global.document.body.dataset.quizEngineManaged = 'true';
     submitButton.type = 'button';
     resultElement.setAttribute('aria-live', 'polite');
+    resultElement.setAttribute('role', 'status');
+    resultElement.tabIndex = -1;
     var retryButton = ensureRetryButton(submitButton);
     var questionNames = config.questions.map(function (question) {
       return question.name;
@@ -99,6 +101,7 @@
           input.style.clip = 'rect(0, 0, 0, 0)';
           input.style.whiteSpace = 'nowrap';
           input.style.border = '0';
+          input.setAttribute('aria-required', 'true');
 
           if (label) {
             input.addEventListener('focus', function () {
@@ -113,6 +116,11 @@
 
           input.addEventListener('change', function () {
             toggleLabelSelection(input);
+            global.document
+              .querySelectorAll('input[name="' + question.name + '"]')
+              .forEach(function (answer) {
+                answer.removeAttribute('aria-invalid');
+              });
 
             if (config.explanationMode === 'immediate') {
               var label = global.document.querySelector('label[for="' + input.id + '"]');
@@ -133,6 +141,30 @@
     });
 
     submitButton.addEventListener('click', function () {
+      var unansweredIndex = config.questions.findIndex(function (question) {
+        return !global.document.querySelector(
+          'input[name="' + question.name + '"]:checked'
+        );
+      });
+
+      if (unansweredIndex !== -1) {
+        var unansweredQuestion = config.questions[unansweredIndex];
+        var unansweredInputs = global.document.querySelectorAll(
+          'input[name="' + unansweredQuestion.name + '"]'
+        );
+        unansweredInputs.forEach(function (input) {
+          input.setAttribute('aria-invalid', 'true');
+        });
+        resultElement.textContent =
+          'Please answer every question before submitting. Question ' +
+          (unansweredIndex + 1) +
+          ' needs an answer.';
+        if (unansweredInputs.length) {
+          unansweredInputs[0].focus();
+        }
+        return;
+      }
+
       var score = 0;
 
       config.questions.forEach(function (question) {
@@ -166,6 +198,11 @@
         'Your score is: ' + score + '/' + config.questions.length;
       submitButton.style.display = 'none';
       retryButton.style.display = config.allowRetry ? '' : 'none';
+      if (config.allowRetry) {
+        retryButton.focus();
+      } else {
+        resultElement.focus();
+      }
 
       if (
         config.trackCompletion !== false &&

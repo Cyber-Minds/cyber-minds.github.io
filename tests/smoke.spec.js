@@ -708,6 +708,7 @@ test.describe('Legacy quiz progress', () => {
 
     await page.locator('label[for="q1-VS"]').first().click();
     await page.locator('label[for="q2-ignore"]').first().click();
+    await page.locator('label[for="q3-a3-radio"]').first().click();
     await page.locator('label[for="q4-phishing"]').first().click();
     await page.getByRole('button', { name: /submit quiz/i }).click();
     await expect(page.locator('#result')).toContainText('/4');
