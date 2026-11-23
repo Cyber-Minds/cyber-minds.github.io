@@ -4,7 +4,8 @@
  * Loads scripts in dependency order:
  * 1) state/config
  * 2) mock terminal engine
- * 3) app runtime
+ * 3) remote build sandbox client
+ * 4) app runtime
  */
 (function bootstrapTerminalFrontend() {
   const current = document.currentScript;
@@ -15,6 +16,7 @@
   const modules = [
     'terminal/state.js',
     'terminal/mock.js',
+    'terminal/remote.js',
     'terminal/app.js',
   ];
 

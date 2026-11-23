@@ -503,6 +503,11 @@ async function runMockCommand(command) {
     return;
   }
 
+  if (needsRemoteRuntime(trimmed)) {
+    await runRemoteCommand(trimmed);
+    return;
+  }
+
   const pipelineOutput = runMockPipeline(trimmed);
   if (pipelineOutput !== null) {
     if (pipelineOutput) mockWrite(`${pipelineOutput.replace(/\n/g, '\r\n')}\r\n`);
@@ -515,7 +520,7 @@ async function runMockCommand(command) {
   }
 
   if (trimmed === 'help') {
-    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, python3, node, clear');
+    mockWriteLine('Available commands: pwd, whoami, ls, cat, touch, echo, grep, awk, sort, uniq, wc, ss, curl, python3, node, java, javac, go, npm, npx, clear');
     return;
   }
 

@@ -23,14 +23,17 @@ launching it. The JavaScript runner supports standard JavaScript with a five
 second time limit. `curl` reads public HTTP(S) sites through the terminal
 proxy, including sites that do not allow browser cross-origin requests. It
 supports GET and HEAD and caps output at 128 KiB.
-Unsupported shell commands print an explicit message instead of being passed
-to the host.
+`java`, `javac`, `go`, `gofmt`, `npm`, `npx` and `node` with installed
+packages run in the build sandbox (`terminal/runtime`, a Cloudflare Worker with
+per-session containers) through `remote.js`; the workspace files go with each
+command and created files come back. It needs the `terminal-runtime-url` meta
+tag in `HTML/terminal/index.html`. Unsupported shell commands print an explicit
+message instead of being passed to the host.
 
 New courses should declare their required commands, fixture files, and
-checker behavior before they are added. A course needing arbitrary package
-installation, real internet access, system services, npm, or a command outside
-the supported list needs a separate runtime decision; this workspace does not
-provide a general Linux environment.
+checker behavior before they are added. A course needing system services,
+root access, or a command outside the supported list needs a separate runtime
+decision; this workspace does not provide a general Linux environment.
 
 ## Local Draft Recovery
 

@@ -33,6 +33,15 @@ test.beforeEach(async ({ page }) => {
   await stubTerminalCdn(page);
 });
 
+/** Point the terminal's build sandbox meta tag at a stubbed local runtime. */
+async function useBuildSandbox(page) {
+  await page.addInitScript(() => {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('meta[name="terminal-runtime-url"]').content = 'http://127.0.0.1:9999';
+    });
+  });
+}
+
 /** Wait for the terminal to report "Ready" in the status bar. */
 async function waitForMockReady(page) {
   await expect(page.locator('#statusText')).toHaveText('Ready', {
@@ -793,6 +802,69 @@ test.describe('Mock terminal', () => {
     await expect(page.locator('#terminal')).toContainText(
       'terminal proxy unavailable; try again later'
     );
+  });
+
+  test('java, go and npm say so when no build sandbox is configured', async ({ page }) => {
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    await page.evaluate(() => handleMockTerminalInput('javac Hello.java\r'));
+    await expect(page.locator('#terminal')).toContainText('build sandbox is not configured');
+    await expect(page.locator('#terminal')).not.toContainText('command not found');
+  });
+
+  test('java, go and npm run in the build sandbox and sync files back', async ({ page }) => {
+    const calls = [];
+    await page.route('http://127.0.0.1:9999/v1/exec', (route) => {
+      const body = JSON.parse(route.request().postData());
+      calls.push(body);
+      return route.fulfill({
+        status: 200,
+        headers: { 'access-control-allow-origin': '*', 'content-type': 'application/json' },
+        body: JSON.stringify({
+          output: body.command.startsWith('go ') ? 'hi go\n' : 'hi java\n',
+          exitCode: 0,
+          timedOut: false,
+          files: { 'go.mod': 'module hello\n' },
+          deleted: [],
+        }),
+      });
+    });
+    await useBuildSandbox(page);
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+
+    await page.evaluate(() => handleMockTerminalInput('javac Hello.java && java Hello\r'));
+    await expect(page.locator('#terminal')).toContainText('hi java');
+    await page.evaluate(() => handleMockTerminalInput('go run hello.go\r'));
+    await expect(page.locator('#terminal')).toContainText('hi go');
+
+    expect(calls).toHaveLength(2);
+    expect(calls[0].command).toBe('javac Hello.java && java Hello');
+    expect(calls[0].sessionId).toMatch(/^[A-Za-z0-9_-]{16,64}$/);
+    expect(calls[0].sessionId).toBe(calls[1].sessionId);
+    expect(Object.keys(calls[0].files)).toContain('Hello.java');
+    expect(await page.evaluate(() => getMockFile('go.mod'))).toBe('module hello\n');
+
+    // Single-file node stays in the browser until packages are installed.
+    await page.evaluate(() => setMockFile('local.js', 'console.log("local node")'));
+    await page.evaluate(() => handleMockTerminalInput('node local.js\r'));
+    await expect(page.locator('#terminal')).toContainText('local node');
+    expect(calls).toHaveLength(2);
+  });
+
+  test('build sandbox errors are shown without crashing the shell', async ({ page }) => {
+    await page.route('http://127.0.0.1:9999/v1/exec', (route) => route.fulfill({
+      status: 429,
+      headers: { 'access-control-allow-origin': '*', 'content-type': 'application/json' },
+      body: JSON.stringify({ error: 'too many commands, slow down' }),
+    }));
+    await useBuildSandbox(page);
+    await page.goto('/HTML/terminal/index.html?challenge=web-recon');
+    await waitForMockReady(page);
+    await page.evaluate(() => handleMockTerminalInput('npm install\r'));
+    await expect(page.locator('#terminal')).toContainText('build sandbox error: too many commands');
+    await page.evaluate(() => handleMockTerminalInput('pwd\r'));
+    await expect(page.locator('#terminal')).toContainText('/workspace');
   });
 
   test('node runs workspace JavaScript from the shell and editor', async ({ page }) => {
