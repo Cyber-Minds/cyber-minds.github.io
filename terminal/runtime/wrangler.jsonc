@@ -10,6 +10,8 @@
     {
       "class_name": "SandboxContainer",
       "image": "./Dockerfile",
+      // The default "lite" size is 1/16 vCPU, far too slow for javac and go build.
+      "instance_type": "standard-2",
       "max_instances": 10,
       "name": "cyberminds-terminal-sandbox"
     }

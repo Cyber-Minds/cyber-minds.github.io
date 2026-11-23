@@ -52,6 +52,15 @@ Serve the site from `http://localhost:3939` and set the meta tag to
 `http://localhost:8787` while testing. `http://localhost` in `ALLOWED_ORIGINS`
 enables any loopback port, for development only.
 
+## Performance
+
+The container size is set by `instance_type` in `wrangler.jsonc`. Cloudflare's
+default (`lite`, 1/16 vCPU) made `go run` take a minute; `standard-2` (1 vCPU,
+6 GiB) runs `go run`, `javac` and `npm install` of a small package in 1 to 2
+seconds after a ~2 second cold start. The image pre-compiles the Go standard
+library into the build cache. Raise the size if many learners run builds at
+once.
+
 ## Limits and safety
 
 - 60 s default / 120 s max per command; one command at a time per sandbox.
