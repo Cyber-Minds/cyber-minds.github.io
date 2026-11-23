@@ -64,6 +64,10 @@ export default {
         })
       );
       const payload = await upstream.text();
+      if (!upstream.headers.get('Content-Type')?.includes('application/json')) {
+        // Platform errors (for example a container still provisioning) are plain text.
+        return json(503, { error: 'sandbox is starting, try again in a few seconds' }, cors);
+      }
       return new Response(payload, {
         status: upstream.status,
         headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...cors },

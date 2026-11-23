@@ -34,12 +34,12 @@ test.beforeEach(async ({ page }) => {
 });
 
 /** Point the terminal's build sandbox meta tag at a stubbed local runtime. */
-async function useBuildSandbox(page) {
-  await page.addInitScript(() => {
+async function useBuildSandbox(page, url = 'http://127.0.0.1:9999') {
+  await page.addInitScript((runtimeUrl) => {
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('meta[name="terminal-runtime-url"]').content = 'http://127.0.0.1:9999';
+      document.querySelector('meta[name="terminal-runtime-url"]').content = runtimeUrl;
     });
-  });
+  }, url);
 }
 
 /** Wait for the terminal to report "Ready" in the status bar. */
@@ -805,6 +805,7 @@ test.describe('Mock terminal', () => {
   });
 
   test('java, go and npm say so when no build sandbox is configured', async ({ page }) => {
+    await useBuildSandbox(page, '');
     await page.goto('/HTML/terminal/index.html?challenge=web-recon');
     await waitForMockReady(page);
     await page.evaluate(() => handleMockTerminalInput('javac Hello.java\r'));
