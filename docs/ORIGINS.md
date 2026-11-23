@@ -112,6 +112,7 @@ docs/TERMINAL-ASSETS.md.
 | Origin | Purpose | Resources | Data Sent | Controlled By | CSP Directive | Approval Date |
 |--------|---------|-----------|-----------|---------------|---------------|---------------|
 | `https://cyberminds-terminal-20260621-ncus.northcentralus.cloudapp.azure.com` | Terminal backend API & WebSocket | HTTP REST API + WebSocket (`wss://`) | Challenge metadata, code submission, terminal I/O (learner commands & output). **Same origin as frontend in localhost dev; separate in production.** | Terminal backend middleware | N/A (connect-src for legacy browsers) | 2025-09-01 |
+| `https://cyberminds-terminal-runtime.egeuysal.workers.dev` | Terminal build sandbox (java, go, npm) | HTTPS POST `/v1/exec` | Learner command line and workspace files; returns command output and created files. No credentials or cookies sent. | Cloudflare Worker + Container (`terminal/runtime`) | `connect-src` | 2026-11-22 |
 
 **Data Classification:** Learner code & terminal session data.
 

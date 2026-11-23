@@ -1,0 +1,29 @@
+{
+  "name": "cyberminds-terminal-runtime",
+  "main": "src/index.js",
+  "compatibility_date": "2026-05-12",
+  "vars": {
+    // Comma-separated browser origins allowed to call the runtime.
+    "ALLOWED_ORIGINS": "https://cyber-minds.github.io"
+  },
+  "containers": [
+    {
+      "class_name": "SandboxContainer",
+      "image": "./Dockerfile",
+      "max_instances": 10,
+      "name": "cyberminds-terminal-sandbox"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [{ "class_name": "SandboxContainer", "name": "SANDBOX" }]
+  },
+  "migrations": [{ "new_sqlite_classes": ["SandboxContainer"], "tag": "v1" }],
+  // Per-learner request limit; requires no extra setup beyond this binding.
+  "ratelimits": [
+    {
+      "name": "EXEC_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 30, "period": 60 }
+    }
+  ]
+}
