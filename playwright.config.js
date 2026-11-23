@@ -55,7 +55,26 @@ module.exports = defineConfig({
   projects: [
     /* The full suite runs in Chromium — fast and sufficient for catching
      * student-journey regressions before they reach production. */
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium',
+      /* The course sweep has its own project below: it is ~340 independent
+       * page loads and runs in parallel, so it would slow this serial suite. */
+      testIgnore: '**/responsive-course-sweep.spec.js',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    /* Every published lesson at every supported width. Geometry only: no
+     * screenshots or video, so a failure never produces an image of a lesson
+     * page to upload anywhere. See docs/RESPONSIVE-TESTING.md. */
+    {
+      name: 'responsive-sweep',
+      testMatch: '**/responsive-course-sweep.spec.js',
+      use: {
+        ...devices['Desktop Chrome'],
+        screenshot: 'off',
+        video: 'off',
+        trace: 'off',
+      },
+    },
     /* Firefox and WebKit run only the compact cross-browser learner path
      * (course page → quiz → terminal). See docs/CROSS-BROWSER-SMOKE.md. */
     {
