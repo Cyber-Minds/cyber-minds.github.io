@@ -79,7 +79,7 @@ async function runRemoteCommand(line) {
   }
   if (!remoteRuntime.announced) {
     remoteRuntime.announced = true;
-    mockWriteLine('\x1b[2mStarting your build sandbox (first command can take ~15s)...\x1b[0m');
+    mockWriteLine('\x1b[2mStarting your build sandbox...\x1b[0m');
   }
 
   let response;
