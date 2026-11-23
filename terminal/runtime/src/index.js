@@ -1,10 +1,10 @@
 import { Container, getContainer } from '@cloudflare/containers';
 import { MAX_BODY_BYTES, corsHeaders, isOriginAllowed, parseAllowedOrigins, validateExecBody } from './policy.js';
 
-/** One sandbox per learner session; sleeps after 15 minutes without commands. */
+/** One sandbox per learner session; sleeps after 3 minutes without commands. */
 export class SandboxContainer extends Container {
   defaultPort = 8080;
-  sleepAfter = '15m';
+  sleepAfter = '3m';
   enableInternet = true;
 }
 
