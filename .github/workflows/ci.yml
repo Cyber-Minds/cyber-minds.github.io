@@ -77,6 +77,30 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+  responsive-sweep:
+    # Every published course lesson at 320, 768, 1024 and 1440px, checked for
+    # layout geometry against tests/responsive-known-issues.json. Geometry
+    # only: the project takes no screenshots or video, and no report is
+    # uploaded, so no image of a lesson page leaves the runner.
+    # See docs/RESPONSIVE-TESTING.md.
+    name: Responsive Course Sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Chromium browser
+        run: npx playwright install chromium
+      - name: Run responsive course sweep
+        run: npm run test:responsive:sweep
+
   cross-browser-smoke:
     # Compact learner path (course page → quiz → terminal) in the non-Chromium
     # engines. Chromium already runs this spec as part of the full suite in

@@ -19,9 +19,23 @@
  * Nothing leaves the machine: pages come from the repository test server, and
  * no fixture carries credentials or learner data.
  *
+ * This is the canary set. Every other published lesson is swept at the same
+ * widths by tests/responsive-course-sweep.spec.js; the probes both suites use
+ * live in tests/helpers/layout-probes.js.
+ *
  * Reproducing and repairing a failure: docs/RESPONSIVE-TESTING.md
  */
 const { test, expect } = require('@playwright/test');
+const {
+  VIEWPORTS,
+  OVERFLOW_TOLERANCE_PX,
+  MIN_TARGET_PX,
+  openLesson,
+  collectOverflow,
+  collectHeaderOcclusion,
+  collectControlOverlap,
+  collectNavReadability,
+} = require('./helpers/layout-probes');
 
 const COURSE_ROOT = '/HTML/Courses and Activities';
 
@@ -58,232 +72,8 @@ const PAGE_MATRIX = [
   },
 ];
 
-const VIEWPORTS = [
-  { name: 'mobile-320', width: 320, height: 812 },
-  { name: 'tablet-768', width: 768, height: 1024 },
-  { name: 'laptop-1024', width: 1024, height: 768 },
-  { name: 'desktop-1440', width: 1440, height: 900 },
-];
-
-// Sub-pixel layout rounding is normal and not a defect; a real overflow is
-// never within a pixel of the viewport edge.
-const OVERFLOW_TOLERANCE_PX = 1;
-
-// WCAG 2.2 AA minimum target size (2.5.8).
-const MIN_TARGET_PX = 24;
-
-/**
- * Transitions make computed styles depend on when the assertion runs. Freeze
- * them so every reading is the settled value.
- */
-async function freezeAnimations(page) {
-  await page.addStyleTag({
-    content: `*, *::before, *::after {
-      transition-duration: 0s !important;
-      animation-duration: 0s !important;
-      animation-delay: 0s !important;
-    }`,
-  });
-}
-
 async function openPage(page, path) {
-  await page.goto(path, { waitUntil: 'domcontentloaded' });
-  // The shared navbar is injected by header.js; wait for it so geometry is
-  // measured against the real header rather than an empty placeholder.
-  // `attached`, not `visible`: below the desktop breakpoint these links are
-  // collapsed into the hamburger menu, which is correct behaviour, not a
-  // missing navbar.
-  await page.waitForSelector('#cmh-main-nav a', {
-    state: 'attached',
-    timeout: 10_000,
-  });
-  await freezeAnimations(page);
-  await page.evaluate(() => document.fonts && document.fonts.ready);
-}
-
-/**
- * Elements extending past the viewport edge. Returns readable selectors so a
- * failure names the element to fix rather than just a scrollWidth number.
- */
-function collectOverflow(tolerance) {
-  const clientWidth = document.documentElement.clientWidth;
-
-  const describe = (el) => {
-    const id = el.id ? `#${el.id}` : '';
-    const cls = typeof el.className === 'string' && el.className.trim()
-      ? `.${el.className.trim().split(/\s+/).slice(0, 2).join('.')}`
-      : '';
-    return `${el.tagName.toLowerCase()}${id}${cls}`;
-  };
-
-  const offenders = [];
-  for (const el of document.querySelectorAll('body *')) {
-    const style = getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') continue;
-    // Out-of-flow overlays (menu panels, backdrops, popups) are positioned
-    // off-screen by design when closed.
-    if (style.position === 'fixed') continue;
-    if (el.closest('[aria-hidden="true"]')) continue;
-    if (el.closest('#cmh-menu-backdrop')) continue;
-
-    const rect = el.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) continue;
-
-    if (rect.right > clientWidth + tolerance || rect.left < -tolerance) {
-      offenders.push({
-        selector: describe(el),
-        left: Math.round(rect.left),
-        right: Math.round(rect.right),
-        clientWidth,
-      });
-    }
-  }
-
-  return {
-    scrollWidth: document.documentElement.scrollWidth,
-    clientWidth,
-    offenders: offenders.slice(0, 8),
-  };
-}
-
-/**
- * Geometry of the shared header against the first block of page content.
- *
- * A static header must not intersect the content; a fixed or sticky one must
- * not sit on top of it either -- in both cases the content has to start below
- * the header, or the first lines are unreadable.
- */
-function collectHeaderOcclusion() {
-  const header = document.querySelector('#site-header, header');
-  const content =
-    document.querySelector('.right-side_rectangle') ||
-    document.querySelector('.left-side_rectangle') ||
-    document.querySelector('main') ||
-    document.querySelector('section');
-
-  if (!header || !content) return null;
-
-  const headerBox = header.getBoundingClientRect();
-  const contentBox = content.getBoundingClientRect();
-  const position = getComputedStyle(header).position;
-
-  const horizontallyOverlapping =
-    headerBox.left < contentBox.right && contentBox.left < headerBox.right;
-  const verticallyOverlapping =
-    headerBox.top < contentBox.bottom && contentBox.top < headerBox.bottom;
-
-  return {
-    position,
-    overlap: horizontallyOverlapping && verticallyOverlapping,
-    headerBottom: Math.round(headerBox.bottom),
-    contentTop: Math.round(contentBox.top),
-  };
-}
-
-/** Pairs of header controls whose boxes intersect. */
-function collectControlOverlap() {
-  const controls = [
-    ...document.querySelectorAll(
-      '#site-header a, #site-header button, .cmh-logo'
-    ),
-  ].filter((el) => {
-    const style = getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') return false;
-    const rect = el.getBoundingClientRect();
-    return rect.width > 0 && rect.height > 0;
-  });
-
-  const describe = (el) =>
-    `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}` +
-    `${el.textContent ? `[${el.textContent.trim().slice(0, 18)}]` : ''}`;
-
-  const collisions = [];
-  for (let i = 0; i < controls.length; i += 1) {
-    for (let j = i + 1; j < controls.length; j += 1) {
-      const a = controls[i];
-      const b = controls[j];
-      // Nesting is not a collision (a link inside its list item, say).
-      if (a.contains(b) || b.contains(a)) continue;
-
-      const ra = a.getBoundingClientRect();
-      const rb = b.getBoundingClientRect();
-      const overlapX = Math.min(ra.right, rb.right) - Math.max(ra.left, rb.left);
-      const overlapY = Math.min(ra.bottom, rb.bottom) - Math.max(ra.top, rb.top);
-      // Require a real intersection, not a shared border.
-      if (overlapX > 1 && overlapY > 1) {
-        collisions.push(`${describe(a)} <-> ${describe(b)}`);
-      }
-    }
-  }
-  return collisions.slice(0, 6);
-}
-
-/**
- * Whether navigation is reachable and readable at the current width.
- *
- * Below the desktop breakpoint the links collapse into the hamburger menu.
- * A collapsed link reports a 0x0 box while its computed `display` is still
- * not `none` (the container clips it), so size alone cannot distinguish
- * "collapsed by design" from "broken". Rendered links must meet the target
- * size; if none are rendered, the control that reveals them must itself be
- * usable, or navigation is unreachable at this width.
- */
-function collectNavReadability(minTarget) {
-  const isRendered = (el) => {
-    const style = getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') return false;
-    const rect = el.getBoundingClientRect();
-    return rect.width > 0 && rect.height > 0;
-  };
-
-  const links = [...document.querySelectorAll('#cmh-main-nav a')];
-  const rendered = links.filter(isRendered);
-  const problems = [];
-
-  for (const link of rendered) {
-    const rect = link.getBoundingClientRect();
-    const label = (link.textContent || '').trim().slice(0, 20);
-
-    if (rect.height < minTarget || rect.width < minTarget) {
-      problems.push(
-        `"${label}" target ${Math.round(rect.width)}x${Math.round(rect.height)} ` +
-          `below ${minTarget}px minimum`
-      );
-      continue;
-    }
-    // Text clipped by its own box: the label is present but unreadable.
-    if (link.scrollWidth > link.clientWidth + 1) {
-      problems.push(
-        `"${label}" text is clipped ` +
-          `(scrollWidth ${link.scrollWidth} > clientWidth ${link.clientWidth})`
-      );
-    }
-  }
-
-  if (rendered.length === 0) {
-    const toggle = document.querySelector('#cmh-menu-toggle');
-    if (!toggle || !isRendered(toggle)) {
-      problems.push(
-        'no navigation links are rendered and the menu toggle is not visible, '
-          + 'so navigation is unreachable at this width'
-      );
-    } else {
-      const rect = toggle.getBoundingClientRect();
-      if (rect.width < minTarget || rect.height < minTarget) {
-        problems.push(
-          `menu toggle target ${Math.round(rect.width)}x${Math.round(rect.height)} `
-            + `below ${minTarget}px minimum, and it is the only way to reach navigation`
-        );
-      }
-    }
-  }
-
-  return {
-    totalLinks: links.length,
-    renderedLinks: rendered.length,
-    collapsed: rendered.length === 0,
-    problems,
-  };
+  await openLesson(page, path, 'shared-navbar');
 }
 
 for (const viewport of VIEWPORTS) {
@@ -300,7 +90,7 @@ for (const viewport of VIEWPORTS) {
         const [overflow, occlusion, collisions, nav] = await Promise.all([
           page.evaluate(collectOverflow, OVERFLOW_TOLERANCE_PX),
           page.evaluate(collectHeaderOcclusion),
-          page.evaluate(collectControlOverlap),
+          page.evaluate(collectControlOverlap, '#site-header'),
           page.evaluate(collectNavReadability, MIN_TARGET_PX),
         ]);
 
